@@ -27,7 +27,8 @@ function ColorList({
   uncategorized,
   showAllUncategorized,
   setShowAllUncategorized,
-}: ColorListProps) {
+  className,
+}: ColorListProps & ClassNameProp) {
   const toListItems = (colors: string[]) =>
     colors.map((color) => (
       <ColorListItem
@@ -42,13 +43,15 @@ function ColorList({
     ? toListItems(uncategorized)
     : toListItems(uncategorized.slice(0, limit));
 
-  const showAllButtonText = showAllUncategorized ? "Show Less" : "Show All";
+  const showAllButtonText = showAllUncategorized
+    ? "Show Less"
+    : "Show All Uncategorized";
   const showAllDetailedText = showAllUncategorized
     ? ""
-    : `(Showing only ${listItems.length} colors)`;
+    : `(Showing ${listItems.length} colors only)`;
 
   return (
-    <>
+    <div className={className}>
       <p className="mb-2">
         <button
           onClick={() => setShowAllUncategorized(!showAllUncategorized)}
@@ -59,7 +62,7 @@ function ColorList({
         {showAllDetailedText}
       </p>
       <div className="flex flex-wrap">{listItems}</div>
-    </>
+    </div>
   );
 }
 
@@ -84,9 +87,53 @@ function StatsBar({
   );
 }
 
+type AddColorGroupFormProps = {
+  handleSubmit: (text: string) => void;
+};
+
+function AddColorGroupForm({ handleSubmit }: AddColorGroupFormProps) {
+  const [text, setText] = useState("");
+
+  return (
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        handleSubmit(text);
+        setText("");
+      }}
+    >
+      <label>
+        Color Group Name:
+        <input
+          type="text"
+          placeholder="Add a new color group"
+          value={text}
+          onChange={(event) => {
+            let currentTarget = event.currentTarget as HTMLInputElement;
+            let lastChar = currentTarget.value.charAt(
+              currentTarget.value.length - 1
+            );
+            if (lastChar === " ") {
+              setText(text + "-");
+            } else {
+              setText(currentTarget.value);
+            }
+          }}
+          className="ml-4 border-gray-300 border-2 rounded focus:ring-indigo-500 focus:border-indigo-500 px-2 py-1"
+        />
+      </label>
+    </form>
+  );
+}
+
 function App() {
   const [uncategorized, setUncategorized] = useState(tailwindColors);
   const [showAllUncategorized, setShowAllUncategorized] = useState(false);
+
+  const emptyGroup: string[] = [];
+  const [groupNames, setGroupNames] = useState(emptyGroup);
+
+  const groupItems = groupNames.map((name, i) => <li key={i}>{name}</li>);
 
   return (
     <div className="m-4">
@@ -100,9 +147,26 @@ function App() {
         uncategorized={uncategorized}
         showAllUncategorized={showAllUncategorized}
         setShowAllUncategorized={setShowAllUncategorized}
+        className="mb-4"
       />
+      <AddColorGroupForm
+        handleSubmit={(name: string) =>
+          setGroupNames(groupNames.concat([name]))
+        }
+      />
+      <ol className="list-decimal ml-4">{groupItems}</ol>
     </div>
   );
 }
+
+/**
+ * TODO:
+ * 1. Delete group name (tricky!)
+ * 2. Map currently selected color to a single group
+ * 3. Map currently selected color to multiple groups
+ * 4. Undo last grouping action
+ * 5. Navigate to color group
+ * 6. Fast keyboard naming for colors in group
+ */
 
 export default App;
