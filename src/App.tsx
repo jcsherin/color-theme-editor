@@ -3,9 +3,9 @@ import "./App.css";
 import { tailwindColors } from "./tailwindAllColors";
 
 type ClassNameProp = { className: string };
-type ColorProps = { color: string } & ClassNameProp;
+type ColorProps = { color: string };
 
-function ColorSquare({ color, className }: ColorProps) {
+function ColorSquare({ color, className }: ColorProps & ClassNameProp) {
   const style = {
     backgroundColor: color,
   };
@@ -14,6 +14,27 @@ function ColorSquare({ color, className }: ColorProps) {
       <div className="w-12 h-12 border-2 mx-auto" style={style}></div>
       <p>{color}</p>
     </div>
+  );
+}
+
+type StatsBarProps = {
+  countCategorized: number;
+  countUncategorized: number;
+  countGroups: number;
+};
+
+function StatsBar({
+  countCategorized,
+  countUncategorized,
+  countGroups,
+  className,
+}: StatsBarProps & ClassNameProp) {
+  return (
+    <p className={className}>
+      <span className="mr-4">Uncategorized: {countUncategorized}</span>
+      <span className="mr-4">Categorized: {countCategorized}</span>
+      <span>Groups: {countGroups}</span>
+    </p>
   );
 }
 
@@ -38,9 +59,16 @@ function App() {
   const showAllButtonText = showAllUncategorized ? "Show Less" : "Show All";
   const showAllDetailedText = showAllUncategorized
     ? ""
-    : `Showing only ${listItems.length} of ${uncategorized.length} remaining uncategorized colors.`;
+    : `(Showing only ${listItems.length} colors)`;
+
   return (
     <div className="m-4">
+      <StatsBar
+        countUncategorized={uncategorized.length}
+        countCategorized={0}
+        countGroups={0}
+        className="mb-4"
+      />
       <p className="mb-2">
         <button
           onClick={() => setShowAllUncategorized(!showAllUncategorized)}
