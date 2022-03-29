@@ -18,10 +18,11 @@ function ColorSquare({ color, className }: ColorProps) {
 }
 
 function App() {
-  const limit = 16;
-  const listItems = tailwindColors
-    .slice(0, limit)
-    .map((color) => (
+  const [uncategorized, setUncategorized] = useState(tailwindColors);
+  const [showAllUncategorized, setShowAllUncategorized] = useState(false);
+
+  const toListItems = (colors: string[]) =>
+    colors.map((color) => (
       <ColorSquare
         key={color}
         color={color}
@@ -29,11 +30,25 @@ function App() {
       />
     ));
 
+  const limit = 16;
+  const listItems = showAllUncategorized
+    ? toListItems(uncategorized)
+    : toListItems(uncategorized.slice(0, limit));
+
+  const showAllButtonText = showAllUncategorized ? "Show Less" : "Show All";
+  const showAllDetailedText = showAllUncategorized
+    ? ""
+    : `Showing only ${listItems.length} of ${uncategorized.length} remaining uncategorized colors.`;
   return (
     <div className="m-4">
       <p className="mb-2">
-        Showing {listItems.length} of {tailwindColors.length} colors
-        remaining...
+        <button
+          onClick={() => setShowAllUncategorized(!showAllUncategorized)}
+          className="underline mr-4 text-blue-600"
+        >
+          {showAllButtonText}
+        </button>
+        {showAllDetailedText}
       </p>
       <div className="flex flex-wrap">{listItems}</div>
     </div>
