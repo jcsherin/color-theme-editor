@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { tailwindColors } from "./tailwindAllColors";
 
@@ -11,8 +11,12 @@ function ColorListItem({ color, className }: ColorProps & ClassNameProp) {
   };
   return (
     <div className={className}>
-      <div className="w-12 h-12 border-2 mx-auto" style={style}></div>
-      <p>{color}</p>
+      <div
+        className="w-16 h-16 text border-2 flex items-center justify-center"
+        style={style}
+      >
+        <p className="text-sm invisible hover:visible">{color.slice(1)}</p>
+      </div>
     </div>
   );
 }
@@ -22,27 +26,15 @@ type ColorListProps = {
 };
 
 function ColorList({ ungrouped, className }: ColorListProps & ClassNameProp) {
-  // FIXME: `ungrouped` could be empty, so `ungrouped[0]` becomes undefined
-  const [currentSelection, setcurrentSelection] = useState(ungrouped[0]);
-  useEffect(() => {
-    if (ungrouped.length > 0) {
-      setcurrentSelection(ungrouped[0]);
-    }
-  }, [ungrouped]);
-
   const toListItems = (colors: string[]) =>
     colors.map((color) => {
-      const selectedItemBorder = "border-2 border-indigo-600 border-dotted";
-      const style = "flex-column items-center mr-4 py-2 px-4";
-      const className =
-        color === currentSelection ? `${style} ${selectedItemBorder}` : style;
+      const className = "";
       return <ColorListItem key={color} color={color} className={className} />;
     });
 
   return (
     <div className={className}>
       <div className="flex flex-wrap">{toListItems(ungrouped)}</div>
-      <p className="font-bold">Current Selection: {currentSelection}</p>
     </div>
   );
 }
@@ -133,7 +125,7 @@ function App() {
           setGroupNames(groupNames.concat([name]))
         }
       />
-
+      <hr className="mb-4" />
       <ColorList ungrouped={ungrouped} className="mb-4" />
     </div>
   );
