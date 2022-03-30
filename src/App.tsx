@@ -91,7 +91,7 @@ function Selectable({ text }: SelectableProps) {
 
 type SelectableGroupProps = { texts: string[] };
 function SelectableGroup({ texts }: SelectableGroupProps) {
-  const items = texts.map((text) => <Selectable text={text} />);
+  const items = texts.map((text, i) => <Selectable key={i} text={text} />);
   return <div className="mb-4">{items}</div>;
 }
 
