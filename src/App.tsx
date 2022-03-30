@@ -3,38 +3,46 @@ import "./App.css";
 import { tailwindColors } from "./tailwindAllColors";
 
 type ClassNameProp = { className: string };
-type ColorProps = { color: string };
 
-function ColorListItem({ color, className }: ColorProps & ClassNameProp) {
+type ColorItem = { hexcode: string; selected: boolean };
+type ColorProps = { color: ColorItem; handleClick: () => void };
+
+function ColorListItem({ color, handleClick }: ColorProps) {
   const style = {
-    backgroundColor: color,
+    backgroundColor: color.hexcode,
   };
+  const className = "flex items-center justify-center w-20 h-20 cursor-pointer";
+  const highlight = color.selected ? "border-2 border-green-600" : "";
   return (
-    <div className={className}>
+    <div className={`${className} ${highlight}`} onClick={() => handleClick()}>
       <div
-        className="w-16 h-16 text border-2 mr-4 mb-2 flex items-center justify-center"
+        className="w-16 h-16 text border-2 flex items-center justify-center"
         style={style}
       >
-        <p className="text-sm">{color.slice(1)}</p>
+        <p className="text-sm">{color.hexcode.slice(1)}</p>
       </div>
     </div>
   );
 }
 
 type ColorListProps = {
-  ungrouped: string[];
+  items: ColorItem[];
+  handleSelection: (colorItem: ColorItem) => void;
 };
 
-function ColorList({ ungrouped, className }: ColorListProps & ClassNameProp) {
-  const toListItems = (colors: string[]) =>
-    colors.map((color) => {
-      const className = "";
-      return <ColorListItem key={color} color={color} className={className} />;
-    });
+function ColorList({ items, handleSelection }: ColorListProps) {
+  const toListItems = (colors: ColorItem[]) =>
+    colors.map((color, i) => (
+      <ColorListItem
+        key={i}
+        color={color}
+        handleClick={() => handleSelection(color)}
+      />
+    ));
 
   return (
-    <div className={className}>
-      <div className="flex flex-wrap">{toListItems(ungrouped)}</div>
+    <div className="mb-4">
+      <div className="flex flex-wrap">{toListItems(items)}</div>
     </div>
   );
 }
@@ -105,7 +113,11 @@ function EmptyState({ message }: EmptyStateProps) {
 }
 
 function App() {
-  const [ungrouped, setUngrouped] = useState(tailwindColors);
+  const [colorItems, setColorItems] = useState(() =>
+    tailwindColors.map(
+      (hexcode): ColorItem => ({ hexcode: hexcode, selected: false })
+    )
+  );
 
   const emptyGroup: string[] = [];
   const [groupNames, setGroupNames] = useState(emptyGroup);
@@ -117,6 +129,16 @@ function App() {
       <SelectableGroup texts={groupNames} />
     );
 
+  const handleColorItemSelection = (colorItem: ColorItem) => {
+    setColorItems((items) =>
+      items.map((item) =>
+        item.hexcode === colorItem.hexcode
+          ? { ...item, selected: !item.selected }
+          : item
+      )
+    );
+  };
+
   return (
     <div className="m-4">
       <AddColorGroupForm
@@ -126,8 +148,10 @@ function App() {
         }
       />
       {groupItems}
-      <hr className="mb-4" />
-      <ColorList ungrouped={ungrouped} className="mb-4" />
+      <ColorList
+        items={colorItems}
+        handleSelection={handleColorItemSelection}
+      />
     </div>
   );
 }
