@@ -5,6 +5,8 @@ import { tailwindColors } from "./tailwindAllColors";
 type ClassNameProp = { className: string };
 
 type ColorItem = { hexcode: string; selected: boolean };
+type ColorGroup = { name: string; selected: boolean };
+
 type ColorProps = { color: ColorItem; handleClick: () => void };
 
 function ColorListItem({ color, handleClick }: ColorProps) {
@@ -90,16 +92,29 @@ function AddColorGroupForm({
   );
 }
 
-type SelectableProps = { text: string };
-function Selectable({ text }: SelectableProps) {
+type SelectableProps = { group: ColorGroup; handleClick: () => void };
+function Selectable({ group, handleClick }: SelectableProps) {
+  const bgColor = group.selected ? `bg-green-600 text-white` : `bg-blue-200`;
+  const className = `text-xl py-1 px-4 mr-4 mb-2 ${bgColor}`;
   return (
-    <button className="text-xl bg-blue-200 py-1 px-4 mr-4 mb-2">{text}</button>
+    <button onClick={() => handleClick()} className={className}>
+      {group.name}
+    </button>
   );
 }
 
-type SelectableGroupProps = { texts: string[] };
-function SelectableGroup({ texts }: SelectableGroupProps) {
-  const items = texts.map((text, i) => <Selectable key={i} text={text} />);
+type SelectableGroupProps = {
+  groups: ColorGroup[];
+  handleSelection: (colorGroup: ColorGroup) => void;
+};
+function SelectableGroup({ groups, handleSelection }: SelectableGroupProps) {
+  const items = groups.map((group, i) => (
+    <Selectable
+      key={i}
+      group={group}
+      handleClick={() => handleSelection(group)}
+    />
+  ));
   return <div className="mb-4">{items}</div>;
 }
 
@@ -119,17 +134,24 @@ function App() {
     )
   );
 
-  const emptyGroup: string[] = [];
-  const [groupNames, setGroupNames] = useState(emptyGroup);
+  const emptyColorGroup: ColorGroup[] = [];
+  const [colorGroups, setColorGroups] = useState(emptyColorGroup);
 
-  const groupItems =
-    groupNames.length === 0 ? (
-      <EmptyState message="Create 1 or more color groups to begin grouping colors." />
-    ) : (
-      <SelectableGroup texts={groupNames} />
+  const handleAddColorGroupFormSubmit = (name: string) =>
+    setColorGroups((groups) =>
+      groups.concat([{ name: name, selected: false }])
     );
 
-  const handleColorItemSelection = (colorItem: ColorItem) => {
+  const handleColorGroupSelection = (colorGroup: ColorGroup) =>
+    setColorGroups((groups) =>
+      groups.map((group) =>
+        group.name === colorGroup.name
+          ? { ...group, selected: !group.selected }
+          : group
+      )
+    );
+
+  const handleColorItemSelection = (colorItem: ColorItem) =>
     setColorItems((items) =>
       items.map((item) =>
         item.hexcode === colorItem.hexcode
@@ -137,17 +159,23 @@ function App() {
           : item
       )
     );
-  };
 
   return (
     <div className="m-4">
       <AddColorGroupForm
         className="mb-4"
-        handleSubmit={(name: string) =>
-          setGroupNames(groupNames.concat([name]))
-        }
+        handleSubmit={handleAddColorGroupFormSubmit}
       />
-      {groupItems}
+
+      {colorGroups.length === 0 ? (
+        <EmptyState message="Create 1 or more color groups to begin grouping colors." />
+      ) : (
+        <SelectableGroup
+          groups={colorGroups}
+          handleSelection={handleColorGroupSelection}
+        />
+      )}
+
       <ColorList
         items={colorItems}
         handleSelection={handleColorItemSelection}
