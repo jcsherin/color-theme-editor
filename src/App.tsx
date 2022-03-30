@@ -160,6 +160,13 @@ function App() {
       )
     );
 
+  const moveDisabled =
+    colorItems.findIndex((item) => item.selected) === -1 ||
+    colorGroups.findIndex((item) => item.selected) === -1;
+
+  const moveBg = moveDisabled ? "bg-slate-600" : "bg-blue-600";
+  const moveClassName = `mb-4 text-lg font-semibold text-slate-200 px-16 py-2 capitalize ${moveBg}`;
+
   return (
     <div className="m-4">
       <AddColorGroupForm
@@ -175,6 +182,14 @@ function App() {
           handleSelection={handleColorGroupSelection}
         />
       )}
+
+      <button
+        disabled={moveDisabled}
+        onClick={() => {}}
+        className={moveClassName}
+      >
+        Move colors to groups
+      </button>
 
       <ColorList
         items={colorItems}
