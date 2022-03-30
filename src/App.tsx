@@ -1,3 +1,4 @@
+import { group } from "console";
 import React, { useState } from "react";
 import "./App.css";
 import { tailwindColors } from "./tailwindAllColors";
@@ -143,13 +144,23 @@ function App() {
     );
 
   const handleColorGroupSelection = (colorGroup: ColorGroup) =>
-    setColorGroups((groups) =>
-      groups.map((group) =>
+    setColorGroups((groups) => {
+      let selectedIdx = groups.findIndex(
+        (group) => group.name === colorGroup.name
+      );
+      if (groups[selectedIdx].selected) {
+        // selected earlier, therefore turn off the selection
+        return groups.map((group) =>
+          group.name === colorGroup.name ? { ...group, selected: false } : group
+        );
+      }
+
+      return groups.map((group) =>
         group.name === colorGroup.name
-          ? { ...group, selected: !group.selected }
-          : group
-      )
-    );
+          ? { ...group, selected: true }
+          : { ...group, selected: false }
+      );
+    });
 
   const handleColorItemSelection = (colorItem: ColorItem) =>
     setColorItems((items) =>
@@ -185,7 +196,9 @@ function App() {
 
       <button
         disabled={moveDisabled}
-        onClick={() => {}}
+        onClick={() => {
+          console.log("Move!!!");
+        }}
         className={moveClassName}
       >
         Move colors to groups
