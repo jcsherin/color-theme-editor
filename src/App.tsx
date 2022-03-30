@@ -131,9 +131,19 @@ function EmptyState({ message }: EmptyStateProps) {
   );
 }
 
+type ColorGroupProps = { group: ColorGroup };
+function ColorGroupView({ group }: ColorGroupProps) {
+  return (
+    <section className="mb-4">
+      <h2>{group.name}</h2>
+      <ColorList items={group.colors} handleSelection={() => {}} />
+    </section>
+  );
+}
+
 function App() {
   const [colorItems, setColorItems] = useState(() =>
-    tailwindColors.map(
+    tailwindColors.slice(0, 40).map(
       (hexcode): ColorItem => ({
         hexcode: hexcode,
         selected: false,
@@ -206,6 +216,10 @@ function App() {
   const moveBg = moveDisabled ? "bg-slate-600" : "bg-blue-600";
   const moveClassName = `mb-4 text-lg font-semibold text-slate-200 px-16 py-2 capitalize ${moveBg}`;
 
+  const nonEmptyGroups = colorGroups
+    .filter((group) => group.colors.length > 0)
+    .map((group) => <ColorGroupView group={group} />);
+
   return (
     <div className="m-4">
       <AddColorGroupForm
@@ -234,8 +248,9 @@ function App() {
         items={colorItems}
         handleSelection={handleColorItemSelection}
       />
+
+      {nonEmptyGroups}
     </div>
   );
 }
-
 export default App;
