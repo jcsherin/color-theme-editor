@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { tailwindColors } from "./tailwindAllColors";
 
@@ -18,72 +18,32 @@ function ColorListItem({ color, className }: ColorProps & ClassNameProp) {
 }
 
 type ColorListProps = {
-  uncategorized: string[];
-  showAllUncategorized: boolean;
-  setShowAllUncategorized: React.Dispatch<React.SetStateAction<boolean>>;
+  ungrouped: string[];
 };
 
-function ColorList({
-  uncategorized,
-  showAllUncategorized,
-  setShowAllUncategorized,
-  className,
-}: ColorListProps & ClassNameProp) {
+function ColorList({ ungrouped, className }: ColorListProps & ClassNameProp) {
+  // FIXME: `ungrouped` could be empty, so `ungrouped[0]` becomes undefined
+  const [currentSelection, setcurrentSelection] = useState(ungrouped[0]);
+  useEffect(() => {
+    if (ungrouped.length > 0) {
+      setcurrentSelection(ungrouped[0]);
+    }
+  }, [ungrouped]);
+
   const toListItems = (colors: string[]) =>
-    colors.map((color) => (
-      <ColorListItem
-        key={color}
-        color={color}
-        className="flex-column items-center mr-4"
-      />
-    ));
-
-  const limit = 16;
-  const listItems = showAllUncategorized
-    ? toListItems(uncategorized)
-    : toListItems(uncategorized.slice(0, limit));
-
-  const showAllButtonText = showAllUncategorized
-    ? "Show Less"
-    : "Show All Uncategorized";
-  const showAllDetailedText = showAllUncategorized
-    ? ""
-    : `(Showing ${listItems.length} colors only)`;
+    colors.map((color) => {
+      const selectedItemBorder = "border-2 border-indigo-600 border-dotted";
+      const style = "flex-column items-center mr-4 py-2 px-4";
+      const className =
+        color === currentSelection ? `${style} ${selectedItemBorder}` : style;
+      return <ColorListItem key={color} color={color} className={className} />;
+    });
 
   return (
     <div className={className}>
-      <p className="mb-2">
-        <button
-          onClick={() => setShowAllUncategorized(!showAllUncategorized)}
-          className="underline mr-4 text-blue-600"
-        >
-          {showAllButtonText}
-        </button>
-        {showAllDetailedText}
-      </p>
-      <div className="flex flex-wrap">{listItems}</div>
+      <div className="flex flex-wrap">{toListItems(ungrouped)}</div>
+      <p className="font-bold">Current Selection: {currentSelection}</p>
     </div>
-  );
-}
-
-type StatsBarProps = {
-  countCategorized: number;
-  countUncategorized: number;
-  countGroups: number;
-};
-
-function StatsBar({
-  countCategorized,
-  countUncategorized,
-  countGroups,
-  className,
-}: StatsBarProps & ClassNameProp) {
-  return (
-    <p className={className}>
-      <span className="mr-4">Uncategorized: {countUncategorized}</span>
-      <span className="mr-4">Categorized: {countCategorized}</span>
-      <span>Groups: {countGroups}</span>
-    </p>
   );
 }
 
@@ -91,11 +51,15 @@ type AddColorGroupFormProps = {
   handleSubmit: (text: string) => void;
 };
 
-function AddColorGroupForm({ handleSubmit }: AddColorGroupFormProps) {
+function AddColorGroupForm({
+  handleSubmit,
+  className,
+}: AddColorGroupFormProps & ClassNameProp) {
   const [text, setText] = useState("");
 
   return (
     <form
+      className={className}
       onSubmit={(event) => {
         event.preventDefault();
         handleSubmit(text);
@@ -126,47 +90,53 @@ function AddColorGroupForm({ handleSubmit }: AddColorGroupFormProps) {
   );
 }
 
-function App() {
-  const [uncategorized, setUncategorized] = useState(tailwindColors);
-  const [showAllUncategorized, setShowAllUncategorized] = useState(false);
+type SelectableProps = { text: string };
+function Selectable({ text }: SelectableProps) {
+  return <button>{text}</button>;
+}
 
-  const emptyGroup: string[] = [];
-  const [groupNames, setGroupNames] = useState(emptyGroup);
+type SelectableGroupProps = { texts: string[] };
+function SelectableGroup({ texts }: SelectableGroupProps) {
+  const items = texts.map((text) => <Selectable text={text} />);
+  return <>{items}</>;
+}
 
-  const groupItems = groupNames.map((name, i) => <li key={i}>{name}</li>);
-
+type EmptyStateProps = { message: string };
+function EmptyState({ message }: EmptyStateProps) {
   return (
-    <div className="m-4">
-      <StatsBar
-        countUncategorized={uncategorized.length}
-        countCategorized={0}
-        countGroups={0}
-        className="mb-4"
-      />
-      <ColorList
-        uncategorized={uncategorized}
-        showAllUncategorized={showAllUncategorized}
-        setShowAllUncategorized={setShowAllUncategorized}
-        className="mb-4"
-      />
-      <AddColorGroupForm
-        handleSubmit={(name: string) =>
-          setGroupNames(groupNames.concat([name]))
-        }
-      />
-      <ol className="list-decimal ml-4">{groupItems}</ol>
+    <div className="h-16 w-full border-2 border-dotted mb-4 flex items-center justify-center text-red-400 font-semibold">
+      <p>{message}</p>
     </div>
   );
 }
 
-/**
- * TODO:
- * 1. Delete group name (tricky!)
- * 2. Map currently selected color to a single group
- * 3. Map currently selected color to multiple groups
- * 4. Undo last grouping action
- * 5. Navigate to color group
- * 6. Fast keyboard naming for colors in group
- */
+function App() {
+  const [ungrouped, setUngrouped] = useState(tailwindColors);
+
+  const emptyGroup: string[] = [];
+  const [groupNames, setGroupNames] = useState(emptyGroup);
+
+  // const groupItems = groupNames.map((name, i) => <li key={i}>{name}</li>);
+  const groupItems =
+    groupNames.length === 0 ? (
+      <EmptyState message="Create 1 or more color groups to begin grouping colors." />
+    ) : (
+      <SelectableGroup texts={groupNames} />
+    );
+
+  return (
+    <div className="m-4">
+      {groupItems}
+      <AddColorGroupForm
+        className="mb-4"
+        handleSubmit={(name: string) =>
+          setGroupNames(groupNames.concat([name]))
+        }
+      />
+
+      <ColorList ungrouped={ungrouped} className="mb-4" />
+    </div>
+  );
+}
 
 export default App;
