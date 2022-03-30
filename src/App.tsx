@@ -190,7 +190,9 @@ function App() {
 
   const handleMove = () => {
     let selectedGroup = colorGroups.find((group) => group.selected);
-    let selectedColors = colorItems.filter((item) => item.selected);
+    let selectedColors = colorItems
+      .filter((item) => item.selected)
+      .map((item) => ({ ...item, selected: false }));
     setColorGroups((colorGroups) =>
       colorGroups.map((group) =>
         group.name === selectedGroup?.name
