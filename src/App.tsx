@@ -12,10 +12,10 @@ function ColorListItem({ color, className }: ColorProps & ClassNameProp) {
   return (
     <div className={className}>
       <div
-        className="w-16 h-16 text border-2 flex items-center justify-center"
+        className="w-16 h-16 text border-2 mr-4 mb-2 flex items-center justify-center"
         style={style}
       >
-        <p className="text-sm invisible hover:visible">{color.slice(1)}</p>
+        <p className="text-sm">{color.slice(1)}</p>
       </div>
     </div>
   );
@@ -84,13 +84,15 @@ function AddColorGroupForm({
 
 type SelectableProps = { text: string };
 function Selectable({ text }: SelectableProps) {
-  return <button>{text}</button>;
+  return (
+    <button className="text-xl bg-blue-200 py-1 px-4 mr-4 mb-2">{text}</button>
+  );
 }
 
 type SelectableGroupProps = { texts: string[] };
 function SelectableGroup({ texts }: SelectableGroupProps) {
   const items = texts.map((text) => <Selectable text={text} />);
-  return <>{items}</>;
+  return <div className="mb-4">{items}</div>;
 }
 
 type EmptyStateProps = { message: string };
@@ -108,7 +110,6 @@ function App() {
   const emptyGroup: string[] = [];
   const [groupNames, setGroupNames] = useState(emptyGroup);
 
-  // const groupItems = groupNames.map((name, i) => <li key={i}>{name}</li>);
   const groupItems =
     groupNames.length === 0 ? (
       <EmptyState message="Create 1 or more color groups to begin grouping colors." />
@@ -118,13 +119,13 @@ function App() {
 
   return (
     <div className="m-4">
-      {groupItems}
       <AddColorGroupForm
         className="mb-4"
         handleSubmit={(name: string) =>
           setGroupNames(groupNames.concat([name]))
         }
       />
+      {groupItems}
       <hr className="mb-4" />
       <ColorList ungrouped={ungrouped} className="mb-4" />
     </div>
