@@ -152,7 +152,12 @@ function App() {
     )
   );
 
-  const emptyColorGroup: ColorGroup[] = [];
+  const emptyColorGroup: ColorGroup[] = [
+    { name: "primary", selected: false, colors: [] },
+    { name: "secondary", selected: false, colors: [] },
+    { name: "notify", selected: false, colors: [] },
+    { name: "background", selected: false, colors: [] },
+  ];
   const [colorGroups, setColorGroups] = useState(emptyColorGroup);
 
   const handleAddColorGroupFormSubmit = (name: string) =>
