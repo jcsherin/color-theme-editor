@@ -1,12 +1,11 @@
-import { group } from "console";
-import React, { useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import { tailwindColors } from "./tailwindAllColors";
 
 type ClassNameProp = { className: string };
 
-type ColorItem = { hexcode: string; selected: boolean };
-type ColorGroup = { name: string; selected: boolean };
+type ColorItem = { hexcode: string; selected: boolean; grouped: boolean };
+type ColorGroup = { name: string; selected: boolean; colors: ColorItem[] };
 
 type ColorProps = { color: ColorItem; handleClick: () => void };
 
@@ -16,8 +15,12 @@ function ColorListItem({ color, handleClick }: ColorProps) {
   };
   const className = "flex items-center justify-center w-20 h-20 cursor-pointer";
   const highlight = color.selected ? "border-2 border-green-600" : "";
+  const visible = color.grouped ? "invisible" : "";
   return (
-    <div className={`${className} ${highlight}`} onClick={() => handleClick()}>
+    <div
+      className={`${className} ${highlight} ${visible}`}
+      onClick={() => handleClick()}
+    >
       <div
         className="w-16 h-16 text border-2 flex items-center justify-center"
         style={style}
@@ -131,7 +134,11 @@ function EmptyState({ message }: EmptyStateProps) {
 function App() {
   const [colorItems, setColorItems] = useState(() =>
     tailwindColors.map(
-      (hexcode): ColorItem => ({ hexcode: hexcode, selected: false })
+      (hexcode): ColorItem => ({
+        hexcode: hexcode,
+        selected: false,
+        grouped: false,
+      })
     )
   );
 
@@ -140,7 +147,7 @@ function App() {
 
   const handleAddColorGroupFormSubmit = (name: string) =>
     setColorGroups((groups) =>
-      groups.concat([{ name: name, selected: false }])
+      groups.concat([{ name: name, selected: false, colors: [] }])
     );
 
   const handleColorGroupSelection = (colorGroup: ColorGroup) =>
@@ -171,6 +178,27 @@ function App() {
       )
     );
 
+  const handleMove = () => {
+    let selectedGroup = colorGroups.find((group) => group.selected);
+    let selectedColors = colorItems.filter((item) => item.selected);
+    setColorGroups((colorGroups) =>
+      colorGroups.map((group) =>
+        group.name === selectedGroup?.name
+          ? {
+              ...group,
+              selected: false,
+              colors: group.colors.concat(selectedColors),
+            }
+          : group
+      )
+    );
+    setColorItems((colorItems) =>
+      colorItems.map((color) =>
+        color.selected ? { ...color, selected: false, grouped: true } : color
+      )
+    );
+  };
+
   const moveDisabled =
     colorItems.findIndex((item) => item.selected) === -1 ||
     colorGroups.findIndex((item) => item.selected) === -1;
@@ -196,9 +224,7 @@ function App() {
 
       <button
         disabled={moveDisabled}
-        onClick={() => {
-          console.log("Move!!!");
-        }}
+        onClick={() => handleMove()}
         className={moveClassName}
       >
         Move colors to groups
