@@ -131,11 +131,22 @@ function EmptyState({ message }: EmptyStateProps) {
   );
 }
 
-type ColorGroupProps = { group: ColorGroup };
-function ColorGroupView({ group }: ColorGroupProps) {
+type ColorGroupProps = {
+  group: ColorGroup;
+  handleDelete: (colorGroup: ColorGroup) => void;
+};
+function ColorGroupView({ group, handleDelete }: ColorGroupProps) {
   return (
     <section className="mb-4">
-      <h2>{group.name}</h2>
+      <div className="flex">
+        <h2 className="mr-4">{group.name}</h2>
+        <button
+          onClick={() => handleDelete(group)}
+          className="text-red-600 underline capitalize text-sm"
+        >
+          Delete!
+        </button>
+      </div>
       <ColorList items={group.colors} handleSelection={() => {}} />
     </section>
   );
@@ -273,9 +284,28 @@ function App() {
       )
     );
 
+  const handleDeleteColorGroup = (group: ColorGroup) => {
+    setColorItems((colors) =>
+      colors.map((color) =>
+        group.colors.findIndex((item) => item.hexcode === color.hexcode) > -1
+          ? { ...color, grouped: false }
+          : color
+      )
+    );
+    setColorGroups((groups) =>
+      groups.filter((item) => item.name !== group.name)
+    );
+  };
+
   const groupedColors = colorGroups
     .filter((group) => group.colors.length > 0)
-    .map((group, i) => <ColorGroupView key={i} group={group} />);
+    .map((group, i) => (
+      <ColorGroupView
+        handleDelete={() => handleDeleteColorGroup(group)}
+        key={i}
+        group={group}
+      />
+    ));
 
   const tailwindConfig = tailwindConfigJSON(
     colorGroups,
@@ -314,5 +344,3 @@ function App() {
   );
 }
 export default App;
-
-
