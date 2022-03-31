@@ -220,7 +220,7 @@ function App() {
     colorItems.findIndex((item) => item.selected) === -1 ||
     colorGroups.findIndex((item) => item.selected) === -1;
 
-  const moveBg = moveDisabled ? "bg-slate-600" : "bg-blue-600";
+  const moveBg = moveDisabled ? "bg-slate-300" : "bg-blue-600";
   const moveClassName = `mb-4 text-lg font-semibold text-slate-200 px-16 py-2 capitalize ${moveBg}`;
 
   const nonEmptyGroups = colorGroups
@@ -242,6 +242,12 @@ function App() {
           handleSelection={handleColorGroupSelection}
         />
       )}
+      
+      <p>Ungrouped</p>
+      <ColorList
+        items={colorItems.filter((item) => !item.grouped)}
+        handleSelection={handleColorItemSelection}
+      />
 
       <button
         disabled={moveDisabled}
@@ -250,11 +256,6 @@ function App() {
       >
         Move colors to groups
       </button>
-
-      <ColorList
-        items={colorItems}
-        handleSelection={handleColorItemSelection}
-      />
 
       {nonEmptyGroups}
     </div>
