@@ -165,24 +165,35 @@ function App() {
       groups.concat([{ name: name, selected: false, colors: [] }])
     );
 
-  const handleColorGroupSelection = (colorGroup: ColorGroup) =>
-    setColorGroups((groups) => {
-      let selectedIdx = groups.findIndex(
-        (group) => group.name === colorGroup.name
+  const handleMoveColorsToGroup = (target: ColorGroup) => {
+    let colorsToMove = colorItems
+      .filter((item) => item.selected)
+      .map((item) => ({ ...item, selected: false }));
+    if (colorsToMove.length === 0) {
+      setColorGroups((groups) =>
+        groups.map((group) =>
+          group.name === target.name ? { ...group, selected: false } : group
+        )
       );
-      if (groups[selectedIdx].selected) {
-        // selected earlier, therefore turn off the selection
-        return groups.map((group) =>
-          group.name === colorGroup.name ? { ...group, selected: false } : group
-        );
-      }
-
-      return groups.map((group) =>
-        group.name === colorGroup.name
-          ? { ...group, selected: true }
-          : { ...group, selected: false }
-      );
-    });
+      return;
+    }
+    setColorItems((colors) =>
+      colors.map((item) =>
+        item.selected ? { ...item, selected: false, grouped: true } : item
+      )
+    );
+    setColorGroups((groups) =>
+      groups.map((group) =>
+        group.name === target.name
+          ? {
+              ...group,
+              selected: false,
+              colors: group.colors.concat(colorsToMove),
+            }
+          : group
+      )
+    );
+  };
 
   const handleColorItemSelection = (colorItem: ColorItem) =>
     setColorItems((items) =>
@@ -193,37 +204,7 @@ function App() {
       )
     );
 
-  const handleMove = () => {
-    let selectedGroup = colorGroups.find((group) => group.selected);
-    let selectedColors = colorItems
-      .filter((item) => item.selected)
-      .map((item) => ({ ...item, selected: false }));
-    setColorGroups((colorGroups) =>
-      colorGroups.map((group) =>
-        group.name === selectedGroup?.name
-          ? {
-              ...group,
-              selected: false,
-              colors: group.colors.concat(selectedColors),
-            }
-          : group
-      )
-    );
-    setColorItems((colorItems) =>
-      colorItems.map((color) =>
-        color.selected ? { ...color, selected: false, grouped: true } : color
-      )
-    );
-  };
-
-  const moveDisabled =
-    colorItems.findIndex((item) => item.selected) === -1 ||
-    colorGroups.findIndex((item) => item.selected) === -1;
-
-  const moveBg = moveDisabled ? "bg-slate-300" : "bg-blue-600";
-  const moveClassName = `mb-4 text-lg font-semibold text-slate-200 px-16 py-2 capitalize ${moveBg}`;
-
-  const nonEmptyGroups = colorGroups
+  const groupedColors = colorGroups
     .filter((group) => group.colors.length > 0)
     .map((group) => <ColorGroupView group={group} />);
 
@@ -237,27 +218,22 @@ function App() {
       {colorGroups.length === 0 ? (
         <EmptyState message="Create 1 or more color groups to begin grouping colors." />
       ) : (
-        <SelectableGroup
-          groups={colorGroups}
-          handleSelection={handleColorGroupSelection}
-        />
+        <>
+          <h2 className="mb-2">Color Groups</h2>
+          <SelectableGroup
+            groups={colorGroups}
+            handleSelection={handleMoveColorsToGroup}
+          />
+        </>
       )}
-      
+
       <p>Ungrouped</p>
       <ColorList
         items={colorItems.filter((item) => !item.grouped)}
         handleSelection={handleColorItemSelection}
       />
 
-      <button
-        disabled={moveDisabled}
-        onClick={() => handleMove()}
-        className={moveClassName}
-      >
-        Move colors to groups
-      </button>
-
-      {nonEmptyGroups}
+      {groupedColors}
     </div>
   );
 }
