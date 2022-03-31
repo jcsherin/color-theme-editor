@@ -141,6 +141,33 @@ function ColorGroupView({ group }: ColorGroupProps) {
   );
 }
 
+type TailwindColorMap = {
+  [key: string]: string;
+};
+
+type TailwindConfig = {
+  theme: {
+    colors: {
+      [key: string]: string | TailwindColorMap;
+    };
+  };
+};
+
+function tailwindConfigJSON(groups: ColorGroup[], ungrouped: ColorItem[]) {
+  const config: TailwindConfig = { theme: { colors: {} } };
+  groups.forEach((group) => {
+    const tmp: TailwindColorMap = {};
+    group.colors.forEach((color) => {
+      tmp[color.hexcode] = color.hexcode;
+    });
+    config.theme.colors[group.name] = tmp;
+  });
+  ungrouped.forEach((color) => {
+    config.theme.colors[color.hexcode] = color.hexcode;
+  });
+  return JSON.stringify(config, null, 2);
+}
+
 function App() {
   const [colorItems, setColorItems] = useState(() =>
     tailwindColors.slice(0, 40).map(
@@ -206,7 +233,12 @@ function App() {
 
   const groupedColors = colorGroups
     .filter((group) => group.colors.length > 0)
-    .map((group) => <ColorGroupView group={group} />);
+    .map((group, i) => <ColorGroupView key={i} group={group} />);
+
+  const config = tailwindConfigJSON(
+    colorGroups,
+    colorItems.filter((item) => !item.grouped)
+  );
 
   return (
     <div className="m-4">
@@ -234,6 +266,8 @@ function App() {
       />
 
       {groupedColors}
+
+      <pre>{config}</pre>
     </div>
   );
 }
