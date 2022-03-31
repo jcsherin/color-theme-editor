@@ -168,6 +168,48 @@ function tailwindConfigJSON(groups: ColorGroup[], ungrouped: ColorItem[]) {
   return JSON.stringify(config, null, 2);
 }
 
+type ClipboardCopyProps = {
+  copyText: string;
+};
+function ClipboardCopy({ copyText }: ClipboardCopyProps) {
+  const [isCopied, setIsCopied] = useState(false);
+
+  async function copyTextToClipboard(text: string) {
+    return await navigator.clipboard.writeText(text);
+  }
+
+  const handleCopyClick = () => {
+    copyTextToClipboard(copyText)
+      .then(() => {
+        setIsCopied(true);
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 1500);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const copyAction = isCopied ? (
+    <p className="text-green-500">Copied!</p>
+  ) : (
+    <button
+      onClick={handleCopyClick}
+      className="bg-blue-500 text-slate-200 px-8"
+    >
+      Copy
+    </button>
+  );
+
+  return (
+    <div>
+      {copyAction}
+      <pre>{copyText}</pre>
+    </div>
+  );
+}
+
 function App() {
   const [colorItems, setColorItems] = useState(() =>
     tailwindColors.slice(0, 40).map(
@@ -235,7 +277,7 @@ function App() {
     .filter((group) => group.colors.length > 0)
     .map((group, i) => <ColorGroupView key={i} group={group} />);
 
-  const config = tailwindConfigJSON(
+  const tailwindConfig = tailwindConfigJSON(
     colorGroups,
     colorItems.filter((item) => !item.grouped)
   );
@@ -267,8 +309,10 @@ function App() {
 
       {groupedColors}
 
-      <pre>{config}</pre>
+      <ClipboardCopy copyText={tailwindConfig} />
     </div>
   );
 }
 export default App;
+
+
