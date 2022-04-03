@@ -221,6 +221,32 @@ function ClipboardCopy({ copyText }: ClipboardCopyProps) {
   );
 }
 
+const exampleColorGroups = [
+  "primary",
+  "secondary",
+  "notification",
+  "background",
+];
+
+shuffle(tailwindColors);
+const exampleColorValues = tailwindColors.slice(0, 40);
+
+// [0..n)
+function uniformRandom(n: number) {
+  return Math.trunc(Math.random() * n);
+}
+
+// randomly shuffle array
+function shuffle(arr: string[]) {
+  const size = arr.length;
+  for (let i = 0; i < size; i++) {
+    const random = i + uniformRandom(size - i);
+    let tmp = arr[i];
+    arr[i] = arr[random];
+    arr[random] = tmp;
+  }
+}
+
 function App() {
   const [colorItems, setColorItems] = useState(() =>
     tailwindColors.slice(0, 40).map(
@@ -314,12 +340,28 @@ function App() {
 
   return (
     <div className="m-4">
-      <AddColorGroupForm
+      <div className="border-2 border-blue-300 border-dashed p-2">
+        <textarea
+          className="bg-slate-100 w-full md:w-1/2 h-60 p-4 border-2 resize-none"
+          placeholder="Enter color values exported from design here. One value per line."
+          value={exampleColorValues.join("\n")}
+        ></textarea>
+        <textarea
+          className="bg-slate-100 w-full md:w-1/2 h-60 p-4 border-2 resize-none"
+          placeholder="Enter color group names. One value per line."
+          value={exampleColorGroups.join("\n")}
+        ></textarea>
+        <p>
+          <span className="mr-2">Groups: {exampleColorGroups.length}</span>
+          <span>Colors: {exampleColorValues.length}</span>
+        </p>
+      </div>
+      {/* <AddColorGroupForm
         className="mb-4"
         handleSubmit={handleAddColorGroupFormSubmit}
-      />
+      /> */}
 
-      {colorGroups.length === 0 ? (
+      {/* {colorGroups.length === 0 ? (
         <EmptyState message="Create 1 or more color groups to begin grouping colors." />
       ) : (
         <>
@@ -339,7 +381,7 @@ function App() {
 
       {groupedColors}
 
-      <ClipboardCopy copyText={tailwindConfig} />
+      <ClipboardCopy copyText={tailwindConfig} /> */}
     </div>
   );
 }
