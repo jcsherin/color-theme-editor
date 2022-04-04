@@ -93,40 +93,38 @@ function App() {
     colors: "",
   });
 
-  const isThemeEmpty = theme.groups.length === 0 && theme.colors.length === 0;
-
-  const primaryActionButton = (
-    <button className="mr-4 px-12 py-2 font-bold text-red-600 hover:text-red-800 bg-red-200 hover:bg-red-400">
-      Reload Color Values & Groups
-    </button>
-  );
-
-  const secondaryActionButton = isThemeEmpty ? (
-    <button
-      onClick={() =>
-        setTheme({
-          groups: exampleColorGroups.join("\n"),
-          colors: exampleColorValues.join("\n"),
-        })
-      }
-      className="text-blue-600 underline"
-    >
-      Populate Example Data
-    </button>
-  ) : (
-    <button
-      onClick={() => setTheme({ groups: "", colors: "" })}
-      className="text-blue-600 underline"
-    >
-      Clear Form Data
-    </button>
+  const batchActions = (
+    <>
+      <button className="mr-4 px-12 py-2 font-bold text-red-600 hover:text-red-800 bg-red-200 hover:bg-red-400">
+        Reload Color Values & Groups
+      </button>
+      {theme.groups.length === 0 && theme.colors.length === 0 ? (
+        <button
+          onClick={() =>
+            setTheme({
+              groups: exampleColorGroups.join("\n"),
+              colors: exampleColorValues.join("\n"),
+            })
+          }
+          className="text-blue-600 underline"
+        >
+          Populate Example Data
+        </button>
+      ) : (
+        <button
+          onClick={() => setTheme({ groups: "", colors: "" })}
+          className="text-blue-600 underline"
+        >
+          Clear Form Data
+        </button>
+      )}
+    </>
   );
 
   return (
     <div className="m-4">
       <BatchInput batch={theme} handleBatchUpdate={setTheme}>
-        {primaryActionButton}
-        {secondaryActionButton}
+        {batchActions}
       </BatchInput>
     </div>
   );
