@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
-import { shuffle } from "./random";
-import { tailwindColors } from "./tailwindAllColors";
+import { exampleColorGroups, exampleColorValues } from "./example";
 
 interface TextInputProps {
   label: string;
@@ -73,15 +72,6 @@ function BatchInput({ batch, handleBatchUpdate, children }: BatchInputProps) {
   );
 }
 
-const exampleColorGroups = [
-  "primary",
-  "secondary",
-  "notification",
-  "background",
-];
-
-// const exampleColorValues = shuffle(tailwindColors).slice(0, 40);
-const exampleColorValues = shuffle(tailwindColors).slice(0, 40);
 interface ColorThemeInputFormat {
   groups: string;
   colors: string;

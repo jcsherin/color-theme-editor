@@ -1,5 +1,6 @@
-// https://gist.github.com/davidpiesse/74f5eaa23eb405e61b58cfe535d9907c
+import { shuffle } from "./random";
 
+// https://gist.github.com/davidpiesse/74f5eaa23eb405e61b58cfe535d9907c
 let tailwind = {
   transparent: "transparent",
   black: "#000000",
@@ -556,4 +557,10 @@ let tailwindColors = Array.from(
   new Set(Object.values(tailwind).filter((x) => x.startsWith("#")))
 );
 
-export { tailwindColors };
+export const exampleColorGroups = [
+  "primary",
+  "secondary",
+  "notification",
+  "background",
+];
+export const exampleColorValues = shuffle(tailwindColors).slice(0, 40);
