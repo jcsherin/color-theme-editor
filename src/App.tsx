@@ -3,12 +3,6 @@ import "./App.css";
 import { shuffle } from "./random";
 import { tailwindColors } from "./tailwindAllColors";
 
-interface BatchInputProps {
-  formData: BatchInputFormat;
-  handleFormUpdate: React.Dispatch<React.SetStateAction<BatchInputFormat>>;
-  handlePopulateExampleData: () => void;
-}
-
 interface TextInputProps {
   label: string;
   text: string;
@@ -34,37 +28,25 @@ function TextAreaInput({
   );
 }
 
-function BatchInput({
-  formData,
-  handleFormUpdate,
-  handlePopulateExampleData,
-}: BatchInputProps) {
-  const secondaryActionButton =
-    formData.groups.length === 0 && formData.colors.length === 0 ? (
-      <button
-        onClick={handlePopulateExampleData}
-        className="text-blue-600 underline"
-      >
-        Populate Example Data
-      </button>
-    ) : (
-      <button
-        onClick={() => handleFormUpdate({ groups: "", colors: "" })}
-        className="text-blue-600 underline"
-      >
-        Clear Form Data
-      </button>
-    );
+interface BatchInputProps {
+  batch: ColorThemeInputFormat;
+  handleBatchUpdate: React.Dispatch<
+    React.SetStateAction<ColorThemeInputFormat>
+  >;
+  children: React.ReactNode;
+}
+
+function BatchInput({ batch, handleBatchUpdate, children }: BatchInputProps) {
   const handleUpdateGroups = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const newGroups = event.currentTarget.value;
-    handleFormUpdate((prev) => ({
+    handleBatchUpdate((prev) => ({
       ...prev,
       groups: newGroups,
     }));
   };
   const handleUpdateColors = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const newColors = event.currentTarget.value;
-    handleFormUpdate((prev) => ({
+    handleBatchUpdate((prev) => ({
       ...prev,
       colors: newColors,
     }));
@@ -76,20 +58,17 @@ function BatchInput({
         <TextAreaInput
           className="w-full mr-1 mb-2"
           label="Color Groups"
-          text={formData.groups}
+          text={batch.groups}
           handleChange={handleUpdateGroups}
         />
         <TextAreaInput
           className="w-full mb-2"
           label="Color values"
-          text={formData.colors}
+          text={batch.colors}
           handleChange={handleUpdateColors}
         />
       </div>
-      <button className="mr-4 px-12 py-2 font-bold text-red-600 hover:text-red-800 bg-red-200 hover:bg-red-400">
-        Reload Color Values & Groups
-      </button>
-      {secondaryActionButton}
+      {children}
     </div>
   );
 }
@@ -103,29 +82,52 @@ const exampleColorGroups = [
 
 // const exampleColorValues = shuffle(tailwindColors).slice(0, 40);
 const exampleColorValues = shuffle(tailwindColors).slice(0, 40);
-interface BatchInputFormat {
+interface ColorThemeInputFormat {
   groups: string;
   colors: string;
 }
 
 function App() {
-  const [batch, setBatch] = useState<BatchInputFormat>({
+  const [theme, setTheme] = useState<ColorThemeInputFormat>({
     groups: "",
     colors: "",
   });
 
+  const isThemeEmpty = theme.groups.length === 0 && theme.colors.length === 0;
+
+  const primaryActionButton = (
+    <button className="mr-4 px-12 py-2 font-bold text-red-600 hover:text-red-800 bg-red-200 hover:bg-red-400">
+      Reload Color Values & Groups
+    </button>
+  );
+
+  const secondaryActionButton = isThemeEmpty ? (
+    <button
+      onClick={() =>
+        setTheme({
+          groups: exampleColorGroups.join("\n"),
+          colors: exampleColorValues.join("\n"),
+        })
+      }
+      className="text-blue-600 underline"
+    >
+      Populate Example Data
+    </button>
+  ) : (
+    <button
+      onClick={() => setTheme({ groups: "", colors: "" })}
+      className="text-blue-600 underline"
+    >
+      Clear Form Data
+    </button>
+  );
+
   return (
     <div className="m-4">
-      <BatchInput
-        formData={batch}
-        handleFormUpdate={setBatch}
-        handlePopulateExampleData={() =>
-          setBatch({
-            groups: exampleColorGroups.join("\n"),
-            colors: exampleColorValues.join("\n"),
-          })
-        }
-      />
+      <BatchInput batch={theme} handleBatchUpdate={setTheme}>
+        {primaryActionButton}
+        {secondaryActionButton}
+      </BatchInput>
     </div>
   );
 }
