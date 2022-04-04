@@ -1,4 +1,4 @@
-import { ColorThemeInputFormat } from "./ColorThemeInputFormat";
+import { ColorThemeInputFormat } from "./ColorTheme";
 import { TextAreaInput } from "./TextAreaInput";
 
 interface BatchInputProps {
@@ -9,7 +9,11 @@ interface BatchInputProps {
   children: React.ReactNode;
 }
 
-export function BatchInput({ batch, handleBatchUpdate, children }: BatchInputProps) {
+export function BatchInput({
+  batch,
+  handleBatchUpdate,
+  children,
+}: BatchInputProps) {
   const handleUpdateGroups = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const newGroups = event.currentTarget.value;
     handleBatchUpdate((prev) => ({
