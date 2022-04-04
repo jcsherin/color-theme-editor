@@ -1,81 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./App.css";
+import { BatchInput } from "./BatchInput";
+import { ColorThemeInputFormat } from "./ColorThemeInputFormat";
 import { exampleColorGroups, exampleColorValues } from "./example";
-
-interface TextAreaInputProps {
-  label: string;
-  text: string;
-  handleChange: (event: React.FormEvent<HTMLTextAreaElement>) => void;
-}
-
-function TextAreaInput({
-  label,
-  text,
-  handleChange,
-  className,
-}: TextAreaInputProps & { className: string }) {
-  return (
-    <div className={className}>
-      <p className="text-sm font-bold">{label}</p>
-      <textarea
-        className="w-full bg-slate-100 h-60 p-4 border-2 resize-none"
-        placeholder="Enter color group names. One value per line."
-        value={text}
-        onChange={handleChange}
-      ></textarea>
-    </div>
-  );
-}
-
-interface BatchInputProps {
-  batch: ColorThemeInputFormat;
-  handleBatchUpdate: React.Dispatch<
-    React.SetStateAction<ColorThemeInputFormat>
-  >;
-  children: React.ReactNode;
-}
-
-function BatchInput({ batch, handleBatchUpdate, children }: BatchInputProps) {
-  const handleUpdateGroups = (event: React.FormEvent<HTMLTextAreaElement>) => {
-    const newGroups = event.currentTarget.value;
-    handleBatchUpdate((prev) => ({
-      ...prev,
-      groupsTextValue: newGroups,
-    }));
-  };
-  const handleUpdateColors = (event: React.FormEvent<HTMLTextAreaElement>) => {
-    const newColors = event.currentTarget.value;
-    handleBatchUpdate((prev) => ({
-      ...prev,
-      colorsTextValue: newColors,
-    }));
-  };
-
-  return (
-    <div>
-      <div className="block sm:flex">
-        <TextAreaInput
-          className="w-full mr-1 mb-2"
-          label="Color Groups"
-          text={batch.groupsTextValue}
-          handleChange={handleUpdateGroups}
-        />
-        <TextAreaInput
-          className="w-full mb-2"
-          label="Color values"
-          text={batch.colorsTextValue}
-          handleChange={handleUpdateColors}
-        />
-      </div>
-      {children}
-    </div>
-  );
-}
-
-interface ColorThemeInputFormat {
-  groupsTextValue: string;
-  colorsTextValue: string;
-}
 
 function App() {
   const [colorTheme, setColorTheme] = useState<ColorThemeInputFormat>({
