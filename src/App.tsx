@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import { exampleColorGroups, exampleColorValues } from "./example";
 
-interface TextInputProps {
+interface TextAreaInputProps {
   label: string;
   text: string;
   handleChange: (event: React.FormEvent<HTMLTextAreaElement>) => void;
@@ -13,7 +13,7 @@ function TextAreaInput({
   text,
   handleChange,
   className,
-}: TextInputProps & { className: string }) {
+}: TextAreaInputProps & { className: string }) {
   return (
     <div className={className}>
       <p className="text-sm font-bold">{label}</p>
@@ -40,14 +40,14 @@ function BatchInput({ batch, handleBatchUpdate, children }: BatchInputProps) {
     const newGroups = event.currentTarget.value;
     handleBatchUpdate((prev) => ({
       ...prev,
-      groups: newGroups,
+      groupsTextValue: newGroups,
     }));
   };
   const handleUpdateColors = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const newColors = event.currentTarget.value;
     handleBatchUpdate((prev) => ({
       ...prev,
-      colors: newColors,
+      colorsTextValue: newColors,
     }));
   };
 
@@ -57,13 +57,13 @@ function BatchInput({ batch, handleBatchUpdate, children }: BatchInputProps) {
         <TextAreaInput
           className="w-full mr-1 mb-2"
           label="Color Groups"
-          text={batch.groups}
+          text={batch.groupsTextValue}
           handleChange={handleUpdateGroups}
         />
         <TextAreaInput
           className="w-full mb-2"
           label="Color values"
-          text={batch.colors}
+          text={batch.colorsTextValue}
           handleChange={handleUpdateColors}
         />
       </div>
@@ -73,39 +73,40 @@ function BatchInput({ batch, handleBatchUpdate, children }: BatchInputProps) {
 }
 
 interface ColorThemeInputFormat {
-  groups: string;
-  colors: string;
+  groupsTextValue: string;
+  colorsTextValue: string;
 }
 
 function App() {
-  const [theme, setTheme] = useState<ColorThemeInputFormat>({
-    groups: "",
-    colors: "",
+  const [colorTheme, setColorTheme] = useState<ColorThemeInputFormat>({
+    groupsTextValue: "",
+    colorsTextValue: "",
   });
+
+  const clearColorTheme = () =>
+    setColorTheme({ groupsTextValue: "", colorsTextValue: "" });
 
   const batchActions = (
     <>
       <button className="mr-4 px-12 py-2 font-bold text-red-600 hover:text-red-800 bg-red-200 hover:bg-red-400">
         Reload Color Values & Groups
       </button>
-      {theme.groups.length === 0 && theme.colors.length === 0 ? (
+      {colorTheme.groupsTextValue.length === 0 &&
+      colorTheme.colorsTextValue.length === 0 ? (
         <button
           onClick={() =>
-            setTheme({
-              groups: exampleColorGroups.join("\n"),
-              colors: exampleColorValues.join("\n"),
+            setColorTheme({
+              groupsTextValue: exampleColorGroups.join("\n"),
+              colorsTextValue: exampleColorValues.join("\n"),
             })
           }
           className="text-blue-600 underline"
         >
-          Populate Example Data
+          Populate Example Color Groups & Values
         </button>
       ) : (
-        <button
-          onClick={() => setTheme({ groups: "", colors: "" })}
-          className="text-blue-600 underline"
-        >
-          Clear Form Data
+        <button onClick={clearColorTheme} className="text-blue-600 underline">
+          Clear Color Groups & Values
         </button>
       )}
     </>
@@ -113,7 +114,7 @@ function App() {
 
   return (
     <div className="m-4">
-      <BatchInput batch={theme} handleBatchUpdate={setTheme}>
+      <BatchInput batch={colorTheme} handleBatchUpdate={setColorTheme}>
         {batchActions}
       </BatchInput>
     </div>
