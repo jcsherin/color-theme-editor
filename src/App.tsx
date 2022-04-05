@@ -187,9 +187,9 @@ export default App;
 
 /**
  * TODO
- * - Show grouped colors
- * - Show Tailwind Configuration
- * - Copy Tailwind Configuration to clipboard
+ * - Background of square should match the color value
+ * - Inline editor for naming color values
+ * - Show colors along side color values in config view
  * - Disable `Use Colors Groups & Values` button after first use
  * - Enable button only when data in input changes
  * - The use button destroys existing work in the bottom half (warn user)
