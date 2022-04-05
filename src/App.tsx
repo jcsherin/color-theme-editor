@@ -8,6 +8,7 @@ import {
   createColorState,
   parseColors,
   parseGroups,
+  tailwindJSON,
 } from "./ColorTheme";
 import { exampleColorGroups, exampleColorValues } from "./example";
 /**
@@ -137,7 +138,7 @@ function App() {
           />
         ))}
       </div>
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap mb-8">
         {Array.from(colorTheme.colors.entries()).map(([color, _]) =>
           color.selected ? (
             <Button
@@ -156,6 +157,10 @@ function App() {
           )
         )}
       </div>
+      <hr className="mb-8" />
+      <pre className="bg-slate-800 text-blue-300 p-8">
+        {tailwindJSON(colorTheme)}
+      </pre>
     </div>
   );
 }

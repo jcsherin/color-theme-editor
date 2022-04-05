@@ -8,6 +8,39 @@ export interface ColorTheme {
   colors: Set<ColorState>;
 }
 
+export type ColorState = { value: string; selected: boolean };
+
+interface TailwindColorMap {
+  [key: string]: string;
+}
+
+interface TailwindConfig {
+  theme: {
+    colors: {
+      [key: string]: string | TailwindColorMap;
+    };
+  };
+}
+
+function createEmptyTailwindConfig(): TailwindConfig {
+  return { theme: { colors: {} } };
+}
+
+export function tailwindJSON(theme: ColorTheme) {
+  const config = createEmptyTailwindConfig();
+  theme.groups.forEach((colors, group) => {
+    const tmp: TailwindColorMap = {};
+    colors.forEach((color) => {
+      tmp[color] = color;
+    });
+    config.theme.colors[group] = tmp;
+  });
+  theme.colors.forEach((colorState) => {
+    config.theme.colors[colorState.value] = colorState.value;
+  });
+  return JSON.stringify(config, null, 2);
+}
+
 export function parseColors(text: string) {
   return text
     .split("\n")
@@ -23,8 +56,6 @@ export function parseGroups(text: string) {
     .filter((value) => value.length > 0)
     .reduce((acc, current) => [...acc, current], new Array<string>());
 }
-
-export type ColorState = { value: string; selected: boolean };
 
 export function createColorState(color: string): ColorState {
   return { value: color, selected: false };
