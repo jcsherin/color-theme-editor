@@ -1,8 +1,12 @@
 import { useState } from "react";
-import "./App.css";
 import { BatchInput } from "./BatchInput";
 import { Button } from "./Button";
-import { ColorTheme, ColorThemeInputFormat } from "./ColorTheme";
+import {
+  ColorTheme,
+  ColorThemeInputFormat,
+  parseColors,
+  parseGroups,
+} from "./ColorTheme";
 import { exampleColorGroups, exampleColorValues } from "./example";
 
 function App() {
@@ -28,22 +32,10 @@ function App() {
 
   const handleUpdateColorTheme = () => {
     const { groupsTextValue, colorsTextValue } = colorThemeInput;
-
-    const groups = new Set<string>();
-    groupsTextValue
-      .split("\n")
-      .map((value) => value.trim().replace(/\s+/, "-"))
-      .filter((value) => value.length > 0)
-      .forEach((value) => groups.add(value));
-
-    const colors = new Set<string>();
-    colorsTextValue
-      .split("\n")
-      .map((value) => value.trim())
-      .filter((value) => value.length > 0)
-      .forEach((value) => colors.add(value));
-
-    setColorTheme({ groups: groups, colors: colors });
+    setColorTheme({
+      groups: parseGroups(groupsTextValue),
+      colors: parseColors(colorsTextValue),
+    });
   };
 
   const isColorThemeInputEmpty =
