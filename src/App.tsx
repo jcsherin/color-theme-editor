@@ -21,10 +21,10 @@ function App() {
     colors: new Set(),
   });
 
-  const clearColorThemeInput = () =>
+  const handleClearColorThemeInput = () =>
     setColorThemeInput({ groupsTextValue: "", colorsTextValue: "" });
 
-  const populateFromExample = () =>
+  const handlePopulateFromExample = () =>
     setColorThemeInput({
       groupsTextValue: exampleColorGroups.join("\n"),
       colorsTextValue: exampleColorValues.join("\n"),
@@ -59,13 +59,13 @@ function App() {
         />
         {isColorThemeInputEmpty ? (
           <Button
-            handleClick={populateFromExample}
+            handleClick={handlePopulateFromExample}
             className="text-blue-600 underline"
             label="Populate Example Color Groups & Values"
           />
         ) : (
           <Button
-            handleClick={clearColorThemeInput}
+            handleClick={handleClearColorThemeInput}
             className="text-blue-600 underline"
             label="Clear Color Groups & Values"
           />
