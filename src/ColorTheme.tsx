@@ -4,7 +4,7 @@ export interface ColorThemeInputFormat {
 }
 
 export interface ColorTheme {
-  groups: Set<string>;
+  groups: Map<string, Set<string>>;
   colors: Set<ColorState>;
 }
 

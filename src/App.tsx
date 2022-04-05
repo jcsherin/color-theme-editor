@@ -19,7 +19,7 @@ function App() {
     }
   );
   const [colorTheme, setColorTheme] = useState<ColorTheme>({
-    groups: new Set(),
+    groups: new Map<string, Set<string>>(),
     colors: new Set<ColorState>(),
   });
 
@@ -35,7 +35,9 @@ function App() {
   const handleUpdateColorTheme = () => {
     const { groupsTextValue, colorsTextValue } = colorThemeInput;
     setColorTheme({
-      groups: new Set(parseGroups(groupsTextValue)),
+      groups: new Map(
+        parseGroups(groupsTextValue).map((group) => [group, new Set()])
+      ),
       colors: new Set(parseColors(colorsTextValue).map(createColorState)),
     });
   };
@@ -56,6 +58,29 @@ function App() {
         return item;
       });
       return { ...prevState, colors: new Set(newColors) };
+    });
+  };
+
+  const handleGrouping = (group: string) => {
+    console.log(`Grouping ${group}`);
+    setColorTheme((prevState) => {
+      const selectedColorValues = Array.from(prevState.colors)
+        .filter((color) => color.selected)
+        .map((color) => color.value);
+      if (selectedColorValues.length === 0) {
+        return prevState;
+      }
+      const colorValuesInGroup = Array.from(prevState.groups.get(group)!);
+      const newGroups = new Map(
+        prevState.groups.set(
+          group,
+          new Set([...colorValuesInGroup, ...selectedColorValues])
+        )
+      );
+      const newColors = new Set(
+        Array.from(prevState.colors).filter((color) => !color.selected)
+      );
+      return { groups: newGroups, colors: newColors };
     });
   };
 
@@ -90,7 +115,7 @@ function App() {
         {Array.from(colorTheme.groups.entries()).map(([group, _]) => (
           <Button
             key={group}
-            handleClick={() => {}}
+            handleClick={() => handleGrouping(group)}
             className="mr-2 mb-2 px-4 py-2 font-bold text-green-600 hover:text-green-800 bg-green-200 hover:bg-green-400"
             label={group}
           />
