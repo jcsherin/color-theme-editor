@@ -10,7 +10,23 @@ import {
   parseGroups,
 } from "./ColorTheme";
 import { exampleColorGroups, exampleColorValues } from "./example";
-
+/**
+ * TODO
+ * - Show grouped colors
+ * - Show Tailwind Configuration
+ * - Copy Tailwind Configuration to clipboard
+ * - Disable `Use Colors Groups & Values` button after first use
+ * - Enable button only when data in input changes
+ * - The use button destroys existing work in the bottom half (warn user)
+ * - Add usage/help inline in app
+ * Future work
+ * - Parse color values
+ * - Show invalid color values highlighted inline in textarea (better ux?)
+ *    (May have to make it a content editable div)
+ * - Unit tests
+ * - Browser tests
+ * - Keyboard navigation for color selection & grouping
+ */
 function App() {
   const [colorThemeInput, setColorThemeInput] = useState<ColorThemeInputFormat>(
     {
