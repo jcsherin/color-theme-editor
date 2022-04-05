@@ -24,11 +24,8 @@ export function parseGroups(text: string) {
     .reduce((acc, current) => [...acc, current], new Array<string>());
 }
 
-type ColorWithoutGroup = { state: "color-without-group"; value: string };
-type ColorSelected = { state: "color-selected"; value: string };
-type ColorGrouped = { state: "color-grouped"; value: string; group: string };
-export type ColorState = ColorWithoutGroup | ColorSelected | ColorGrouped;
+export type ColorState = { value: string; selected: boolean };
 
 export function createColorState(color: string): ColorState {
-  return { state: "color-without-group", value: color };
+  return { value: color, selected: false };
 }

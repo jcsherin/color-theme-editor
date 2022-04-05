@@ -49,21 +49,11 @@ function App() {
 
   const handleColorSelection = (color: ColorState) => {
     setColorTheme((prevState) => {
-      const { colors } = prevState;
-      const newColors: ColorState[] = Array.from(colors).map((item) => {
+      const newColors = Array.from(prevState.colors).map((item) => {
         if (item.value === color.value) {
-          switch (item.state) {
-            case "color-without-group":
-              return { ...item, state: "color-selected" };
-            case "color-selected":
-              return { ...item, state: "color-without-group" };
-            case "color-grouped":
-            default:
-              return item;
-          }
-        } else {
-          return item;
+          return { ...item, selected: !item.selected };
         }
+        return item;
       });
       return { ...prevState, colors: new Set(newColors) };
     });
@@ -108,7 +98,7 @@ function App() {
       </div>
       <div className="flex flex-wrap">
         {Array.from(colorTheme.colors.entries()).map(([color, _]) =>
-          color.state === "color-selected" ? (
+          color.selected ? (
             <Button
               key={color.value}
               handleClick={() => handleColorSelection(color)}
