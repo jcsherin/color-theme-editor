@@ -2,8 +2,10 @@ import { useState } from "react";
 import { BatchInput } from "./BatchInput";
 import { Button } from "./Button";
 import {
+  ColorState,
   ColorTheme,
   ColorThemeInputFormat,
+  createColorState,
   parseColors,
   parseGroups,
 } from "./ColorTheme";
@@ -18,10 +20,8 @@ function App() {
   );
   const [colorTheme, setColorTheme] = useState<ColorTheme>({
     groups: new Set(),
-    colors: new Set(),
+    colors: new Set<ColorState>(),
   });
-
-  const [selectedColors, setSelectedColors] = useState<Set<string>>(new Set());
 
   const handleClearColorThemeInput = () =>
     setColorThemeInput({ groupsTextValue: "", colorsTextValue: "" });
@@ -35,8 +35,8 @@ function App() {
   const handleUpdateColorTheme = () => {
     const { groupsTextValue, colorsTextValue } = colorThemeInput;
     setColorTheme({
-      groups: parseGroups(groupsTextValue),
-      colors: parseColors(colorsTextValue),
+      groups: new Set(parseGroups(groupsTextValue)),
+      colors: new Set(parseColors(colorsTextValue).map(createColorState)),
     });
   };
 
@@ -47,12 +47,27 @@ function App() {
     ? "text-gray-400 hover:text-gray-600 bg-slate-200 hover:bg-slate-400 cursor-not-allowed"
     : "text-red-600 hover:text-red-800 bg-red-200 hover:bg-red-400";
 
-  const handleColorSelection = (color: string) =>
-    setSelectedColors((prevState) => {
-      return prevState.has(color)
-        ? new Set(Array.from(prevState).filter((value) => value !== color))
-        : new Set(Array.from(prevState).concat([color]));
+  const handleColorSelection = (color: ColorState) => {
+    setColorTheme((prevState) => {
+      const { colors } = prevState;
+      const newColors: ColorState[] = Array.from(colors).map((item) => {
+        if (item.value === color.value) {
+          switch (item.state) {
+            case "color-without-group":
+              return { ...item, state: "color-selected" };
+            case "color-selected":
+              return { ...item, state: "color-without-group" };
+            case "color-grouped":
+            default:
+              return item;
+          }
+        } else {
+          return item;
+        }
+      });
+      return { ...prevState, colors: new Set(newColors) };
     });
+  };
 
   return (
     <div className="m-4">
@@ -93,19 +108,19 @@ function App() {
       </div>
       <div className="flex flex-wrap">
         {Array.from(colorTheme.colors.entries()).map(([color, _]) =>
-          selectedColors.has(color) ? (
+          color.state === "color-selected" ? (
             <Button
-              key={color}
+              key={color.value}
               handleClick={() => handleColorSelection(color)}
               className="mr-2 mb-2 font-xs text-green-200 bg-green-600 w-20 h-20 truncate"
-              label={color}
+              label={color.value}
             />
           ) : (
             <Button
-              key={color}
+              key={color.value}
               handleClick={() => handleColorSelection(color)}
               className="mr-2 mb-2 font-xs text-green-600 hover:text-green-800 bg-green-200 hover:bg-green-400 w-20 h-20 truncate"
-              label={color}
+              label={color.value}
             />
           )
         )}
