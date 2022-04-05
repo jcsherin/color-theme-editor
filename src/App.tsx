@@ -72,7 +72,24 @@ function App() {
         )}
       </BatchInput>
       <hr className="mb-8" />
-      <p>Hello world</p>
+      <div className="flex flex-wrap mb-4">
+        {Array.from(colorTheme.groups.entries()).map(([group, _]) => (
+          <Button
+            handleClick={() => {}}
+            className="mr-2 mb-2 px-4 py-2 font-bold text-green-600 hover:text-green-800 bg-green-200 hover:bg-green-400"
+            label={group}
+          />
+        ))}
+      </div>
+      <div className="flex flex-wrap">
+        {Array.from(colorTheme.colors.entries()).map(([color, _]) => (
+          <Button
+            handleClick={() => {}}
+            className="mr-2 mb-2 font-xs text-green-600 hover:text-green-800 bg-green-200 hover:bg-green-400 w-20 h-20 truncate"
+            label={color}
+          />
+        ))}
+      </div>
     </div>
   );
 }
