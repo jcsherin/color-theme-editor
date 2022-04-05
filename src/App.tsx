@@ -3,7 +3,6 @@ import "./App.css";
 import { BatchInput } from "./BatchInput";
 import { Button } from "./Button";
 import { ColorTheme, ColorThemeInputFormat } from "./ColorTheme";
-import { Conditional } from "./Conditional";
 import { exampleColorGroups, exampleColorValues } from "./example";
 
 function App() {
@@ -66,23 +65,19 @@ function App() {
           handleClick={handleUpdateColorTheme}
           label="Use Color Groups & Values"
         />
-        <Conditional
-          pred={isColorThemeInputEmpty}
-          whenTrue={
-            <Button
-              handleClick={populateFromExample}
-              className="text-blue-600 underline"
-              label="Populate Example Color Groups & Values"
-            />
-          }
-          whenFalse={
-            <Button
-              handleClick={clearColorThemeInput}
-              className="text-blue-600 underline"
-              label="Clear Color Groups & Values"
-            />
-          }
-        />
+        {isColorThemeInputEmpty ? (
+          <Button
+            handleClick={populateFromExample}
+            className="text-blue-600 underline"
+            label="Populate Example Color Groups & Values"
+          />
+        ) : (
+          <Button
+            handleClick={clearColorThemeInput}
+            className="text-blue-600 underline"
+            label="Clear Color Groups & Values"
+          />
+        )}
       </BatchInput>
     </div>
   );
