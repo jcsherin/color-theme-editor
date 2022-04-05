@@ -11,23 +11,41 @@ import {
   tailwindJSON,
 } from "./ColorTheme";
 import { exampleColorGroups, exampleColorValues } from "./example";
-/**
- * TODO
- * - Show grouped colors
- * - Show Tailwind Configuration
- * - Copy Tailwind Configuration to clipboard
- * - Disable `Use Colors Groups & Values` button after first use
- * - Enable button only when data in input changes
- * - The use button destroys existing work in the bottom half (warn user)
- * - Add usage/help inline in app
- * Future work
- * - Parse color values
- * - Show invalid color values highlighted inline in textarea (better ux?)
- *    (May have to make it a content editable div)
- * - Unit tests
- * - Browser tests
- * - Keyboard navigation for color selection & grouping
- */
+
+interface CopyToClipboardProps {
+  text: string;
+}
+function CopyToClipboard({ text }: CopyToClipboardProps) {
+  const [isCopied, setIsCopied] = useState(false);
+
+  async function copy(text: string) {
+    return await navigator.clipboard.writeText(text);
+  }
+
+  const handleCopy = () => {
+    copy(text)
+      .then(() => {
+        setIsCopied(true);
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  return isCopied ? (
+    <p className="text-green-800 px-8 py-2 mb-2">Copied!</p>
+  ) : (
+    <Button
+      label="Copy Tailwind Config"
+      handleClick={handleCopy}
+      className="bg-blue-500 hover:bg-blue-800 text-slate-200 hover:text-slate-500 px-8 py-2 mb-2"
+    />
+  );
+}
+
 function App() {
   const [colorThemeInput, setColorThemeInput] = useState<ColorThemeInputFormat>(
     {
@@ -158,6 +176,7 @@ function App() {
         )}
       </div>
       <hr className="mb-8" />
+      <CopyToClipboard text={tailwindJSON(colorTheme)} />
       <pre className="bg-slate-800 text-blue-300 p-8">
         {tailwindJSON(colorTheme)}
       </pre>
@@ -165,3 +184,21 @@ function App() {
   );
 }
 export default App;
+
+/**
+ * TODO
+ * - Show grouped colors
+ * - Show Tailwind Configuration
+ * - Copy Tailwind Configuration to clipboard
+ * - Disable `Use Colors Groups & Values` button after first use
+ * - Enable button only when data in input changes
+ * - The use button destroys existing work in the bottom half (warn user)
+ * - Add usage/help inline in app
+ * Future work
+ * - Parse color values
+ * - Show invalid color values highlighted inline in textarea (better ux?)
+ *    (May have to make it a content editable div)
+ * - Unit tests
+ * - Browser tests
+ * - Keyboard navigation for color selection & grouping
+ */
