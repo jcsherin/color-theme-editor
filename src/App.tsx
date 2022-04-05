@@ -21,6 +21,8 @@ function App() {
     colors: new Set(),
   });
 
+  const [selectedColors, setSelectedColors] = useState<Set<string>>(new Set());
+
   const handleClearColorThemeInput = () =>
     setColorThemeInput({ groupsTextValue: "", colorsTextValue: "" });
 
@@ -44,6 +46,13 @@ function App() {
   const reloadButtonClassName = isColorThemeInputEmpty
     ? "text-gray-400 hover:text-gray-600 bg-slate-200 hover:bg-slate-400 cursor-not-allowed"
     : "text-red-600 hover:text-red-800 bg-red-200 hover:bg-red-400";
+
+  const handleColorSelection = (color: string) =>
+    setSelectedColors((prevState) => {
+      return prevState.has(color)
+        ? new Set(Array.from(prevState).filter((value) => value !== color))
+        : new Set(Array.from(prevState).concat([color]));
+    });
 
   return (
     <div className="m-4">
@@ -75,6 +84,7 @@ function App() {
       <div className="flex flex-wrap mb-4">
         {Array.from(colorTheme.groups.entries()).map(([group, _]) => (
           <Button
+            key={group}
             handleClick={() => {}}
             className="mr-2 mb-2 px-4 py-2 font-bold text-green-600 hover:text-green-800 bg-green-200 hover:bg-green-400"
             label={group}
@@ -82,13 +92,23 @@ function App() {
         ))}
       </div>
       <div className="flex flex-wrap">
-        {Array.from(colorTheme.colors.entries()).map(([color, _]) => (
-          <Button
-            handleClick={() => {}}
-            className="mr-2 mb-2 font-xs text-green-600 hover:text-green-800 bg-green-200 hover:bg-green-400 w-20 h-20 truncate"
-            label={color}
-          />
-        ))}
+        {Array.from(colorTheme.colors.entries()).map(([color, _]) =>
+          selectedColors.has(color) ? (
+            <Button
+              key={color}
+              handleClick={() => handleColorSelection(color)}
+              className="mr-2 mb-2 font-xs text-green-200 bg-green-600 w-20 h-20 truncate"
+              label={color}
+            />
+          ) : (
+            <Button
+              key={color}
+              handleClick={() => handleColorSelection(color)}
+              className="mr-2 mb-2 font-xs text-green-600 hover:text-green-800 bg-green-200 hover:bg-green-400 w-20 h-20 truncate"
+              label={color}
+            />
+          )
+        )}
       </div>
     </div>
   );
