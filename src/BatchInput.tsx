@@ -30,7 +30,7 @@ export function BatchInput({
   };
 
   return (
-    <div>
+    <div className="mb-8">
       <div className="block sm:flex">
         <TextAreaInput
           className="w-full mr-1 mb-2"
@@ -45,7 +45,7 @@ export function BatchInput({
           handleChange={handleUpdateColors}
         />
       </div>
-      {children}
+      <div className="flex">{children}</div>
     </div>
   );
 }

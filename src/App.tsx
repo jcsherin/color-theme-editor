@@ -71,6 +71,8 @@ function App() {
           />
         )}
       </BatchInput>
+      <hr className="mb-8" />
+      <p>Hello world</p>
     </div>
   );
 }
