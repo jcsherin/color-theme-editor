@@ -124,23 +124,26 @@ function App() {
         ))}
       </div>
       <div className="flex flex-wrap mb-8">
-        {Array.from(colorTheme.colors.entries()).map(([color, _]) =>
-          color.selected ? (
+        {Array.from(colorTheme.colors.entries()).map(([color, _]) => {
+          const style: React.CSSProperties = { backgroundColor: color.value };
+          return color.selected ? (
             <Button
               key={color.value}
               handleClick={() => handleColorSelection(color)}
-              className="mr-2 mb-2 font-xs text-green-200 bg-green-600 w-20 h-20 truncate"
+              className="mr-2 mb-2 font-xs border-2 border-indigo-600 w-20 h-20 truncate"
               label={color.value}
+              style={style}
             />
           ) : (
             <Button
               key={color.value}
               handleClick={() => handleColorSelection(color)}
-              className="mr-2 mb-2 font-xs text-green-600 hover:text-green-800 bg-green-200 hover:bg-green-400 w-20 h-20 truncate"
+              className="mr-2 mb-2 font-xs w-20 h-20 truncate"
               label={color.value}
+              style={style}
             />
-          )
-        )}
+          );
+        })}
       </div>
       <hr className="mb-8" />
       <ClipboardCopy text={tailwindJSON(colorTheme)} />
@@ -154,14 +157,12 @@ export default App;
 
 /**
  * TODO
- * - Background of square should match the color value
  * - Inline editor for naming color values
  * - Show colors along side color values in config view
  * - Disable `Use Colors Groups & Values` button after first use
  * - Enable button only when data in input changes
  * - The use button destroys existing work in the bottom half (warn user)
  * - Add usage/help inline in app
- * Future work
  * - Parse color values
  * - Show invalid color values highlighted inline in textarea (better ux?)
  *    (May have to make it a content editable div)

@@ -9,9 +9,15 @@ export function Button({
   handleClick,
   disabled,
   className,
-}: ButtonProps & { className: string }) {
+  style,
+}: ButtonProps & { className: string; style?: React.CSSProperties }) {
   return (
-    <button disabled={disabled} className={className} onClick={handleClick}>
+    <button
+      disabled={disabled}
+      className={className}
+      onClick={handleClick}
+      style={style}
+    >
       {label}
     </button>
   );
