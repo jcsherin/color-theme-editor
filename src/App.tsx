@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BatchInput } from "./BatchInput";
 import { Button } from "./Button";
+import { ClipboardCopy } from "./ClipboardCopy";
 import {
   ColorState,
   ColorTheme,
@@ -11,40 +12,6 @@ import {
   tailwindJSON,
 } from "./ColorTheme";
 import { exampleColorGroups, exampleColorValues } from "./example";
-
-interface CopyToClipboardProps {
-  text: string;
-}
-function CopyToClipboard({ text }: CopyToClipboardProps) {
-  const [isCopied, setIsCopied] = useState(false);
-
-  async function copy(text: string) {
-    return await navigator.clipboard.writeText(text);
-  }
-
-  const handleCopy = () => {
-    copy(text)
-      .then(() => {
-        setIsCopied(true);
-        setTimeout(() => {
-          setIsCopied(false);
-        }, 2000);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  return isCopied ? (
-    <p className="text-green-800 px-8 py-2 mb-2">Copied!</p>
-  ) : (
-    <Button
-      label="Copy Tailwind Config"
-      handleClick={handleCopy}
-      className="bg-blue-500 hover:bg-blue-800 text-slate-200 hover:text-slate-500 px-8 py-2 mb-2"
-    />
-  );
-}
 
 function App() {
   const [colorThemeInput, setColorThemeInput] = useState<ColorThemeInputFormat>(
@@ -176,7 +143,7 @@ function App() {
         )}
       </div>
       <hr className="mb-8" />
-      <CopyToClipboard text={tailwindJSON(colorTheme)} />
+      <ClipboardCopy text={tailwindJSON(colorTheme)} />
       <pre className="bg-slate-800 text-blue-300 p-8">
         {tailwindJSON(colorTheme)}
       </pre>
