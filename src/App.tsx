@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { BatchInput } from "./BatchInput";
 import { Button } from "./Button";
 import { ClipboardCopy } from "./ClipboardCopy";
@@ -12,6 +12,29 @@ import {
   tailwindJSON,
 } from "./ColorTheme";
 import { exampleColorGroups, exampleColorValues } from "./example";
+
+interface TailwindViewerProps {
+  colorTheme: ColorTheme;
+}
+
+function TailwindViewer({ colorTheme }: TailwindViewerProps) {
+  const CURLY_OPEN = String.fromCharCode(123);
+  const CURLY_CLOSE = String.fromCharCode(125);
+  return (
+    <div className="bg-slate-800 text-blue-300 p-8 mb-8 font-mono">
+      <span>{CURLY_OPEN}</span>
+      <div className="mx-6">
+        "theme": <span>{CURLY_OPEN}</span>
+        <div className="mx-6">
+          "colors": <span>{CURLY_OPEN}</span>
+          <span>{CURLY_CLOSE}</span>
+        </div>
+        <span>{CURLY_CLOSE}</span>
+      </div>
+      <span>{CURLY_CLOSE}</span>
+    </div>
+  );
+}
 
 function App() {
   const [colorThemeInput, setColorThemeInput] = useState<ColorThemeInputFormat>(
@@ -146,6 +169,7 @@ function App() {
         })}
       </div>
       <hr className="mb-8" />
+      <TailwindViewer colorTheme={colorTheme} />
       <ClipboardCopy text={tailwindJSON(colorTheme)} />
       <pre className="bg-slate-800 text-blue-300 p-8">
         {tailwindJSON(colorTheme)}
