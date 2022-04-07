@@ -228,7 +228,7 @@ function App() {
             <Button
               key={color.value}
               handleClick={() => handleColorSelection(color)}
-              className="mr-2 mb-2 font-xs border-2 border-indigo-600 w-20 h-20 truncate"
+              className="mr-2 mb-2 font-xs border-8 border-indigo-600 w-20 h-20 truncate"
               label={color.value}
               style={style}
             />
