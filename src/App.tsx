@@ -13,25 +13,67 @@ import {
 } from "./ColorTheme";
 import { exampleColorGroups, exampleColorValues } from "./example";
 
+interface IndentProps {
+  children: React.ReactNode;
+}
+function Indent({ children, className }: IndentProps & { className?: string }) {
+  return <div className={`mx-4 ${className}`}>{children}</div>;
+}
+interface CurlyBraceProps {
+  value?: string;
+  children?: React.ReactNode;
+}
+
+const CURLY_OPEN = String.fromCharCode(123);
+const CURLY_CLOSE = String.fromCharCode(125);
+
+function CurlyBrace({ value, children }: CurlyBraceProps) {
+  return (
+    <Indent>
+      {value} <span>{CURLY_OPEN}</span>
+      {children}
+      <span>{CURLY_CLOSE}</span>
+    </Indent>
+  );
+}
+
+interface KeyValueLineProps {
+  name: string;
+  value: string;
+}
+function ColorLineItem({ name, value }: KeyValueLineProps) {
+  return (
+    <Indent className="flex items-center">
+      <span>"{name}":&nbsp;</span>
+      <span style={{ backgroundColor: value }} className="w-3 h-3" />
+      <span>&nbsp;"{value}",</span>
+    </Indent>
+  );
+}
+
+interface ColorsProps {
+  colors: Set<ColorState>;
+}
+function Colors({ colors }: ColorsProps) {
+  const items = Array.from(colors).map((item) => (
+    <ColorLineItem name={item.value} value={item.value} />
+  ));
+  return <>{items}</>;
+}
+
 interface TailwindViewerProps {
   colorTheme: ColorTheme;
 }
-
 function TailwindViewer({ colorTheme }: TailwindViewerProps) {
-  const CURLY_OPEN = String.fromCharCode(123);
-  const CURLY_CLOSE = String.fromCharCode(125);
   return (
-    <div className="bg-slate-800 text-blue-300 p-8 mb-8 font-mono">
-      <span>{CURLY_OPEN}</span>
-      <div className="mx-6">
-        "theme": <span>{CURLY_OPEN}</span>
-        <div className="mx-6">
-          "colors": <span>{CURLY_OPEN}</span>
-          <span>{CURLY_CLOSE}</span>
-        </div>
-        <span>{CURLY_CLOSE}</span>
-      </div>
-      <span>{CURLY_CLOSE}</span>
+    <div className="bg-slate-800 text-blue-300 p-4 mb-8 font-mono">
+      <CurlyBrace>
+        <CurlyBrace value='"theme:"'>
+          <CurlyBrace value='"colors:"'>
+            <Colors colors={colorTheme.colors} />
+          </CurlyBrace>
+        </CurlyBrace>
+      </CurlyBrace>
     </div>
   );
 }
