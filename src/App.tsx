@@ -44,19 +44,20 @@ function CurlyBrace({
   );
 }
 
-interface KeyValueLineProps {
-  name: string;
-  value: string;
+interface ColorLineItemprops {
+  color: Color;
   editable?: boolean;
+  handleRename?: (color: Color, name: string) => void;
 }
-function ColorLineItem({ name, value, editable = false }: KeyValueLineProps) {
-  const handleRename = (event: React.KeyboardEvent<HTMLInputElement>) => {
+function ColorLineItem({
+  color,
+  editable = false,
+  handleRename,
+}: ColorLineItemprops) {
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const newValue = event.currentTarget.value;
     if (event.key === "Enter") {
-      // move to next color to be renamed
-      console.log(`Enter key pressed (${newValue})`);
-    } else {
-      console.log(newValue, event.key);
+      handleRename!(color, newValue);
     }
   };
   const nameView = editable ? (
@@ -65,39 +66,40 @@ function ColorLineItem({ name, value, editable = false }: KeyValueLineProps) {
         className="py-1 px-4 text-gray-900"
         type="text"
         placeholder="color name"
-        onKeyUp={handleRename}
+        onKeyUp={handleKeyUp}
       />
       &nbsp;:&nbsp;
     </>
   ) : (
-    <span>"{name}":&nbsp;</span>
+    <span>"{color.name}":&nbsp;</span>
   );
 
   return (
     <Indent className="flex items-center">
       {nameView}
-      <span style={{ backgroundColor: value }} className="w-3 h-3" />
-      <span>&nbsp;"{value}",</span>
+      <span style={{ backgroundColor: color.value }} className="w-3 h-3" />
+      <span>&nbsp;"{color.value}",</span>
     </Indent>
   );
 }
 
 interface ColorsProps {
   colors: Color[];
+  handleRenameColor: (color: Color, name: string) => void;
 }
-function Colors({ colors }: ColorsProps) {
+function Colors({ colors, handleRenameColor }: ColorsProps) {
   return (
     <>
-      {colors.map((item) =>
-        item.name === "#ff7043" ? (
+      {colors.map((color) =>
+        color.name === "#ff7043" ? (
           <ColorLineItem
-            key={item.value}
-            name={item.name}
-            value={item.value}
+            color={color}
+            key={color.value}
             editable={true}
+            handleRename={handleRenameColor}
           />
         ) : (
-          <ColorLineItem key={item.value} name={item.name} value={item.value} />
+          <ColorLineItem key={color.value} color={color} />
         )
       )}
     </>
@@ -105,30 +107,43 @@ function Colors({ colors }: ColorsProps) {
 }
 
 interface GroupProps {
-  name: string;
+  group: string;
   colors: Color[];
+  handleRenameColorInGroup: (group: string, color: Color, name: string) => void;
 }
-function Group({ name, colors }: GroupProps) {
+function Group({ group, colors, handleRenameColorInGroup }: GroupProps) {
   return colors.length === 0 ? (
-    <CurlyBrace value={`"${name}"`} trailingComma={true} />
+    <CurlyBrace value={`"${group}"`} trailingComma={true} />
   ) : (
-    <CurlyBrace value={`"${name}"`} trailingComma={true}>
-      <Colors colors={colors} />
+    <CurlyBrace value={`"${group}"`} trailingComma={true}>
+      <Colors
+        colors={colors}
+        handleRenameColor={(color, name) =>
+          handleRenameColorInGroup(group, color, name)
+        }
+      />
     </CurlyBrace>
   );
 }
 
 interface TailwindViewerProps {
   colorTheme: ColorTheme;
+  handleRenameColor: (color: Color, name: string) => void;
+  handleRenameColorInGroup: (group: string, Color: Color, name: string) => void;
 }
-function TailwindViewer({ colorTheme }: TailwindViewerProps) {
+function TailwindViewer({
+  colorTheme,
+  handleRenameColor,
+  handleRenameColorInGroup,
+}: TailwindViewerProps) {
   const groupItems = (
     <>
       {Array.from(colorTheme.groups.keys()).map((name, i) => (
         <Group
           key={i}
-          name={name}
+          group={name}
           colors={Array.from(colorTheme.groups.get(name)!)}
+          handleRenameColorInGroup={handleRenameColorInGroup}
         />
       ))}
     </>
@@ -141,6 +156,7 @@ function TailwindViewer({ colorTheme }: TailwindViewerProps) {
             {groupItems}
             <Colors
               colors={Array.from(colorTheme.colors).map((item) => item.color)}
+              handleRenameColor={handleRenameColor}
             />
           </CurlyBrace>
         </CurlyBrace>
@@ -221,6 +237,46 @@ function App() {
     });
   };
 
+  const handleRenameColor = (color: Color, name: string) => {
+    setColorTheme((prevState) => {
+      const newColors = new Set(
+        Array.from(prevState.colors).map((colorState) => {
+          if (colorState.color === color) {
+            return {
+              ...colorState,
+              color: { ...colorState.color, name: name },
+            };
+          } else {
+            return colorState;
+          }
+        })
+      );
+      return { ...prevState, colors: newColors };
+    });
+  };
+  const handleRenameColorInGroup = (
+    group: string,
+    color: Color,
+    name: string
+  ) => {
+    setColorTheme((prevState) => {
+      if (!prevState.groups.has(group)) {
+        return prevState;
+      }
+      const newColors = new Set(
+        Array.from(prevState.groups.get(group)!).map((item) => {
+          if (item === color) {
+            return { ...item, name: name };
+          } else {
+            return item;
+          }
+        })
+      );
+      const newGroups = prevState.groups.set(group, newColors);
+      return { ...prevState, groups: newGroups };
+    });
+  };
+
   return (
     <div className="m-4">
       <BatchInput
@@ -283,7 +339,11 @@ function App() {
         })}
       </div>
       <hr className="mb-8" />
-      <TailwindViewer colorTheme={colorTheme} />
+      <TailwindViewer
+        colorTheme={colorTheme}
+        handleRenameColor={handleRenameColor}
+        handleRenameColorInGroup={handleRenameColorInGroup}
+      />
       <ClipboardCopy text={tailwindJSON(colorTheme)} />
       <pre className="bg-slate-800 text-blue-300 p-8">
         {tailwindJSON(colorTheme)}
