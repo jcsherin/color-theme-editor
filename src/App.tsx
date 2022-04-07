@@ -339,15 +339,12 @@ function App() {
         })}
       </div>
       <hr className="mb-8" />
+      <ClipboardCopy text={tailwindJSON(colorTheme)} />
       <TailwindViewer
         colorTheme={colorTheme}
         handleRenameColor={handleRenameColor}
         handleRenameColorInGroup={handleRenameColorInGroup}
       />
-      <ClipboardCopy text={tailwindJSON(colorTheme)} />
-      <pre className="bg-slate-800 text-blue-300 p-8">
-        {tailwindJSON(colorTheme)}
-      </pre>
     </div>
   );
 }
