@@ -4,11 +4,19 @@ export interface ColorThemeInputFormat {
 }
 
 export interface ColorTheme {
-  groups: Map<string, Set<string>>;
+  groups: Map<string, Set<Color>>;
   colors: Set<ColorState>;
 }
 
-export type ColorState = { value: string; selected: boolean };
+export interface ColorState {
+  color: Color;
+  selected: boolean;
+}
+
+export interface Color {
+  name: string;
+  value: string;
+}
 
 interface TailwindColorMap {
   [key: string]: string;
@@ -31,12 +39,12 @@ export function tailwindJSON(theme: ColorTheme) {
   theme.groups.forEach((colors, group) => {
     const tmp: TailwindColorMap = {};
     colors.forEach((color) => {
-      tmp[color] = color;
+      tmp[color.name] = color.value;
     });
     config.theme.colors[group] = tmp;
   });
   theme.colors.forEach((colorState) => {
-    config.theme.colors[colorState.value] = colorState.value;
+    config.theme.colors[colorState.color.name] = colorState.color.value;
   });
   return JSON.stringify(config, null, 2);
 }
@@ -58,5 +66,5 @@ export function parseGroups(text: string) {
 }
 
 export function createColorState(color: string): ColorState {
-  return { value: color, selected: false };
+  return { color: { name: color, value: color }, selected: false };
 }

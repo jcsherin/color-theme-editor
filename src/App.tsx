@@ -3,6 +3,7 @@ import { BatchInput } from "./BatchInput";
 import { Button } from "./Button";
 import { ClipboardCopy } from "./ClipboardCopy";
 import {
+  Color,
   ColorState,
   ColorTheme,
   ColorThemeInputFormat,
@@ -17,7 +18,7 @@ interface IndentProps {
   children: React.ReactNode;
 }
 function Indent({ children, className }: IndentProps & { className?: string }) {
-  return <div className={`mx-4 ${className}`}>{children}</div>;
+  return <div className={`mx-5 ${className}`}>{children}</div>;
 }
 interface CurlyBraceProps {
   value?: string;
@@ -46,11 +47,35 @@ function CurlyBrace({
 interface KeyValueLineProps {
   name: string;
   value: string;
+  editable?: boolean;
 }
-function ColorLineItem({ name, value }: KeyValueLineProps) {
+function ColorLineItem({ name, value, editable = false }: KeyValueLineProps) {
+  const handleRename = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const newValue = event.currentTarget.value;
+    if (event.key === "Enter") {
+      // move to next color to be renamed
+      console.log(`Enter key pressed (${newValue})`);
+    } else {
+      console.log(newValue, event.key);
+    }
+  };
+  const nameView = editable ? (
+    <>
+      <input
+        className="py-1 px-4 text-gray-900"
+        type="text"
+        placeholder="color name"
+        onKeyUp={handleRename}
+      />
+      &nbsp;:&nbsp;
+    </>
+  ) : (
+    <span>"{name}":&nbsp;</span>
+  );
+
   return (
     <Indent className="flex items-center">
-      <span>"{name}":&nbsp;</span>
+      {nameView}
       <span style={{ backgroundColor: value }} className="w-3 h-3" />
       <span>&nbsp;"{value}",</span>
     </Indent>
@@ -58,21 +83,30 @@ function ColorLineItem({ name, value }: KeyValueLineProps) {
 }
 
 interface ColorsProps {
-  colors: string[];
+  colors: Color[];
 }
 function Colors({ colors }: ColorsProps) {
   return (
     <>
-      {colors.map((value) => (
-        <ColorLineItem key={value} name={value} value={value} />
-      ))}
+      {colors.map((item) =>
+        item.name === "#ff7043" ? (
+          <ColorLineItem
+            key={item.value}
+            name={item.name}
+            value={item.value}
+            editable={true}
+          />
+        ) : (
+          <ColorLineItem key={item.value} name={item.name} value={item.value} />
+        )
+      )}
     </>
   );
 }
 
 interface GroupProps {
   name: string;
-  colors: string[];
+  colors: Color[];
 }
 function Group({ name, colors }: GroupProps) {
   return colors.length === 0 ? (
@@ -90,8 +124,12 @@ interface TailwindViewerProps {
 function TailwindViewer({ colorTheme }: TailwindViewerProps) {
   const groupItems = (
     <>
-      {Array.from(colorTheme.groups.keys()).map((name) => (
-        <Group name={name} colors={Array.from(colorTheme.groups.get(name)!)} />
+      {Array.from(colorTheme.groups.keys()).map((name, i) => (
+        <Group
+          key={i}
+          name={name}
+          colors={Array.from(colorTheme.groups.get(name)!)}
+        />
       ))}
     </>
   );
@@ -102,7 +140,7 @@ function TailwindViewer({ colorTheme }: TailwindViewerProps) {
           <CurlyBrace value='"colors:"'>
             {groupItems}
             <Colors
-              colors={Array.from(colorTheme.colors).map((item) => item.value)}
+              colors={Array.from(colorTheme.colors).map((item) => item.color)}
             />
           </CurlyBrace>
         </CurlyBrace>
@@ -119,7 +157,7 @@ function App() {
     }
   );
   const [colorTheme, setColorTheme] = useState<ColorTheme>({
-    groups: new Map<string, Set<string>>(),
+    groups: new Map<string, Set<Color>>(),
     colors: new Set<ColorState>(),
   });
 
@@ -152,7 +190,7 @@ function App() {
   const handleColorSelection = (color: ColorState) => {
     setColorTheme((prevState) => {
       const newColors = Array.from(prevState.colors).map((item) => {
-        if (item.value === color.value) {
+        if (item.color.value === color.color.value) {
           return { ...item, selected: !item.selected };
         }
         return item;
@@ -162,11 +200,10 @@ function App() {
   };
 
   const handleGrouping = (group: string) => {
-    console.log(`Grouping ${group}`);
     setColorTheme((prevState) => {
       const selectedColorValues = Array.from(prevState.colors)
         .filter((color) => color.selected)
-        .map((color) => color.value);
+        .map((color) => color.color);
       if (selectedColorValues.length === 0) {
         return prevState;
       }
@@ -223,21 +260,23 @@ function App() {
       </div>
       <div className="flex flex-wrap mb-8">
         {Array.from(colorTheme.colors.entries()).map(([color, _]) => {
-          const style: React.CSSProperties = { backgroundColor: color.value };
+          const style: React.CSSProperties = {
+            backgroundColor: color.color.value,
+          };
           return color.selected ? (
             <Button
-              key={color.value}
+              key={color.color.value}
               handleClick={() => handleColorSelection(color)}
               className="mr-2 mb-2 font-xs border-8 border-indigo-600 w-20 h-20 truncate"
-              label={color.value}
+              label={color.color.value}
               style={style}
             />
           ) : (
             <Button
-              key={color.value}
+              key={color.color.value}
               handleClick={() => handleColorSelection(color)}
               className="mr-2 mb-2 font-xs w-20 h-20 truncate"
-              label={color.value}
+              label={color.color.value}
               style={style}
             />
           );
