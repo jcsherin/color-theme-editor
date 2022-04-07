@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BatchInput } from "./BatchInput";
 import { Button } from "./Button";
 import { ClipboardCopy } from "./ClipboardCopy";
@@ -86,12 +86,13 @@ function ColorLineItem({
 interface ColorsProps {
   colors: Color[];
   handleRenameColor: (color: Color, name: string) => void;
+  edit?: Color | undefined;
 }
-function Colors({ colors, handleRenameColor }: ColorsProps) {
+function Colors({ colors, handleRenameColor, edit }: ColorsProps) {
   return (
     <>
       {colors.map((color) =>
-        color.name === "#ff7043" ? (
+        color === edit ? (
           <ColorLineItem
             color={color}
             key={color.value}
@@ -126,6 +127,21 @@ function Group({ group, colors, handleRenameColorInGroup }: GroupProps) {
   );
 }
 
+function firstColor(colorTheme: ColorTheme) {
+  const { groups, colors } = colorTheme;
+  groups.forEach((colors, _) => {
+    if (colors.size > 0) {
+      const [color, _]: [color: Color, _: Color] = colors.values().next().value;
+      return color;
+    }
+  });
+  if (colors.size === 0) return;
+  const [colorState, _]: [colorState: ColorState, _: ColorState] = colors
+    .entries()
+    .next().value;
+  return colorState.color;
+}
+
 interface TailwindViewerProps {
   colorTheme: ColorTheme;
   handleRenameColor: (color: Color, name: string) => void;
@@ -136,6 +152,14 @@ function TailwindViewer({
   handleRenameColor,
   handleRenameColorInGroup,
 }: TailwindViewerProps) {
+  const [currEditing, setCurrEditing] = useState<Color | undefined>();
+
+  useEffect(() => {
+    const fc = firstColor(colorTheme);
+    setCurrEditing(fc);
+    console.log(fc);
+  }, [colorTheme]);
+
   const groupItems = (
     <>
       {Array.from(colorTheme.groups.keys()).map((name, i) => (
@@ -157,6 +181,7 @@ function TailwindViewer({
             <Colors
               colors={Array.from(colorTheme.colors).map((item) => item.color)}
               handleRenameColor={handleRenameColor}
+              edit={currEditing}
             />
           </CurlyBrace>
         </CurlyBrace>
