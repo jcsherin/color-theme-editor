@@ -21,18 +21,24 @@ function Indent({ children, className }: IndentProps & { className?: string }) {
 }
 interface CurlyBraceProps {
   value?: string;
+  trailingComma?: boolean;
   children?: React.ReactNode;
 }
 
 const CURLY_OPEN = String.fromCharCode(123);
 const CURLY_CLOSE = String.fromCharCode(125);
 
-function CurlyBrace({ value, children }: CurlyBraceProps) {
+function CurlyBrace({
+  value,
+  trailingComma = false,
+  children,
+}: CurlyBraceProps) {
   return (
     <Indent>
       {value} <span>{CURLY_OPEN}</span>
       {children}
       <span>{CURLY_CLOSE}</span>
+      {trailingComma ? "," : ""}
     </Indent>
   );
 }
@@ -52,25 +58,52 @@ function ColorLineItem({ name, value }: KeyValueLineProps) {
 }
 
 interface ColorsProps {
-  colors: Set<ColorState>;
+  colors: string[];
 }
 function Colors({ colors }: ColorsProps) {
-  const items = Array.from(colors).map((item) => (
-    <ColorLineItem name={item.value} value={item.value} />
-  ));
-  return <>{items}</>;
+  return (
+    <>
+      {colors.map((value) => (
+        <ColorLineItem key={value} name={value} value={value} />
+      ))}
+    </>
+  );
+}
+
+interface GroupProps {
+  name: string;
+  colors: string[];
+}
+function Group({ name, colors }: GroupProps) {
+  return colors.length === 0 ? (
+    <CurlyBrace value={`"${name}"`} trailingComma={true} />
+  ) : (
+    <CurlyBrace value={`"${name}"`} trailingComma={true}>
+      <Colors colors={colors} />
+    </CurlyBrace>
+  );
 }
 
 interface TailwindViewerProps {
   colorTheme: ColorTheme;
 }
 function TailwindViewer({ colorTheme }: TailwindViewerProps) {
+  const groupItems = (
+    <>
+      {Array.from(colorTheme.groups.keys()).map((name) => (
+        <Group name={name} colors={Array.from(colorTheme.groups.get(name)!)} />
+      ))}
+    </>
+  );
   return (
     <div className="bg-slate-800 text-blue-300 p-4 mb-8 font-mono">
       <CurlyBrace>
         <CurlyBrace value='"theme:"'>
           <CurlyBrace value='"colors:"'>
-            <Colors colors={colorTheme.colors} />
+            {groupItems}
+            <Colors
+              colors={Array.from(colorTheme.colors).map((item) => item.value)}
+            />
           </CurlyBrace>
         </CurlyBrace>
       </CurlyBrace>
