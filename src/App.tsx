@@ -8,6 +8,7 @@ import {
   ColorTheme,
   ColorThemeInputFormat,
   createColorState,
+  isColorThemeEmpty,
   parseColors,
   parseGroups,
   tailwindJSON,
@@ -397,48 +398,56 @@ function App() {
           />
         )}
       </BatchInput>
-      <hr className="mb-8" />
-      <div className="flex flex-wrap mb-4">
-        {Array.from(colorTheme.groups.entries()).map(([group, _]) => (
-          <Button
-            key={group}
-            handleClick={() => handleGrouping(group)}
-            className="mr-2 mb-2 px-4 py-2 font-bold text-green-600 hover:text-green-800 bg-green-200 hover:bg-green-400"
-            label={group}
-          />
-        ))}
-      </div>
-      <div className="flex flex-wrap mb-8">
-        {Array.from(colorTheme.colors.entries()).map(([color, _]) => {
-          const style: React.CSSProperties = {
-            backgroundColor: color.color.value,
-          };
-          return color.selected ? (
-            <Button
-              key={color.color.value}
-              handleClick={() => handleColorSelection(color)}
-              className="mr-2 mb-2 font-xs border-8 border-indigo-600 w-20 h-20 truncate"
-              label={color.color.value}
-              style={style}
+      <div className="flex">
+        {isColorThemeEmpty(colorTheme) ? (
+          <></>
+        ) : (
+          <div className="w-1/2 pr-8">
+            <ClipboardCopy text={tailwindJSON(colorTheme)} />
+            <TailwindViewer
+              colorTheme={colorTheme}
+              handleRenameColor={handleRenameColor}
+              handleRenameColorInGroup={handleRenameColorInGroup}
             />
-          ) : (
-            <Button
-              key={color.color.value}
-              handleClick={() => handleColorSelection(color)}
-              className="mr-2 mb-2 font-xs w-20 h-20 truncate"
-              label={color.color.value}
-              style={style}
-            />
-          );
-        })}
+          </div>
+        )}
+        <div className="w-1/2">
+          <div className="flex flex-wrap mb-4">
+            {Array.from(colorTheme.groups.entries()).map(([group, _]) => (
+              <Button
+                key={group}
+                handleClick={() => handleGrouping(group)}
+                className="mr-2 mb-2 px-4 py-2 font-bold text-green-600 hover:text-green-800 bg-green-200 hover:bg-green-400"
+                label={group}
+              />
+            ))}
+          </div>
+          <div className="flex flex-wrap mb-8">
+            {Array.from(colorTheme.colors.entries()).map(([color, _]) => {
+              const style: React.CSSProperties = {
+                backgroundColor: color.color.value,
+              };
+              return color.selected ? (
+                <Button
+                  key={color.color.value}
+                  handleClick={() => handleColorSelection(color)}
+                  className="mr-2 mb-2 font-xs border-8 border-indigo-600 w-20 h-20 truncate"
+                  label={color.color.value}
+                  style={style}
+                />
+              ) : (
+                <Button
+                  key={color.color.value}
+                  handleClick={() => handleColorSelection(color)}
+                  className="mr-2 mb-2 font-xs w-20 h-20 truncate"
+                  label={color.color.value}
+                  style={style}
+                />
+              );
+            })}
+          </div>
+        </div>
       </div>
-      <hr className="mb-8" />
-      <ClipboardCopy text={tailwindJSON(colorTheme)} />
-      <TailwindViewer
-        colorTheme={colorTheme}
-        handleRenameColor={handleRenameColor}
-        handleRenameColorInGroup={handleRenameColorInGroup}
-      />
     </div>
   );
 }
