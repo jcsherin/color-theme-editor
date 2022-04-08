@@ -179,7 +179,12 @@ function TailwindViewer({
       setMoveEditable(false);
       setEditable((prevState) => {
         const colors = toColorList(colorTheme);
-        const colorIdx = colors.findIndex((value) => value === prevState.color);
+        const colorIdx =
+          colors[prevState.idx].value === prevState.color.value
+            ? prevState.idx
+            : colors.findIndex(
+                (color) => color.value === prevState.color.value
+              );
         const nextIdx = (colorIdx + 1) % colors.length;
         return { idx: nextIdx, color: colors[nextIdx] };
       });
