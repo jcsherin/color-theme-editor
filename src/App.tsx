@@ -465,16 +465,11 @@ export default App;
 
 /**
  * TODO
- * - Inline editor for naming color values
- * - Disable `Use Colors Groups & Values` button after first use
- * - Enable button only when data in input changes
- * - The use button destroys existing work in the bottom half (warn user)
- * - Add usage/help inline in app
- * - Parse color values
- * - Show invalid color values highlighted inline in textarea (better ux?)
- *    (May have to make it a content editable div)
- * - Unit tests
- * - Browser tests
- * - Keyboard navigation for color selection & grouping
- * - Fix: Remove focus of input#text when user is selecting colors for grouping
+ * - 2 step wizard
+ *   1. Load Color Group & Values
+ *   2. 2-column layout: Editor | Grouping
+ * - Parse input color values
+ * - Be able to move input up/down using arrow keys
+ * - README
+ * - Tests
  */
