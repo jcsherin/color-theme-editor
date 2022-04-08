@@ -137,44 +137,6 @@ function Group({ group, colors, handleRenameColorInGroup }: GroupProps) {
   );
 }
 
-function firstColor(colorTheme: ColorTheme) {
-  const { groups, colors } = colorTheme;
-  groups.forEach((colors, _) => {
-    const iter = Array.from(colors.values());
-    for (const color of iter) {
-      return color;
-    }
-  });
-  const iter = Array.from(colors.values());
-  for (const colorState of iter) {
-    return colorState.color;
-  }
-}
-
-function nextColor(colorTheme: ColorTheme, color: Color) {
-  const { groups, colors } = colorTheme;
-  let foundCurrColor = false;
-  groups.forEach((colors, _) => {
-    const iter = Array.from(colors.values());
-    for (const item of iter) {
-      if (!foundCurrColor && item === color) {
-        foundCurrColor = true;
-      } else if (foundCurrColor) {
-        return item;
-      }
-    }
-  });
-  const iter = Array.from(colors.values());
-  for (const colorState of iter) {
-    if (!foundCurrColor && colorState.color === color) {
-      foundCurrColor = true;
-    } else if (foundCurrColor) {
-      return colorState.color;
-    }
-  }
-  return firstColor(colorTheme); // cycles back to first color item
-}
-
 function colorsList(colorTheme: ColorTheme) {
   const { groups, colors } = colorTheme;
   let list: Color[] = [];
