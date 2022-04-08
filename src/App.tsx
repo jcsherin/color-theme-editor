@@ -69,7 +69,7 @@ function ColorLineItem({
   useEffect(() => {
     if (focus && renameInput && renameInput.current)
       renameInput.current!.focus();
-  });
+  }, [focus]);
 
   const nameView = editable ? (
     <>
@@ -99,8 +99,9 @@ interface ColorsProps {
   colors: Color[];
   handleRenameColor: (color: Color, name: string) => void;
   edit?: Color | undefined;
+  focus: boolean;
 }
-function Colors({ colors, handleRenameColor, edit }: ColorsProps) {
+function Colors({ colors, handleRenameColor, edit, focus }: ColorsProps) {
   return (
     <>
       {colors.map((color) =>
@@ -110,6 +111,7 @@ function Colors({ colors, handleRenameColor, edit }: ColorsProps) {
             key={color.value}
             editable={true}
             handleRename={handleRenameColor}
+            focus={focus}
           />
         ) : (
           <ColorLineItem key={color.value} color={color} />
@@ -124,8 +126,15 @@ interface GroupProps {
   colors: Color[];
   handleRenameColorInGroup: (group: string, color: Color, name: string) => void;
   edit?: Color;
+  focus: boolean;
 }
-function Group({ group, colors, handleRenameColorInGroup, edit }: GroupProps) {
+function Group({
+  group,
+  colors,
+  handleRenameColorInGroup,
+  edit,
+  focus,
+}: GroupProps) {
   return colors.length === 0 ? (
     <CurlyBrace value={`"${group}"`} trailingComma={true} />
   ) : (
@@ -136,6 +145,7 @@ function Group({ group, colors, handleRenameColorInGroup, edit }: GroupProps) {
           handleRenameColorInGroup(group, color, name)
         }
         edit={edit}
+        focus={focus}
       />
     </CurlyBrace>
   );
@@ -150,11 +160,13 @@ interface TailwindViewerProps {
   colorTheme: ColorTheme;
   handleRenameColor: (color: Color, name: string) => void;
   handleRenameColorInGroup: (group: string, Color: Color, name: string) => void;
+  hasFocus: boolean;
 }
 function TailwindViewer({
   colorTheme,
   handleRenameColor,
   handleRenameColorInGroup,
+  hasFocus,
 }: TailwindViewerProps) {
   const [editable, setEditable] = useState<Editable>({
     idx: 0,
@@ -199,6 +211,7 @@ function TailwindViewer({
           colors={Array.from(colorTheme.groups.get(name)!)}
           handleRenameColorInGroup={handleRenameColorInGroupLocal}
           edit={editable.color}
+          focus={hasFocus}
         />
       ))}
     </>
@@ -214,6 +227,7 @@ function TailwindViewer({
               colors={Array.from(colorTheme.colors).map((item) => item.color)}
               handleRenameColor={handleRenameColorLocal}
               edit={editable.color}
+              focus={hasFocus}
             />
           </CurlyBrace>
         </CurlyBrace>
@@ -232,6 +246,26 @@ function App() {
   const [colorTheme, setColorTheme] = useState<ColorTheme>({
     groups: new Map<string, Set<Color>>(),
     colors: new Set<ColorState>(),
+  });
+
+  const [focusEditor, setFocusEditor] = useState(true);
+
+  const clickRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        clickRef &&
+        clickRef.current &&
+        !clickRef.current.contains(event.target as Node)
+      ) {
+        setFocusEditor(false);
+      } else {
+        setFocusEditor(true);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   });
 
   const handleClearColorThemeInput = () =>
@@ -364,12 +398,13 @@ function App() {
         {isColorThemeEmpty(colorTheme) ? (
           <></>
         ) : (
-          <div className="w-1/2 pr-8">
+          <div className="w-1/2 pr-8" ref={clickRef}>
             <ClipboardCopy text={tailwindJSON(colorTheme)} />
             <TailwindViewer
               colorTheme={colorTheme}
               handleRenameColor={handleRenameColor}
               handleRenameColorInGroup={handleRenameColorInGroup}
+              hasFocus={focusEditor}
             />
           </div>
         )}
