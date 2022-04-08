@@ -12,6 +12,7 @@ import {
   parseColors,
   parseGroups,
   tailwindJSON,
+  toColorList,
 } from "./ColorTheme";
 import { exampleColorGroups, exampleColorValues } from "./example";
 
@@ -138,47 +139,9 @@ function Group({ group, colors, handleRenameColorInGroup }: GroupProps) {
   );
 }
 
-function colorsList(colorTheme: ColorTheme) {
-  const { groups, colors } = colorTheme;
-  let list: Color[] = [];
-  groups.forEach((colors) => {
-    list = list.concat(Array.from(colors.values()));
-  });
-  list = list.concat(Array.from(colors.values()).map((x) => x.color));
-  return list;
-}
-
-interface ListCursor {
-  kind: "cursor";
+interface Editable {
   idx: number;
   color: Color;
-}
-
-interface EmptyList {
-  kind: "empty";
-}
-
-type Cursor = ListCursor | EmptyList;
-
-function initialCursor(colorTheme: ColorTheme): Cursor {
-  const colors = colorsList(colorTheme);
-  return colors.length === 0
-    ? { kind: "empty" }
-    : { kind: "cursor", idx: 0, color: colors[0] };
-}
-
-function nextCursor(cursor: Cursor, colorTheme: ColorTheme): Cursor {
-  const colors = colorsList(colorTheme);
-  switch (cursor.kind) {
-    case "empty":
-      return cursor;
-    case "cursor":
-      if (colors.length === 0) {
-        return { kind: "empty" };
-      }
-      const nextIdx = (cursor.idx + 1) % colors.length;
-      return { ...cursor, idx: nextIdx, color: colors[nextIdx] };
-  }
 }
 
 interface TailwindViewerProps {
@@ -191,29 +154,28 @@ function TailwindViewer({
   handleRenameColor,
   handleRenameColorInGroup,
 }: TailwindViewerProps) {
-  const [moveCursor, setMoveCursor] = useState(false);
-  const [cursor, setCursor] = useState<Cursor>(initialCursor(colorTheme));
-  useEffect(() => {
-    setCursor((prevState) => {
-      const colors = colorsList(colorTheme);
-      if (colors.length === 0) return prevState;
+  const [editable, setEditable] = useState<Editable>({
+    idx: 0,
+    color: toColorList(colorTheme)[0],
+  });
+  const [moveEditable, setMoveEditable] = useState(false);
 
-      switch (prevState.kind) {
-        case "empty":
-          return initialCursor(colorTheme);
-        case "cursor":
-          if (moveCursor) {
-            setMoveCursor(false);
-            return nextCursor(prevState, colorTheme);
-          } else if (colors[prevState.idx] === prevState.color) {
-            return prevState;
-          } else {
-            let newIdx = colors.findIndex((value) => value === prevState.color);
-            return { ...prevState, idx: newIdx };
-          }
-      }
-    });
-  }, [colorTheme, moveCursor]);
+  useEffect(() => {
+    if (moveEditable) {
+      setMoveEditable(false);
+      setEditable((prevState) => {
+        const colors = toColorList(colorTheme);
+        const nextIdx = (prevState.idx + 1) % colors.length;
+        return { idx: nextIdx, color: colors[nextIdx] };
+      });
+    }
+  }, [colorTheme, moveEditable]);
+
+  const handleRenameColorLocal = (color: Color, name: string) => {
+    setMoveEditable(true);
+    // continuation call
+    if (name.trim().length > 0) handleRenameColor(color, name);
+  };
 
   const groupItems = (
     <>
@@ -227,14 +189,6 @@ function TailwindViewer({
       ))}
     </>
   );
-  const editColor = () => {
-    switch (cursor.kind) {
-      case "empty":
-        return;
-      case "cursor":
-        return cursor.color;
-    }
-  };
 
   return (
     <div className="bg-slate-800 text-blue-300 p-4 mb-8 font-mono">
@@ -244,14 +198,8 @@ function TailwindViewer({
             {groupItems}
             <Colors
               colors={Array.from(colorTheme.colors).map((item) => item.color)}
-              handleRenameColor={(color, name) => {
-                // Prevent color name from being an empty string
-                if (name.trim().length > 0) {
-                  handleRenameColor(color, name);
-                }
-                setMoveCursor(true);
-              }}
-              edit={editColor()}
+              handleRenameColor={handleRenameColorLocal}
+              edit={editable.color}
             />
           </CurlyBrace>
         </CurlyBrace>
