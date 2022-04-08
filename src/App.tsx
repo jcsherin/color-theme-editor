@@ -179,13 +179,11 @@ function TailwindViewer({
       setMoveEditable(false);
       setEditable((prevState) => {
         const colors = toColorList(colorTheme);
-        const colorIdx =
-          colors[prevState.idx].value === prevState.color.value
+        const nextIdx =
+          colors[prevState.idx].name === colors[prevState.idx].value &&
+          prevState.color !== colors[prevState.idx]
             ? prevState.idx
-            : colors.findIndex(
-                (color) => color.value === prevState.color.value
-              );
-        const nextIdx = (colorIdx + 1) % colors.length;
+            : (prevState.idx + 1) % colors.length;
         return { idx: nextIdx, color: colors[nextIdx] };
       });
     }
@@ -360,13 +358,23 @@ function App() {
         return prevState;
       }
       const newColors = new Set(
-        Array.from(prevState.groups.get(group)!).map((item) => {
-          if (item === color) {
-            return { ...item, name: name };
-          } else {
-            return item;
-          }
-        })
+        Array.from(prevState.groups.get(group)!)
+          .map((item) => {
+            if (item === color) {
+              return { ...item, name: name };
+            } else {
+              return item;
+            }
+          })
+          .sort((a, b) => {
+            if (a.name < b.name) {
+              return -1;
+            }
+            if (a.name > b.name) {
+              return 1;
+            }
+            return 0;
+          })
       );
       const newGroups = prevState.groups.set(group, newColors);
       return { ...prevState, groups: newGroups };
