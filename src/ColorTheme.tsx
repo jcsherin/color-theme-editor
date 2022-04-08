@@ -68,3 +68,16 @@ export function parseGroups(text: string) {
 export function createColorState(color: string): ColorState {
   return { color: { name: color, value: color }, selected: false };
 }
+
+export function toColorList(colorTheme: ColorTheme) {
+  let grouped: Color[] = [];
+  colorTheme.groups.forEach((set) => {
+    grouped = [...grouped, ...Array.from(set.values())];
+  });
+  let ungrouped = Array.from(colorTheme.colors.values()).map((x) => x.color);
+  return [...grouped, ...ungrouped];
+}
+
+export function isColorThemeEmpty(colorTheme: ColorTheme) {
+  return toColorList(colorTheme).length === 0;
+}
