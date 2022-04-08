@@ -418,7 +418,6 @@ export default App;
 /**
  * TODO
  * - Inline editor for naming color values
- * - Show colors along side color values in config view
  * - Disable `Use Colors Groups & Values` button after first use
  * - Enable button only when data in input changes
  * - The use button destroys existing work in the bottom half (warn user)
@@ -429,4 +428,5 @@ export default App;
  * - Unit tests
  * - Browser tests
  * - Keyboard navigation for color selection & grouping
+ * - Fix: Remove focus of input#text when user is selecting colors for grouping
  */
