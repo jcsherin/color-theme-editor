@@ -123,8 +123,9 @@ interface GroupProps {
   group: string;
   colors: Color[];
   handleRenameColorInGroup: (group: string, color: Color, name: string) => void;
+  edit?: Color;
 }
-function Group({ group, colors, handleRenameColorInGroup }: GroupProps) {
+function Group({ group, colors, handleRenameColorInGroup, edit }: GroupProps) {
   return colors.length === 0 ? (
     <CurlyBrace value={`"${group}"`} trailingComma={true} />
   ) : (
@@ -134,6 +135,7 @@ function Group({ group, colors, handleRenameColorInGroup }: GroupProps) {
         handleRenameColor={(color, name) =>
           handleRenameColorInGroup(group, color, name)
         }
+        edit={edit}
       />
     </CurlyBrace>
   );
@@ -165,7 +167,8 @@ function TailwindViewer({
       setMoveEditable(false);
       setEditable((prevState) => {
         const colors = toColorList(colorTheme);
-        const nextIdx = (prevState.idx + 1) % colors.length;
+        const colorIdx = colors.findIndex((value) => value === prevState.color);
+        const nextIdx = (colorIdx + 1) % colors.length;
         return { idx: nextIdx, color: colors[nextIdx] };
       });
     }
@@ -177,6 +180,16 @@ function TailwindViewer({
     if (name.trim().length > 0) handleRenameColor(color, name);
   };
 
+  const handleRenameColorInGroupLocal = (
+    group: string,
+    color: Color,
+    name: string
+  ) => {
+    setMoveEditable(true);
+    // continuation call
+    if (name.trim().length > 0) handleRenameColorInGroup(group, color, name);
+  };
+
   const groupItems = (
     <>
       {Array.from(colorTheme.groups.keys()).map((name, i) => (
@@ -184,7 +197,8 @@ function TailwindViewer({
           key={i}
           group={name}
           colors={Array.from(colorTheme.groups.get(name)!)}
-          handleRenameColorInGroup={handleRenameColorInGroup}
+          handleRenameColorInGroup={handleRenameColorInGroupLocal}
+          edit={editable.color}
         />
       ))}
     </>
