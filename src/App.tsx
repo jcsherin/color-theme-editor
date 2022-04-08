@@ -47,11 +47,13 @@ function CurlyBrace({
 interface ColorLineItemprops {
   color: Color;
   editable?: boolean;
+  focus?: boolean;
   handleRename?: (color: Color, name: string) => void;
 }
 function ColorLineItem({
   color,
   editable = false,
+  focus = false,
   handleRename,
 }: ColorLineItemprops) {
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -63,7 +65,8 @@ function ColorLineItem({
   const renameInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (renameInput && renameInput.current) renameInput.current!.focus();
+    if (focus && renameInput && renameInput.current)
+      renameInput.current!.focus();
   });
 
   const nameView = editable ? (
@@ -172,6 +175,49 @@ function nextColor(colorTheme: ColorTheme, color: Color) {
   return firstColor(colorTheme); // cycles back to first color item
 }
 
+function colorsList(colorTheme: ColorTheme) {
+  const { groups, colors } = colorTheme;
+  let list: Color[] = [];
+  groups.forEach((colors) => {
+    list = list.concat(Array.from(colors.values()));
+  });
+  list = list.concat(Array.from(colors.values()).map((x) => x.color));
+  return list;
+}
+
+interface ListCursor {
+  kind: "cursor";
+  idx: number;
+  color: Color;
+}
+
+interface EmptyList {
+  kind: "empty";
+}
+
+type Cursor = ListCursor | EmptyList;
+
+function initialCursor(colorTheme: ColorTheme): Cursor {
+  const colors = colorsList(colorTheme);
+  return colors.length === 0
+    ? { kind: "empty" }
+    : { kind: "cursor", idx: 0, color: colors[0] };
+}
+
+function nextCursor(cursor: Cursor, colorTheme: ColorTheme): Cursor {
+  const colors = colorsList(colorTheme);
+  switch (cursor.kind) {
+    case "empty":
+      return cursor;
+    case "cursor":
+      if (colors.length === 0) {
+        return { kind: "empty" };
+      }
+      const nextIdx = (cursor.idx + 1) % colors.length;
+      return { ...cursor, idx: nextIdx, color: colors[nextIdx] };
+  }
+}
+
 interface TailwindViewerProps {
   colorTheme: ColorTheme;
   handleRenameColor: (color: Color, name: string) => void;
@@ -182,14 +228,29 @@ function TailwindViewer({
   handleRenameColor,
   handleRenameColorInGroup,
 }: TailwindViewerProps) {
-  const [currEditing, setCurrEditing] = useState(firstColor(colorTheme));
-
+  const [moveCursor, setMoveCursor] = useState(false);
+  const [cursor, setCursor] = useState<Cursor>(initialCursor(colorTheme));
   useEffect(() => {
-    const fc = firstColor(colorTheme);
-    setCurrEditing(fc);
-    if (fc !== undefined)
-      console.log(`Placing input#text for edit at first color => ${fc.value}`);
-  }, [colorTheme]);
+    setCursor((prevState) => {
+      const colors = colorsList(colorTheme);
+      if (colors.length === 0) return prevState;
+
+      switch (prevState.kind) {
+        case "empty":
+          return initialCursor(colorTheme);
+        case "cursor":
+          if (moveCursor) {
+            setMoveCursor(false);
+            return nextCursor(prevState, colorTheme);
+          } else if (colors[prevState.idx] === prevState.color) {
+            return prevState;
+          } else {
+            let newIdx = colors.findIndex((value) => value === prevState.color);
+            return { ...prevState, idx: newIdx };
+          }
+      }
+    });
+  }, [colorTheme, moveCursor]);
 
   const groupItems = (
     <>
@@ -203,6 +264,15 @@ function TailwindViewer({
       ))}
     </>
   );
+  const editColor = () => {
+    switch (cursor.kind) {
+      case "empty":
+        return;
+      case "cursor":
+        return cursor.color;
+    }
+  };
+
   return (
     <div className="bg-slate-800 text-blue-300 p-4 mb-8 font-mono">
       <CurlyBrace>
@@ -216,20 +286,9 @@ function TailwindViewer({
                 if (name.trim().length > 0) {
                   handleRenameColor(color, name);
                 }
-                // HACK! #FIXME
-                // This depends on `colorTheme` which is modified by the
-                // above call to `handleRenameColor`.
-                const moveInputToColor = nextColor(colorTheme, color);
-                if (moveInputToColor !== undefined) {
-                  console.log(
-                    `Moving from ${color.value} to ${moveInputToColor.value}.`
-                  );
-                } else {
-                  console.log(`Next color (of ${color.value}) is 'undefined'`);
-                }
-                setCurrEditing(moveInputToColor);
+                setMoveCursor(true);
               }}
-              edit={currEditing}
+              edit={editColor()}
             />
           </CurlyBrace>
         </CurlyBrace>
