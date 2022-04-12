@@ -448,21 +448,25 @@ function App() {
                 backgroundColor: color.color.value,
               };
               return color.selected ? (
-                <Button
-                  key={color.color.value}
-                  handleClick={() => handleColorSelection(color)}
-                  className="mr-2 mb-2 font-xs border-8 border-indigo-600 w-20 h-20 truncate"
-                  label={color.color.value}
-                  style={style}
-                />
+                <div className="w-32 h-32 p-1 mr-2 mb-2 font-xs border-4 border-indigo-600">
+                  <Button
+                    key={color.color.value}
+                    handleClick={() => handleColorSelection(color)}
+                    className="h-full w-full truncate opacity-60"
+                    label={color.color.value}
+                    style={style}
+                  />
+                </div>
               ) : (
-                <Button
-                  key={color.color.value}
-                  handleClick={() => handleColorSelection(color)}
-                  className="mr-2 mb-2 font-xs w-20 h-20 truncate"
-                  label={color.color.value}
-                  style={style}
-                />
+                <div className="w-32 h-32 p-1 mr-2 mb-2 font-xs">
+                  <Button
+                    key={color.color.value}
+                    handleClick={() => handleColorSelection(color)}
+                    className="h-full w-full truncate"
+                    label={color.color.value}
+                    style={style}
+                  />
+                </div>
               );
             })}
           </div>
