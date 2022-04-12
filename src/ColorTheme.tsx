@@ -1,8 +1,5 @@
-export interface ColorThemeInputFormat {
-  groupsTextValue: string;
-  colorsTextValue: string;
-}
 
+// Old types below
 export interface ColorTheme {
   groups: Map<string, Set<Color>>;
   colors: Set<ColorState>;

@@ -6,7 +6,6 @@ import {
   Color,
   ColorState,
   ColorTheme,
-  ColorThemeInputFormat,
   createColorState,
   isColorThemeEmpty,
   parseColors,
@@ -15,6 +14,9 @@ import {
   toColorList,
 } from "./ColorTheme";
 import { exampleColorGroups, exampleColorValues } from "./example";
+
+import { isUnparsedEmpty, makeUnparsedColorPalette } from "./unparsed";
+import type { UnparsedColorPalette } from "./unparsed";
 
 interface IndentProps {
   children: React.ReactNode;
@@ -240,12 +242,10 @@ function TailwindViewer({
 }
 
 function App() {
-  const [colorThemeInput, setColorThemeInput] = useState<ColorThemeInputFormat>(
-    {
-      groupsTextValue: "",
-      colorsTextValue: "",
-    }
+  const [unparsed, setUnparsed] = useState<UnparsedColorPalette>(
+    makeUnparsedColorPalette()
   );
+
   const [colorTheme, setColorTheme] = useState<ColorTheme>({
     groups: new Map<string, Set<Color>>(),
     colors: new Set<ColorState>(),
@@ -272,16 +272,16 @@ function App() {
   });
 
   const handleClearColorThemeInput = () =>
-    setColorThemeInput({ groupsTextValue: "", colorsTextValue: "" });
+    setUnparsed(makeUnparsedColorPalette());
+  // setColorThemeInput({ groupsTextValue: "", colorsTextValue: "" });
 
   const handlePopulateFromExample = () =>
-    setColorThemeInput({
-      groupsTextValue: exampleColorGroups.join("\n"),
-      colorsTextValue: exampleColorValues.join("\n"),
-    });
+    setUnparsed(
+      makeUnparsedColorPalette(exampleColorGroups, exampleColorValues)
+    );
 
-  const handleUpdateColorTheme = () => {
-    const { groupsTextValue, colorsTextValue } = colorThemeInput;
+  const handleUpdateColorTheme = (unparsed: UnparsedColorPalette) => {
+    const { classNames: groupsTextValue, colors: colorsTextValue } = unparsed;
     setColorTheme({
       groups: new Map(
         parseGroups(groupsTextValue).map((group) => [group, new Set()])
@@ -290,10 +290,7 @@ function App() {
     });
   };
 
-  const isColorThemeInputEmpty =
-    colorThemeInput.groupsTextValue.length === 0 &&
-    colorThemeInput.colorsTextValue.length === 0;
-  const reloadButtonClassName = isColorThemeInputEmpty
+  const reloadButtonClassName = isUnparsedEmpty(unparsed)
     ? "text-gray-400 hover:text-gray-600 bg-slate-200 hover:bg-slate-400 cursor-not-allowed"
     : "text-red-600 hover:text-red-800 bg-red-200 hover:bg-red-400";
 
@@ -393,17 +390,14 @@ function App() {
 
   return (
     <div className="m-4">
-      <BatchInput
-        batch={colorThemeInput}
-        handleBatchUpdate={setColorThemeInput}
-      >
+      <BatchInput batch={unparsed} handleBatchUpdate={setUnparsed}>
         <Button
-          disabled={isColorThemeInputEmpty}
+          disabled={isUnparsedEmpty(unparsed)}
           className={`mr-4 px-12 py-2 font-bold ${reloadButtonClassName}`}
-          handleClick={handleUpdateColorTheme}
+          handleClick={() => handleUpdateColorTheme(unparsed)}
           label="Use Color Groups & Values"
         />
-        {isColorThemeInputEmpty ? (
+        {isUnparsedEmpty(unparsed) ? (
           <Button
             handleClick={handlePopulateFromExample}
             className="text-blue-600 underline"

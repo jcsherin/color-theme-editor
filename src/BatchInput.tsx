@@ -1,11 +1,9 @@
-import { ColorThemeInputFormat } from "./ColorTheme";
 import { TextAreaInput } from "./TextAreaInput";
+import { UnparsedColorPalette } from "./unparsed";
 
 interface BatchInputProps {
-  batch: ColorThemeInputFormat;
-  handleBatchUpdate: React.Dispatch<
-    React.SetStateAction<ColorThemeInputFormat>
-  >;
+  batch: UnparsedColorPalette;
+  handleBatchUpdate: React.Dispatch<React.SetStateAction<UnparsedColorPalette>>;
   children: React.ReactNode;
 }
 
@@ -35,13 +33,13 @@ export function BatchInput({
         <TextAreaInput
           className="w-full mr-1 mb-2"
           label="Color Groups"
-          text={batch.groupsTextValue}
+          text={batch.classNames}
           handleChange={handleUpdateGroups}
         />
         <TextAreaInput
           className="w-full mb-2"
           label="Color values"
-          text={batch.colorsTextValue}
+          text={batch.colors}
           handleChange={handleUpdateColors}
         />
       </div>
