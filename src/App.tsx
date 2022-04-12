@@ -465,11 +465,18 @@ export default App;
 
 /**
  * TODO
- * - 2 step wizard
+ * - Update UI to as a 2 step wizard
  *   1. Load Color Group & Values
  *   2. 2-column layout: Editor | Grouping
  * - Parse input color values
  * - Be able to move input up/down using arrow keys
  * - README
  * - Tests
+ * - Move cursor up/down using arrow keys
+ * - Reproduce bug (faulty cursor jump after renaming first color):
+ *    Add first color to `background` group
+ *    Add any other colors to otehr groups
+ *    Rename first color (default cursor position)
+ *    Cursor jumps to first color in first group
+ *  - Remove `create-react-app`
  */
