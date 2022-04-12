@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { BatchInput } from "./BatchInput";
+import { PaletteInput } from "./PaletteInput";
 import { Button } from "./Button";
 import { ClipboardCopy } from "./ClipboardCopy";
 import {
@@ -13,9 +13,7 @@ import {
   tailwindJSON,
   toColorList,
 } from "./ColorTheme";
-import { exampleColorGroups, exampleColorValues } from "./example";
-
-import { isUnparsedEmpty, makeUnparsedColorPalette } from "./unparsed";
+import { makeUnparsedColorPalette } from "./unparsed";
 import type { UnparsedColorPalette } from "./unparsed";
 
 interface IndentProps {
@@ -271,28 +269,15 @@ function App() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   });
 
-  const handleClearColorThemeInput = () =>
-    setUnparsed(makeUnparsedColorPalette());
-  // setColorThemeInput({ groupsTextValue: "", colorsTextValue: "" });
-
-  const handlePopulateFromExample = () =>
-    setUnparsed(
-      makeUnparsedColorPalette(exampleColorGroups, exampleColorValues)
-    );
-
   const handleUpdateColorTheme = (unparsed: UnparsedColorPalette) => {
-    const { classNames: groupsTextValue, colors: colorsTextValue } = unparsed;
+    const { classNames, colors } = unparsed;
     setColorTheme({
       groups: new Map(
-        parseGroups(groupsTextValue).map((group) => [group, new Set()])
+        parseGroups(classNames).map((group) => [group, new Set()])
       ),
-      colors: new Set(parseColors(colorsTextValue).map(createColorState)),
+      colors: new Set(parseColors(colors).map(createColorState)),
     });
   };
-
-  const reloadButtonClassName = isUnparsedEmpty(unparsed)
-    ? "text-gray-400 hover:text-gray-600 bg-slate-200 hover:bg-slate-400 cursor-not-allowed"
-    : "text-red-600 hover:text-red-800 bg-red-200 hover:bg-red-400";
 
   const handleColorSelection = (color: ColorState) => {
     setColorTheme((prevState) => {
@@ -390,27 +375,7 @@ function App() {
 
   return (
     <div className="m-4">
-      <BatchInput batch={unparsed} handleBatchUpdate={setUnparsed}>
-        <Button
-          disabled={isUnparsedEmpty(unparsed)}
-          className={`mr-4 px-12 py-2 font-bold ${reloadButtonClassName}`}
-          handleClick={() => handleUpdateColorTheme(unparsed)}
-          label="Use Color Groups & Values"
-        />
-        {isUnparsedEmpty(unparsed) ? (
-          <Button
-            handleClick={handlePopulateFromExample}
-            className="text-blue-600 underline"
-            label="Populate Example Color Groups & Values"
-          />
-        ) : (
-          <Button
-            handleClick={handleClearColorThemeInput}
-            className="text-blue-600 underline"
-            label="Clear Color Groups & Values"
-          />
-        )}
-      </BatchInput>
+      <PaletteInput unparsed={unparsed} handleUnparsed={setUnparsed} />
       <div className="flex">
         {isColorThemeEmpty(colorTheme) ? (
           <></>
@@ -487,4 +452,5 @@ export default App;
  *    Rename first color (default cursor position)
  *    Cursor jumps to first color in first group
  *  - Remove `create-react-app`
+ *  - Extract layout component from PaletteInput (reusable in viewer/grouping UI)
  */
