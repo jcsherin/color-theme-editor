@@ -334,16 +334,26 @@ function App() {
   const handleRenameColor = (color: Color, name: string) => {
     setColorTheme((prevState) => {
       const newColors = new Set(
-        Array.from(prevState.colors).map((colorState) => {
-          if (colorState.color === color) {
-            return {
-              ...colorState,
-              color: { ...colorState.color, name: name },
-            };
-          } else {
-            return colorState;
-          }
-        })
+        Array.from(prevState.colors)
+          .map((colorState) => {
+            if (colorState.color === color) {
+              return {
+                ...colorState,
+                color: { ...colorState.color, name: name },
+              };
+            } else {
+              return colorState;
+            }
+          })
+          .sort((a, b) => {
+            if (a.color.name < b.color.name) {
+              return -1;
+            }
+            if (a.color.name > b.color.name) {
+              return 1;
+            }
+            return 0;
+          })
       );
       return { ...prevState, colors: newColors };
     });
