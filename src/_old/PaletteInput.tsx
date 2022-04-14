@@ -1,6 +1,7 @@
 import React from "react";
+import { colors, utilityClassnames } from "../example";
 import { Button } from "./Button";
-import { exampleColors, exampleUtilityClassnames } from "./example";
+
 import {
   isUnparsedEmpty,
   makeUnparsedColorPalette,
@@ -47,9 +48,7 @@ function PaletteActions({
   const handleClearPaletteInput = () => handleInput(makeUnparsedColorPalette());
 
   const handleUseExample = () =>
-    handleInput(
-      makeUnparsedColorPalette(exampleUtilityClassnames, exampleColors)
-    );
+    handleInput(makeUnparsedColorPalette(utilityClassnames, colors));
 
   return (
     <>
