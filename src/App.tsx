@@ -1,4 +1,6 @@
 import React from "react";
+import type { Color } from "./color";
+import { getColorValue, parseColor } from "./color";
 import * as example from "./example";
 
 function Button({
@@ -27,45 +29,66 @@ function Button({
   );
 }
 
-function ButtonGroup({
-  names,
-  disabled,
-  handleClick,
+function ColorSquare({
+  className: overrideClassName,
+  color,
+  handleSelection,
 }: {
-  names: string[];
-  disabled: boolean;
-  handleClick: (name: string) => void;
+  className: string;
+  color: Color;
+  handleSelection: (color: Color) => void;
 }) {
   return (
-    <div>
-      {names.map((value) => {
-        const className =
-          "mr-4 px-6 py-1 bg-red-200 hover:bg-red-400 text-rose-600 hover:text-rose-900";
-
-        return (
-          <Button
-            disabled={disabled}
-            key={value}
-            className={className}
-            text={value}
-            handleClick={handleClick}
-          />
-        );
-      })}
-    </div>
+    <button
+      className={overrideClassName}
+      onClick={(_event) => handleSelection(color)}
+    >
+      <span
+        className="w-16 h-16 block border-b"
+        style={{ backgroundColor: getColorValue(color) }}
+      ></span>
+      <span className="block pt-1 text-xs text-center truncate">
+        {getColorValue(color)}
+      </span>
+    </button>
   );
 }
 
 export default function App() {
+  const colors = example.colors
+    .map((value) => parseColor(value))
+    .flatMap((color) => (color ? [color] : []));
+  const classnames = example.utilityClassnames;
+
   return (
     <div className="m-2">
-      <ButtonGroup
-        names={example.utilityClassnames}
-        handleClick={(className) => {
-          console.log(`Clicked on -> ${className}.`);
-        }}
-        disabled={false}
-      />
+      <div className="flex flex-wrap mb-2">
+        {colors.map((color) => (
+          <ColorSquare
+            className="m-1 pb-1 border bg-black text-white"
+            key={getColorValue(color)}
+            color={color}
+            handleSelection={(color) =>
+              console.log(`Clicke color -> ${JSON.stringify(color, null, 2)}`)
+            }
+          />
+        ))}
+      </div>
+      <div className={"mb-4"}>
+        {classnames.map((value) => {
+          return (
+            <Button
+              disabled={false}
+              key={value}
+              className="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900"
+              text={value}
+              handleClick={(className) => {
+                console.log(`Clicked on -> ${className}.`);
+              }}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
