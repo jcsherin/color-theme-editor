@@ -557,10 +557,10 @@ let tailwindColors = Array.from(
   new Set(Object.values(tailwind).filter((x) => x.startsWith("#")))
 );
 
-export const exampleUtilityClassnames = [
+export const utilityClassnames = [
   "primary",
   "secondary",
   "notification",
   "background",
 ];
-export const exampleColors = shuffle(tailwindColors).slice(0, 40);
+export const colors = shuffle(tailwindColors).slice(0, 40);
