@@ -31,4 +31,7 @@ module.exports = {
       title: "Development",
     }),
   ],
+  stats: {
+    errorDetails: true,
+  },
 };

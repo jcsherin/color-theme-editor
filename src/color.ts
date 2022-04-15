@@ -1,12 +1,10 @@
-interface HexColor {
+export interface HexColor {
   kind: "hex";
   name: string;
   hexcode: string;
 }
 
-export type Color = HexColor;
-
-export function makeHexColor(name: string, value: string): Color {
+export function makeHexColor(name: string, value: string): HexColor {
   return {
     kind: "hex",
     name: name,
@@ -14,7 +12,7 @@ export function makeHexColor(name: string, value: string): Color {
   };
 }
 
-export function getColorValue(color: Color) {
+export function getColorText(color: HexColor) {
   switch (color.kind) {
     case "hex":
       return color.hexcode;

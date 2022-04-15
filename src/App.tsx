@@ -1,6 +1,5 @@
-import React from "react";
-import type { Color } from "./color";
-import { getColorValue, parseColor } from "./color";
+import React, { useEffect, useState } from "react";
+import { getColorText, HexColor, parseColor } from "./color";
 import * as example from "./example";
 
 function Button({
@@ -31,46 +30,76 @@ function Button({
 
 function ColorSquare({
   className: overrideClassName,
-  color,
+  item,
   handleSelection,
 }: {
   className: string;
-  color: Color;
-  handleSelection: (color: Color) => void;
+  item: ColorListItem;
+  handleSelection: (color: ColorListItem) => void;
 }) {
+  const className = item.selected
+    ? `border-4 border-indigo-500`
+    : `border-4 border-white`;
+
   return (
     <button
-      className={overrideClassName}
-      onClick={(_event) => handleSelection(color)}
+      className={`${overrideClassName} ${className}`}
+      onClick={(_event) => handleSelection(item)}
     >
       <span
-        className="w-16 h-16 block border-b"
-        style={{ backgroundColor: getColorValue(color) }}
+        className="w-16 h-12 block border-b"
+        style={{ backgroundColor: getColorText(item.color) }}
       ></span>
-      <span className="block pt-1 text-xs text-center truncate">
-        {getColorValue(color)}
+      <span className="block text-xs text-center truncate bg-black text-white">
+        {getColorText(item.color)}
       </span>
     </button>
   );
 }
 
+interface ColorListItem {
+  color: HexColor;
+  selected: boolean;
+}
+
 export default function App() {
-  const colors = example.colors
-    .map((value) => parseColor(value))
-    .flatMap((color) => (color ? [color] : []));
-  const classnames = example.utilityClassnames;
+  const [colors, setColors] = useState(
+    example.colors.flatMap((value) => {
+      const color = parseColor(value);
+      return color ? [color] : [];
+    })
+  );
+  const [classnames, setClassnames] = useState(example.utilityClassnames);
+
+  const [colorList, setColorList] = useState<ColorListItem[]>([]);
+  useEffect(
+    () =>
+      setColorList(
+        colors.map((color) => {
+          return { color: color, selected: false };
+        })
+      ),
+    [colors]
+  );
+
+  const handleToggleColorSelection = (color: ColorListItem) =>
+    setColorList((state) => {
+      return state.map((item) =>
+        item.color === color.color
+          ? { ...item, selected: !item.selected }
+          : item
+      );
+    });
 
   return (
     <div className="m-2">
       <div className="flex flex-wrap mb-2">
-        {colors.map((color) => (
+        {colorList.map((item) => (
           <ColorSquare
-            className="m-1 pb-1 border bg-black text-white"
-            key={getColorValue(color)}
-            color={color}
-            handleSelection={(color) =>
-              console.log(`Clicke color -> ${JSON.stringify(color, null, 2)}`)
-            }
+            className="mr-1 mb-1 p-1"
+            key={getColorText(item.color)}
+            item={item}
+            handleSelection={handleToggleColorSelection}
           />
         ))}
       </div>
