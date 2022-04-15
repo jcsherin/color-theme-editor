@@ -63,13 +63,13 @@ interface ColorListItem {
 }
 
 export default function App() {
-  const [colors, setColors] = useState(
+  const [colors, _setColors] = useState(
     example.colors.flatMap((value) => {
       const color = parseColor(value);
       return color ? [color] : [];
     })
   );
-  const [classnames, setClassnames] = useState(example.utilityClassnames);
+  const [classnames, _setClassnames] = useState(example.utilityClassnames);
 
   const [colorList, setColorList] = useState<ColorListItem[]>([]);
   useEffect(
