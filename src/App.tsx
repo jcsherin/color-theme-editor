@@ -97,31 +97,36 @@ export default function App() {
     });
 
   return (
-    <div className="m-2">
-      <div className="flex flex-wrap mb-2">
-        {colorList.map((item) => (
-          <ColorSquare
-            className="mr-1 mb-1 p-1"
-            key={getColorText(item.color)}
-            item={item}
-            handleSelection={handleToggleColorSelection}
-          />
-        ))}
-      </div>
-      <div className={"mb-4"}>
-        {classnames.map((value) => {
-          return (
-            <Button
-              disabled={disableButtonGroup}
-              key={value}
-              className="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900"
-              text={value}
-              handleClick={(className) => {
-                console.log(`Clicked on -> ${className}.`);
-              }}
-            />
-          );
-        })}
+    <div className="mx-2 my-8">
+      <div className="grid grid-cols-2">
+        <div>
+          <div className="flex flex-wrap mb-4">
+            {colorList.map((item) => (
+              <ColorSquare
+                className="mr-1 mb-1 p-1"
+                key={getColorText(item.color)}
+                item={item}
+                handleSelection={handleToggleColorSelection}
+              />
+            ))}
+          </div>
+          <div className={"pl-2"}>
+            {classnames.map((value) => {
+              return (
+                <Button
+                  disabled={disableButtonGroup}
+                  key={value}
+                  className="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900"
+                  text={value}
+                  handleClick={(className) => {
+                    console.log(`Clicked on -> ${className}.`);
+                  }}
+                />
+              );
+            })}
+          </div>
+        </div>
+        <div></div>
       </div>
     </div>
   );
