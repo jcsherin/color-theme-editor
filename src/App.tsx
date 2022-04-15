@@ -80,15 +80,18 @@ function TreeNode({
   children,
 }: {
   contents: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }) {
-  return (
+  let node = children ? (
     <div>
       <p className="mb-1">{`${contents} {`}</p>
       <div className="ml-4">{children}</div>
       <p>{"}"}</p>
     </div>
+  ) : (
+    <p className="mb-1">{`${contents} {}`}</p>
   );
+  return node;
 }
 
 function TreeLeaf({ contents }: { contents: string }) {
@@ -143,6 +146,26 @@ export default function App() {
       );
     });
 
+  const handleAddColorsToKlass = (className: string) => {
+    setTheme((theme) => {
+      const selectedColors = colorList
+        .filter((item) => item.selected)
+        .map((item) => item.color);
+
+      return theme.map((klass) => {
+        switch (klass.kind) {
+          case "default":
+            return klass;
+          case "scale":
+            return klass.name === className
+              ? { ...klass, colors: [...klass.colors, ...selectedColors] }
+              : klass;
+        }
+      });
+    });
+    setColorList((colors) => colors.filter((item) => !item.selected));
+  };
+
   const colorListItems = colorList.map((item) => (
     <ColorSquare
       className="mr-1 mb-1 p-1"
@@ -159,22 +182,33 @@ export default function App() {
         key={value}
         className="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900"
         text={value}
-        handleClick={(className) => {
-          console.log(`Clicked on -> ${className}.`);
-        }}
+        handleClick={handleAddColorsToKlass}
       />
     );
   });
 
-  const themeItems = theme
-    .map((klass) => {
-      switch (klass.kind) {
-        case "default":
-          return `${getColorName(klass.color)}: ${getColorValue(klass.color)}`;
-      }
-    })
-    .flatMap((line) => (line ? [line] : []))
-    .map((contents) => <TreeLeaf contents={contents} />);
+  const colorNode = (color: HexColor) => {
+    let contents = `"${getColorName(color)}" : ${getColorValue(color)}`;
+    return <TreeLeaf key={getColorValue(color)} contents={contents} />;
+  };
+
+  const themeItems = theme.map((klass) => {
+    switch (klass.kind) {
+      case "default":
+        return colorNode(klass.color);
+      case "scale":
+        let contents = `"${klass.name}" :`;
+        const node =
+          klass.colors.length === 0 ? (
+            <TreeNode key={klass.name} contents={contents} />
+          ) : (
+            <TreeNode key={klass.name} contents={contents}>
+              {klass.colors.map((color) => colorNode(color))}
+            </TreeNode>
+          );
+        return node;
+    }
+  });
 
   return (
     <div className="mx-2 my-8">
