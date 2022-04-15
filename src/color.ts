@@ -12,10 +12,17 @@ export function makeHexColor(name: string, value: string): HexColor {
   };
 }
 
-export function getColorText(color: HexColor) {
+export function getColorValue(color: HexColor) {
   switch (color.kind) {
     case "hex":
       return color.hexcode;
+  }
+}
+
+export function getColorName(color: HexColor) {
+  switch (color.kind) {
+    case "hex":
+      return color.name;
   }
 }
 

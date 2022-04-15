@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getColorText, HexColor, parseColor } from "./color";
+import { getColorName, getColorValue, HexColor, parseColor } from "./color";
 import * as example from "./example";
 
 function Button({
@@ -48,10 +48,10 @@ function ColorSquare({
     >
       <span
         className="w-16 h-12 block border-b"
-        style={{ backgroundColor: getColorText(item.color) }}
+        style={{ backgroundColor: getColorValue(item.color) }}
       ></span>
       <span className="block text-xs text-center truncate bg-black text-white">
-        {getColorText(item.color)}
+        {getColorValue(item.color)}
       </span>
     </button>
   );
@@ -60,6 +60,39 @@ function ColorSquare({
 interface ColorListItem {
   color: HexColor;
   selected: boolean;
+}
+
+interface DefaultKlass {
+  kind: "default";
+  color: HexColor;
+}
+
+interface ScaleKlass {
+  kind: "scale";
+  name: string;
+  colors: HexColor[];
+}
+
+type Klass = ScaleKlass | DefaultKlass;
+
+function TreeNode({
+  contents,
+  children,
+}: {
+  contents: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <p className="mb-1">{`${contents} {`}</p>
+      <div className="ml-4">{children}</div>
+      <p>{"}"}</p>
+    </div>
+  );
+}
+
+function TreeLeaf({ contents }: { contents: string }) {
+  return <p className="mb-1">{`${contents},`}</p>;
 }
 
 export default function App() {
@@ -82,6 +115,20 @@ export default function App() {
     []
   );
 
+  const [theme, setTheme] = useState<Klass[]>([]);
+  useEffect(() => {
+    setTheme((_theme) => {
+      const scaleKlasses = classnames.map<Klass>((name) => {
+        return { kind: "scale", name: name, colors: [] };
+      });
+      const defaultKlasses = colors.map<Klass>((color) => {
+        return { kind: "default", color: color };
+      });
+
+      return [...scaleKlasses, ...defaultKlasses];
+    });
+  }, []);
+
   const [disableButtonGroup, setDisableButtonGroup] = useState(true);
   useEffect(() => {
     setDisableButtonGroup(colorList.every((item) => !item.selected));
@@ -96,37 +143,53 @@ export default function App() {
       );
     });
 
+  const colorListItems = colorList.map((item) => (
+    <ColorSquare
+      className="mr-1 mb-1 p-1"
+      key={getColorValue(item.color)}
+      item={item}
+      handleSelection={handleToggleColorSelection}
+    />
+  ));
+
+  const classnamesButtonGroup = classnames.map((value) => {
+    return (
+      <Button
+        disabled={disableButtonGroup}
+        key={value}
+        className="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900"
+        text={value}
+        handleClick={(className) => {
+          console.log(`Clicked on -> ${className}.`);
+        }}
+      />
+    );
+  });
+
+  const themeItems = theme
+    .map((klass) => {
+      switch (klass.kind) {
+        case "default":
+          return `${getColorName(klass.color)}: ${getColorValue(klass.color)}`;
+      }
+    })
+    .flatMap((line) => (line ? [line] : []))
+    .map((contents) => <TreeLeaf contents={contents} />);
+
   return (
     <div className="mx-2 my-8">
       <div className="grid grid-cols-2">
-        <div>
-          <div className="flex flex-wrap mb-4">
-            {colorList.map((item) => (
-              <ColorSquare
-                className="mr-1 mb-1 p-1"
-                key={getColorText(item.color)}
-                item={item}
-                handleSelection={handleToggleColorSelection}
-              />
-            ))}
-          </div>
-          <div className={"pl-2"}>
-            {classnames.map((value) => {
-              return (
-                <Button
-                  disabled={disableButtonGroup}
-                  key={value}
-                  className="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900"
-                  text={value}
-                  handleClick={(className) => {
-                    console.log(`Clicked on -> ${className}.`);
-                  }}
-                />
-              );
-            })}
-          </div>
+        <div className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2">
+          <TreeNode contents="module.exports =">
+            <TreeNode contents="theme:">
+              <TreeNode contents="colors:">{themeItems}</TreeNode>
+            </TreeNode>
+          </TreeNode>
         </div>
-        <div></div>
+        <div>
+          <div className="flex flex-wrap mb-4">{colorListItems}</div>
+          <div className={"pl-2"}>{classnamesButtonGroup}</div>
+        </div>
       </div>
     </div>
   );
