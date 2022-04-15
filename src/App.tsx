@@ -79,7 +79,7 @@ export default function App() {
           return { color: color, selected: false };
         })
       ),
-    [colors]
+    []
   );
 
   const [disableButtonGroup, setDisableButtonGroup] = useState(true);
