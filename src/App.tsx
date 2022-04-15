@@ -82,6 +82,11 @@ export default function App() {
     [colors]
   );
 
+  const [disableButtonGroup, setDisableButtonGroup] = useState(true);
+  useEffect(() => {
+    setDisableButtonGroup(colorList.every((item) => !item.selected));
+  }, [colorList]);
+
   const handleToggleColorSelection = (color: ColorListItem) =>
     setColorList((state) => {
       return state.map((item) =>
@@ -107,7 +112,7 @@ export default function App() {
         {classnames.map((value) => {
           return (
             <Button
-              disabled={false}
+              disabled={disableButtonGroup}
               key={value}
               className="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900"
               text={value}
