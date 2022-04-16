@@ -112,6 +112,22 @@ function TreeLeaf({
     </button>
   );
 }
+function TreeLeafInput({
+  handleFocus,
+  children,
+}: {
+  handleFocus: React.MouseEventHandler<HTMLButtonElement>;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      className="mb-1 block bg-yellow-300 text-slate-600 w-full py-4 text-xl"
+      onClick={handleFocus}
+    >
+      {children}
+    </button>
+  );
+}
 
 interface ViewMode {
   kind: "view";
@@ -280,20 +296,52 @@ export default function App() {
     handleFocus: (color: HexColor) => void
   ) => {
     let colorValue = getColorValue(color);
-    return (
-      <TreeLeaf
-        key={getColorValue(color)}
-        handleFocus={(_event) => handleFocus(color)}
-      >
-        <span className="mr-4">"{getColorName(color)}"</span>
-        <span className="mr-4">:</span>
-        <span
-          className="w-4 h-4 inline-block mr-2 rounded-sm"
-          style={{ backgroundColor: colorValue }}
-        ></span>
-        <span>{colorValue},</span>
-      </TreeLeaf>
-    );
+
+    switch (inputMode.kind) {
+      case "view":
+        return (
+          <TreeLeaf
+            key={getColorValue(color)}
+            handleFocus={(_event) => handleFocus(color)}
+          >
+            <span className="mr-4">"{getColorName(color)}"</span>
+            <span className="mr-4">:</span>
+            <span
+              className="w-4 h-4 inline-block mr-2 rounded-sm"
+              style={{ backgroundColor: colorValue }}
+            ></span>
+            <span>{colorValue},</span>
+          </TreeLeaf>
+        );
+      case "edit":
+        return inputMode.color === color ? (
+          <TreeLeafInput
+            key={getColorValue(color)}
+            handleFocus={(_event) => handleFocus(color)}
+          >
+            <span className="mr-4">"{getColorName(color)}"</span>
+            <span className="mr-4">:</span>
+            <span
+              className="w-4 h-4 inline-block mr-2 rounded-sm"
+              style={{ backgroundColor: colorValue }}
+            ></span>
+            <span>{colorValue},</span>
+          </TreeLeafInput>
+        ) : (
+          <TreeLeaf
+            key={getColorValue(color)}
+            handleFocus={(_event) => handleFocus(color)}
+          >
+            <span className="mr-4">"{getColorName(color)}"</span>
+            <span className="mr-4">:</span>
+            <span
+              className="w-4 h-4 inline-block mr-2 rounded-sm"
+              style={{ backgroundColor: colorValue }}
+            ></span>
+            <span>{colorValue},</span>
+          </TreeLeaf>
+        );
+    }
   };
 
   const handleInputFocus = (color: HexColor) => {
