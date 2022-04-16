@@ -99,8 +99,8 @@ function TreeNode({
   return node;
 }
 
-function TreeLeaf({ contents }: { contents: string }) {
-  return <p className="mb-1">{`${contents},`}</p>;
+function TreeLeaf({ children }: { children: React.ReactNode }) {
+  return <p className="mb-1">{children}</p>;
 }
 
 export default function App() {
@@ -219,11 +219,21 @@ export default function App() {
   });
 
   const colorNode = (color: HexColor) => {
-    let contents = `"${getColorName(color)}" : ${getColorValue(color)}`;
-    return <TreeLeaf key={getColorValue(color)} contents={contents} />;
+    let colorValue = getColorValue(color);
+    return (
+      <TreeLeaf key={getColorValue(color)}>
+        <span className="mr-4">"{getColorName(color)}"</span>
+        <span className="mr-4">:</span>
+        <span
+          className="w-4 h-4 inline-block mr-2 rounded-sm"
+          style={{ backgroundColor: colorValue }}
+        ></span>
+        <span>{colorValue},</span>
+      </TreeLeaf>
+    );
   };
 
-  const themeItems = theme.map((klass) => {
+  const childNodes = theme.map((klass) => {
     switch (klass.kind) {
       case "default":
         return colorNode(klass.color);
@@ -247,7 +257,7 @@ export default function App() {
         <div className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2">
           <TreeNode contents="module.exports =">
             <TreeNode contents="theme:">
-              <TreeNode contents="colors:">{themeItems}</TreeNode>
+              <TreeNode contents="colors:">{childNodes}</TreeNode>
             </TreeNode>
           </TreeNode>
         </div>
