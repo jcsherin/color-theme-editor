@@ -37,9 +37,10 @@ function ColorSquare({
   item: ColorListItem;
   handleSelection: (color: ColorListItem) => void;
 }) {
-  const className = item.selected
-    ? `border-4 border-indigo-500`
-    : `border-4 border-white`;
+  const className =
+    item.status === "selected"
+      ? `border-4 border-indigo-500`
+      : `border-4 border-white`;
 
   return (
     <button
@@ -59,7 +60,11 @@ function ColorSquare({
 
 interface ColorListItem {
   color: HexColor;
-  selected: boolean;
+  status: "visible" | "selected" | "hidden";
+}
+
+function makeColorListItem(color: HexColor): ColorListItem {
+  return { color: color, status: "visible" };
 }
 
 interface DefaultKlass {
@@ -108,15 +113,7 @@ export default function App() {
   const [classnames, _setClassnames] = useState(example.utilityClassnames);
 
   const [colorList, setColorList] = useState<ColorListItem[]>([]);
-  useEffect(
-    () =>
-      setColorList(
-        colors.map((color) => {
-          return { color: color, selected: false };
-        })
-      ),
-    []
-  );
+  useEffect(() => setColorList(colors.map(makeColorListItem)), []);
 
   const [theme, setTheme] = useState<Klass[]>([]);
   useEffect(() => {
@@ -134,17 +131,30 @@ export default function App() {
 
   const [disableButtonGroup, setDisableButtonGroup] = useState(true);
   useEffect(() => {
-    setDisableButtonGroup(colorList.every((item) => !item.selected));
+    setDisableButtonGroup(
+      colorList.every(
+        (item) => item.status === "visible" || item.status === "hidden"
+      )
+    );
   }, [colorList]);
 
-  const handleToggleColorSelection = (color: ColorListItem) =>
+  const handleToggleColorSelection = (color: ColorListItem) => {
+    const toggleStatus = (item: ColorListItem): ColorListItem => {
+      switch (item.status) {
+        case "visible":
+          return { ...item, status: "selected" };
+        case "selected":
+          return { ...item, status: "visible" };
+        case "hidden":
+          return item;
+      }
+    };
     setColorList((state) => {
       return state.map((item) =>
-        item.color === color.color
-          ? { ...item, selected: !item.selected }
-          : item
+        item.color === color.color ? toggleStatus(item) : item
       );
     });
+  };
 
   const handleAddColorsToKlass = (className: string) => {
     const removeFromDefaultKlass = (
@@ -171,24 +181,30 @@ export default function App() {
     };
     setTheme((theme) => {
       const selectedColors = colorList
-        .filter((item) => item.selected)
+        .filter((item) => item.status === "selected")
         .map((item) => item.color);
 
       return theme
         .filter((klass) => removeFromDefaultKlass(selectedColors, klass))
         .map((klass) => addToScaleKlass(selectedColors, klass));
     });
-    setColorList((colors) => colors.filter((item) => !item.selected));
+    setColorList((colors) =>
+      colors.map((item) =>
+        item.status === "selected" ? { ...item, status: "hidden" } : item
+      )
+    );
   };
 
-  const colorListItems = colorList.map((item) => (
-    <ColorSquare
-      className="mr-1 mb-1 p-1"
-      key={getColorValue(item.color)}
-      item={item}
-      handleSelection={handleToggleColorSelection}
-    />
-  ));
+  const colorListItems = colorList
+    .filter((item) => item.status !== "hidden")
+    .map((item) => (
+      <ColorSquare
+        className="mr-1 mb-1 p-1"
+        key={getColorValue(item.color)}
+        item={item}
+        handleSelection={handleToggleColorSelection}
+      />
+    ));
 
   const classnamesButtonGroup = classnames.map((value) => {
     return (
