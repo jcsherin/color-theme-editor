@@ -99,8 +99,18 @@ function TreeNode({
   return node;
 }
 
-function TreeLeaf({ children }: { children: React.ReactNode }) {
-  return <p className="mb-1">{children}</p>;
+function TreeLeaf({
+  handleFocus,
+  children,
+}: {
+  handleFocus: React.MouseEventHandler<HTMLButtonElement>;
+  children: React.ReactNode;
+}) {
+  return (
+    <button className="mb-1 block" onClick={handleFocus}>
+      {children}
+    </button>
+  );
 }
 
 export default function App() {
@@ -222,6 +232,12 @@ export default function App() {
     let colorValue = getColorValue(color);
     return (
       <TreeLeaf key={getColorValue(color)}>
+      <TreeLeaf
+        key={getColorValue(color)}
+        handleFocus={(_event) =>
+          console.log(`Editing -> ${JSON.stringify(color, null, 2)}`)
+        }
+      >
         <span className="mr-4">"{getColorName(color)}"</span>
         <span className="mr-4">:</span>
         <span
