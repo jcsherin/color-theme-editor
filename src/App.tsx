@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { getColorName, getColorValue, HexColor, parseColor } from "./color";
 import * as example from "./example";
 
@@ -113,6 +113,48 @@ function TreeLeaf({
   );
 }
 
+interface ViewMode {
+  kind: "view";
+}
+interface EditMode {
+  kind: "edit";
+  pos: number;
+}
+
+type InputMode = ViewMode | EditMode;
+
+const initialInputMode: InputMode = { kind: "view" };
+
+interface Focus {
+  kind: "focus";
+  pos: number;
+}
+
+interface Escape {
+  kind: "escape";
+}
+
+type InputAction = Focus | Escape;
+
+function reducerInputAction(state: InputMode, action: InputAction): InputMode {
+  switch (state.kind) {
+    case "view":
+      switch (action.kind) {
+        case "focus":
+          return { kind: "edit", pos: action.pos };
+        case "escape":
+          return state;
+      }
+    case "edit":
+      switch (action.kind) {
+        case "focus":
+          return { ...state, pos: action.pos };
+        case "escape":
+          return { kind: "view" };
+      }
+  }
+}
+
 export default function App() {
   const [colors, _setColors] = useState(
     example.colors.flatMap((value) => {
@@ -138,6 +180,11 @@ export default function App() {
       return [...scaleKlasses, ...defaultKlasses];
     });
   }, []);
+
+  const [inputMode, inputActionDispatch] = useReducer(
+    reducerInputAction,
+    initialInputMode
+  );
 
   const [disableButtonGroup, setDisableButtonGroup] = useState(true);
   useEffect(() => {
