@@ -67,18 +67,18 @@ function makeColorListItem(color: HexColor): ColorListItem {
   return { color: color, status: "visible" };
 }
 
-interface DefaultKlass {
-  kind: "default";
+interface NoneKlass {
+  kind: "none";
   color: HexColor;
 }
 
-interface ScaleKlass {
-  kind: "scale";
+interface UtilityKlass {
+  kind: "utility";
   name: string;
   colors: HexColor[];
 }
 
-type Klass = ScaleKlass | DefaultKlass;
+type Klass = UtilityKlass | NoneKlass;
 
 function TreeNode({
   contents,
@@ -129,10 +129,10 @@ export default function App() {
   useEffect(() => {
     setTheme((_theme) => {
       const scaleKlasses = classnames.map<Klass>((name) => {
-        return { kind: "scale", name: name, colors: [] };
+        return { kind: "utility", name: name, colors: [] };
       });
       const defaultKlasses = colors.map<Klass>((color) => {
-        return { kind: "default", color: color };
+        return { kind: "none", color: color };
       });
 
       return [...scaleKlasses, ...defaultKlasses];
@@ -172,18 +172,18 @@ export default function App() {
       klass: Klass
     ) => {
       switch (klass.kind) {
-        case "default":
+        case "none":
           return !selectedColors.includes(klass.color);
-        case "scale":
+        case "utility":
           return true;
       }
     };
 
     const addToScaleKlass = (selectedColors: HexColor[], klass: Klass) => {
       switch (klass.kind) {
-        case "default":
+        case "none":
           return klass;
-        case "scale":
+        case "utility":
           return klass.name === className
             ? { ...klass, colors: [...klass.colors, ...selectedColors] }
             : klass;
@@ -231,7 +231,6 @@ export default function App() {
   const colorNode = (color: HexColor) => {
     let colorValue = getColorValue(color);
     return (
-      <TreeLeaf key={getColorValue(color)}>
       <TreeLeaf
         key={getColorValue(color)}
         handleFocus={(_event) =>
@@ -251,9 +250,9 @@ export default function App() {
 
   const childNodes = theme.map((klass) => {
     switch (klass.kind) {
-      case "default":
+      case "none":
         return colorNode(klass.color);
-      case "scale":
+      case "utility":
         let contents = `"${klass.name}" :`;
         const node =
           klass.colors.length === 0 ? (
