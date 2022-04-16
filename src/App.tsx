@@ -118,7 +118,7 @@ interface ViewMode {
 }
 interface EditMode {
   kind: "edit";
-  pos: number;
+  color: HexColor;
 }
 
 type InputMode = ViewMode | EditMode;
@@ -127,7 +127,7 @@ const initialInputMode: InputMode = { kind: "view" };
 
 interface Focus {
   kind: "focus";
-  pos: number;
+  color: HexColor;
 }
 
 interface Escape {
@@ -141,14 +141,14 @@ function reducerInputAction(state: InputMode, action: InputAction): InputMode {
     case "view":
       switch (action.kind) {
         case "focus":
-          return { kind: "edit", pos: action.pos };
+          return { kind: "edit", color: action.color };
         case "escape":
           return state;
       }
     case "edit":
       switch (action.kind) {
         case "focus":
-          return { ...state, pos: action.pos };
+          return { ...state, color: action.color };
         case "escape":
           return { kind: "view" };
       }
@@ -275,14 +275,15 @@ export default function App() {
     );
   });
 
-  const colorNode = (color: HexColor) => {
+  const colorNode = (
+    color: HexColor,
+    handleFocus: (color: HexColor) => void
+  ) => {
     let colorValue = getColorValue(color);
     return (
       <TreeLeaf
         key={getColorValue(color)}
-        handleFocus={(_event) =>
-          console.log(`Editing -> ${JSON.stringify(color, null, 2)}`)
-        }
+        handleFocus={(_event) => handleFocus(color)}
       >
         <span className="mr-4">"{getColorName(color)}"</span>
         <span className="mr-4">:</span>
@@ -295,10 +296,15 @@ export default function App() {
     );
   };
 
+  const handleInputFocus = (color: HexColor) => {
+    inputActionDispatch({ kind: "focus", color: color });
+    console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
+  };
+
   const childNodes = theme.map((klass) => {
     switch (klass.kind) {
       case "none":
-        return colorNode(klass.color);
+        return colorNode(klass.color, handleInputFocus);
       case "utility":
         let contents = `"${klass.name}" :`;
         const node =
@@ -306,7 +312,7 @@ export default function App() {
             <TreeNode key={klass.name} contents={contents} />
           ) : (
             <TreeNode key={klass.name} contents={contents}>
-              {klass.colors.map((color) => colorNode(color))}
+              {klass.colors.map((color) => colorNode(color, handleInputFocus))}
             </TreeNode>
           );
         return node;
