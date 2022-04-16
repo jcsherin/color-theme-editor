@@ -147,21 +147,36 @@ export default function App() {
     });
 
   const handleAddColorsToKlass = (className: string) => {
+    const removeFromDefaultKlass = (
+      selectedColors: HexColor[],
+      klass: Klass
+    ) => {
+      switch (klass.kind) {
+        case "default":
+          return !selectedColors.includes(klass.color);
+        case "scale":
+          return true;
+      }
+    };
+
+    const addToScaleKlass = (selectedColors: HexColor[], klass: Klass) => {
+      switch (klass.kind) {
+        case "default":
+          return klass;
+        case "scale":
+          return klass.name === className
+            ? { ...klass, colors: [...klass.colors, ...selectedColors] }
+            : klass;
+      }
+    };
     setTheme((theme) => {
       const selectedColors = colorList
         .filter((item) => item.selected)
         .map((item) => item.color);
 
-      return theme.map((klass) => {
-        switch (klass.kind) {
-          case "default":
-            return klass;
-          case "scale":
-            return klass.name === className
-              ? { ...klass, colors: [...klass.colors, ...selectedColors] }
-              : klass;
-        }
-      });
+      return theme
+        .filter((klass) => removeFromDefaultKlass(selectedColors, klass))
+        .map((klass) => addToScaleKlass(selectedColors, klass));
     });
     setColorList((colors) => colors.filter((item) => !item.selected));
   };
