@@ -67,8 +67,8 @@ function makeColorListItem(color: HexColor): ColorListItem {
   return { color: color, status: "visible" };
 }
 
-interface NoneKlass {
-  kind: "none";
+interface SingleColorKlass {
+  kind: "singleColor";
   color: HexColor;
 }
 
@@ -78,7 +78,11 @@ interface UtilityKlass {
   colors: HexColor[];
 }
 
-type Klass = UtilityKlass | NoneKlass;
+type Klass = UtilityKlass | SingleColorKlass;
+
+function makeUtilityKlass(name: string): UtilityKlass {
+  return { kind: "utility", name: name, colors: [] };
+}
 
 function TreeNode({
   contents,
@@ -193,24 +197,34 @@ export default function App() {
       return color ? [color] : [];
     })
   );
-  const [classnames, _setClassnames] = useState(example.utilityClassnames);
+
+  const [utilityKlasses, _setUtilityKlasses] = useState(
+    example.utilityClassnames.map(makeUtilityKlass)
+  );
 
   const [colorList, setColorList] = useState<ColorListItem[]>([]);
   useEffect(() => setColorList(colors.map(makeColorListItem)), []);
-
-  const [theme, setTheme] = useState<Klass[]>([]);
   useEffect(() => {
-    setTheme((_theme) => {
-      const scaleKlasses = classnames.map<Klass>((name) => {
-        return { kind: "utility", name: name, colors: [] };
-      });
+    function updateColorRef(item: ColorListItem, idx: number) {
+      return colors[idx] === item.color
+        ? item
+        : { ...item, color: colors[idx] };
+    }
+    setColorList((prev) =>
+      prev.length === 0 ? prev : prev.map(updateColorRef)
+    );
+  }, [colors]);
+
+  const [colorTheme, setColorTheme] = useState<Klass[]>([]);
+  useEffect(() => {
+    setColorTheme((_prev) => {
       const defaultKlasses = colors.map<Klass>((color) => {
-        return { kind: "none", color: color };
+        return { kind: "singleColor", color: color };
       });
 
-      return [...scaleKlasses, ...defaultKlasses];
+      return [...utilityKlasses, ...defaultKlasses];
     });
-  }, []);
+  }, [utilityKlasses]);
 
   const [inputMode, inputActionDispatch] = useReducer(
     reducerInputAction,
@@ -270,7 +284,7 @@ export default function App() {
       klass: Klass
     ) => {
       switch (klass.kind) {
-        case "none":
+        case "singleColor":
           return !selectedColors.includes(klass.color);
         case "utility":
           return true;
@@ -279,7 +293,7 @@ export default function App() {
 
     const addToScaleKlass = (selectedColors: HexColor[], klass: Klass) => {
       switch (klass.kind) {
-        case "none":
+        case "singleColor":
           return klass;
         case "utility":
           return klass.name === className
@@ -287,7 +301,7 @@ export default function App() {
             : klass;
       }
     };
-    setTheme((theme) => {
+    setColorTheme((theme) => {
       const selectedColors = colorList
         .filter((item) => item.status === "selected")
         .map((item) => item.color);
@@ -314,13 +328,13 @@ export default function App() {
       />
     ));
 
-  const classnamesButtonGroup = classnames.map((value) => {
+  const utilityKlassesButtonGroup = utilityKlasses.map((klass) => {
     return (
       <Button
         disabled={disableButtonGroup}
-        key={value}
+        key={klass.name}
         className="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900"
-        text={value}
+        text={klass.name}
         handleClick={handleAddColorsToKlass}
       />
     );
@@ -378,9 +392,9 @@ export default function App() {
     console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
   };
 
-  const childNodes = theme.map((klass) => {
+  const childNodes = colorTheme.map((klass) => {
     switch (klass.kind) {
-      case "none":
+      case "singleColor":
         return colorNode(klass.color, handleInputFocus, focusRenameInput);
       case "utility":
         let contents = `"${klass.name}" :`;
@@ -413,7 +427,7 @@ export default function App() {
         </div>
         <div>
           <div className="flex flex-wrap mb-4">{colorListItems}</div>
-          <div className={"pl-2"}>{classnamesButtonGroup}</div>
+          <div className={"pl-2"}>{utilityKlassesButtonGroup}</div>
         </div>
       </div>
     </div>
