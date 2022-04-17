@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { getColorName, getColorValue, HexColor, parseColor } from "./color";
 import * as example from "./example";
 
@@ -112,13 +112,27 @@ function TreeLeaf({
     </button>
   );
 }
-function TreeLeafInput({ color }: { color: HexColor }) {
+function TreeLeafInput({ color, focus }: { color: HexColor; focus: boolean }) {
+  const renameRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (focus && renameRef && renameRef.current) {
+        renameRef.current.focus();
+        renameRef.current.select();
+      }
+    }, 20);
+  }, [focus]);
+
   return (
     <div>
       <input
+        id="tree-leaf-input"
+        ref={renameRef}
         type="text"
         placeholder={`Rename ${getColorName(color)}`}
-        className="py-2 pl-2 mr-4 w-1/2 mt-4 mb-4"
+        value={getColorName(color)}
+        className="py-2 pl-4 mr-4 w-1/2 mt-4 mb-4 text-black"
       />
       <span className="mr-4">:</span>
       <span
@@ -212,6 +226,26 @@ export default function App() {
     );
   }, [colorList]);
 
+  const [focusRenameInput, setFocusRenameInput] = useState(false);
+  const mouseRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    function handleRenameInputFocus(event: MouseEvent) {
+      if (
+        mouseRef &&
+        mouseRef.current &&
+        mouseRef.current.contains(event.target as Node)
+      ) {
+        setFocusRenameInput(true);
+      } else {
+        setFocusRenameInput(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleRenameInputFocus);
+    return () =>
+      document.removeEventListener("mousedown", handleRenameInputFocus);
+  }, []);
+
   const handleToggleColorSelection = (color: ColorListItem) => {
     const toggleStatus = (item: ColorListItem): ColorListItem => {
       switch (item.status) {
@@ -294,7 +328,8 @@ export default function App() {
 
   const colorNode = (
     color: HexColor,
-    handleFocus: (color: HexColor) => void
+    handleFocus: (color: HexColor) => void,
+    focusRenameInput: boolean
   ) => {
     let colorValue = getColorValue(color);
 
@@ -316,7 +351,11 @@ export default function App() {
         );
       case "edit":
         return inputMode.color === color ? (
-          <TreeLeafInput key={getColorValue(color)} color={color} />
+          <TreeLeafInput
+            key={getColorValue(color)}
+            color={color}
+            focus={focusRenameInput}
+          />
         ) : (
           <TreeLeaf
             key={getColorValue(color)}
@@ -342,7 +381,7 @@ export default function App() {
   const childNodes = theme.map((klass) => {
     switch (klass.kind) {
       case "none":
-        return colorNode(klass.color, handleInputFocus);
+        return colorNode(klass.color, handleInputFocus, focusRenameInput);
       case "utility":
         let contents = `"${klass.name}" :`;
         const node =
@@ -350,7 +389,9 @@ export default function App() {
             <TreeNode key={klass.name} contents={contents} />
           ) : (
             <TreeNode key={klass.name} contents={contents}>
-              {klass.colors.map((color) => colorNode(color, handleInputFocus))}
+              {klass.colors.map((color) =>
+                colorNode(color, handleInputFocus, focusRenameInput)
+              )}
             </TreeNode>
           );
         return node;
@@ -360,7 +401,10 @@ export default function App() {
   return (
     <div className="mx-2 my-8">
       <div className="grid grid-cols-2">
-        <div className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2">
+        <div
+          ref={mouseRef}
+          className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
+        >
           <TreeNode contents="module.exports =">
             <TreeNode contents="theme:">
               <TreeNode contents="colors:">{childNodes}</TreeNode>
