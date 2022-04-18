@@ -36,41 +36,49 @@ function Button({
 
 function ColorSquare({
   className: overrideClassName,
+  color,
   item,
   handleSelection,
 }: {
   className: string;
+  color: HexColor;
   item: ColorListItem;
   handleSelection: (color: ColorListItem) => void;
 }) {
-  const className =
-    item.status === "selected"
-      ? `border-4 border-indigo-500`
-      : `border-4 border-white`;
+  const getClassName = (item: ColorListItem): string => {
+    switch (item.status) {
+      case "selected":
+        return "border-4 border-indigo-500";
+      case "visible":
+        return "border-4 border-white";
+      case "hidden":
+        return "hidden";
+    }
+  };
 
   return (
     <button
-      className={`${overrideClassName} ${className}`}
+      className={`${overrideClassName} ${getClassName(item)}`}
       onClick={(_event) => handleSelection(item)}
     >
       <span
         className="w-16 h-12 block border-b"
-        style={{ backgroundColor: getColorValue(item.color) }}
+        style={{ backgroundColor: getColorValue(color) }}
       ></span>
       <span className="block text-xs text-center truncate bg-black text-white">
-        {getColorValue(item.color)}
+        {getColorValue(color)}
       </span>
     </button>
   );
 }
 
 interface ColorListItem {
-  color: HexColor;
+  colorId: string;
   status: "visible" | "selected" | "hidden";
 }
 
 function makeColorListItem(color: HexColor): ColorListItem {
-  return { color: color, status: "visible" };
+  return { colorId: getColorId(color), status: "visible" };
 }
 
 interface SingleColorKlass {
@@ -96,6 +104,15 @@ function getKlassId(klass: Klass): string {
       return klass.name;
     case "singleColor":
       return getColorId(klass.color);
+  }
+}
+
+function getKlassName(klass: Klass): string {
+  switch (klass.kind) {
+    case "utility":
+      return klass.name;
+    case "singleColor":
+      return getColorName(klass.color);
   }
 }
 
@@ -261,16 +278,6 @@ export default function App() {
 
   const [colorList, setColorList] = useState<ColorListItem[]>([]);
   useEffect(() => setColorList(colors.map(makeColorListItem)), []);
-  useEffect(() => {
-    function updateColorRef(item: ColorListItem, idx: number) {
-      return colors[idx] === item.color
-        ? item
-        : { ...item, color: colors[idx] };
-    }
-    setColorList((prev) =>
-      prev.length === 0 ? prev : prev.map(updateColorRef)
-    );
-  }, [colors]);
 
   const [colorTheme, setColorTheme] = useState<Klass[]>([]);
   useEffect(() => {
@@ -330,7 +337,7 @@ export default function App() {
     };
     setColorList((state) => {
       return state.map((item) =>
-        item.color === color.color ? toggleStatus(item) : item
+        item.colorId === color.colorId ? toggleStatus(item) : item
       );
     });
   };
@@ -361,7 +368,7 @@ export default function App() {
     setColorTheme((theme) => {
       const selectedColors = colorList
         .filter((item) => item.status === "selected")
-        .map((item) => item.color);
+        .map((item) => colorStore[item.colorId]);
 
       return theme
         .filter((klass) => removeFromDefaultKlass(selectedColors, klass))
@@ -374,16 +381,15 @@ export default function App() {
     );
   };
 
-  const colorListItems = colorList
-    .filter((item) => item.status !== "hidden")
-    .map((item) => (
-      <ColorSquare
-        className="mr-1 mb-1 p-1"
-        key={getColorValue(item.color)}
-        item={item}
-        handleSelection={handleToggleColorSelection}
-      />
-    ));
+  const colorListItems = colorList.map((item) => (
+    <ColorSquare
+      className="mr-1 mb-1 p-1"
+      key={item.colorId}
+      color={colorStore[item.colorId]}
+      item={item}
+      handleSelection={handleToggleColorSelection}
+    />
+  ));
 
   const utilityKlassesButtonGroup = utilityKlasses.map((klass) => {
     return (
