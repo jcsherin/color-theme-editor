@@ -141,7 +141,15 @@ function TreeLeaf({
     </button>
   );
 }
-function TreeLeafInput({ color, focus }: { color: HexColor; focus: boolean }) {
+function TreeLeafInput({
+  color,
+  focus,
+  handleRenameColor,
+}: {
+  color: HexColor;
+  focus: boolean;
+  handleRenameColor: (colorId: string, name: string) => void;
+}) {
   const renameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -161,6 +169,11 @@ function TreeLeafInput({ color, focus }: { color: HexColor; focus: boolean }) {
         type="text"
         placeholder={`Rename ${getColorName(color)}`}
         value={getColorName(color)}
+        onChange={(event) => {
+          let name = event.currentTarget.value;
+          let colorId = getColorId(color);
+          handleRenameColor(colorId, name);
+        }}
         className="py-2 pl-4 mr-4 w-1/2 mt-4 mb-4 text-black"
       />
       <span className="mr-4">:</span>
@@ -241,7 +254,7 @@ function getColorIds(map: ColorDict): string[] {
 }
 
 export default function App() {
-  const [colorDict, _setColorDict] = useState(() => {
+  const [colorDict, setColorDict] = useState(() => {
     const deduped = new Set(example.colors);
     const parsed = Array.from(deduped)
       .map(parseColor)
@@ -374,7 +387,8 @@ export default function App() {
   const colorNode = (
     colorId: string,
     handleFocus: (colorId: string) => void,
-    focusRenameInput: boolean
+    focusRenameInput: boolean,
+    handleRenameColor: (colorId: string, name: string) => void
   ) => {
     let color = colorDict.get(colorId);
     if (color) {
@@ -402,6 +416,7 @@ export default function App() {
               key={getColorValue(color)}
               color={color}
               focus={focusRenameInput}
+              handleRenameColor={handleRenameColor}
             />
           ) : (
             <TreeLeaf
@@ -429,6 +444,17 @@ export default function App() {
     if (color) console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
   };
 
+  const handleRenameColor = (colorId: string, name: string) => {
+    setColorDict((state) => {
+      const color = state.get(colorId);
+      if (color) {
+        const newColor = { ...color, name: name };
+        state.set(colorId, newColor);
+      }
+      return new Map(Array.from(state));
+    });
+  };
+
   const klassNodes = Array.from(klassDict.values()).map((klass) => {
     let contents = `"${klass.name}" :`;
     return klass.colorIds.length === 0 ? (
@@ -436,14 +462,26 @@ export default function App() {
     ) : (
       <TreeNode key={klass.name} contents={contents}>
         {klass.colorIds.map((colorId) =>
-          colorNode(colorId, handleInputFocus, focusRenameInput)
+          colorNode(
+            colorId,
+            handleInputFocus,
+            focusRenameInput,
+            handleRenameColor
+          )
         )}
       </TreeNode>
     );
   });
   const singleColorNodes = colorList
     .filter((item) => item.status !== "hidden")
-    .map((item) => colorNode(item.colorId, handleInputFocus, focusRenameInput));
+    .map((item) =>
+      colorNode(
+        item.colorId,
+        handleInputFocus,
+        focusRenameInput,
+        handleRenameColor
+      )
+    );
 
   const childNodes = [klassNodes, ...singleColorNodes];
 
