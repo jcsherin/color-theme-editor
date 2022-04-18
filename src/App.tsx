@@ -441,23 +441,8 @@ export default function App() {
           })}
         </TreeNode>
       );
-    const singleColorNodes = colorList
-      .filter((item) => item.status === "visible")
-      .map((item) => item.colorId)
-      .map((colorId) => {
-        const color = colorDict.get(colorId);
-        return color ? (
-          colorNode(color, handleInputFocus, focusRenameInput)
-        ) : (
-          <></>
-        );
-      });
-    return (
-      <>
-        {klassNodes}
-        {singleColorNodes}
-      </>
-    );
+    const nodes = [klassNodes];
+    return <>{nodes}</>;
   });
 
   return (
