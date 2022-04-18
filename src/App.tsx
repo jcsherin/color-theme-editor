@@ -77,43 +77,25 @@ interface ColorListItem {
   status: "visible" | "selected" | "hidden";
 }
 
-function makeColorListItem(color: HexColor): ColorListItem {
-  return { colorId: getColorId(color), status: "visible" };
+function makeColorListItem(colorId: string): ColorListItem {
+  return { colorId: colorId, status: "visible" };
 }
 
 interface SingleColorKlass {
   kind: "singleColor";
-  color: HexColor;
+  colorId: string;
 }
 
 interface UtilityKlass {
   kind: "utility";
   name: string;
-  colors: HexColor[];
+  colorIds: string[];
 }
 
 type Klass = UtilityKlass | SingleColorKlass;
 
 function makeUtilityKlass(name: string): UtilityKlass {
-  return { kind: "utility", name: name, colors: [] };
-}
-
-function getKlassId(klass: Klass): string {
-  switch (klass.kind) {
-    case "utility":
-      return klass.name;
-    case "singleColor":
-      return getColorId(klass.color);
-  }
-}
-
-function getKlassName(klass: Klass): string {
-  switch (klass.kind) {
-    case "utility":
-      return klass.name;
-    case "singleColor":
-      return getColorName(klass.color);
-  }
+  return { kind: "utility", name: name, colorIds: [] };
 }
 
 function parseUtilityKlass(value: string): UtilityKlass | undefined {
@@ -243,8 +225,7 @@ type UtilityKlassStore = { [id: string]: UtilityKlass };
 
 function makeUtilityKlassStore(klasses: UtilityKlass[]): UtilityKlassStore {
   return klasses.reduce((store, klass) => {
-    const klassId = getKlassId(klass);
-    store[klassId] = klass;
+    store[klass.name] = klass;
     return store;
   }, {} as UtilityKlassStore);
 }
@@ -265,19 +246,18 @@ export default function App() {
     return makeUtilityKlassStore(parsed);
   });
 
-  const [colors, _setColors] = useState(
-    example.colors.flatMap((value) => {
-      const color = parseColor(value);
-      return color ? [color] : [];
-    })
-  );
-
-  const [utilityKlasses, _setUtilityKlasses] = useState(
-    example.utilityClassnames.map(makeUtilityKlass)
-  );
-
   const [colorList, setColorList] = useState<ColorListItem[]>([]);
-  useEffect(() => setColorList(colors.map(makeColorListItem)), []);
+  useEffect(() => {
+    function getColorIds(colorStore: ColorStore): string[] {
+      return Object.entries(colorStore).map(([colorId, _color]) => colorId);
+    }
+
+    function initColorList(colorIds: string[]): ColorListItem[] {
+      return colorIds.map(makeColorListItem);
+    }
+
+    setColorList(initColorList(getColorIds(colorStore)));
+  }, []);
 
   const [colorTheme, setColorTheme] = useState<Klass[]>([]);
   useEffect(() => {
