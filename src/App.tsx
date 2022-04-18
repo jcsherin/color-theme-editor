@@ -231,14 +231,14 @@ function makeUtilityKlassStore(klasses: UtilityKlass[]): UtilityKlassStore {
 }
 
 export default function App() {
-  const [colorStore, _setColorStore] = useState(() => {
+  const [colors, _setColors] = useState(() => {
     const deduped = new Set(example.colors);
     const parsed = Array.from(deduped)
       .map(parseColor)
       .flatMap((item) => (item ? [item] : []));
     return makeColorStore(parsed);
   });
-  const [utilityKlassStore, _setUtilityKlassStore] = useState(() => {
+  const [utilityKlasses, _setUtilityKlasses] = useState(() => {
     const deduped = new Set(example.utilityClassnames.map((x) => x.trim()));
     const parsed = Array.from(deduped)
       .map(parseUtilityKlass)
@@ -256,7 +256,7 @@ export default function App() {
       return colorIds.map(makeColorListItem);
     }
 
-    setColorList(initColorList(getColorIds(colorStore)));
+    setColorList(initColorList(getColorIds(colors)));
   }, []);
 
   const [colorTheme, setColorTheme] = useState<Klass[]>([]);
@@ -348,7 +348,7 @@ export default function App() {
     setColorTheme((theme) => {
       const selectedColors = colorList
         .filter((item) => item.status === "selected")
-        .map((item) => colorStore[item.colorId]);
+        .map((item) => colors[item.colorId]);
 
       return theme
         .filter((klass) => removeFromDefaultKlass(selectedColors, klass))
@@ -365,7 +365,7 @@ export default function App() {
     <ColorSquare
       className="mr-1 mb-1 p-1"
       key={item.colorId}
-      color={colorStore[item.colorId]}
+      color={colors[item.colorId]}
       item={item}
       handleSelection={handleToggleColorSelection}
     />
