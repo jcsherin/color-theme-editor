@@ -215,27 +215,29 @@ function reducerInputAction(state: InputMode, action: InputAction): InputMode {
   }
 }
 
-type ColorDict = { [id: string]: HexColor };
+type ColorDict = Map<string, HexColor>;
 
 function makeColorDict(colors: HexColor[]): ColorDict {
-  return colors.reduce((store, color) => {
-    const colorId = getColorId(color);
-    store[colorId] = color;
-    return store;
-  }, {} as ColorDict);
+  const map = new Map();
+  colors.forEach((color) => {
+    const key = getColorId(color);
+    map.set(key, color);
+  });
+  return map;
 }
 
-type UtilityKlassDict = { [id: string]: UtilityKlass };
+type UtilityKlassDict = Map<string, UtilityKlass>;
 
 function makeUtilityKlassDict(klasses: UtilityKlass[]): UtilityKlassDict {
-  return klasses.reduce((store, klass) => {
-    store[klass.name] = klass;
-    return store;
-  }, {} as UtilityKlassDict);
+  const map = new Map();
+  klasses.forEach((klass) => {
+    map.set(klass.name, klass);
+  });
+  return map;
 }
 
-function getColorIds(colorStore: ColorDict): string[] {
-  return Object.keys(colorStore);
+function getColorIds(map: ColorDict): string[] {
+  return Array.from(map.keys());
 }
 
 export default function App() {
@@ -257,6 +259,7 @@ export default function App() {
   const [colorList, setColorList] = useState<ColorListItem[]>([]);
   useEffect(() => {
     function initColorList(colorIds: string[]): ColorListItem[] {
+      console.log(`colorIds: ${colorIds}`);
       return colorIds.map(makeColorListItem);
     }
 
@@ -316,36 +319,21 @@ export default function App() {
   };
 
   const handleAddColorsToKlass = (className: string) => {
-    const removeFromDefaultKlass = (selectedColors: string[], klass: Klass) => {
-      switch (klass.kind) {
-        case "singleColor":
-          return !selectedColors.includes(klass.colorId);
-        case "utility":
-          return true;
-      }
-    };
-
-    const addToScaleKlass = (selectedColors: string[], klass: Klass) => {
-      switch (klass.kind) {
-        case "singleColor":
-          return klass;
-        case "utility":
-          return klass.name === className
-            ? { ...klass, colors: [...klass.colorIds, ...selectedColors] }
-            : klass;
-      }
-    };
     setKlassDict((dict) => {
       const selectedColorIds = colorList
         .filter((item) => item.status === "selected")
         .map((item) => item.colorId);
 
-      dict[className].colorIds = [
-        ...dict[className].colorIds,
-        ...selectedColorIds,
-      ];
+      const item = dict.get(className);
+      if (item) {
+        const newItem = {
+          ...item,
+          colorIds: [...item.colorIds, ...selectedColorIds],
+        };
+        dict.set(className, newItem);
+      }
 
-      return dict;
+      return new Map(Array.from(dict));
     });
     setColorList((colors) =>
       colors.map((item) =>
@@ -354,25 +342,33 @@ export default function App() {
     );
   };
 
-  const colorListItems = colorList.map((item) => (
-    <ColorSquare
-      className="mr-1 mb-1 p-1"
-      key={item.colorId}
-      color={colorDict[item.colorId]}
-      item={item}
-      handleSelection={handleToggleColorSelection}
-    />
-  ));
+  const colorListItems = colorList.map((item) => {
+    const color = colorDict.get(item.colorId);
+    return color ? (
+      <ColorSquare
+        className="mr-1 mb-1 p-1"
+        key={item.colorId}
+        color={color}
+        item={item}
+        handleSelection={handleToggleColorSelection}
+      />
+    ) : (
+      <></>
+    );
+  });
 
-  const utilityKlassesButtonGroup = Object.keys(klassDict).map((id) => {
-    return (
+  const utilityKlassesButtonGroup = Array.from(klassDict.keys()).map((id) => {
+    const klass = klassDict.get(id);
+    return klass ? (
       <Button
         disabled={disableButtonGroup}
         key={id}
         className="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900"
-        text={klassDict[id].name}
+        text={klass.name}
         handleClick={handleAddColorsToKlass}
       />
+    ) : (
+      <></>
     );
   });
 
@@ -428,24 +424,34 @@ export default function App() {
     console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
   };
 
-  const childNodes = Object.entries(klassDict).map(([id, klass]) => {
+  const childNodes = Array.from(klassDict).map(([id, klass]) => {
     let contents = `"${klass.name}" :`;
     const klassNodes =
       klass.colorIds.length === 0 ? (
         <TreeNode key={klass.name} contents={contents} />
       ) : (
         <TreeNode key={klass.name} contents={contents}>
-          {klass.colorIds.map((colorId) =>
-            colorNode(colorDict[colorId], handleInputFocus, focusRenameInput)
-          )}
+          {klass.colorIds.map((colorId) => {
+            const color = colorDict.get(colorId);
+            return color ? (
+              colorNode(color, handleInputFocus, focusRenameInput)
+            ) : (
+              <></>
+            );
+          })}
         </TreeNode>
       );
     const singleColorNodes = colorList
       .filter((item) => item.status === "visible")
       .map((item) => item.colorId)
-      .map((colorId) =>
-        colorNode(colorDict[colorId], handleInputFocus, focusRenameInput)
-      );
+      .map((colorId) => {
+        const color = colorDict.get(colorId);
+        return color ? (
+          colorNode(color, handleInputFocus, focusRenameInput)
+        ) : (
+          <></>
+        );
+      });
     return (
       <>
         {klassNodes}
