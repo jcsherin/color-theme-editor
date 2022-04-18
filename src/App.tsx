@@ -178,7 +178,7 @@ interface ViewMode {
 }
 interface EditMode {
   kind: "edit";
-  color: HexColor;
+  colorId: string;
 }
 
 type InputMode = ViewMode | EditMode;
@@ -187,7 +187,7 @@ const initialInputMode: InputMode = { kind: "view" };
 
 interface Focus {
   kind: "focus";
-  color: HexColor;
+  colorId: string;
 }
 
 interface Escape {
@@ -201,14 +201,14 @@ function reducerInputAction(state: InputMode, action: InputAction): InputMode {
     case "view":
       switch (action.kind) {
         case "focus":
-          return { kind: "edit", color: action.color };
+          return { kind: "edit", colorId: action.colorId };
         case "escape":
           return state;
       }
     case "edit":
       switch (action.kind) {
         case "focus":
-          return { ...state, color: action.color };
+          return { ...state, colorId: action.colorId };
         case "escape":
           return { kind: "view" };
       }
@@ -259,7 +259,6 @@ export default function App() {
   const [colorList, setColorList] = useState<ColorListItem[]>([]);
   useEffect(() => {
     function initColorList(colorIds: string[]): ColorListItem[] {
-      console.log(`colorIds: ${colorIds}`);
       return colorIds.map(makeColorListItem);
     }
 
@@ -373,77 +372,80 @@ export default function App() {
   });
 
   const colorNode = (
-    color: HexColor,
-    handleFocus: (color: HexColor) => void,
+    colorId: string,
+    handleFocus: (colorId: string) => void,
     focusRenameInput: boolean
   ) => {
-    let colorValue = getColorValue(color);
+    let color = colorDict.get(colorId);
+    if (color) {
+      let colorValue = getColorValue(color);
 
-    switch (inputMode.kind) {
-      case "view":
-        return (
-          <TreeLeaf
-            key={getColorValue(color)}
-            handleFocus={(_event) => handleFocus(color)}
-          >
-            <span className="mr-4">"{getColorName(color)}"</span>
-            <span className="mr-4">:</span>
-            <span
-              className="w-4 h-4 inline-block mr-2 rounded-sm"
-              style={{ backgroundColor: colorValue }}
-            ></span>
-            <span>{colorValue},</span>
-          </TreeLeaf>
-        );
-      case "edit":
-        return inputMode.color === color ? (
-          <TreeLeafInput
-            key={getColorValue(color)}
-            color={color}
-            focus={focusRenameInput}
-          />
-        ) : (
-          <TreeLeaf
-            key={getColorValue(color)}
-            handleFocus={(_event) => handleFocus(color)}
-          >
-            <span className="mr-4">"{getColorName(color)}"</span>
-            <span className="mr-4">:</span>
-            <span
-              className="w-4 h-4 inline-block mr-2 rounded-sm"
-              style={{ backgroundColor: colorValue }}
-            ></span>
-            <span>{colorValue},</span>
-          </TreeLeaf>
-        );
+      switch (inputMode.kind) {
+        case "view":
+          return (
+            <TreeLeaf
+              key={getColorValue(color)}
+              handleFocus={(_event) => handleFocus(colorId)}
+            >
+              <span className="mr-4">"{getColorName(color)}"</span>
+              <span className="mr-4">:</span>
+              <span
+                className="w-4 h-4 inline-block mr-2 rounded-sm"
+                style={{ backgroundColor: colorValue }}
+              ></span>
+              <span>{colorValue},</span>
+            </TreeLeaf>
+          );
+        case "edit":
+          return inputMode.colorId === colorId ? (
+            <TreeLeafInput
+              key={getColorValue(color)}
+              color={color}
+              focus={focusRenameInput}
+            />
+          ) : (
+            <TreeLeaf
+              key={getColorValue(color)}
+              handleFocus={(_event) => handleFocus(colorId)}
+            >
+              <span className="mr-4">"{getColorName(color)}"</span>
+              <span className="mr-4">:</span>
+              <span
+                className="w-4 h-4 inline-block mr-2 rounded-sm"
+                style={{ backgroundColor: colorValue }}
+              ></span>
+              <span>{colorValue},</span>
+            </TreeLeaf>
+          );
+      }
+    } else {
+      return <></>;
     }
   };
 
-  const handleInputFocus = (color: HexColor) => {
-    inputActionDispatch({ kind: "focus", color: color });
-    console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
+  const handleInputFocus = (colorId: string) => {
+    inputActionDispatch({ kind: "focus", colorId: colorId });
+    const color = colorDict.get(colorId);
+    if (color) console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
   };
 
-  const childNodes = Array.from(klassDict).map(([id, klass]) => {
+  const klassNodes = Array.from(klassDict.values()).map((klass) => {
     let contents = `"${klass.name}" :`;
-    const klassNodes =
-      klass.colorIds.length === 0 ? (
-        <TreeNode key={klass.name} contents={contents} />
-      ) : (
-        <TreeNode key={klass.name} contents={contents}>
-          {klass.colorIds.map((colorId) => {
-            const color = colorDict.get(colorId);
-            return color ? (
-              colorNode(color, handleInputFocus, focusRenameInput)
-            ) : (
-              <></>
-            );
-          })}
-        </TreeNode>
-      );
-    const nodes = [klassNodes];
-    return <>{nodes}</>;
+    return klass.colorIds.length === 0 ? (
+      <TreeNode key={klass.name} contents={contents} />
+    ) : (
+      <TreeNode key={klass.name} contents={contents}>
+        {klass.colorIds.map((colorId) =>
+          colorNode(colorId, handleInputFocus, focusRenameInput)
+        )}
+      </TreeNode>
+    );
   });
+  const singleColorNodes = colorList
+    .filter((item) => item.status !== "hidden")
+    .map((item) => colorNode(item.colorId, handleInputFocus, focusRenameInput));
+
+  const childNodes = [klassNodes, ...singleColorNodes];
 
   return (
     <div className="mx-2 my-8">
