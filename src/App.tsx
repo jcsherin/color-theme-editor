@@ -98,6 +98,10 @@ function makeUtilityKlass(name: string): UtilityKlass {
   return { kind: "utility", name: name, colorIds: [] };
 }
 
+function makeSingleColorKlass(colorId: string): SingleColorKlass {
+  return { kind: "singleColor", colorId: colorId };
+}
+
 function parseUtilityKlass(value: string): UtilityKlass | undefined {
   const name = value.trim().replace(/\s+/g, "-");
   if (name.length > 0) {
@@ -211,64 +215,64 @@ function reducerInputAction(state: InputMode, action: InputAction): InputMode {
   }
 }
 
-type ColorStore = { [id: string]: HexColor };
+type ColorDict = { [id: string]: HexColor };
 
-function makeColorStore(colors: HexColor[]): ColorStore {
+function makeColorDict(colors: HexColor[]): ColorDict {
   return colors.reduce((store, color) => {
     const colorId = getColorId(color);
     store[colorId] = color;
     return store;
-  }, {} as ColorStore);
+  }, {} as ColorDict);
 }
 
-type UtilityKlassStore = { [id: string]: UtilityKlass };
+type UtilityKlassDict = { [id: string]: UtilityKlass };
 
-function makeUtilityKlassStore(klasses: UtilityKlass[]): UtilityKlassStore {
+function makeUtilityKlassDict(klasses: UtilityKlass[]): UtilityKlassDict {
   return klasses.reduce((store, klass) => {
     store[klass.name] = klass;
     return store;
-  }, {} as UtilityKlassStore);
+  }, {} as UtilityKlassDict);
+}
+
+function getColorIds(colorStore: ColorDict): string[] {
+  return Object.keys(colorStore);
 }
 
 export default function App() {
-  const [colors, _setColors] = useState(() => {
+  const [colorDict, _setColorDict] = useState(() => {
     const deduped = new Set(example.colors);
     const parsed = Array.from(deduped)
       .map(parseColor)
       .flatMap((item) => (item ? [item] : []));
-    return makeColorStore(parsed);
+    return makeColorDict(parsed);
   });
-  const [utilityKlasses, _setUtilityKlasses] = useState(() => {
+  const [klassDict, _setKlassDict] = useState(() => {
     const deduped = new Set(example.utilityClassnames.map((x) => x.trim()));
     const parsed = Array.from(deduped)
       .map(parseUtilityKlass)
       .flatMap((item) => (item ? [item] : []));
-    return makeUtilityKlassStore(parsed);
+    return makeUtilityKlassDict(parsed);
   });
 
   const [colorList, setColorList] = useState<ColorListItem[]>([]);
   useEffect(() => {
-    function getColorIds(colorStore: ColorStore): string[] {
-      return Object.entries(colorStore).map(([colorId, _color]) => colorId);
-    }
-
     function initColorList(colorIds: string[]): ColorListItem[] {
       return colorIds.map(makeColorListItem);
     }
 
-    setColorList(initColorList(getColorIds(colors)));
+    setColorList(initColorList(getColorIds(colorDict)));
   }, []);
 
-  const [colorTheme, setColorTheme] = useState<Klass[]>([]);
+  const [config, setConfig] = useState<Klass[]>([]);
   useEffect(() => {
-    setColorTheme((_prev) => {
-      const defaultKlasses = colors.map<Klass>((color) => {
-        return { kind: "singleColor", color: color };
-      });
-
-      return [...utilityKlasses, ...defaultKlasses];
-    });
-  }, [utilityKlasses]);
+    function initConfig(colorIds: string[], klasses: string[]): Klass[] {
+      return [
+        ...colorIds.map(makeSingleColorKlass),
+        ...klasses.map(makeUtilityKlass),
+      ];
+    }
+    setConfig(initConfig(Object.keys(colorDict), Object.keys(klassDict)));
+  }, []);
 
   const [inputMode, inputActionDispatch] = useReducer(
     reducerInputAction,
@@ -345,10 +349,10 @@ export default function App() {
             : klass;
       }
     };
-    setColorTheme((theme) => {
+    setConfig((theme) => {
       const selectedColors = colorList
         .filter((item) => item.status === "selected")
-        .map((item) => colors[item.colorId]);
+        .map((item) => colorDict[item.colorId]);
 
       return theme
         .filter((klass) => removeFromDefaultKlass(selectedColors, klass))
@@ -365,13 +369,13 @@ export default function App() {
     <ColorSquare
       className="mr-1 mb-1 p-1"
       key={item.colorId}
-      color={colors[item.colorId]}
+      color={colorDict[item.colorId]}
       item={item}
       handleSelection={handleToggleColorSelection}
     />
   ));
 
-  const utilityKlassesButtonGroup = utilityKlasses.map((klass) => {
+  const utilityKlassesButtonGroup = klassDict.map((klass) => {
     return (
       <Button
         disabled={disableButtonGroup}
@@ -435,7 +439,7 @@ export default function App() {
     console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
   };
 
-  const childNodes = colorTheme.map((klass) => {
+  const childNodes = config.map((klass) => {
     switch (klass.kind) {
       case "singleColor":
         return colorNode(klass.color, handleInputFocus, focusRenameInput);
