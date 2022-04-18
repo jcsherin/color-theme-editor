@@ -246,7 +246,7 @@ export default function App() {
       .flatMap((item) => (item ? [item] : []));
     return makeColorDict(parsed);
   });
-  const [klassDict, _setKlassDict] = useState(() => {
+  const [klassDict, setKlassDict] = useState(() => {
     const deduped = new Set(example.utilityClassnames.map((x) => x.trim()));
     const parsed = Array.from(deduped)
       .map(parseUtilityKlass)
@@ -261,17 +261,6 @@ export default function App() {
     }
 
     setColorList(initColorList(getColorIds(colorDict)));
-  }, []);
-
-  const [config, setConfig] = useState<Klass[]>([]);
-  useEffect(() => {
-    function initConfig(colorIds: string[], klasses: string[]): Klass[] {
-      return [
-        ...colorIds.map(makeSingleColorKlass),
-        ...klasses.map(makeUtilityKlass),
-      ];
-    }
-    setConfig(initConfig(Object.keys(colorDict), Object.keys(klassDict)));
   }, []);
 
   const [inputMode, inputActionDispatch] = useReducer(
@@ -327,36 +316,36 @@ export default function App() {
   };
 
   const handleAddColorsToKlass = (className: string) => {
-    const removeFromDefaultKlass = (
-      selectedColors: HexColor[],
-      klass: Klass
-    ) => {
+    const removeFromDefaultKlass = (selectedColors: string[], klass: Klass) => {
       switch (klass.kind) {
         case "singleColor":
-          return !selectedColors.includes(klass.color);
+          return !selectedColors.includes(klass.colorId);
         case "utility":
           return true;
       }
     };
 
-    const addToScaleKlass = (selectedColors: HexColor[], klass: Klass) => {
+    const addToScaleKlass = (selectedColors: string[], klass: Klass) => {
       switch (klass.kind) {
         case "singleColor":
           return klass;
         case "utility":
           return klass.name === className
-            ? { ...klass, colors: [...klass.colors, ...selectedColors] }
+            ? { ...klass, colors: [...klass.colorIds, ...selectedColors] }
             : klass;
       }
     };
-    setConfig((theme) => {
-      const selectedColors = colorList
+    setKlassDict((dict) => {
+      const selectedColorIds = colorList
         .filter((item) => item.status === "selected")
-        .map((item) => colorDict[item.colorId]);
+        .map((item) => item.colorId);
 
-      return theme
-        .filter((klass) => removeFromDefaultKlass(selectedColors, klass))
-        .map((klass) => addToScaleKlass(selectedColors, klass));
+      dict[className].colorIds = [
+        ...dict[className].colorIds,
+        ...selectedColorIds,
+      ];
+
+      return dict;
     });
     setColorList((colors) =>
       colors.map((item) =>
@@ -375,13 +364,13 @@ export default function App() {
     />
   ));
 
-  const utilityKlassesButtonGroup = klassDict.map((klass) => {
+  const utilityKlassesButtonGroup = Object.keys(klassDict).map((id) => {
     return (
       <Button
         disabled={disableButtonGroup}
-        key={klass.name}
+        key={id}
         className="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900"
-        text={klass.name}
+        text={klassDict[id].name}
         handleClick={handleAddColorsToKlass}
       />
     );
@@ -439,24 +428,30 @@ export default function App() {
     console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
   };
 
-  const childNodes = config.map((klass) => {
-    switch (klass.kind) {
-      case "singleColor":
-        return colorNode(klass.color, handleInputFocus, focusRenameInput);
-      case "utility":
-        let contents = `"${klass.name}" :`;
-        const node =
-          klass.colors.length === 0 ? (
-            <TreeNode key={klass.name} contents={contents} />
-          ) : (
-            <TreeNode key={klass.name} contents={contents}>
-              {klass.colors.map((color) =>
-                colorNode(color, handleInputFocus, focusRenameInput)
-              )}
-            </TreeNode>
-          );
-        return node;
-    }
+  const childNodes = Object.entries(klassDict).map(([id, klass]) => {
+    let contents = `"${klass.name}" :`;
+    const klassNodes =
+      klass.colorIds.length === 0 ? (
+        <TreeNode key={klass.name} contents={contents} />
+      ) : (
+        <TreeNode key={klass.name} contents={contents}>
+          {klass.colorIds.map((colorId) =>
+            colorNode(colorDict[colorId], handleInputFocus, focusRenameInput)
+          )}
+        </TreeNode>
+      );
+    const singleColorNodes = colorList
+      .filter((item) => item.status === "visible")
+      .map((item) => item.colorId)
+      .map((colorId) =>
+        colorNode(colorDict[colorId], handleInputFocus, focusRenameInput)
+      );
+    return (
+      <>
+        {klassNodes}
+        {singleColorNodes}
+      </>
+    );
   });
 
   return (
