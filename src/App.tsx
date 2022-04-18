@@ -1,5 +1,11 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
-import { getColorName, getColorValue, HexColor, parseColor } from "./color";
+import {
+  getColorId,
+  getColorName,
+  getColorValue,
+  HexColor,
+  parseColor,
+} from "./color";
 import * as example from "./example";
 
 function Button({
@@ -82,6 +88,22 @@ type Klass = UtilityKlass | SingleColorKlass;
 
 function makeUtilityKlass(name: string): UtilityKlass {
   return { kind: "utility", name: name, colors: [] };
+}
+
+function getKlassId(klass: Klass): string {
+  switch (klass.kind) {
+    case "utility":
+      return klass.name;
+    case "singleColor":
+      return getColorId(klass.color);
+  }
+}
+
+function parseUtilityKlass(value: string): UtilityKlass | undefined {
+  const name = value.trim().replace(/\s+/g, "-");
+  if (name.length > 0) {
+    return makeUtilityKlass(name);
+  }
 }
 
 function TreeNode({
@@ -190,7 +212,42 @@ function reducerInputAction(state: InputMode, action: InputAction): InputMode {
   }
 }
 
+type ColorStore = { [id: string]: HexColor };
+
+function makeColorStore(colors: HexColor[]): ColorStore {
+  return colors.reduce((store, color) => {
+    const colorId = getColorId(color);
+    store[colorId] = color;
+    return store;
+  }, {} as ColorStore);
+}
+
+type UtilityKlassStore = { [id: string]: UtilityKlass };
+
+function makeUtilityKlassStore(klasses: UtilityKlass[]): UtilityKlassStore {
+  return klasses.reduce((store, klass) => {
+    const klassId = getKlassId(klass);
+    store[klassId] = klass;
+    return store;
+  }, {} as UtilityKlassStore);
+}
+
 export default function App() {
+  const [colorStore, _setColorStore] = useState(() => {
+    const deduped = new Set(example.colors);
+    const parsed = Array.from(deduped)
+      .map(parseColor)
+      .flatMap((item) => (item ? [item] : []));
+    return makeColorStore(parsed);
+  });
+  const [utilityKlassStore, _setUtilityKlassStore] = useState(() => {
+    const deduped = new Set(example.utilityClassnames.map((x) => x.trim()));
+    const parsed = Array.from(deduped)
+      .map(parseUtilityKlass)
+      .flatMap((item) => (item ? [item] : []));
+    return makeUtilityKlassStore(parsed);
+  });
+
   const [colors, _setColors] = useState(
     example.colors.flatMap((value) => {
       const color = parseColor(value);

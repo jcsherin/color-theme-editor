@@ -1,3 +1,5 @@
+import { colors } from "./example";
+
 export interface HexColor {
   kind: "hex";
   name: string;
@@ -10,6 +12,13 @@ export function makeHexColor(name: string, value: string): HexColor {
     name: name,
     hexcode: value,
   };
+}
+
+export function getColorId(color: HexColor) {
+  switch (color.kind) {
+    case "hex":
+      return color.hexcode;
+  }
 }
 
 export function getColorValue(color: HexColor) {
