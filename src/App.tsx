@@ -145,10 +145,16 @@ function TreeLeafInput({
   color,
   focus,
   handleRenameColor,
+  handleKeyboardNavigate,
+  prev,
+  next,
 }: {
   color: HexColor;
   focus: boolean;
   handleRenameColor: (colorId: string, name: string) => void;
+  handleKeyboardNavigate: (key: string, target: string) => void;
+  prev: string;
+  next: string;
 }) {
   const renameRef = useRef<HTMLInputElement>(null);
 
@@ -173,6 +179,14 @@ function TreeLeafInput({
           let name = event.currentTarget.value;
           let colorId = getColorId(color);
           handleRenameColor(colorId, name);
+        }}
+        onKeyDown={(event) => {
+          let key = event.key;
+          if (key === "ArrowDown" || key === "Enter") {
+            handleKeyboardNavigate(key, next);
+          } else if (key === "ArrowUp") {
+            handleKeyboardNavigate(key, prev);
+          }
         }}
         className="py-2 pl-4 mr-4 w-1/2 mt-4 mb-4 text-black"
       />
@@ -203,11 +217,17 @@ interface Focus {
   colorId: string;
 }
 
-interface Escape {
-  kind: "escape";
+interface MoveUp {
+  kind: "moveup";
+  target: string;
 }
 
-type InputAction = Focus | Escape;
+interface MoveDown {
+  kind: "movedown";
+  target: string;
+}
+
+type InputAction = Focus | MoveUp | MoveDown;
 
 function reducerInputAction(state: InputMode, action: InputAction): InputMode {
   switch (state.kind) {
@@ -215,15 +235,17 @@ function reducerInputAction(state: InputMode, action: InputAction): InputMode {
       switch (action.kind) {
         case "focus":
           return { kind: "edit", colorId: action.colorId };
-        case "escape":
-          return state;
+        case "movedown":
+        case "moveup":
+          return { kind: "edit", colorId: action.target };
       }
     case "edit":
       switch (action.kind) {
         case "focus":
           return { ...state, colorId: action.colorId };
-        case "escape":
-          return { kind: "view" };
+        case "movedown":
+        case "moveup":
+          return { ...state, colorId: action.target };
       }
   }
 }
@@ -388,7 +410,11 @@ export default function App() {
     colorId: string,
     handleFocus: (colorId: string) => void,
     focusRenameInput: boolean,
-    handleRenameColor: (colorId: string, name: string) => void
+    handleRenameColor: (colorId: string, name: string) => void,
+    handleKeyboardNavigate: (key: string, target: string) => void,
+    idx: number,
+    prevColorId: string,
+    nextColorId: string
   ) => {
     let color = colorDict.get(colorId);
     if (color) {
@@ -417,6 +443,9 @@ export default function App() {
               color={color}
               focus={focusRenameInput}
               handleRenameColor={handleRenameColor}
+              handleKeyboardNavigate={handleKeyboardNavigate}
+              prev={prevColorId}
+              next={nextColorId}
             />
           ) : (
             <TreeLeaf
@@ -444,6 +473,16 @@ export default function App() {
     if (color) console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
   };
 
+  const handleKeyboardNavigate = (key: string, target: string) => {
+    switch (key) {
+      case "Enter":
+      case "ArrowDown":
+        return inputActionDispatch({ kind: "movedown", target: target });
+      case "ArrowUp":
+        return inputActionDispatch({ kind: "moveup", target: target });
+    }
+  };
+
   const handleRenameColor = (colorId: string, name: string) => {
     setColorDict((state) => {
       const color = state.get(colorId);
@@ -455,33 +494,67 @@ export default function App() {
     });
   };
 
+  const configOrderedColorIds = Array.from(klassDict.values())
+    .flatMap((klass) => klass.colorIds)
+    .concat(
+      colorList
+        .filter((item) => item.status !== "hidden")
+        .map((item) => item.colorId)
+    );
+
+  const getNodeIdx = (colorId: string) =>
+    configOrderedColorIds.findIndex((id) => id === colorId);
+
+  const prevColorId = (colorId: string) => {
+    const idx = getNodeIdx(colorId);
+    const prevIdx =
+      (idx - 1 + configOrderedColorIds.length) % configOrderedColorIds.length;
+    return configOrderedColorIds[prevIdx];
+  };
+
+  const nextColorId = (colorId: string) => {
+    const idx = getNodeIdx(colorId);
+    const nextIdx = (idx + 1) % configOrderedColorIds.length;
+    return configOrderedColorIds[nextIdx];
+  };
+
   const klassNodes = Array.from(klassDict.values()).map((klass) => {
     let contents = `"${klass.name}" :`;
     return klass.colorIds.length === 0 ? (
       <TreeNode key={klass.name} contents={contents} />
     ) : (
       <TreeNode key={klass.name} contents={contents}>
-        {klass.colorIds.map((colorId) =>
-          colorNode(
+        {klass.colorIds.map((colorId) => {
+          let node = colorNode(
             colorId,
             handleInputFocus,
             focusRenameInput,
-            handleRenameColor
-          )
-        )}
+            handleRenameColor,
+            handleKeyboardNavigate,
+            getNodeIdx(colorId),
+            prevColorId(colorId),
+            nextColorId(colorId)
+          );
+          return node;
+        })}
       </TreeNode>
     );
   });
   const singleColorNodes = colorList
     .filter((item) => item.status !== "hidden")
-    .map((item) =>
-      colorNode(
+    .map((item) => {
+      let node = colorNode(
         item.colorId,
         handleInputFocus,
         focusRenameInput,
-        handleRenameColor
-      )
-    );
+        handleRenameColor,
+        handleKeyboardNavigate,
+        getNodeIdx(item.colorId),
+        prevColorId(item.colorId),
+        nextColorId(item.colorId)
+      );
+      return node;
+    });
 
   const childNodes = [klassNodes, ...singleColorNodes];
 

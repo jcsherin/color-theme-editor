@@ -563,4 +563,4 @@ export const utilityClassnames = [
   "notification",
   "background",
 ];
-export const colors = shuffle(tailwindColors).slice(0, 3);
+export const colors = shuffle(tailwindColors).slice(0, 10);
