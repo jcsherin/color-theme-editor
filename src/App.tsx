@@ -186,6 +186,9 @@ function TreeLeafInput({
             handleKeyboardNavigate(key, next);
           } else if (key === "ArrowUp") {
             handleKeyboardNavigate(key, prev);
+          } else if (key === "Escape") {
+            // refactor: the 2nd arg `next` is unused
+            handleKeyboardNavigate(key, next);
           }
         }}
         className="py-2 pl-4 mr-4 w-1/2 mt-4 mb-4 text-black"
@@ -227,7 +230,11 @@ interface MoveDown {
   target: string;
 }
 
-type InputAction = Focus | MoveUp | MoveDown;
+interface Escape {
+  kind: "escape";
+}
+
+type InputAction = Focus | MoveUp | MoveDown | Escape;
 
 function reducerInputAction(state: InputMode, action: InputAction): InputMode {
   switch (state.kind) {
@@ -238,6 +245,8 @@ function reducerInputAction(state: InputMode, action: InputAction): InputMode {
         case "movedown":
         case "moveup":
           return { kind: "edit", colorId: action.target };
+        case "escape":
+          return state;
       }
     case "edit":
       switch (action.kind) {
@@ -246,6 +255,8 @@ function reducerInputAction(state: InputMode, action: InputAction): InputMode {
         case "movedown":
         case "moveup":
           return { ...state, colorId: action.target };
+        case "escape":
+          return { ...state, kind: "view" };
       }
   }
 }
@@ -480,6 +491,8 @@ export default function App() {
         return inputActionDispatch({ kind: "movedown", target: target });
       case "ArrowUp":
         return inputActionDispatch({ kind: "moveup", target: target });
+      case "Escape":
+        return inputActionDispatch({ kind: "escape" });
     }
   };
 
