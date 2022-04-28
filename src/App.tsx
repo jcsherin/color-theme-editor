@@ -387,6 +387,23 @@ export default function App() {
     );
   };
 
+  const handleRemoveColorFromKlass = (colorId: string, className: string) => {
+    setKlassDict((map) => {
+      const klass = map.get(className);
+      if (klass) {
+        let newColorIds = klass.colorIds.filter((item) => item != colorId);
+        map.set(className, { ...klass, colorIds: newColorIds });
+      }
+
+      return new Map(Array.from(map));
+    });
+    setColorList((colors) =>
+      colors.map((item) =>
+        item.colorId === colorId ? { ...item, status: "visible" } : item
+      )
+    );
+  };
+
   const colorListItems = colorList.map((item) => {
     const color = colorDict.get(item.colorId);
     return color ? (
