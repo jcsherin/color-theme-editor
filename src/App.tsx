@@ -350,6 +350,57 @@ function getColorIds(map: ColorDict): string[] {
   return Array.from(map.keys());
 }
 
+const compareColorId = (colorDict: ColorDict) => (x: string, y: string) => {
+  const xname = getColorName(colorDict.get(x)!);
+  const yname = getColorName(colorDict.get(y)!);
+  if (xname < yname) return -1;
+  if (xname > yname) return 1;
+  return 0;
+};
+
+function serializeConfig(
+  colorDict: ColorDict,
+  klassDict: UtilityKlassDict,
+  colorList: ColorListItem[]
+) {
+  const serialized: { [name: string]: string | { [name: string]: string } } =
+    {};
+  Array.from(klassDict.values()).forEach((klass) => {
+    const inner: { [name: string]: string } = {};
+    Array.from(klass.colorIds)
+      .sort(compareColorId(colorDict))
+      .forEach((colorId) => {
+        const color = colorDict.get(colorId);
+        if (color) {
+          const key = getColorName(color);
+          const value = getColorValue(color);
+          inner[key] = value;
+        }
+      });
+    serialized[klass.name] = inner;
+  });
+  colorList
+    .filter((item) => item.status !== "hidden")
+    .map((item) => item.colorId)
+    .sort(compareColorId(colorDict))
+    .forEach((colorId) => {
+      const color = colorDict.get(colorId);
+      if (color) {
+        const key = getColorName(color);
+        const value = getColorValue(color);
+        serialized[key] = value;
+      }
+    });
+  const template = `
+module.exports = {
+  theme: {
+    colors: ${JSON.stringify(serialized, null, 2)}
+  }
+}
+`;
+  return template;
+}
+
 export default function App() {
   const [colorDict, setColorDict] = useState(() => {
     const deduped = new Set(example.colors);
@@ -590,14 +641,6 @@ export default function App() {
     });
   };
 
-  const compareColorId = (colorDict: ColorDict) => (x: string, y: string) => {
-    const xname = getColorName(colorDict.get(x)!);
-    const yname = getColorName(colorDict.get(y)!);
-    if (xname < yname) return -1;
-    if (xname > yname) return 1;
-    return 0;
-  };
-
   const configOrderedColorIds = Array.from(klassDict.values())
     .flatMap((klass) =>
       Array.from(klass.colorIds).sort(compareColorId(colorDict))
@@ -680,7 +723,7 @@ export default function App() {
           className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
         >
           <Clipboard
-            text={""}
+            text={serializeConfig(colorDict, klassDict, colorList)}
             timeoutInMs={2000}
             className="mb-4 flex justify-end"
           />
