@@ -8,6 +8,49 @@ import {
 } from "./color";
 import * as example from "./example";
 
+function copy(text: string) {
+  if (navigator && navigator.clipboard) {
+    return navigator.clipboard.writeText(text);
+  }
+
+  return Promise.reject(new Error("Copying to clipboard not supported!"));
+}
+
+function Clipboard({
+  text,
+  timeoutInMs,
+  className: overrideClassName,
+}: {
+  text: string;
+  timeoutInMs: number;
+  className: string;
+}) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = (text: string) =>
+    copy(text)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => {
+          setCopied(false);
+        }, timeoutInMs);
+      })
+      .catch((reason) => console.error(reason));
+
+  const copyButton = copied ? (
+    <p className="text-green-100 text-2xl font-sans py-1 px-4">Copied!</p>
+  ) : (
+    <button
+      className="bg-slate-100 hover:bg-slate-300 text-blue-500 hover:text-blue-800 text-2xl py-1 px-4"
+      onClick={(_e) => handleCopy(text)}
+    >
+      Copy
+    </button>
+  );
+
+  return <div className={overrideClassName}>{copyButton}</div>;
+}
+
 function Button({
   className: overrideClassName,
   text,
@@ -612,6 +655,11 @@ export default function App() {
           ref={mouseRef}
           className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
         >
+          <Clipboard
+            text={""}
+            timeoutInMs={2000}
+            className="mb-4 flex justify-end"
+          />
           <TreeNode contents="module.exports =">
             <TreeNode contents="theme:">
               <TreeNode contents="colors:">{childNodes}</TreeNode>
