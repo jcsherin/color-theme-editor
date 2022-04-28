@@ -606,6 +606,7 @@ export default function App() {
       colorList
         .filter((item) => item.status !== "hidden")
         .map((item) => item.colorId)
+        .sort(compareColorId(colorDict))
     );
 
   const getNodeIdx = (colorId: string) =>
@@ -650,18 +651,21 @@ export default function App() {
       </TreeNode>
     );
   });
+
   const singleColorNodes = colorList
     .filter((item) => item.status !== "hidden")
-    .map((item) => {
+    .map((item) => item.colorId)
+    .sort(compareColorId(colorDict))
+    .map((colorId) => {
       let node = colorNode(
-        item.colorId,
+        colorId,
         handleInputFocus,
         focusRenameInput,
         handleRenameColor,
         handleKeyboardNavigate,
-        getNodeIdx(item.colorId),
-        prevColorId(item.colorId),
-        nextColorId(item.colorId)
+        getNodeIdx(colorId),
+        prevColorId(colorId),
+        nextColorId(colorId)
       );
       return node;
     });
