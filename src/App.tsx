@@ -148,6 +148,7 @@ function TreeLeafInput({
   handleKeyboardNavigate,
   prev,
   next,
+  handleRemoveColor,
 }: {
   color: HexColor;
   focus: boolean;
@@ -155,6 +156,7 @@ function TreeLeafInput({
   handleKeyboardNavigate: (key: string, target: string) => void;
   prev: string;
   next: string;
+  handleRemoveColor?: (colorId: string) => void;
 }) {
   const renameRef = useRef<HTMLInputElement>(null);
 
@@ -166,6 +168,17 @@ function TreeLeafInput({
       }
     }, 20);
   }, [focus]);
+
+  const removeButton = handleRemoveColor ? (
+    <button
+      className="py-1 px-4 text-red-100 hover:text-red-300 bg-red-600 hover:bg-red-800 font-sans rounded-sm"
+      onClick={(_e) => handleRemoveColor(getColorId(color))}
+    >
+      Remove
+    </button>
+  ) : (
+    <></>
+  );
 
   return (
     <div>
@@ -198,7 +211,8 @@ function TreeLeafInput({
         className="w-4 h-4 inline-block mr-2 rounded-sm"
         style={{ backgroundColor: getColorValue(color) }}
       ></span>
-      <span>{getColorValue(color)},</span>
+      <span className="mr-4">{getColorValue(color)},</span>
+      {removeButton}
     </div>
   );
 }
@@ -387,7 +401,7 @@ export default function App() {
     );
   };
 
-  const handleRemoveColorFromKlass = (colorId: string, className: string) => {
+  const handleRemoveColorFromKlass = (className: string, colorId: string) => {
     setKlassDict((map) => {
       const klass = map.get(className);
       if (klass) {
@@ -442,7 +456,8 @@ export default function App() {
     handleKeyboardNavigate: (key: string, target: string) => void,
     idx: number,
     prevColorId: string,
-    nextColorId: string
+    nextColorId: string,
+    handleRemoveColor?: (colorId: string) => void
   ) => {
     let color = colorDict.get(colorId);
     if (color) {
@@ -474,6 +489,7 @@ export default function App() {
               handleKeyboardNavigate={handleKeyboardNavigate}
               prev={prevColorId}
               next={nextColorId}
+              handleRemoveColor={handleRemoveColor}
             />
           ) : (
             <TreeLeaf
@@ -563,7 +579,8 @@ export default function App() {
             handleKeyboardNavigate,
             getNodeIdx(colorId),
             prevColorId(colorId),
-            nextColorId(colorId)
+            nextColorId(colorId),
+            (colorId) => handleRemoveColorFromKlass(klass.name, colorId)
           );
           return node;
         })}
