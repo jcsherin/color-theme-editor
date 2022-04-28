@@ -597,8 +597,11 @@ export default function App() {
     if (xname > yname) return 1;
     return 0;
   };
+
   const configOrderedColorIds = Array.from(klassDict.values())
-    .flatMap((klass) => klass.colorIds)
+    .flatMap((klass) =>
+      Array.from(klass.colorIds).sort(compareColorId(colorDict))
+    )
     .concat(
       colorList
         .filter((item) => item.status !== "hidden")
@@ -623,11 +626,14 @@ export default function App() {
 
   const klassNodes = Array.from(klassDict.values()).map((klass) => {
     let contents = `"${klass.name}" :`;
+    let sortedColorIds = Array.from(klass.colorIds).sort(
+      compareColorId(colorDict)
+    );
     return klass.colorIds.length === 0 ? (
       <TreeNode key={klass.name} contents={contents} />
     ) : (
       <TreeNode key={klass.name} contents={contents}>
-        {klass.colorIds.map((colorId) => {
+        {sortedColorIds.map((colorId) => {
           let node = colorNode(
             colorId,
             handleInputFocus,
