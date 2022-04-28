@@ -201,6 +201,7 @@ function TreeLeafInput({
   next: string;
   handleRemoveColor?: (colorId: string) => void;
 }) {
+  const [value, setValue] = useState(getColorName(color));
   const renameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -230,15 +231,19 @@ function TreeLeafInput({
         ref={renameRef}
         type="text"
         placeholder={`Rename ${getColorName(color)}`}
-        value={getColorName(color)}
+        value={value}
         onChange={(event) => {
-          let name = event.currentTarget.value;
-          let colorId = getColorId(color);
-          handleRenameColor(colorId, name);
+          const newValue = event.currentTarget.value;
+          setValue(newValue);
         }}
         onKeyDown={(event) => {
-          let key = event.key;
-          if (key === "ArrowDown" || key === "Enter") {
+          const key = event.key;
+          if (key === "Enter") {
+            const name = event.currentTarget.value;
+            const colorId = getColorId(color);
+            handleRenameColor(colorId, name);
+            handleKeyboardNavigate(key, next);
+          } else if (key === "ArrowDown") {
             handleKeyboardNavigate(key, next);
           } else if (key === "ArrowUp") {
             handleKeyboardNavigate(key, prev);
