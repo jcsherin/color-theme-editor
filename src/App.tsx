@@ -590,6 +590,13 @@ export default function App() {
     });
   };
 
+  const compareColorId = (colorDict: ColorDict) => (x: string, y: string) => {
+    const xname = getColorName(colorDict.get(x)!);
+    const yname = getColorName(colorDict.get(y)!);
+    if (xname < yname) return -1;
+    if (xname > yname) return 1;
+    return 0;
+  };
   const configOrderedColorIds = Array.from(klassDict.values())
     .flatMap((klass) => klass.colorIds)
     .concat(
