@@ -239,9 +239,11 @@ function TreeLeafInput({
         onKeyDown={(event) => {
           const key = event.key;
           if (key === "Enter") {
-            const name = event.currentTarget.value;
-            const colorId = getColorId(color);
-            handleRenameColor(colorId, name);
+            const name = event.currentTarget.value.trim();
+            if (name.length > 0) {
+              const colorId = getColorId(color);
+              handleRenameColor(colorId, name);
+            }
             handleKeyboardNavigate(key, next);
           } else if (key === "ArrowDown") {
             handleKeyboardNavigate(key, next);
