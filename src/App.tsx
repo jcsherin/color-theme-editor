@@ -401,6 +401,33 @@ module.exports = {
   return template;
 }
 
+interface WizardStep {
+  kind: "colorThemeInput" | "colorThemeConfig";
+}
+interface Wizard {
+  steps: WizardStep[];
+  currStep: number;
+}
+
+function makeWizard(): Wizard {
+  return {
+    steps: [{ kind: "colorThemeInput" }, { kind: "colorThemeConfig" }],
+    currStep: 0,
+  };
+}
+
+function wizardNextStep(wizard: Wizard): Wizard {
+  return wizard.currStep < wizard.steps.length - 1
+    ? { ...wizard, currStep: wizard.currStep + 1 }
+    : wizard;
+}
+
+function wizardPrevStep(wizard: Wizard): Wizard {
+  return wizard.currStep > 0
+    ? { ...wizard, currStep: wizard.currStep - 1 }
+    : wizard;
+}
+
 export default function App() {
   const [colorDict, setColorDict] = useState(() => {
     const deduped = new Set(example.colors);
