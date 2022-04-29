@@ -744,7 +744,27 @@ export default function App() {
 
   const childNodes = [klassNodes, ...singleColorNodes];
 
-  const colorThemeInputUI = <p>Step 1</p>;
+  const colorThemeInputUI = (
+    <div className="grid grid-cols-2">
+      <div className="mr-4">
+        <p>Utility Classnames:</p>
+        <textarea className="w-full bg-slate-100 h-60">
+          primary secondary
+        </textarea>
+      </div>
+      <div>
+        <p>Color Values:</p>
+        <textarea className="w-full bg-slate-100 h-60">
+          primary secondary
+        </textarea>
+      </div>
+      <div>
+        <button className="py-1 px-4 text-2xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700">
+          Next
+        </button>
+      </div>
+    </div>
+  );
   const colorThemeConfigUI = (
     <div className="grid grid-cols-2">
       <div
