@@ -548,6 +548,9 @@ export default function App() {
     );
   };
 
+  const handleNextUI = () => setWizard((wizard) => wizardNextStep(wizard));
+  const handlePrevUI = () => setWizard((wizard) => wizardPrevStep(wizard));
+
   const colorListItems = colorList.map((item) => {
     const color = colorDict.get(item.colorId);
     return color ? (
@@ -745,48 +748,63 @@ export default function App() {
   const childNodes = [klassNodes, ...singleColorNodes];
 
   const colorThemeInputUI = (
-    <div className="grid grid-cols-2">
-      <div className="mr-4">
-        <p>Utility Classnames:</p>
-        <textarea className="w-full bg-slate-100 h-60">
-          primary secondary
-        </textarea>
+    <>
+      <div className="grid grid-cols-2">
+        <div className="mr-4">
+          <p>Utility Classnames:</p>
+          <textarea className="w-full bg-slate-100 h-60">
+            primary secondary
+          </textarea>
+        </div>
+        <div>
+          <p>Color Values:</p>
+          <textarea className="w-full bg-slate-100 h-60">
+            primary secondary
+          </textarea>
+        </div>
       </div>
       <div>
-        <p>Color Values:</p>
-        <textarea className="w-full bg-slate-100 h-60">
-          primary secondary
-        </textarea>
-      </div>
-      <div>
-        <button className="py-1 px-4 text-2xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700">
+        <button
+          onClick={(_e) => handleNextUI()}
+          className="py-1 px-4 text-2xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
+        >
           Next
         </button>
       </div>
-    </div>
+    </>
   );
   const colorThemeConfigUI = (
-    <div className="grid grid-cols-2">
-      <div
-        ref={mouseRef}
-        className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
-      >
-        <Clipboard
-          text={serializeConfig(colorDict, klassDict, colorList)}
-          timeoutInMs={2000}
-          className="mb-4 flex justify-end"
-        />
-        <TreeNode contents="module.exports =">
-          <TreeNode contents="theme:">
-            <TreeNode contents="colors:">{childNodes}</TreeNode>
+    <>
+      <div className="grid grid-cols-2 mb-4">
+        <div
+          ref={mouseRef}
+          className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
+        >
+          <Clipboard
+            text={serializeConfig(colorDict, klassDict, colorList)}
+            timeoutInMs={2000}
+            className="mb-4 flex justify-end"
+          />
+          <TreeNode contents="module.exports =">
+            <TreeNode contents="theme:">
+              <TreeNode contents="colors:">{childNodes}</TreeNode>
+            </TreeNode>
           </TreeNode>
-        </TreeNode>
+        </div>
+        <div>
+          <div className="flex flex-wrap mb-4">{colorListItems}</div>
+          <div className={"pl-2"}>{utilityKlassesButtonGroup}</div>
+        </div>
       </div>
       <div>
-        <div className="flex flex-wrap mb-4">{colorListItems}</div>
-        <div className={"pl-2"}>{utilityKlassesButtonGroup}</div>
+        <button
+          onClick={(_e) => handlePrevUI()}
+          className="py-1 px-4 text-2xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
+        >
+          Previous
+        </button>
       </div>
-    </div>
+    </>
   );
 
   const showUI = (wizard: Wizard) => {
