@@ -791,7 +791,8 @@ export default function App() {
       <div>
         <button
           onClick={(_e) => handleNextUI()}
-          className="mr-4 py-1 px-4 text-2xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
+          className="mr-4 py-1 px-4 text-2xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700 disabled:cursor-not-allowed"
+          disabled={isInputEmpty()}
         >
           Next
         </button>
@@ -841,7 +842,7 @@ export default function App() {
           onClick={(_e) => handlePrevUI()}
           className="py-1 px-4 text-2xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
         >
-          Previous
+          Go Back
         </button>
       </div>
     </>
