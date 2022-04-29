@@ -428,7 +428,16 @@ function wizardPrevStep(wizard: Wizard): Wizard {
     : wizard;
 }
 
+interface UnparsedUserInput {
+  classnames: string;
+  colors: string;
+}
+
 export default function App() {
+  const [unparsed, setUnparsed] = useState<UnparsedUserInput>({
+    classnames: "",
+    colors: "",
+  });
   const [wizard, setWizard] = useState<Wizard>(makeWizard());
 
   const [colorDict, setColorDict] = useState(() => {
@@ -550,6 +559,18 @@ export default function App() {
 
   const handleNextUI = () => setWizard((wizard) => wizardNextStep(wizard));
   const handlePrevUI = () => setWizard((wizard) => wizardPrevStep(wizard));
+
+  const handleLoadExample = () =>
+    setUnparsed({
+      classnames: example.utilityClassnames.join("\n"),
+      colors: example.colors.join("\n"),
+    });
+
+  const handleClearInput = () => setUnparsed({ classnames: "", colors: "" });
+
+  const isInputEmpty = () =>
+    unparsed.classnames.trim().length === 0 &&
+    unparsed.colors.trim().length === 0;
 
   const colorListItems = colorList.map((item) => {
     const color = colorDict.get(item.colorId);
@@ -752,24 +773,43 @@ export default function App() {
       <div className="grid grid-cols-2">
         <div className="mr-4">
           <p>Utility Classnames:</p>
-          <textarea className="w-full bg-slate-100 h-60">
-            primary secondary
-          </textarea>
+          <textarea
+            className="w-full bg-slate-100 h-60 py-1 px-4"
+            placeholder="One name per line"
+            value={unparsed.classnames}
+          />
         </div>
         <div>
           <p>Color Values:</p>
-          <textarea className="w-full bg-slate-100 h-60">
-            primary secondary
-          </textarea>
+          <textarea
+            className="w-full bg-slate-100 h-60 py-1 px-4"
+            placeholder="One color value per line"
+            value={unparsed.colors}
+          />
         </div>
       </div>
       <div>
         <button
           onClick={(_e) => handleNextUI()}
-          className="py-1 px-4 text-2xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
+          className="mr-4 py-1 px-4 text-2xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
         >
           Next
         </button>
+        {isInputEmpty() ? (
+          <button
+            onClick={(_e) => handleLoadExample()}
+            className="text-blue-500 hover:text-blue-700 text-2xl"
+          >
+            Load Example
+          </button>
+        ) : (
+          <button
+            onClick={(_e) => handleClearInput()}
+            className="text-blue-500 hover:text-blue-700 text-2xl"
+          >
+            Clear
+          </button>
+        )}
       </div>
     </>
   );
