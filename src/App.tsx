@@ -440,29 +440,22 @@ export default function App() {
   });
   const [wizard, setWizard] = useState<Wizard>(makeWizard());
 
-  const [colorDict, setColorDict] = useState(() => {
-    const deduped = new Set(example.colors);
-    const parsed = Array.from(deduped)
-      .map(parseColor)
-      .flatMap((item) => (item ? [item] : []));
-    return makeColorDict(parsed);
-  });
-  const [klassDict, setKlassDict] = useState(() => {
-    const deduped = new Set(example.utilityClassnames.map((x) => x.trim()));
-    const parsed = Array.from(deduped)
-      .map(parseUtilityKlass)
-      .flatMap((item) => (item ? [item] : []));
-    return makeUtilityKlassDict(parsed);
-  });
-
+  const [colorDict, setColorDict] = useState<ColorDict>(
+    new Map<string, HexColor>()
+  );
+  const [klassDict, setKlassDict] = useState<UtilityKlassDict>(
+    new Map<string, UtilityKlass>()
+  );
   const [colorList, setColorList] = useState<ColorListItem[]>([]);
   useEffect(() => {
     function initColorList(colorIds: string[]): ColorListItem[] {
       return colorIds.map(makeColorListItem);
     }
 
-    setColorList(initColorList(getColorIds(colorDict)));
-  }, []);
+    if (colorList.length === 0) {
+      setColorList(initColorList(getColorIds(colorDict)));
+    }
+  }, [colorDict]);
 
   const [inputMode, inputActionDispatch] = useReducer(
     reducerInputAction,
@@ -557,7 +550,27 @@ export default function App() {
     );
   };
 
-  const handleNextUI = () => setWizard((wizard) => wizardNextStep(wizard));
+  const handleNextUI = () => {
+    setWizard((wizard) => wizardNextStep(wizard));
+
+    setColorDict((_state) => {
+      const colors = unparsed.colors.split("\n");
+      const deduped = new Set(colors);
+      const parsed = Array.from(deduped)
+        .map(parseColor)
+        .flatMap((color) => (color ? [color] : []));
+      return makeColorDict(parsed);
+    });
+
+    setKlassDict((_state) => {
+      const classnames = unparsed.classnames.split("\n");
+      const deduped = new Set(classnames);
+      const parsed = Array.from(deduped)
+        .map(parseUtilityKlass)
+        .flatMap((classname) => (classname ? [classname] : []));
+      return makeUtilityKlassDict(parsed);
+    });
+  };
   const handlePrevUI = () => setWizard((wizard) => wizardPrevStep(wizard));
 
   const handleLoadExample = () =>
@@ -777,6 +790,7 @@ export default function App() {
             className="w-full bg-slate-100 h-60 py-1 px-4"
             placeholder="One name per line"
             value={unparsed.classnames}
+            onChange={(_e) => {}}
           />
         </div>
         <div>
@@ -785,6 +799,7 @@ export default function App() {
             className="w-full bg-slate-100 h-60 py-1 px-4"
             placeholder="One color value per line"
             value={unparsed.colors}
+            onChange={(_e) => {}}
           />
         </div>
       </div>
