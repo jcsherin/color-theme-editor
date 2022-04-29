@@ -429,6 +429,8 @@ function wizardPrevStep(wizard: Wizard): Wizard {
 }
 
 export default function App() {
+  const [wizard, setWizard] = useState<Wizard>(makeWizard());
+
   const [colorDict, setColorDict] = useState(() => {
     const deduped = new Set(example.colors);
     const parsed = Array.from(deduped)
@@ -742,29 +744,39 @@ export default function App() {
 
   const childNodes = [klassNodes, ...singleColorNodes];
 
-  return (
-    <div className="mx-2 my-8">
-      <div className="grid grid-cols-2">
-        <div
-          ref={mouseRef}
-          className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
-        >
-          <Clipboard
-            text={serializeConfig(colorDict, klassDict, colorList)}
-            timeoutInMs={2000}
-            className="mb-4 flex justify-end"
-          />
-          <TreeNode contents="module.exports =">
-            <TreeNode contents="theme:">
-              <TreeNode contents="colors:">{childNodes}</TreeNode>
-            </TreeNode>
+  const colorThemeInputUI = <p>Step 1</p>;
+  const colorThemeConfigUI = (
+    <div className="grid grid-cols-2">
+      <div
+        ref={mouseRef}
+        className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
+      >
+        <Clipboard
+          text={serializeConfig(colorDict, klassDict, colorList)}
+          timeoutInMs={2000}
+          className="mb-4 flex justify-end"
+        />
+        <TreeNode contents="module.exports =">
+          <TreeNode contents="theme:">
+            <TreeNode contents="colors:">{childNodes}</TreeNode>
           </TreeNode>
-        </div>
-        <div>
-          <div className="flex flex-wrap mb-4">{colorListItems}</div>
-          <div className={"pl-2"}>{utilityKlassesButtonGroup}</div>
-        </div>
+        </TreeNode>
+      </div>
+      <div>
+        <div className="flex flex-wrap mb-4">{colorListItems}</div>
+        <div className={"pl-2"}>{utilityKlassesButtonGroup}</div>
       </div>
     </div>
   );
+
+  const showUI = (wizard: Wizard) => {
+    switch (wizard.steps[wizard.currStep].kind) {
+      case "colorThemeInput":
+        return colorThemeInputUI;
+      case "colorThemeConfig":
+        return colorThemeConfigUI;
+    }
+  };
+
+  return <div className="mx-2 my-8">{showUI(wizard)}</div>;
 }
