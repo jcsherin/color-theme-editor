@@ -124,31 +124,25 @@ function makeColorListItem(colorId: string): ColorListItem {
   return { colorId: colorId, status: "visible" };
 }
 
-interface SingleColorKlass {
+interface UngroupedColor {
   kind: "singleColor";
   colorId: string;
 }
 
-interface UtilityKlass {
+interface ColorGroup {
   kind: "utility";
   name: string;
   colorIds: string[];
 }
 
-type Klass = UtilityKlass | SingleColorKlass;
-
-function makeUtilityKlass(name: string): UtilityKlass {
+function makeColorGroup(name: string): ColorGroup {
   return { kind: "utility", name: name, colorIds: [] };
 }
 
-function makeSingleColorKlass(colorId: string): SingleColorKlass {
-  return { kind: "singleColor", colorId: colorId };
-}
-
-function parseUtilityKlass(value: string): UtilityKlass | undefined {
+function parseColorGroup(value: string): ColorGroup | undefined {
   const name = value.trim().replace(/\s+/g, "-");
   if (name.length > 0) {
-    return makeUtilityKlass(name);
+    return makeColorGroup(name);
   }
 }
 
@@ -336,12 +330,12 @@ function makeColorDict(colors: HexColor[]): ColorDict {
   return map;
 }
 
-type UtilityKlassDict = Map<string, UtilityKlass>;
+type ColorGroupDict = Map<string, ColorGroup>;
 
-function makeUtilityKlassDict(klasses: UtilityKlass[]): UtilityKlassDict {
+function makeColorGroupDict(colorGroups: ColorGroup[]): ColorGroupDict {
   const map = new Map();
-  klasses.forEach((klass) => {
-    map.set(klass.name, klass);
+  colorGroups.forEach((group) => {
+    map.set(group.name, group);
   });
   return map;
 }
@@ -360,14 +354,14 @@ const compareColorId = (colorDict: ColorDict) => (x: string, y: string) => {
 
 function serializeConfig(
   colorDict: ColorDict,
-  klassDict: UtilityKlassDict,
+  colorGroupDict: ColorGroupDict,
   colorList: ColorListItem[]
 ) {
   const serialized: { [name: string]: string | { [name: string]: string } } =
     {};
-  Array.from(klassDict.values()).forEach((klass) => {
+  Array.from(colorGroupDict.values()).forEach((colorGroup) => {
     const inner: { [name: string]: string } = {};
-    Array.from(klass.colorIds)
+    Array.from(colorGroup.colorIds)
       .sort(compareColorId(colorDict))
       .forEach((colorId) => {
         const color = colorDict.get(colorId);
@@ -377,7 +371,7 @@ function serializeConfig(
           inner[key] = value;
         }
       });
-    serialized[klass.name] = inner;
+    serialized[colorGroup.name] = inner;
   });
   colorList
     .filter((item) => item.status !== "hidden")
@@ -443,8 +437,8 @@ export default function App() {
   const [colorDict, setColorDict] = useState<ColorDict>(
     new Map<string, HexColor>()
   );
-  const [klassDict, setKlassDict] = useState<UtilityKlassDict>(
-    new Map<string, UtilityKlass>()
+  const [colorGroupDict, setColorGroupDict] = useState<ColorGroupDict>(
+    new Map<string, ColorGroup>()
   );
   const [colorList, setColorList] = useState<ColorListItem[]>([]);
   useEffect(() => {
@@ -509,8 +503,8 @@ export default function App() {
     });
   };
 
-  const handleAddColorsToKlass = (className: string) => {
-    setKlassDict((dict) => {
+  const handleAddColorsToGroup = (className: string) => {
+    setColorGroupDict((dict) => {
       const selectedColorIds = colorList
         .filter((item) => item.status === "selected")
         .map((item) => item.colorId);
@@ -533,12 +527,12 @@ export default function App() {
     );
   };
 
-  const handleRemoveColorFromKlass = (className: string, colorId: string) => {
-    setKlassDict((map) => {
-      const klass = map.get(className);
-      if (klass) {
-        let newColorIds = klass.colorIds.filter((item) => item != colorId);
-        map.set(className, { ...klass, colorIds: newColorIds });
+  const handleRemoveColorFromGroup = (className: string, colorId: string) => {
+    setColorGroupDict((map) => {
+      const colorGroup = map.get(className);
+      if (colorGroup) {
+        let newColorIds = colorGroup.colorIds.filter((item) => item != colorId);
+        map.set(className, { ...colorGroup, colorIds: newColorIds });
       }
 
       return new Map(Array.from(map));
@@ -564,15 +558,15 @@ export default function App() {
       return makeColorDict(parsed);
     });
 
-    setKlassDict((state) => {
+    setColorGroupDict((state) => {
       if (state.size > 0) return state;
 
       const classnames = unparsed.classnames.split("\n");
       const deduped = new Set(classnames);
       const parsed = Array.from(deduped)
-        .map(parseUtilityKlass)
+        .map(parseColorGroup)
         .flatMap((classname) => (classname ? [classname] : []));
-      return makeUtilityKlassDict(parsed);
+      return makeColorGroupDict(parsed);
     });
   };
   const handlePrevUI = () => setWizard((wizard) => wizardPrevStep(wizard));
@@ -604,15 +598,15 @@ export default function App() {
     );
   });
 
-  const utilityKlassesButtonGroup = Array.from(klassDict.keys()).map((id) => {
-    const klass = klassDict.get(id);
-    return klass ? (
+  const colorGroupsButtonRow = Array.from(colorGroupDict.keys()).map((id) => {
+    const colorGroup = colorGroupDict.get(id);
+    return colorGroup ? (
       <Button
         disabled={disableButtonGroup}
         key={id}
         className="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900"
-        text={klass.name}
-        handleClick={handleAddColorsToKlass}
+        text={colorGroup.name}
+        handleClick={handleAddColorsToGroup}
       />
     ) : (
       <></>
@@ -711,9 +705,9 @@ export default function App() {
     });
   };
 
-  const configOrderedColorIds = Array.from(klassDict.values())
-    .flatMap((klass) =>
-      Array.from(klass.colorIds).sort(compareColorId(colorDict))
+  const configOrderedColorIds = Array.from(colorGroupDict.values())
+    .flatMap((colorGroup) =>
+      Array.from(colorGroup.colorIds).sort(compareColorId(colorDict))
     )
     .concat(
       colorList
@@ -738,32 +732,34 @@ export default function App() {
     return configOrderedColorIds[nextIdx];
   };
 
-  const klassNodes = Array.from(klassDict.values()).map((klass) => {
-    let contents = `"${klass.name}" :`;
-    let sortedColorIds = Array.from(klass.colorIds).sort(
-      compareColorId(colorDict)
-    );
-    return klass.colorIds.length === 0 ? (
-      <TreeNode key={klass.name} contents={contents} />
-    ) : (
-      <TreeNode key={klass.name} contents={contents}>
-        {sortedColorIds.map((colorId) => {
-          let node = colorNode(
-            colorId,
-            handleInputFocus,
-            focusRenameInput,
-            handleRenameColor,
-            handleKeyboardNavigate,
-            getNodeIdx(colorId),
-            prevColorId(colorId),
-            nextColorId(colorId),
-            (colorId) => handleRemoveColorFromKlass(klass.name, colorId)
-          );
-          return node;
-        })}
-      </TreeNode>
-    );
-  });
+  const colorGroupNodes = Array.from(colorGroupDict.values()).map(
+    (colorGroup) => {
+      let contents = `"${colorGroup.name}" :`;
+      let sortedColorIds = Array.from(colorGroup.colorIds).sort(
+        compareColorId(colorDict)
+      );
+      return colorGroup.colorIds.length === 0 ? (
+        <TreeNode key={colorGroup.name} contents={contents} />
+      ) : (
+        <TreeNode key={colorGroup.name} contents={contents}>
+          {sortedColorIds.map((colorId) => {
+            let node = colorNode(
+              colorId,
+              handleInputFocus,
+              focusRenameInput,
+              handleRenameColor,
+              handleKeyboardNavigate,
+              getNodeIdx(colorId),
+              prevColorId(colorId),
+              nextColorId(colorId),
+              (colorId) => handleRemoveColorFromGroup(colorGroup.name, colorId)
+            );
+            return node;
+          })}
+        </TreeNode>
+      );
+    }
+  );
 
   const singleColorNodes = colorList
     .filter((item) => item.status !== "hidden")
@@ -783,7 +779,7 @@ export default function App() {
       return node;
     });
 
-  const childNodes = [klassNodes, ...singleColorNodes];
+  const childNodes = [colorGroupNodes, ...singleColorNodes];
 
   const colorThemeInputUI = (
     <>
@@ -841,7 +837,7 @@ export default function App() {
           className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
         >
           <Clipboard
-            text={serializeConfig(colorDict, klassDict, colorList)}
+            text={serializeConfig(colorDict, colorGroupDict, colorList)}
             timeoutInMs={2000}
             className="mb-4 flex justify-end"
           />
@@ -853,7 +849,7 @@ export default function App() {
         </div>
         <div>
           <div className="flex flex-wrap mb-4">{colorListItems}</div>
-          <div className={"pl-2"}>{utilityKlassesButtonGroup}</div>
+          <div className={"pl-2"}>{colorGroupsButtonRow}</div>
         </div>
       </div>
       <div>
