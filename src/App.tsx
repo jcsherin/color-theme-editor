@@ -123,12 +123,6 @@ interface ColorListItem {
 function makeColorListItem(colorId: string): ColorListItem {
   return { colorId: colorId, status: "visible" };
 }
-
-interface UngroupedColor {
-  kind: "singleColor";
-  colorId: string;
-}
-
 interface ColorGroup {
   kind: "utility";
   name: string;
