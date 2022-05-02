@@ -65,14 +65,6 @@ interface Wizard {
   currStep: number;
 }
 
-function copy(text: string) {
-  if (navigator && navigator.clipboard) {
-    return navigator.clipboard.writeText(text);
-  }
-
-  return Promise.reject(new Error("Copying to clipboard not supported!"));
-}
-
 function Clipboard({
   text,
   timeoutInMs,
@@ -84,8 +76,15 @@ function Clipboard({
 }) {
   const [copied, setCopied] = useState(false);
 
+  const clipboardWriteText = (text: string) =>
+    navigator && navigator.clipboard
+      ? navigator.clipboard.writeText(text)
+      : Promise.reject(
+          new Error("Copying to clipboard not supported in browser!")
+        );
+
   const handleCopy = (text: string) =>
-    copy(text)
+    clipboardWriteText(text)
       .then(() => {
         setCopied(true);
         setTimeout(() => {
