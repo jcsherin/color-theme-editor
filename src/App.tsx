@@ -8,6 +8,64 @@ import {
 } from "./color";
 import * as example from "./example";
 
+interface UnparsedUserInput {
+  classnames: string;
+  colors: string;
+}
+
+interface ColorListItem {
+  colorId: string;
+  status: "visible" | "selected" | "hidden";
+}
+
+interface ColorGroup {
+  kind: "utility";
+  name: string;
+  colorIds: string[];
+}
+
+type ColorDict = Map<string, HexColor>;
+type ColorGroupDict = Map<string, ColorGroup>;
+
+interface ViewMode {
+  kind: "view";
+}
+interface EditMode {
+  kind: "edit";
+  colorId: string;
+}
+
+type InputMode = ViewMode | EditMode;
+
+interface Focus {
+  kind: "focus";
+  colorId: string;
+}
+
+interface MoveUp {
+  kind: "moveup";
+  target: string;
+}
+
+interface MoveDown {
+  kind: "movedown";
+  target: string;
+}
+
+interface Escape {
+  kind: "escape";
+}
+
+type InputAction = Focus | MoveUp | MoveDown | Escape;
+
+interface WizardStep {
+  kind: "colorThemeInput" | "colorThemeConfig";
+}
+interface Wizard {
+  steps: WizardStep[];
+  currStep: number;
+}
+
 function copy(text: string) {
   if (navigator && navigator.clipboard) {
     return navigator.clipboard.writeText(text);
@@ -115,18 +173,8 @@ function ColorSquare({
   );
 }
 
-interface ColorListItem {
-  colorId: string;
-  status: "visible" | "selected" | "hidden";
-}
-
 function makeColorListItem(colorId: string): ColorListItem {
   return { colorId: colorId, status: "visible" };
-}
-interface ColorGroup {
-  kind: "utility";
-  name: string;
-  colorIds: string[];
 }
 
 function makeColorGroup(name: string): ColorGroup {
@@ -255,38 +303,7 @@ function TreeLeafInput({
   );
 }
 
-interface ViewMode {
-  kind: "view";
-}
-interface EditMode {
-  kind: "edit";
-  colorId: string;
-}
-
-type InputMode = ViewMode | EditMode;
-
 const initialInputMode: InputMode = { kind: "view" };
-
-interface Focus {
-  kind: "focus";
-  colorId: string;
-}
-
-interface MoveUp {
-  kind: "moveup";
-  target: string;
-}
-
-interface MoveDown {
-  kind: "movedown";
-  target: string;
-}
-
-interface Escape {
-  kind: "escape";
-}
-
-type InputAction = Focus | MoveUp | MoveDown | Escape;
 
 function reducerInputAction(state: InputMode, action: InputAction): InputMode {
   switch (state.kind) {
@@ -313,8 +330,6 @@ function reducerInputAction(state: InputMode, action: InputAction): InputMode {
   }
 }
 
-type ColorDict = Map<string, HexColor>;
-
 function makeColorDict(colors: HexColor[]): ColorDict {
   const map = new Map();
   colors.forEach((color) => {
@@ -323,8 +338,6 @@ function makeColorDict(colors: HexColor[]): ColorDict {
   });
   return map;
 }
-
-type ColorGroupDict = Map<string, ColorGroup>;
 
 function makeColorGroupDict(colorGroups: ColorGroup[]): ColorGroupDict {
   const map = new Map();
@@ -389,14 +402,6 @@ module.exports = {
   return template;
 }
 
-interface WizardStep {
-  kind: "colorThemeInput" | "colorThemeConfig";
-}
-interface Wizard {
-  steps: WizardStep[];
-  currStep: number;
-}
-
 function makeWizard(): Wizard {
   return {
     steps: [{ kind: "colorThemeInput" }, { kind: "colorThemeConfig" }],
@@ -414,11 +419,6 @@ function wizardPrevStep(wizard: Wizard): Wizard {
   return wizard.currStep > 0
     ? { ...wizard, currStep: wizard.currStep - 1 }
     : wizard;
-}
-
-interface UnparsedUserInput {
-  classnames: string;
-  colors: string;
 }
 
 export default function App() {
