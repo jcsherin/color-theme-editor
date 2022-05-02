@@ -391,13 +391,8 @@ function serializeConfig(
         serialized[key] = value;
       }
     });
-  const template = `
-module.exports = {
-  theme: {
-    colors: ${JSON.stringify(serialized, null, 2)}
-  }
-}
-`;
+  const wrapper = { theme: { colors: serialized } };
+  const template = `module.exports = ${JSON.stringify(wrapper, null, 2)}`;
   return template;
 }
 
