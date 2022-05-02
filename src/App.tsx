@@ -619,7 +619,6 @@ export default function App() {
     focusRenameInput: boolean,
     handleRenameColor: (colorId: string, name: string) => void,
     handleKeyboardNavigate: (key: string, target: string) => void,
-    idx: number,
     prevColorId: string,
     nextColorId: string,
     handleRemoveColor?: (colorId: string) => void
@@ -749,7 +748,6 @@ export default function App() {
               focusRenameInput,
               handleRenameColor,
               handleKeyboardNavigate,
-              getNodeIdx(colorId),
               prevColorId(colorId),
               nextColorId(colorId),
               (colorId) => handleRemoveColorFromGroup(colorGroup.name, colorId)
@@ -772,7 +770,6 @@ export default function App() {
         focusRenameInput,
         handleRenameColor,
         handleKeyboardNavigate,
-        getNodeIdx(colorId),
         prevColorId(colorId),
         nextColorId(colorId)
       );
