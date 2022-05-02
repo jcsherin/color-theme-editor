@@ -107,32 +107,6 @@ function Clipboard({
   return <div className={overrideClassName}>{copyButton}</div>;
 }
 
-function Button({
-  className: overrideClassName,
-  text,
-  disabled,
-  handleClick,
-}: {
-  className: string;
-  text: string;
-  disabled: boolean;
-  handleClick: (text: string) => void;
-}) {
-  const computedClassName = disabled
-    ? "cursor-not-allowed disabled:bg-gray-200 disabled:text-slate-400"
-    : "";
-
-  return (
-    <button
-      onClick={(_event) => handleClick(text)}
-      className={`${overrideClassName} ${computedClassName}`}
-      disabled={disabled}
-    >
-      {text}
-    </button>
-  );
-}
-
 function ColorSquare({
   className: overrideClassName,
   color,
@@ -588,13 +562,14 @@ export default function App() {
   const colorGroupsButtonRow = Array.from(colorGroupDict.keys()).map((id) => {
     const colorGroup = colorGroupDict.get(id);
     return colorGroup ? (
-      <Button
+      <button
         disabled={disableButtonGroup}
         key={id}
         className="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900"
-        text={colorGroup.name}
-        handleClick={handleAddColorsToGroup}
-      />
+        onClick={(_e) => handleAddColorsToGroup(colorGroup.name)}
+      >
+        {colorGroup.name}
+      </button>
     ) : (
       <></>
     );
