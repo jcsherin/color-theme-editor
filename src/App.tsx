@@ -179,7 +179,7 @@ function TreeNode({
   return node;
 }
 
-function TreeLeaf({
+function TreeLeafView({
   handleFocus,
   children,
 }: {
@@ -192,7 +192,7 @@ function TreeLeaf({
     </button>
   );
 }
-function TreeLeafInput({
+function TreeLeafEdit({
   color,
   focus,
   handleRenameColor,
@@ -592,7 +592,7 @@ export default function App() {
       switch (inputMode.kind) {
         case "view":
           return (
-            <TreeLeaf
+            <TreeLeafView
               key={getColorValue(color)}
               handleFocus={(_event) => handleFocus(colorId)}
             >
@@ -603,11 +603,11 @@ export default function App() {
                 style={{ backgroundColor: colorValue }}
               ></span>
               <span>{colorValue},</span>
-            </TreeLeaf>
+            </TreeLeafView>
           );
         case "edit":
           return inputMode.colorId === colorId ? (
-            <TreeLeafInput
+            <TreeLeafEdit
               key={getColorValue(color)}
               color={color}
               focus={focusRenameInput}
@@ -618,7 +618,7 @@ export default function App() {
               handleRemoveColor={handleRemoveColor}
             />
           ) : (
-            <TreeLeaf
+            <TreeLeafView
               key={getColorValue(color)}
               handleFocus={(_event) => handleFocus(colorId)}
             >
@@ -629,7 +629,7 @@ export default function App() {
                 style={{ backgroundColor: colorValue }}
               ></span>
               <span>{colorValue},</span>
-            </TreeLeaf>
+            </TreeLeafView>
           );
       }
     } else {
