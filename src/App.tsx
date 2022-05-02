@@ -19,7 +19,6 @@ interface ColorListItem {
 }
 
 interface ColorGroup {
-  kind: "utility";
   name: string;
   colorIds: string[];
 }
@@ -178,7 +177,7 @@ function makeColorListItem(colorId: string): ColorListItem {
 }
 
 function makeColorGroup(name: string): ColorGroup {
-  return { kind: "utility", name: name, colorIds: [] };
+  return { name: name, colorIds: [] };
 }
 
 function parseColorGroup(value: string): ColorGroup | undefined {
