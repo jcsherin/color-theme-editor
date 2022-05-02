@@ -553,7 +553,9 @@ export default function App() {
   const handleNextUI = () => {
     setWizard((wizard) => wizardNextStep(wizard));
 
-    setColorDict((_state) => {
+    setColorDict((state) => {
+      if (state.size > 0) return state;
+
       const colors = unparsed.colors.split("\n");
       const deduped = new Set(colors);
       const parsed = Array.from(deduped)
@@ -562,7 +564,9 @@ export default function App() {
       return makeColorDict(parsed);
     });
 
-    setKlassDict((_state) => {
+    setKlassDict((state) => {
+      if (state.size > 0) return state;
+
       const classnames = unparsed.classnames.split("\n");
       const deduped = new Set(classnames);
       const parsed = Array.from(deduped)
