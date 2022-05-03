@@ -451,6 +451,17 @@ const parseColorGroups = (groupNames: string): ColorGroupDict => {
   return makeColorGroupDict(parsed);
 };
 
+const toggleStatus = (item: ColorListItem): ColorListItem => {
+  switch (item.status) {
+    case "visible":
+      return { ...item, status: "selected" };
+    case "selected":
+      return { ...item, status: "visible" };
+    case "hidden":
+      return item;
+  }
+};
+
 const reducer = (state: State, action: Action): State => {
   switch (action.kind) {
     case "parse": {
@@ -530,8 +541,15 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
-    case "toggleStatus":
-      return state;
+    case "toggleStatus": {
+      const colorList = state.colorList.map((item) =>
+        item.colorId === action.colorListItem.colorId
+          ? toggleStatus(item)
+          : item
+      );
+
+      return { ...state, colorList: colorList };
+    }
   }
 };
 
