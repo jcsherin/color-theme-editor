@@ -452,7 +452,7 @@ const parseColorGroups = (groupNames: string): ColorGroupDict => {
 
 const reducer = (state: State, action: Action): State => {
   switch (action.kind) {
-    case "parse":
+    case "parse": {
       // Don't reparse user input!
       if (state.colorDict.size > 0 && state.colorGroupDict.size > 0)
         return state;
@@ -468,8 +468,9 @@ const reducer = (state: State, action: Action): State => {
         colorGroupDict: colorGroupDict,
         colorList: colorList,
       };
+    }
 
-    case "addToGroup":
+    case "addToGroup": {
       const group = state.colorGroupDict.get(action.groupName);
       if (!group) return state;
 
@@ -481,17 +482,38 @@ const reducer = (state: State, action: Action): State => {
       const newGroup = { ...group, colorIds: Array.from(deduped) };
       state.colorGroupDict.set(group.name, newGroup);
 
-      const newColorList = state.colorList.map<ColorListItem>((item) =>
+      const colorList = state.colorList.map<ColorListItem>((item) =>
         item.status === "selected" ? { ...item, status: "hidden" } : item
       );
 
       return {
         ...state,
         colorGroupDict: new Map(Array.from(state.colorGroupDict)),
-        colorList: newColorList,
+        colorList: colorList,
       };
+    }
 
-    case "removeFromGroup":
+    case "removeFromGroup": {
+      const group = state.colorGroupDict.get(action.groupName);
+      if (!group) return state;
+
+      const colorIds = group.colorIds.filter(
+        (colorId) => colorId !== action.colorId
+      );
+      const newGroup = { ...group, colorIds: colorIds };
+      state.colorGroupDict.set(group.name, newGroup);
+
+      const colorList = state.colorList.map<ColorListItem>((item) =>
+        item.colorId === action.colorId ? { ...item, status: "visible" } : item
+      );
+
+      return {
+        ...state,
+        colorGroupDict: new Map(Array.from(state.colorGroupDict)),
+        colorList: colorList,
+      };
+    }
+
     case "rename":
     case "toggleStatus":
       return state;
