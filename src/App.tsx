@@ -332,11 +332,7 @@ const compareColorId = (colorDict: ColorDict) => (x: string, y: string) => {
   return 0;
 };
 
-function serializeConfig(
-  colorDict: ColorDict,
-  colorGroupDict: ColorGroupDict,
-  colorList: ColorListItem[]
-) {
+function serializeConfig({ colorDict, colorGroupDict, colorList }: State) {
   const serialized: { [name: string]: string | { [name: string]: string } } =
     {};
   Array.from(colorGroupDict.values()).forEach((colorGroup) => {
@@ -553,26 +549,6 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-// actions
-// colorDict: string -> HexColor
-//    parse colors
-//    rename a color
-// colorGroupDict: string -> {name, colorIds}
-//    parse colornames
-//    add colors to group
-//    remove color from group
-// colorList: {colorId, status}
-//    initialize after colorDict is created
-//    toggle status on selection
-//    change status when added to a group
-//    change status when removed from a group
-
-// parse (groupNames, colors)
-// addToGroup (groupName, colorId[])
-// removeFromGroup (groupName, colorId)
-// renameColor (colorId, newName)
-// updateStatus (colorListItem)
-
 export default function App() {
   const [unparsedColorTheme, setUnparsedColorTheme] =
     useState<UnparsedColorTheme>({
@@ -583,23 +559,6 @@ export default function App() {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const [colorDict, setColorDict] = useState<ColorDict>(
-    new Map<string, HexColor>()
-  );
-  const [colorGroupDict, setColorGroupDict] = useState<ColorGroupDict>(
-    new Map<string, ColorGroup>()
-  );
-  const [colorList, setColorList] = useState<ColorListItem[]>([]);
-  useEffect(() => {
-    function initColorList(colorIds: string[]): ColorListItem[] {
-      return colorIds.map(makeColorListItem);
-    }
-
-    if (colorList.length === 0) {
-      setColorList(initColorList(getColorIds(colorDict)));
-    }
-  }, [colorDict]);
-
   const [inputMode, inputActionDispatch] = useReducer(
     reducerInputAction,
     initialInputMode
@@ -608,11 +567,11 @@ export default function App() {
   const [disableButtonGroup, setDisableButtonGroup] = useState(true);
   useEffect(() => {
     setDisableButtonGroup(
-      colorList.every(
+      state.colorList.every(
         (item) => item.status === "visible" || item.status === "hidden"
       )
     );
-  }, [colorList]);
+  }, [state.colorList]);
 
   const [focusRenameInput, setFocusRenameInput] = useState(false);
   const mouseRef = useRef<HTMLDivElement>(null);
@@ -634,89 +593,10 @@ export default function App() {
       document.removeEventListener("mousedown", handleRenameInputFocus);
   }, []);
 
-  const handleToggleColorSelection = (color: ColorListItem) => {
-    const toggleStatus = (item: ColorListItem): ColorListItem => {
-      switch (item.status) {
-        case "visible":
-          return { ...item, status: "selected" };
-        case "selected":
-          return { ...item, status: "visible" };
-        case "hidden":
-          return item;
-      }
-    };
-    setColorList((state) => {
-      return state.map((item) =>
-        item.colorId === color.colorId ? toggleStatus(item) : item
-      );
-    });
-  };
-
-  const handleAddColorsToGroup = (className: string) => {
-    setColorGroupDict((dict) => {
-      const selectedColorIds = colorList
-        .filter((item) => item.status === "selected")
-        .map((item) => item.colorId);
-
-      const item = dict.get(className);
-      if (item) {
-        const newItem = {
-          ...item,
-          colorIds: [...item.colorIds, ...selectedColorIds],
-        };
-        dict.set(className, newItem);
-      }
-
-      return new Map(Array.from(dict));
-    });
-    setColorList((colors) =>
-      colors.map((item) =>
-        item.status === "selected" ? { ...item, status: "hidden" } : item
-      )
-    );
-  };
-
-  const handleRemoveColorFromGroup = (className: string, colorId: string) => {
-    setColorGroupDict((map) => {
-      const colorGroup = map.get(className);
-      if (colorGroup) {
-        let newColorIds = colorGroup.colorIds.filter((item) => item != colorId);
-        map.set(className, { ...colorGroup, colorIds: newColorIds });
-      }
-
-      return new Map(Array.from(map));
-    });
-    setColorList((colors) =>
-      colors.map((item) =>
-        item.colorId === colorId ? { ...item, status: "visible" } : item
-      )
-    );
-  };
-
   const handleNextUI = () => {
     setWizard((wizard) => wizardNextStep(wizard));
 
-    setColorDict((state) => {
-      if (state.size > 0) return state;
-
-      const colors = unparsedColorTheme.colors.split("\n");
-      const deduped = new Set(colors);
-      const parsed = Array.from(deduped)
-        .map(parseColor)
-        .flatMap((color) => (color ? [color] : []));
-      return makeColorDict(parsed);
-    });
-
-    setColorGroupDict((state) => {
-      if (state.size > 0) return state;
-
-      const classnames = unparsedColorTheme.classnames.split("\n");
-      const deduped = new Set(classnames);
-      const parsed = Array.from(deduped)
-        .map(parseColorGroup)
-        .flatMap((classname) => (classname ? [classname] : []));
-      return makeColorGroupDict(parsed);
-    });
+    dispatch({ kind: "parse", unparsedColorTheme: unparsedColorTheme });
   };
   const handlePrevUI = () => setWizard((wizard) => wizardPrevStep(wizard));
 
@@ -733,38 +613,47 @@ export default function App() {
     unparsedColorTheme.classnames.trim().length === 0 &&
     unparsedColorTheme.colors.trim().length === 0;
 
-  const colorListItems = colorList.map((item) => {
-    const color = colorDict.get(item.colorId);
+  const colorListItems = state.colorList.map((item) => {
+    const color = state.colorDict.get(item.colorId);
     return color ? (
       <ColorSquare
         className="mr-1 mb-1 p-1"
         key={item.colorId}
         color={color}
         item={item}
-        handleSelection={handleToggleColorSelection}
+        handleSelection={(colorListItem) =>
+          dispatch({
+            kind: "toggleStatus",
+            colorListItem: colorListItem,
+          })
+        }
       />
     ) : (
       <></>
     );
   });
 
-  const colorGroupsButtonRow = Array.from(colorGroupDict.keys()).map((id) => {
-    const colorGroup = colorGroupDict.get(id);
-    return colorGroup ? (
-      <button
-        disabled={disableButtonGroup}
-        key={id}
-        className={`mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 ${
-          disableButtonGroup ? "disabled:cursor-not-allowed" : ""
-        }`}
-        onClick={(_e) => handleAddColorsToGroup(colorGroup.name)}
-      >
-        {colorGroup.name}
-      </button>
-    ) : (
-      <></>
-    );
-  });
+  const colorGroupsButtonRow = Array.from(state.colorGroupDict.keys()).map(
+    (id) => {
+      const colorGroup = state.colorGroupDict.get(id);
+      return colorGroup ? (
+        <button
+          disabled={disableButtonGroup}
+          key={id}
+          className={`mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 ${
+            disableButtonGroup ? "disabled:cursor-not-allowed" : ""
+          }`}
+          onClick={(_e) =>
+            dispatch({ kind: "addToGroup", groupName: colorGroup.name })
+          }
+        >
+          {colorGroup.name}
+        </button>
+      ) : (
+        <></>
+      );
+    }
+  );
 
   const colorNode = (
     colorId: string,
@@ -776,7 +665,7 @@ export default function App() {
     nextColorId: string,
     handleRemoveColor?: (colorId: string) => void
   ) => {
-    let color = colorDict.get(colorId);
+    let color = state.colorDict.get(colorId);
     if (color) {
       let colorValue = getColorValue(color);
 
@@ -830,7 +719,7 @@ export default function App() {
 
   const handleInputFocus = (colorId: string) => {
     inputActionDispatch({ kind: "focus", colorId: colorId });
-    const color = colorDict.get(colorId);
+    const color = state.colorDict.get(colorId);
     if (color) console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
   };
 
@@ -846,26 +735,15 @@ export default function App() {
     }
   };
 
-  const handleRenameColor = (colorId: string, name: string) => {
-    setColorDict((state) => {
-      const color = state.get(colorId);
-      if (color) {
-        const newColor = { ...color, name: name };
-        state.set(colorId, newColor);
-      }
-      return new Map(Array.from(state));
-    });
-  };
-
-  const configOrderedColorIds = Array.from(colorGroupDict.values())
+  const configOrderedColorIds = Array.from(state.colorGroupDict.values())
     .flatMap((colorGroup) =>
-      Array.from(colorGroup.colorIds).sort(compareColorId(colorDict))
+      Array.from(colorGroup.colorIds).sort(compareColorId(state.colorDict))
     )
     .concat(
-      colorList
+      state.colorList
         .filter((item) => item.status !== "hidden")
         .map((item) => item.colorId)
-        .sort(compareColorId(colorDict))
+        .sort(compareColorId(state.colorDict))
     );
 
   const getNodeIdx = (colorId: string) =>
@@ -884,11 +762,11 @@ export default function App() {
     return configOrderedColorIds[nextIdx];
   };
 
-  const colorGroupNodes = Array.from(colorGroupDict.values()).map(
+  const colorGroupNodes = Array.from(state.colorGroupDict.values()).map(
     (colorGroup) => {
       let contents = `"${colorGroup.name}" :`;
       let sortedColorIds = Array.from(colorGroup.colorIds).sort(
-        compareColorId(colorDict)
+        compareColorId(state.colorDict)
       );
       return colorGroup.colorIds.length === 0 ? (
         <TreeNode key={colorGroup.name} contents={contents} />
@@ -899,11 +777,21 @@ export default function App() {
               colorId,
               handleInputFocus,
               focusRenameInput,
-              handleRenameColor,
+              (colorId, newName) =>
+                dispatch({
+                  kind: "renameColor",
+                  colorId: colorId,
+                  newName: newName,
+                }),
               handleKeyboardNavigate,
               prevColorId(colorId),
               nextColorId(colorId),
-              (colorId) => handleRemoveColorFromGroup(colorGroup.name, colorId)
+              (colorId) =>
+                dispatch({
+                  kind: "removeFromGroup",
+                  groupName: colorGroup.name,
+                  colorId: colorId,
+                })
             );
             return node;
           })}
@@ -912,16 +800,21 @@ export default function App() {
     }
   );
 
-  const singleColorNodes = colorList
+  const singleColorNodes = state.colorList
     .filter((item) => item.status !== "hidden")
     .map((item) => item.colorId)
-    .sort(compareColorId(colorDict))
+    .sort(compareColorId(state.colorDict))
     .map((colorId) => {
       let node = colorNode(
         colorId,
         handleInputFocus,
         focusRenameInput,
-        handleRenameColor,
+        (colorId, newName) =>
+          dispatch({
+            kind: "renameColor",
+            colorId: colorId,
+            newName: newName,
+          }),
         handleKeyboardNavigate,
         prevColorId(colorId),
         nextColorId(colorId)
@@ -987,7 +880,7 @@ export default function App() {
           className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
         >
           <Clipboard
-            text={serializeConfig(colorDict, colorGroupDict, colorList)}
+            text={serializeConfig(state)}
             timeoutInMs={2000}
             className="mb-4 flex justify-end"
           />
