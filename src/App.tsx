@@ -432,6 +432,49 @@ const initialState = {
   colorGroupDict: new Map(),
   colorList: [],
 };
+
+const parseColors = (colors: string): ColorDict => {
+  const deduped = new Set(colors.split("\n"));
+  const parsed = Array.from(deduped)
+    .map(parseColor)
+    .flatMap((color) => (color ? [color] : []));
+  return makeColorDict(parsed);
+};
+
+const parseColorGroups = (groupNames: string): ColorGroupDict => {
+  const deduped = new Set(groupNames.split("\n"));
+  const parsed = Array.from(deduped)
+    .map(parseColorGroup)
+    .flatMap((classname) => (classname ? [classname] : []));
+  return makeColorGroupDict(parsed);
+};
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.kind) {
+    case "parse":
+      // Don't reparse user input!
+      if (state.colorDict.size > 0 && state.colorGroupDict.size > 0)
+        return state;
+
+      const colorDict = parseColors(action.unparsedColorTheme.colors);
+      const colorGroupDict = parseColorGroups(
+        action.unparsedColorTheme.classnames
+      );
+      const colorList = Array.from(colorDict.keys()).map(makeColorListItem);
+
+      return {
+        colorDict: colorDict,
+        colorGroupDict: colorGroupDict,
+        colorList: colorList,
+      };
+    case "addToGroup":
+    case "removeFromGroup":
+    case "rename":
+    case "toggleStatus":
+      return state;
+  }
+};
+
 // actions
 // colorDict: string -> HexColor
 //    parse colors
@@ -459,6 +502,8 @@ export default function App() {
       colors: "",
     });
   const [wizard, setWizard] = useState<Wizard>(makeWizard());
+
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const [colorDict, setColorDict] = useState<ColorDict>(
     new Map<string, HexColor>()
