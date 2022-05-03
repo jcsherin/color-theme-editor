@@ -551,13 +551,24 @@ const reducer = (state: State, action: Action): State => {
 
 export default function App() {
   const [unparsedColorTheme, setUnparsedColorTheme] =
-    useState<UnparsedColorTheme>({
-      classnames: "",
-      colors: "",
+    useState<UnparsedColorTheme>(() => {
+      const item = localStorage.getItem("unparsedColorTheme");
+      return item
+        ? JSON.parse(item)
+        : {
+            classnames: "",
+            colors: "",
+          };
     });
   const [wizard, setWizard] = useState<Wizard>(makeWizard());
-
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "unparsedColorTheme",
+      JSON.stringify(unparsedColorTheme)
+    );
+  }, [unparsedColorTheme]);
 
   const [inputMode, inputActionDispatch] = useReducer(
     reducerInputAction,
