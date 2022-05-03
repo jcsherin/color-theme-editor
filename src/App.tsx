@@ -5,6 +5,7 @@ import {
   getColorValue,
   HexColor,
   parseColor,
+  updateColorName,
 } from "./color";
 import * as example from "./example";
 
@@ -410,8 +411,8 @@ interface ActionRemoveFromGroup {
   colorId: string;
 }
 
-interface ActionRename {
-  kind: "rename";
+interface ActionRenameColor {
+  kind: "renameColor";
   colorId: string;
   newName: string;
 }
@@ -425,7 +426,7 @@ type Action =
   | ActionParse
   | ActionAddToGroup
   | ActionRemoveFromGroup
-  | ActionRename
+  | ActionRenameColor
   | ActionToggleStatus;
 
 const initialState = {
@@ -514,7 +515,21 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
-    case "rename":
+    case "renameColor": {
+      const color = state.colorDict.get(action.colorId);
+      if (!color) return state;
+
+      state.colorDict.set(
+        action.colorId,
+        updateColorName(color, action.newName)
+      );
+
+      return {
+        ...state,
+        colorDict: new Map(Array.from(state.colorDict)),
+      };
+    }
+
     case "toggleStatus":
       return state;
   }

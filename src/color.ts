@@ -42,3 +42,7 @@ export function parseColor(v: string) {
     return makeHexColor(value, value);
   }
 }
+
+export function updateColorName(color: HexColor, name: string): HexColor {
+  return { ...color, name: name };
+}
