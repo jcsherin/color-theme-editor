@@ -388,6 +388,70 @@ function wizardPrevStep(wizard: Wizard): Wizard {
     : wizard;
 }
 
+interface State {
+  colorDict: Map<string, HexColor>;
+  colorGroupDict: Map<string, ColorGroup>;
+  colorList: ColorListItem[];
+}
+
+interface ActionParse {
+  kind: "parse";
+  unparsedColorTheme: UnparsedColorTheme;
+}
+
+interface ActionAddToGroup {
+  kind: "addToGroup";
+  colorIds: string[];
+}
+
+interface ActionRemoveFromGroup {
+  kind: "removeFromGroup";
+  colorId: string;
+}
+
+interface ActionRename {
+  kind: "rename";
+  colorId: string;
+  newName: string;
+}
+
+interface ActionToggleStatus {
+  kind: "toggleStatus";
+  colorListItem: ColorListItem;
+}
+
+type Action =
+  | ActionParse
+  | ActionAddToGroup
+  | ActionRemoveFromGroup
+  | ActionRename
+  | ActionToggleStatus;
+
+const initialState = {
+  colorDict: new Map(),
+  colorGroupDict: new Map(),
+  colorList: [],
+};
+// actions
+// colorDict: string -> HexColor
+//    parse colors
+//    rename a color
+// colorGroupDict: string -> {name, colorIds}
+//    parse colornames
+//    add colors to group
+//    remove color from group
+// colorList: {colorId, status}
+//    initialize after colorDict is created
+//    toggle status on selection
+//    change status when added to a group
+//    change status when removed from a group
+
+// parse (groupNames, colors)
+// addToGroup (groupName, colorId[])
+// removeFromGroup (groupName, colorId)
+// renameColor (colorId, newName)
+// updateStatus (colorListItem)
+
 export default function App() {
   const [unparsedColorTheme, setUnparsedColorTheme] =
     useState<UnparsedColorTheme>({
