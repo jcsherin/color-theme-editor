@@ -564,15 +564,6 @@ export default function App() {
     initialInputMode
   );
 
-  const [disableButtonGroup, setDisableButtonGroup] = useState(true);
-  useEffect(() => {
-    setDisableButtonGroup(
-      state.colorList.every(
-        (item) => item.status === "visible" || item.status === "hidden"
-      )
-    );
-  }, [state.colorList]);
-
   const [focusRenameInput, setFocusRenameInput] = useState(false);
   const mouseRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -636,12 +627,16 @@ export default function App() {
   const colorGroupsButtonRow = Array.from(state.colorGroupDict.keys()).map(
     (id) => {
       const colorGroup = state.colorGroupDict.get(id);
+      const disabled = state.colorList.every(
+        (item) => item.status === "visible" || item.status === "hidden"
+      );
+
       return colorGroup ? (
         <button
-          disabled={disableButtonGroup}
+          disabled={disabled}
           key={id}
           className={`mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 ${
-            disableButtonGroup ? "disabled:cursor-not-allowed" : ""
+            disabled ? "disabled:cursor-not-allowed" : ""
           }`}
           onClick={(_e) =>
             dispatch({ kind: "addToGroup", groupName: colorGroup.name })
