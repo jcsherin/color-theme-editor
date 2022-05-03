@@ -567,7 +567,9 @@ export default function App() {
       <button
         disabled={disableButtonGroup}
         key={id}
-        className="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900"
+        className={`mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 ${
+          disableButtonGroup ? "disabled:cursor-not-allowed" : ""
+        }`}
         onClick={(_e) => handleAddColorsToGroup(colorGroup.name)}
       >
         {colorGroup.name}
