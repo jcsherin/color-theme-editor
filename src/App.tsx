@@ -401,11 +401,12 @@ interface ActionParse {
 
 interface ActionAddToGroup {
   kind: "addToGroup";
-  colorIds: string[];
+  groupName: string;
 }
 
 interface ActionRemoveFromGroup {
   kind: "removeFromGroup";
+  groupName: string;
   colorId: string;
 }
 
@@ -467,7 +468,29 @@ const reducer = (state: State, action: Action): State => {
         colorGroupDict: colorGroupDict,
         colorList: colorList,
       };
+
     case "addToGroup":
+      const group = state.colorGroupDict.get(action.groupName);
+      if (!group) return state;
+
+      const selected = state.colorList
+        .filter((item) => item.status === "selected")
+        .map((item) => item.colorId);
+
+      const deduped = new Set([...group.colorIds, ...selected]);
+      const newGroup = { ...group, colorIds: Array.from(deduped) };
+      state.colorGroupDict.set(group.name, newGroup);
+
+      const newColorList = state.colorList.map<ColorListItem>((item) =>
+        item.status === "selected" ? { ...item, status: "hidden" } : item
+      );
+
+      return {
+        ...state,
+        colorGroupDict: new Map(Array.from(state.colorGroupDict)),
+        colorList: newColorList,
+      };
+
     case "removeFromGroup":
     case "rename":
     case "toggleStatus":
