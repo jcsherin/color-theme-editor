@@ -8,7 +8,7 @@ import {
 } from "./color";
 import * as example from "./example";
 
-interface UnparsedUserInput {
+interface UnparsedColorTheme {
   classnames: string;
   colors: string;
 }
@@ -389,10 +389,11 @@ function wizardPrevStep(wizard: Wizard): Wizard {
 }
 
 export default function App() {
-  const [unparsed, setUnparsed] = useState<UnparsedUserInput>({
-    classnames: "",
-    colors: "",
-  });
+  const [unparsedColorTheme, setUnparsedColorTheme] =
+    useState<UnparsedColorTheme>({
+      classnames: "",
+      colors: "",
+    });
   const [wizard, setWizard] = useState<Wizard>(makeWizard());
 
   const [colorDict, setColorDict] = useState<ColorDict>(
@@ -511,7 +512,7 @@ export default function App() {
     setColorDict((state) => {
       if (state.size > 0) return state;
 
-      const colors = unparsed.colors.split("\n");
+      const colors = unparsedColorTheme.colors.split("\n");
       const deduped = new Set(colors);
       const parsed = Array.from(deduped)
         .map(parseColor)
@@ -522,7 +523,7 @@ export default function App() {
     setColorGroupDict((state) => {
       if (state.size > 0) return state;
 
-      const classnames = unparsed.classnames.split("\n");
+      const classnames = unparsedColorTheme.classnames.split("\n");
       const deduped = new Set(classnames);
       const parsed = Array.from(deduped)
         .map(parseColorGroup)
@@ -533,16 +534,17 @@ export default function App() {
   const handlePrevUI = () => setWizard((wizard) => wizardPrevStep(wizard));
 
   const handleLoadExample = () =>
-    setUnparsed({
+    setUnparsedColorTheme({
       classnames: example.utilityClassnames.join("\n"),
       colors: example.colors.join("\n"),
     });
 
-  const handleClearInput = () => setUnparsed({ classnames: "", colors: "" });
+  const handleClearInput = () =>
+    setUnparsedColorTheme({ classnames: "", colors: "" });
 
   const isInputEmpty = () =>
-    unparsed.classnames.trim().length === 0 &&
-    unparsed.colors.trim().length === 0;
+    unparsedColorTheme.classnames.trim().length === 0 &&
+    unparsedColorTheme.colors.trim().length === 0;
 
   const colorListItems = colorList.map((item) => {
     const color = colorDict.get(item.colorId);
@@ -748,7 +750,7 @@ export default function App() {
           <textarea
             className="w-full bg-slate-100 h-60 py-1 px-4"
             placeholder="One name per line"
-            value={unparsed.classnames}
+            value={unparsedColorTheme.classnames}
             onChange={(_e) => {}}
           />
         </div>
@@ -757,7 +759,7 @@ export default function App() {
           <textarea
             className="w-full bg-slate-100 h-60 py-1 px-4"
             placeholder="One color value per line"
-            value={unparsed.colors}
+            value={unparsedColorTheme.colors}
             onChange={(_e) => {}}
           />
         </div>
