@@ -425,10 +425,26 @@ type Action =
   | ActionRenameColor
   | ActionToggleStatus;
 
-const initialState = {
-  colorDict: new Map(),
-  colorGroupDict: new Map(),
-  colorList: [],
+const getInitialState = () => {
+  const cached = localStorage.getItem("state");
+
+  if (cached) {
+    const state = JSON.parse(cached);
+    const colorDict: ColorDict = new Map(state.colorDict);
+    const colorGroupDict: ColorGroupDict = new Map(state.colorGroupDict);
+    const colorList: ColorListItem[] = state.colorList;
+    return {
+      colorDict: colorDict,
+      colorGroupDict: colorGroupDict,
+      colorList: colorList,
+    };
+  } else {
+    return {
+      colorDict: new Map(),
+      colorGroupDict: new Map(),
+      colorList: [],
+    };
+  }
 };
 
 const parseColors = (colors: string): ColorDict => {
@@ -550,25 +566,37 @@ const reducer = (state: State, action: Action): State => {
 };
 
 export default function App() {
+  const [wizard, setWizard] = useState<Wizard>(() => {
+    const cached = localStorage.getItem("wizard");
+    return cached ? JSON.parse(cached) : makeWizard();
+  });
   const [unparsedColorTheme, setUnparsedColorTheme] =
     useState<UnparsedColorTheme>(() => {
-      const item = localStorage.getItem("unparsedColorTheme");
-      return item
-        ? JSON.parse(item)
+      const cached = localStorage.getItem("unparsedColorTheme");
+      return cached
+        ? JSON.parse(cached)
         : {
             classnames: "",
             colors: "",
           };
     });
-  const [wizard, setWizard] = useState<Wizard>(makeWizard());
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, getInitialState());
 
   useEffect(() => {
+    localStorage.setItem("wizard", JSON.stringify(wizard));
     localStorage.setItem(
       "unparsedColorTheme",
       JSON.stringify(unparsedColorTheme)
     );
-  }, [unparsedColorTheme]);
+    localStorage.setItem(
+      "state",
+      JSON.stringify({
+        colorDict: Array.from(state.colorDict),
+        colorGroupDict: Array.from(state.colorGroupDict),
+        colorList: state.colorList,
+      })
+    );
+  }, [wizard, unparsedColorTheme, state]);
 
   const [inputMode, inputActionDispatch] = useReducer(
     reducerInputAction,
