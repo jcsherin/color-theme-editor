@@ -695,9 +695,7 @@ export default function App() {
         <button
           disabled={disabled}
           key={id}
-          className={`mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 ${
-            disabled ? "disabled:cursor-not-allowed" : ""
-          }`}
+          className={`mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300`}
           onClick={(_e) =>
             dispatch({ kind: "addToGroup", groupName: colorGroup.name })
           }
@@ -904,7 +902,7 @@ export default function App() {
       <div>
         <button
           onClick={(_e) => handleNextUI()}
-          className="mr-4 py-1 px-4 text-2xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700 disabled:cursor-not-allowed"
+          className="mr-4 py-1 px-4 text-2xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
           disabled={isInputEmpty()}
         >
           Next
