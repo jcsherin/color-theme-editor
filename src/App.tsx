@@ -418,33 +418,48 @@ interface ActionToggleStatus {
   colorListItem: ColorListItem;
 }
 
+interface ActionReset {
+  kind: "reset";
+}
+
 type Action =
   | ActionParse
   | ActionAddToGroup
   | ActionRemoveFromGroup
   | ActionRenameColor
-  | ActionToggleStatus;
+  | ActionToggleStatus
+  | ActionReset;
 
-const getInitialState = () => {
-  const cached = localStorage.getItem("state");
+const getInitialState = (reset: boolean = false) => {
+  const key = "state";
 
-  if (cached) {
-    const state = JSON.parse(cached);
-    const colorDict: ColorDict = new Map(state.colorDict);
-    const colorGroupDict: ColorGroupDict = new Map(state.colorGroupDict);
-    const colorList: ColorListItem[] = state.colorList;
-    return {
-      colorDict: colorDict,
-      colorGroupDict: colorGroupDict,
-      colorList: colorList,
-    };
-  } else {
+  if (reset) {
+    const emptyJSON = JSON.stringify({
+      colorDict: [],
+      colorGroupDict: [],
+      colorList: [],
+    });
+    localStorage.setItem(key, emptyJSON);
+  }
+
+  const cached = localStorage.getItem(key);
+  if (!cached) {
     return {
       colorDict: new Map(),
       colorGroupDict: new Map(),
       colorList: [],
     };
   }
+
+  const state = JSON.parse(cached);
+  const colorDict: ColorDict = new Map(state.colorDict);
+  const colorGroupDict: ColorGroupDict = new Map(state.colorGroupDict);
+  const colorList: ColorListItem[] = state.colorList;
+  return {
+    colorDict: colorDict,
+    colorGroupDict: colorGroupDict,
+    colorList: colorList,
+  };
 };
 
 const parseColors = (colors: string): ColorDict => {
@@ -562,6 +577,10 @@ const reducer = (state: State, action: Action): State => {
 
       return { ...state, colorList: colorList };
     }
+
+    case "reset": {
+      return getInitialState(true);
+    }
   }
 };
 
@@ -636,8 +655,10 @@ export default function App() {
       colors: example.colors.join("\n"),
     });
 
-  const handleClearInput = () =>
+  const handleResetData = () => {
     setUnparsedColorTheme({ classnames: "", colors: "" });
+    dispatch({ kind: "reset" });
+  };
 
   const isInputEmpty = () =>
     unparsedColorTheme.classnames.trim().length === 0 &&
@@ -897,10 +918,10 @@ export default function App() {
           </button>
         ) : (
           <button
-            onClick={(_e) => handleClearInput()}
+            onClick={(_e) => handleResetData()}
             className="text-blue-500 hover:text-blue-700 text-2xl"
           >
-            Clear
+            Reset All Values
           </button>
         )}
       </div>
