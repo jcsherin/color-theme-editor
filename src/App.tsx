@@ -684,8 +684,14 @@ export default function App() {
     );
   });
 
-  const colorGroupsButtonRow = Array.from(state.colorGroupDict.keys()).map(
-    (id) => {
+  const colorGroupsButtonRow = state.colorList.every(
+    (item) => item.status === "hidden"
+  ) ? (
+    <p className="text-2xl text-center bg-yellow-200 py-2">
+      Great! You've completed grouping all the colors.
+    </p>
+  ) : (
+    Array.from(state.colorGroupDict.keys()).map((id) => {
       const colorGroup = state.colorGroupDict.get(id);
       const disabled = state.colorList.every(
         (item) => item.status === "visible" || item.status === "hidden"
@@ -705,7 +711,7 @@ export default function App() {
       ) : (
         <></>
       );
-    }
+    })
   );
 
   const colorNode = (
