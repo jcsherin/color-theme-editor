@@ -95,17 +95,17 @@ function Clipboard({
       .catch((reason) => console.error(reason));
 
   const copyButton = copied ? (
-    <p className="text-green-100 text-2xl font-sans py-1 px-4">Copied!</p>
+    <span className="text-green-800 text-xl py-1 px-4">Copied!</span>
   ) : (
     <button
-      className="bg-slate-100 hover:bg-slate-300 text-blue-500 hover:text-blue-800 text-2xl py-1 px-4"
+      className=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
       onClick={(_e) => handleCopy(text)}
     >
-      Copy
+      Copy To Clipboard
     </button>
   );
 
-  return <div className={overrideClassName}>{copyButton}</div>;
+  return copyButton;
 }
 
 function ColorSquare({
@@ -879,30 +879,10 @@ export default function App() {
 
   const colorThemeInputUI = (
     <>
-      <div className="grid grid-cols-2">
-        <div className="mr-4">
-          <p>Utility Classnames:</p>
-          <textarea
-            className="w-full bg-slate-100 h-60 py-1 px-4"
-            placeholder="One name per line"
-            value={unparsedColorTheme.classnames}
-            onChange={(_e) => {}}
-          />
-        </div>
-        <div>
-          <p>Color Values:</p>
-          <textarea
-            className="w-full bg-slate-100 h-60 py-1 px-4"
-            placeholder="One color value per line"
-            value={unparsedColorTheme.colors}
-            onChange={(_e) => {}}
-          />
-        </div>
-      </div>
-      <div>
+      <div className="mb-4">
         <button
           onClick={(_e) => handleNextUI()}
-          className="mr-4 py-1 px-4 text-2xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+          className="mr-4 py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
           disabled={isInputEmpty()}
         >
           Next
@@ -910,33 +890,61 @@ export default function App() {
         {isInputEmpty() ? (
           <button
             onClick={(_e) => handleLoadExample()}
-            className="text-blue-500 hover:text-blue-700 text-2xl"
+            className="text-blue-500 hover:text-blue-700 text-xl"
           >
             Load Example
           </button>
         ) : (
           <button
             onClick={(_e) => handleResetData()}
-            className="text-blue-500 hover:text-blue-700 text-2xl"
+            className="text-red-500 hover:text-red-700 text-xl"
           >
             Reset All Values
           </button>
         )}
       </div>
+      <div className="grid grid-cols-2">
+        <div className="mr-4">
+          <p className="text-xl mb-1">Utility Classnames</p>
+          <textarea
+            className="w-full bg-slate-100 h-60 py-2 px-4"
+            placeholder="One name per line"
+            value={unparsedColorTheme.classnames}
+            onChange={(_e) => {}}
+          />
+        </div>
+        <div>
+          <p className="text-xl mb-1">Color Values:</p>
+          <textarea
+            className="w-full bg-slate-100 h-60 py-2 px-4"
+            placeholder="One color value per line"
+            value={unparsedColorTheme.colors}
+            onChange={(_e) => {}}
+          />
+        </div>
+      </div>
     </>
   );
   const colorThemeConfigUI = (
     <>
+      <div className="mb-4">
+        <button
+          onClick={(_e) => handlePrevUI()}
+          className="py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
+        >
+          Go Back
+        </button>
+        <Clipboard
+          text={serializeConfig(state)}
+          timeoutInMs={2000}
+          className=""
+        />
+      </div>
       <div className="grid grid-cols-2 mb-4">
         <div
           ref={mouseRef}
           className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
         >
-          <Clipboard
-            text={serializeConfig(state)}
-            timeoutInMs={2000}
-            className="mb-4 flex justify-end"
-          />
           <TreeNode contents="module.exports =">
             <TreeNode contents="theme:">
               <TreeNode contents="colors:">{childNodes}</TreeNode>
@@ -947,14 +955,6 @@ export default function App() {
           <div className="flex flex-wrap mb-4">{colorListItems}</div>
           <div className={"pl-2"}>{colorGroupsButtonRow}</div>
         </div>
-      </div>
-      <div>
-        <button
-          onClick={(_e) => handlePrevUI()}
-          className="py-1 px-4 text-2xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
-        >
-          Go Back
-        </button>
       </div>
     </>
   );
