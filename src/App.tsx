@@ -169,13 +169,13 @@ function TreeNode({
   children?: React.ReactNode;
 }) {
   let node = children ? (
-    <div>
+    <div className="my-2">
       <p className="mb-1">{`${contents} {`}</p>
       <div className="ml-4">{children}</div>
       <p>{"}"}</p>
     </div>
   ) : (
-    <p className="mb-1">{`${contents} {}`}</p>
+    <p className="my-2 h-10">{`${contents} {}`}</p>
   );
   return node;
 }
@@ -188,7 +188,7 @@ function TreeLeafView({
   children: React.ReactNode;
 }) {
   return (
-    <button className="mb-1 block" onClick={handleFocus}>
+    <button className="my-2 block h-10" onClick={handleFocus}>
       {children}
     </button>
   );
@@ -234,7 +234,7 @@ function TreeLeafEdit({
   );
 
   return (
-    <div>
+    <div className="my-2 h-10">
       <input
         id="tree-leaf-input"
         ref={renameRef}
@@ -263,7 +263,7 @@ function TreeLeafEdit({
             handleKeyboardNavigate(key, next);
           }
         }}
-        className="py-2 pl-4 mr-4 w-1/2 mt-4 mb-4 text-black"
+        className="py-2 pl-4 mr-4 w-1/2 text-black"
       />
       <span className="mr-4">:</span>
       <span
