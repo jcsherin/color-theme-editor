@@ -651,8 +651,8 @@ export default function App() {
 
   const handleLoadExample = () =>
     setUnparsedColorTheme({
-      classnames: example.utilityClassnames.join("\n"),
-      colors: example.colors.join("\n"),
+      classnames: example.utilityClassnames().join("\n"),
+      colors: example.colors().join("\n"),
     });
 
   const handleResetData = () => {
