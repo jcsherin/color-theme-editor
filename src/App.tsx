@@ -743,30 +743,26 @@ export default function App() {
     handleRemoveColor?: (colorId: string) => void
   ) => {
     let color = state.colorDict.get(colorId);
-    if (color) {
-      let colorValue = getColorValue(color);
+    if (!color) return <></>;
 
-      switch (inputMode.kind) {
-        case "view":
-          return treeLeafView(color, colorId, handleFocus);
-        case "edit":
-          return inputMode.colorId === colorId ? (
-            <TreeLeafEdit
-              key={getColorValue(color)}
-              color={color}
-              focus={focusRenameInput}
-              handleRenameColor={handleRenameColor}
-              handleKeyboardNavigate={handleKeyboardNavigate}
-              prev={prevColorId}
-              next={nextColorId}
-              handleRemoveColor={handleRemoveColor}
-            />
-          ) : (
-            treeLeafView(color, colorId, handleFocus)
-          );
-      }
-    } else {
-      return <></>;
+    switch (inputMode.kind) {
+      case "view":
+        return treeLeafView(color, colorId, handleFocus);
+      case "edit":
+        return inputMode.colorId === colorId ? (
+          <TreeLeafEdit
+            key={getColorValue(color)}
+            color={color}
+            focus={focusRenameInput}
+            handleRenameColor={handleRenameColor}
+            handleKeyboardNavigate={handleKeyboardNavigate}
+            prev={prevColorId}
+            next={nextColorId}
+            handleRemoveColor={handleRemoveColor}
+          />
+        ) : (
+          treeLeafView(color, colorId, handleFocus)
+        );
     }
   };
 
