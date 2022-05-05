@@ -320,10 +320,6 @@ function makeColorGroupDict(colorGroups: ColorGroup[]): ColorGroupDict {
   return map;
 }
 
-function getColorIds(map: ColorDict): string[] {
-  return Array.from(map.keys());
-}
-
 const compareColorId = (colorDict: ColorDict) => (x: string, y: string) => {
   const xname = getColorName(colorDict.get(x)!);
   const yname = getColorName(colorDict.get(y)!);
@@ -429,71 +425,6 @@ type Action =
   | ActionRenameColor
   | ActionToggleStatus
   | ActionReset;
-
-interface List<T> {
-  value: T;
-  prev?: List<T>;
-  next?: List<T>;
-}
-
-interface InputState {
-  kind: "input";
-  unparsedColorTheme: UnparsedColorTheme;
-}
-interface ConfigState {
-  kind: "config";
-  state: State;
-}
-
-type UIState = InputState | ConfigState;
-type UIWizard = List<UIState>;
-
-const inputStateToJSON: (state: InputState) => string = JSON.stringify;
-const inputStateFromJSON: (json: string) => InputState = JSON.parse;
-
-const configStateToJSON = (state: ConfigState) => {
-  return JSON.stringify({
-    kind: state.kind,
-    state: {
-      colorDict: Array.from(state.state.colorDict),
-      colorGroupDict: Array.from(state.state.colorGroupDict),
-      colorList: state.state.colorList,
-    },
-  });
-};
-
-const configStateFromJSON = (json: string): ConfigState => {
-  const parsed = JSON.parse(json);
-  return {
-    kind: parsed.state,
-    state: {
-      colorDict: new Map(parsed.state.colorDict),
-      colorGroupDict: new Map(parsed.state.colorGroupDict),
-      colorList: parsed.state.colorList,
-    },
-  };
-};
-
-const uiStateToJSON = (state: UIState): string => {
-  switch (state.kind) {
-    case "input":
-      return inputStateToJSON(state);
-    case "config":
-      return configStateToJSON(state);
-  }
-};
-
-const uiStateFromJSON = (json: string): UIState | undefined => {
-  const parsed = JSON.parse(json);
-  switch (parsed.kind) {
-    case "input":
-      return inputStateFromJSON(json);
-    case "config":
-      return configStateFromJSON(json);
-    default:
-      return;
-  }
-};
 
 const getInitialState = (reset: boolean = false) => {
   const key = "state";
