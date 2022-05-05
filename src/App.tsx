@@ -448,6 +448,53 @@ interface ConfigState {
 type UIState = InputState | ConfigState;
 type UIWizard = List<UIState>;
 
+const inputStateToJSON: (state: InputState) => string = JSON.stringify;
+const inputStateFromJSON: (json: string) => InputState = JSON.parse;
+
+const configStateToJSON = (state: ConfigState) => {
+  return JSON.stringify({
+    kind: state.kind,
+    state: {
+      colorDict: Array.from(state.state.colorDict),
+      colorGroupDict: Array.from(state.state.colorGroupDict),
+      colorList: state.state.colorList,
+    },
+  });
+};
+
+const configStateFromJSON = (json: string): ConfigState => {
+  const parsed = JSON.parse(json);
+  return {
+    kind: parsed.state,
+    state: {
+      colorDict: new Map(parsed.state.colorDict),
+      colorGroupDict: new Map(parsed.state.colorGroupDict),
+      colorList: parsed.state.colorList,
+    },
+  };
+};
+
+const uiStateToJSON = (state: UIState): string => {
+  switch (state.kind) {
+    case "input":
+      return inputStateToJSON(state);
+    case "config":
+      return configStateToJSON(state);
+  }
+};
+
+const uiStateFromJSON = (json: string): UIState | undefined => {
+  const parsed = JSON.parse(json);
+  switch (parsed.kind) {
+    case "input":
+      return inputStateFromJSON(json);
+    case "config":
+      return configStateFromJSON(json);
+    default:
+      return;
+  }
+};
+
 const getInitialState = (reset: boolean = false) => {
   const key = "state";
 
