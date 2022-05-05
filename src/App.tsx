@@ -651,25 +651,25 @@ export default function App() {
     unparsedColorTheme.classnames.trim().length === 0 &&
     unparsedColorTheme.colors.trim().length === 0;
 
-  const colorListItems = state.colorList.map((item) => {
-    const color = state.colorDict.get(item.colorId);
-    return color ? (
+  const colorListItems = state.colorList
+    .flatMap((item) => {
+      const color = state.colorDict.get(item.colorId);
+      return color ? [{ item: item, color: color }] : [];
+    })
+    .map(({ item, color }) => (
       <ColorSquare
         className="mr-1 mb-1 p-1"
-        key={item.colorId}
+        key={getColorId(color)}
         color={color}
         item={item}
-        handleSelection={(colorListItem) =>
+        handleSelection={(item) =>
           dispatch({
             kind: "toggleStatus",
-            colorListItem: colorListItem,
+            colorListItem: item,
           })
         }
       />
-    ) : (
-      <></>
-    );
-  });
+    ));
 
   const colorGroupsButtonRow = state.colorList.every(
     (item) => item.status === "hidden"
