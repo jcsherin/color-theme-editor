@@ -430,51 +430,23 @@ type Action =
   | ActionToggleStatus
   | ActionReset;
 
-interface UIColorThemeInput {
-  prev: WizardUI | null;
-  next: WizardUI | null;
-  kind: "colorThemeInput";
+interface List<T> {
+  value: T;
+  prev?: List<T>;
+  next?: List<T>;
+}
+
+interface InputState {
+  kind: "input";
   unparsedColorTheme: UnparsedColorTheme;
 }
-interface UIColorThemeConfig {
-  prev: WizardUI | null;
-  next: WizardUI | null;
-  kind: "colorThemeConfig";
+interface ConfigState {
+  kind: "config";
   state: State;
 }
 
-type WizardUI = UIColorThemeInput | UIColorThemeConfig;
-
-function makeWizardUI(
-  unparsedColorTheme: UnparsedColorTheme,
-  state: State
-): WizardUI {
-  const colorThemeInput: WizardUI = {
-    prev: null,
-    next: null,
-    kind: "colorThemeInput",
-    unparsedColorTheme: unparsedColorTheme,
-  };
-  const colorThemeConfig: WizardUI = {
-    prev: null,
-    next: null,
-    kind: "colorThemeConfig",
-    state: state,
-  };
-
-  colorThemeInput.next = colorThemeConfig;
-  colorThemeConfig.prev = colorThemeInput;
-
-  return colorThemeInput;
-}
-
-function getNextUI(wizardUI: WizardUI): WizardUI {
-  return wizardUI.next ? wizardUI.next : wizardUI;
-}
-
-function getPrevUI(wizardUI: WizardUI): WizardUI {
-  return wizardUI.prev ? wizardUI.prev : wizardUI;
-}
+type UIState = InputState | ConfigState;
+type UIWizard = List<UIState>;
 
 const getInitialState = (reset: boolean = false) => {
   const key = "state";
