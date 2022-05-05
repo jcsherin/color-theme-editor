@@ -671,6 +671,9 @@ export default function App() {
       />
     ));
 
+  const isDisabledGroupButton = state.colorList.every(
+    (item) => item.status === "visible" || item.status === "hidden"
+  );
   const colorGroupsButtonRow = state.colorList.every(
     (item) => item.status === "hidden"
   ) ? (
@@ -678,16 +681,15 @@ export default function App() {
       Great! You've completed grouping all the colors.
     </p>
   ) : (
-    Array.from(state.colorGroupDict.keys()).map((id) => {
-      const colorGroup = state.colorGroupDict.get(id);
-      const disabled = state.colorList.every(
-        (item) => item.status === "visible" || item.status === "hidden"
-      );
-
-      return colorGroup ? (
+    Array.from(state.colorGroupDict.keys())
+      .flatMap((groupId) => {
+        const colorGroup = state.colorGroupDict.get(groupId);
+        return colorGroup ? [{ groupId, colorGroup }] : [];
+      })
+      .map(({ groupId, colorGroup }) => (
         <button
-          disabled={disabled}
-          key={id}
+          disabled={isDisabledGroupButton}
+          key={groupId}
           className={`mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300`}
           onClick={(_e) =>
             dispatch({ kind: "addToGroup", groupName: colorGroup.name })
@@ -695,10 +697,7 @@ export default function App() {
         >
           {colorGroup.name}
         </button>
-      ) : (
-        <></>
-      );
-    })
+      ))
   );
 
   const treeLeafView = (
