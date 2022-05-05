@@ -202,7 +202,7 @@ function TreeLeafEdit({
   handleKeyboardNavigate,
   prev,
   next,
-  handleRemoveColor,
+  children,
 }: {
   color: HexColor;
   focus: boolean;
@@ -210,7 +210,7 @@ function TreeLeafEdit({
   handleKeyboardNavigate: (key: string, target: string) => void;
   prev: string;
   next: string;
-  handleRemoveColor?: (colorId: string) => void;
+  children?: React.ReactNode;
 }) {
   const [value, setValue] = useState(getColorName(color));
   const renameRef = useRef<HTMLInputElement>(null);
@@ -223,17 +223,6 @@ function TreeLeafEdit({
       }
     }, 20);
   }, [focus]);
-
-  const removeButton = handleRemoveColor ? (
-    <button
-      className="py-1 px-4 text-red-100 hover:text-red-300 bg-red-600 hover:bg-red-800 font-sans rounded-sm"
-      onClick={(_e) => handleRemoveColor(getColorId(color))}
-    >
-      Remove
-    </button>
-  ) : (
-    <></>
-  );
 
   return (
     <div className="my-2 h-10">
@@ -273,7 +262,7 @@ function TreeLeafEdit({
         style={{ backgroundColor: getColorValue(color) }}
       ></span>
       <span className="mr-4">{getColorValue(color)},</span>
-      {removeButton}
+      {children}
     </div>
   );
 }
@@ -740,7 +729,7 @@ export default function App() {
     handleKeyboardNavigate: (key: string, target: string) => void,
     prevColorId: string,
     nextColorId: string,
-    handleRemoveColor?: (colorId: string) => void
+    children?: React.ReactNode
   ) => {
     let color = state.colorDict.get(colorId);
     if (!color) return <></>;
@@ -758,8 +747,9 @@ export default function App() {
             handleKeyboardNavigate={handleKeyboardNavigate}
             prev={prevColorId}
             next={nextColorId}
-            handleRemoveColor={handleRemoveColor}
-          />
+          >
+            {children}
+          </TreeLeafEdit>
         ) : (
           treeLeafView(color, colorId, handleFocus)
         );
@@ -822,6 +812,21 @@ export default function App() {
       ) : (
         <TreeNode key={colorGroup.name} contents={contents}>
           {sortedColorIds.map((colorId) => {
+            let removeButton = (
+              <button
+                className="py-1 px-4 text-red-100 hover:text-red-300 bg-red-600 hover:bg-red-800 font-sans rounded-sm"
+                onClick={(_e) =>
+                  dispatch({
+                    kind: "removeFromGroup",
+                    groupName: colorGroup.name,
+                    colorId: colorId,
+                  })
+                }
+              >
+                Remove
+              </button>
+            );
+
             let node = colorNode(
               colorId,
               handleInputFocus,
@@ -835,12 +840,7 @@ export default function App() {
               handleKeyboardNavigate,
               prevColorId(colorId),
               nextColorId(colorId),
-              (colorId) =>
-                dispatch({
-                  kind: "removeFromGroup",
-                  groupName: colorGroup.name,
-                  colorId: colorId,
-                })
+              removeButton
             );
             return node;
           })}
