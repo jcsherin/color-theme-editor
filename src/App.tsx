@@ -351,6 +351,28 @@ function serializeConfig({ colorDict, colorGroupDict, colorList }: State) {
   return template;
 }
 
+// TreeEditor Helpers
+
+const treeLeafView = (
+  color: HexColor,
+  colorId: string,
+  handleFocus: (colorId: string) => void
+) => (
+  <TreeLeafView
+    colorId={colorId}
+    key={getColorValue(color)}
+    handleFocus={(_event) => handleFocus(colorId)}
+  >
+    <span className="mr-4">"{getColorName(color)}"</span>
+    <span className="mr-4">:</span>
+    <span
+      className="w-4 h-4 inline-block mr-2 rounded-sm"
+      style={{ backgroundColor: getColorValue(color) }}
+    ></span>
+    <span>{getColorValue(color)},</span>
+  </TreeLeafView>
+);
+
 function TreeEditor({
   state,
   handleRenameColor,
@@ -385,25 +407,23 @@ function TreeEditor({
     initialInputMode
   );
 
-  const treeLeafView = (
-    color: HexColor,
-    colorId: string,
-    handleFocus: (colorId: string) => void
-  ) => (
-    <TreeLeafView
-      colorId={colorId}
-      key={getColorValue(color)}
-      handleFocus={(_event) => handleFocus(colorId)}
-    >
-      <span className="mr-4">"{getColorName(color)}"</span>
-      <span className="mr-4">:</span>
-      <span
-        className="w-4 h-4 inline-block mr-2 rounded-sm"
-        style={{ backgroundColor: getColorValue(color) }}
-      ></span>
-      <span>{getColorValue(color)},</span>
-    </TreeLeafView>
-  );
+  const handleInputFocus = (colorId: string) => {
+    inputActionDispatch({ kind: "focus", colorId: colorId });
+    const color = state.colorDict.get(colorId);
+    if (color) console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
+  };
+
+  const handleKeyboardNavigate = (key: string, target: string) => {
+    switch (key) {
+      case "Enter":
+      case "ArrowDown":
+        return inputActionDispatch({ kind: "movedown", target: target });
+      case "ArrowUp":
+        return inputActionDispatch({ kind: "moveup", target: target });
+      case "Escape":
+        return inputActionDispatch({ kind: "escape" });
+    }
+  };
 
   const colorNode = (
     colorId: string,
@@ -437,24 +457,6 @@ function TreeEditor({
         ) : (
           treeLeafView(color, colorId, handleFocus)
         );
-    }
-  };
-
-  const handleInputFocus = (colorId: string) => {
-    inputActionDispatch({ kind: "focus", colorId: colorId });
-    const color = state.colorDict.get(colorId);
-    if (color) console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
-  };
-
-  const handleKeyboardNavigate = (key: string, target: string) => {
-    switch (key) {
-      case "Enter":
-      case "ArrowDown":
-        return inputActionDispatch({ kind: "movedown", target: target });
-      case "ArrowUp":
-        return inputActionDispatch({ kind: "moveup", target: target });
-      case "Escape":
-        return inputActionDispatch({ kind: "escape" });
     }
   };
 
