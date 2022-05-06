@@ -16,7 +16,7 @@ interface UnparsedColorTheme {
 
 interface ColorListItem {
   colorId: string;
-  status: "visible" | "selected" | "hidden";
+  status: "default" | "selected" | "grouped";
 }
 
 interface ColorGroup {
@@ -121,9 +121,9 @@ function ColorSquare({
     switch (item.status) {
       case "selected":
         return "border-4 border-indigo-500";
-      case "visible":
+      case "default":
         return "border-4 border-white";
-      case "hidden":
+      case "grouped":
         return "hidden";
     }
   };
@@ -145,7 +145,7 @@ function ColorSquare({
 }
 
 function makeColorListItem(colorId: string): ColorListItem {
-  return { colorId: colorId, status: "visible" };
+  return { colorId: colorId, status: "default" };
 }
 
 function makeColorGroup(name: string): ColorGroup {
@@ -335,7 +335,7 @@ function serializeConfig({ colorDict, colorGroupDict, colorList }: State) {
     serialized[colorGroup.name] = inner;
   });
   colorList
-    .filter((item) => item.status !== "hidden")
+    .filter((item) => item.status !== "grouped")
     .map((item) => item.colorId)
     .sort(compareColorId(colorDict))
     .forEach((colorId) => {
@@ -466,7 +466,7 @@ function TreeEditor({
     )
     .concat(
       state.colorList
-        .filter((item) => item.status !== "hidden")
+        .filter((item) => item.status !== "grouped")
         .map((item) => item.colorId)
         .sort(compareColorId(state.colorDict))
     );
@@ -527,7 +527,7 @@ function TreeEditor({
   );
 
   const singleColorNodes = state.colorList
-    .filter((item) => item.status !== "hidden")
+    .filter((item) => item.status !== "grouped")
     .map((item) => item.colorId)
     .sort(compareColorId(state.colorDict))
     .map((colorId) => {
@@ -673,11 +673,11 @@ const parseColorGroups = (groupNames: string): ColorGroupDict => {
 
 const toggleStatus = (item: ColorListItem): ColorListItem => {
   switch (item.status) {
-    case "visible":
+    case "default":
       return { ...item, status: "selected" };
     case "selected":
-      return { ...item, status: "visible" };
-    case "hidden":
+      return { ...item, status: "default" };
+    case "grouped":
       return item;
   }
 };
@@ -715,7 +715,7 @@ const reducer = (state: State, action: Action): State => {
       state.colorGroupDict.set(group.name, newGroup);
 
       const colorList = state.colorList.map<ColorListItem>((item) =>
-        item.status === "selected" ? { ...item, status: "hidden" } : item
+        item.status === "selected" ? { ...item, status: "grouped" } : item
       );
 
       return {
@@ -736,7 +736,7 @@ const reducer = (state: State, action: Action): State => {
       state.colorGroupDict.set(group.name, newGroup);
 
       const colorList = state.colorList.map<ColorListItem>((item) =>
-        item.colorId === action.colorId ? { ...item, status: "visible" } : item
+        item.colorId === action.colorId ? { ...item, status: "default" } : item
       );
 
       return {
@@ -853,10 +853,10 @@ export default function App() {
     ));
 
   const isDisabledGroupButton = state.colorList.every(
-    (item) => item.status === "visible" || item.status === "hidden"
+    (item) => item.status === "default" || item.status === "grouped"
   );
   const colorGroupsButtonRow = state.colorList.every(
-    (item) => item.status === "hidden"
+    (item) => item.status === "grouped"
   ) ? (
     <p className="text-2xl text-center bg-yellow-200 py-2">
       Great! You've completed grouping all the colors.
