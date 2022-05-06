@@ -351,6 +351,212 @@ function serializeConfig({ colorDict, colorGroupDict, colorList }: State) {
   return template;
 }
 
+function TreeEditor({
+  state,
+  handleRenameColor,
+  handleRemoveFromGroup,
+}: {
+  state: State;
+  handleRenameColor: (colorId: string, newName: string) => void;
+  handleRemoveFromGroup: (colorId: string, gorupName: string) => void;
+}) {
+  const [focusRenameInput, setFocusRenameInput] = useState(false);
+  const mouseRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    function handleRenameInputFocus(event: MouseEvent) {
+      if (
+        mouseRef &&
+        mouseRef.current &&
+        mouseRef.current.contains(event.target as Node)
+      ) {
+        setFocusRenameInput(true);
+      } else {
+        setFocusRenameInput(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleRenameInputFocus);
+    return () =>
+      document.removeEventListener("mousedown", handleRenameInputFocus);
+  }, []);
+
+  const [inputMode, inputActionDispatch] = useReducer(
+    reducerInputAction,
+    initialInputMode
+  );
+
+  const treeLeafView = (
+    color: HexColor,
+    colorId: string,
+    handleFocus: (colorId: string) => void
+  ) => (
+    <TreeLeafView
+      colorId={colorId}
+      key={getColorValue(color)}
+      handleFocus={(_event) => handleFocus(colorId)}
+    >
+      <span className="mr-4">"{getColorName(color)}"</span>
+      <span className="mr-4">:</span>
+      <span
+        className="w-4 h-4 inline-block mr-2 rounded-sm"
+        style={{ backgroundColor: getColorValue(color) }}
+      ></span>
+      <span>{getColorValue(color)},</span>
+    </TreeLeafView>
+  );
+
+  const colorNode = (
+    colorId: string,
+    handleFocus: (colorId: string) => void,
+    focusRenameInput: boolean,
+    handleRenameColor: (colorId: string, name: string) => void,
+    handleKeyboardNavigate: (key: string, target: string) => void,
+    prevColorId: string,
+    nextColorId: string,
+    children?: React.ReactNode
+  ) => {
+    let color = state.colorDict.get(colorId);
+    if (!color) return <></>;
+
+    switch (inputMode.kind) {
+      case "view":
+        return treeLeafView(color, colorId, handleFocus);
+      case "edit":
+        return inputMode.colorId === colorId ? (
+          <TreeLeafEdit
+            key={getColorValue(color)}
+            color={color}
+            focus={focusRenameInput}
+            handleRenameColor={handleRenameColor}
+            handleKeyboardNavigate={handleKeyboardNavigate}
+            prev={prevColorId}
+            next={nextColorId}
+          >
+            {children}
+          </TreeLeafEdit>
+        ) : (
+          treeLeafView(color, colorId, handleFocus)
+        );
+    }
+  };
+
+  const handleInputFocus = (colorId: string) => {
+    inputActionDispatch({ kind: "focus", colorId: colorId });
+    const color = state.colorDict.get(colorId);
+    if (color) console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
+  };
+
+  const handleKeyboardNavigate = (key: string, target: string) => {
+    switch (key) {
+      case "Enter":
+      case "ArrowDown":
+        return inputActionDispatch({ kind: "movedown", target: target });
+      case "ArrowUp":
+        return inputActionDispatch({ kind: "moveup", target: target });
+      case "Escape":
+        return inputActionDispatch({ kind: "escape" });
+    }
+  };
+
+  const configOrderedColorIds = Array.from(state.colorGroupDict.values())
+    .flatMap((colorGroup) =>
+      Array.from(colorGroup.colorIds).sort(compareColorId(state.colorDict))
+    )
+    .concat(
+      state.colorList
+        .filter((item) => item.status !== "hidden")
+        .map((item) => item.colorId)
+        .sort(compareColorId(state.colorDict))
+    );
+
+  const getNodeIdx = (colorId: string) =>
+    configOrderedColorIds.findIndex((id) => id === colorId);
+
+  const prevColorId = (colorId: string) => {
+    const idx = getNodeIdx(colorId);
+    const prevIdx =
+      (idx - 1 + configOrderedColorIds.length) % configOrderedColorIds.length;
+    return configOrderedColorIds[prevIdx];
+  };
+
+  const nextColorId = (colorId: string) => {
+    const idx = getNodeIdx(colorId);
+    const nextIdx = (idx + 1) % configOrderedColorIds.length;
+    return configOrderedColorIds[nextIdx];
+  };
+
+  const colorGroupNodes = Array.from(state.colorGroupDict.values()).map(
+    (colorGroup) => {
+      let contents = `"${colorGroup.name}" :`;
+      let sortedColorIds = Array.from(colorGroup.colorIds).sort(
+        compareColorId(state.colorDict)
+      );
+      return colorGroup.colorIds.length === 0 ? (
+        <TreeNode key={colorGroup.name} contents={contents} />
+      ) : (
+        <TreeNode key={colorGroup.name} contents={contents}>
+          {sortedColorIds.map((colorId) => {
+            let removeButton = (
+              <button
+                className="py-1 px-4 text-red-100 hover:text-red-300 bg-red-600 hover:bg-red-800 font-sans rounded-sm"
+                onClick={(_e) =>
+                  handleRemoveFromGroup(colorId, colorGroup.name)
+                }
+              >
+                Remove
+              </button>
+            );
+
+            let node = colorNode(
+              colorId,
+              handleInputFocus,
+              focusRenameInput,
+              handleRenameColor,
+              handleKeyboardNavigate,
+              prevColorId(colorId),
+              nextColorId(colorId),
+              removeButton
+            );
+            return node;
+          })}
+        </TreeNode>
+      );
+    }
+  );
+
+  const singleColorNodes = state.colorList
+    .filter((item) => item.status !== "hidden")
+    .map((item) => item.colorId)
+    .sort(compareColorId(state.colorDict))
+    .map((colorId) => {
+      let node = colorNode(
+        colorId,
+        handleInputFocus,
+        focusRenameInput,
+        handleRenameColor,
+        handleKeyboardNavigate,
+        prevColorId(colorId),
+        nextColorId(colorId)
+      );
+      return node;
+    });
+
+  const childNodes = [colorGroupNodes, ...singleColorNodes];
+
+  return (
+    <div
+      ref={mouseRef}
+      className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
+    >
+      <TreeNode contents="module.exports =">
+        <TreeNode contents="theme:">
+          <TreeNode contents="colors:">{childNodes}</TreeNode>
+        </TreeNode>
+      </TreeNode>
+    </div>
+  );
+}
+
 function makeWizard(): Wizard {
   return {
     steps: [{ kind: "colorThemeInput" }, { kind: "colorThemeConfig" }],
@@ -602,31 +808,6 @@ export default function App() {
     );
   }, [wizard, unparsedColorTheme, state]);
 
-  const [inputMode, inputActionDispatch] = useReducer(
-    reducerInputAction,
-    initialInputMode
-  );
-
-  const [focusRenameInput, setFocusRenameInput] = useState(false);
-  const mouseRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    function handleRenameInputFocus(event: MouseEvent) {
-      if (
-        mouseRef &&
-        mouseRef.current &&
-        mouseRef.current.contains(event.target as Node)
-      ) {
-        setFocusRenameInput(true);
-      } else {
-        setFocusRenameInput(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleRenameInputFocus);
-    return () =>
-      document.removeEventListener("mousedown", handleRenameInputFocus);
-  }, []);
-
   const handleNextUI = () => {
     setWizard((wizard) => wizardNextStep(wizard));
 
@@ -698,178 +879,6 @@ export default function App() {
       ))
   );
 
-  const treeLeafView = (
-    color: HexColor,
-    colorId: string,
-    handleFocus: (colorId: string) => void
-  ) => (
-    <TreeLeafView
-      colorId={colorId}
-      key={getColorValue(color)}
-      handleFocus={(_event) => handleFocus(colorId)}
-    >
-      <span className="mr-4">"{getColorName(color)}"</span>
-      <span className="mr-4">:</span>
-      <span
-        className="w-4 h-4 inline-block mr-2 rounded-sm"
-        style={{ backgroundColor: getColorValue(color) }}
-      ></span>
-      <span>{getColorValue(color)},</span>
-    </TreeLeafView>
-  );
-
-  const colorNode = (
-    colorId: string,
-    handleFocus: (colorId: string) => void,
-    focusRenameInput: boolean,
-    handleRenameColor: (colorId: string, name: string) => void,
-    handleKeyboardNavigate: (key: string, target: string) => void,
-    prevColorId: string,
-    nextColorId: string,
-    children?: React.ReactNode
-  ) => {
-    let color = state.colorDict.get(colorId);
-    if (!color) return <></>;
-
-    switch (inputMode.kind) {
-      case "view":
-        return treeLeafView(color, colorId, handleFocus);
-      case "edit":
-        return inputMode.colorId === colorId ? (
-          <TreeLeafEdit
-            key={getColorValue(color)}
-            color={color}
-            focus={focusRenameInput}
-            handleRenameColor={handleRenameColor}
-            handleKeyboardNavigate={handleKeyboardNavigate}
-            prev={prevColorId}
-            next={nextColorId}
-          >
-            {children}
-          </TreeLeafEdit>
-        ) : (
-          treeLeafView(color, colorId, handleFocus)
-        );
-    }
-  };
-
-  const handleInputFocus = (colorId: string) => {
-    inputActionDispatch({ kind: "focus", colorId: colorId });
-    const color = state.colorDict.get(colorId);
-    if (color) console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
-  };
-
-  const handleKeyboardNavigate = (key: string, target: string) => {
-    switch (key) {
-      case "Enter":
-      case "ArrowDown":
-        return inputActionDispatch({ kind: "movedown", target: target });
-      case "ArrowUp":
-        return inputActionDispatch({ kind: "moveup", target: target });
-      case "Escape":
-        return inputActionDispatch({ kind: "escape" });
-    }
-  };
-
-  const configOrderedColorIds = Array.from(state.colorGroupDict.values())
-    .flatMap((colorGroup) =>
-      Array.from(colorGroup.colorIds).sort(compareColorId(state.colorDict))
-    )
-    .concat(
-      state.colorList
-        .filter((item) => item.status !== "hidden")
-        .map((item) => item.colorId)
-        .sort(compareColorId(state.colorDict))
-    );
-
-  const getNodeIdx = (colorId: string) =>
-    configOrderedColorIds.findIndex((id) => id === colorId);
-
-  const prevColorId = (colorId: string) => {
-    const idx = getNodeIdx(colorId);
-    const prevIdx =
-      (idx - 1 + configOrderedColorIds.length) % configOrderedColorIds.length;
-    return configOrderedColorIds[prevIdx];
-  };
-
-  const nextColorId = (colorId: string) => {
-    const idx = getNodeIdx(colorId);
-    const nextIdx = (idx + 1) % configOrderedColorIds.length;
-    return configOrderedColorIds[nextIdx];
-  };
-
-  const colorGroupNodes = Array.from(state.colorGroupDict.values()).map(
-    (colorGroup) => {
-      let contents = `"${colorGroup.name}" :`;
-      let sortedColorIds = Array.from(colorGroup.colorIds).sort(
-        compareColorId(state.colorDict)
-      );
-      return colorGroup.colorIds.length === 0 ? (
-        <TreeNode key={colorGroup.name} contents={contents} />
-      ) : (
-        <TreeNode key={colorGroup.name} contents={contents}>
-          {sortedColorIds.map((colorId) => {
-            let removeButton = (
-              <button
-                className="py-1 px-4 text-red-100 hover:text-red-300 bg-red-600 hover:bg-red-800 font-sans rounded-sm"
-                onClick={(_e) =>
-                  dispatch({
-                    kind: "removeFromGroup",
-                    groupName: colorGroup.name,
-                    colorId: colorId,
-                  })
-                }
-              >
-                Remove
-              </button>
-            );
-
-            let node = colorNode(
-              colorId,
-              handleInputFocus,
-              focusRenameInput,
-              (colorId, newName) =>
-                dispatch({
-                  kind: "renameColor",
-                  colorId: colorId,
-                  newName: newName,
-                }),
-              handleKeyboardNavigate,
-              prevColorId(colorId),
-              nextColorId(colorId),
-              removeButton
-            );
-            return node;
-          })}
-        </TreeNode>
-      );
-    }
-  );
-
-  const singleColorNodes = state.colorList
-    .filter((item) => item.status !== "hidden")
-    .map((item) => item.colorId)
-    .sort(compareColorId(state.colorDict))
-    .map((colorId) => {
-      let node = colorNode(
-        colorId,
-        handleInputFocus,
-        focusRenameInput,
-        (colorId, newName) =>
-          dispatch({
-            kind: "renameColor",
-            colorId: colorId,
-            newName: newName,
-          }),
-        handleKeyboardNavigate,
-        prevColorId(colorId),
-        nextColorId(colorId)
-      );
-      return node;
-    });
-
-  const childNodes = [colorGroupNodes, ...singleColorNodes];
-
   const colorThemeInputUI = (
     <>
       <div className="mb-4">
@@ -930,16 +939,23 @@ export default function App() {
         <Clipboard text={serializeConfig(state)} timeoutInMs={2000} />
       </div>
       <div className="grid grid-cols-2 mb-4">
-        <div
-          ref={mouseRef}
-          className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
-        >
-          <TreeNode contents="module.exports =">
-            <TreeNode contents="theme:">
-              <TreeNode contents="colors:">{childNodes}</TreeNode>
-            </TreeNode>
-          </TreeNode>
-        </div>
+        <TreeEditor
+          state={state}
+          handleRenameColor={(colorId, newName) =>
+            dispatch({
+              kind: "renameColor",
+              colorId: colorId,
+              newName: newName,
+            })
+          }
+          handleRemoveFromGroup={(colorId, groupName) =>
+            dispatch({
+              kind: "removeFromGroup",
+              groupName: groupName,
+              colorId: colorId,
+            })
+          }
+        />
         <div>
           <div className="flex flex-wrap mb-4">{colorListItems}</div>
           <div className={"pl-2"}>{colorGroupsButtonRow}</div>
