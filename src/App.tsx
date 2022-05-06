@@ -426,18 +426,23 @@ function TreeEditor({
   };
 
   const colorNode = (
-    colorId: string,
-    handleFocus: (colorId: string) => void,
+    {
+      colorId,
+      prevColorId,
+      nextColorId,
+      color,
+    }: {
+      colorId: string;
+      prevColorId: string;
+      nextColorId: string;
+      color: HexColor;
+    },
     focusRenameInput: boolean,
+    handleFocus: (colorId: string) => void,
     handleRenameColor: (colorId: string, name: string) => void,
     handleKeyboardNavigate: (key: string, target: string) => void,
-    prevColorId: string,
-    nextColorId: string,
     children?: React.ReactNode
   ) => {
-    let color = state.colorDict.get(colorId);
-    if (!color) return <></>;
-
     switch (inputMode.kind) {
       case "view":
         return treeLeafView(color, colorId, handleFocus);
@@ -489,38 +494,49 @@ function TreeEditor({
 
   const colorGroupNodes = Array.from(state.colorGroupDict.values()).map(
     (colorGroup) => {
-      let contents = `"${colorGroup.name}" :`;
-      let sortedColorIds = Array.from(colorGroup.colorIds).sort(
-        compareColorId(state.colorDict)
-      );
-      return colorGroup.colorIds.length === 0 ? (
+      const children = Array.from(colorGroup.colorIds)
+        .sort(compareColorId(state.colorDict))
+        .flatMap((colorId) => {
+          const color = state.colorDict.get(colorId);
+          return color
+            ? [
+                {
+                  colorId,
+                  prevColorId: prevColorId(colorId),
+                  nextColorId: nextColorId(colorId),
+                  color,
+                },
+              ]
+            : [];
+        })
+        .map((args) => {
+          let removeButton = (
+            <button
+              className="py-1 px-4 text-red-100 hover:text-red-300 bg-red-600 hover:bg-red-800 font-sans rounded-sm"
+              onClick={(_e) =>
+                handleRemoveFromGroup(args.colorId, colorGroup.name)
+              }
+            >
+              Remove
+            </button>
+          );
+
+          return colorNode(
+            args,
+            focusRenameInput,
+            handleInputFocus,
+            handleRenameColor,
+            handleKeyboardNavigate,
+            removeButton
+          );
+        });
+
+      const contents = `"${colorGroup.name}" :`;
+      return children.length === 0 ? (
         <TreeNode key={colorGroup.name} contents={contents} />
       ) : (
         <TreeNode key={colorGroup.name} contents={contents}>
-          {sortedColorIds.map((colorId) => {
-            let removeButton = (
-              <button
-                className="py-1 px-4 text-red-100 hover:text-red-300 bg-red-600 hover:bg-red-800 font-sans rounded-sm"
-                onClick={(_e) =>
-                  handleRemoveFromGroup(colorId, colorGroup.name)
-                }
-              >
-                Remove
-              </button>
-            );
-
-            let node = colorNode(
-              colorId,
-              handleInputFocus,
-              focusRenameInput,
-              handleRenameColor,
-              handleKeyboardNavigate,
-              prevColorId(colorId),
-              nextColorId(colorId),
-              removeButton
-            );
-            return node;
-          })}
+          {children}
         </TreeNode>
       );
     }
@@ -530,18 +546,28 @@ function TreeEditor({
     .filter((item) => item.status !== "grouped")
     .map((item) => item.colorId)
     .sort(compareColorId(state.colorDict))
-    .map((colorId) => {
-      let node = colorNode(
-        colorId,
-        handleInputFocus,
+    .flatMap((colorId) => {
+      const color = state.colorDict.get(colorId);
+      return color
+        ? [
+            {
+              colorId,
+              prevColorId: prevColorId(colorId),
+              nextColorId: nextColorId(colorId),
+              color,
+            },
+          ]
+        : [];
+    })
+    .map((args) =>
+      colorNode(
+        args,
         focusRenameInput,
+        handleInputFocus,
         handleRenameColor,
-        handleKeyboardNavigate,
-        prevColorId(colorId),
-        nextColorId(colorId)
-      );
-      return node;
-    });
+        handleKeyboardNavigate
+      )
+    );
 
   const childNodes = [colorGroupNodes, ...singleColorNodes];
 
