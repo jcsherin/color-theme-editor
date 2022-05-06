@@ -1,5 +1,3 @@
-import { colors } from "./example";
-
 export interface HexColor {
   kind: "hex";
   name: string;

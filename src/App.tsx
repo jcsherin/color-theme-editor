@@ -69,11 +69,9 @@ interface Wizard {
 function Clipboard({
   text,
   timeoutInMs,
-  className: overrideClassName,
 }: {
   text: string;
   timeoutInMs: number;
-  className: string;
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -929,11 +927,7 @@ export default function App() {
         >
           Go Back
         </button>
-        <Clipboard
-          text={serializeConfig(state)}
-          timeoutInMs={2000}
-          className=""
-        />
+        <Clipboard text={serializeConfig(state)} timeoutInMs={2000} />
       </div>
       <div className="grid grid-cols-2 mb-4">
         <div
