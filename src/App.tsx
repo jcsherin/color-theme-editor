@@ -9,6 +9,8 @@ import {
 } from "./color";
 import * as example from "./example";
 
+import { Clipboard } from "./clipboard";
+
 interface UnparsedColorTheme {
   classnames: string;
   colors: string;
@@ -64,46 +66,6 @@ interface WizardStep {
 interface Wizard {
   steps: WizardStep[];
   currStep: number;
-}
-
-function Clipboard({
-  text,
-  timeoutInMs,
-}: {
-  text: string;
-  timeoutInMs: number;
-}) {
-  const [copied, setCopied] = useState(false);
-
-  const clipboardWriteText = (text: string) =>
-    navigator && navigator.clipboard
-      ? navigator.clipboard.writeText(text)
-      : Promise.reject(
-          new Error("Copying to clipboard not supported in browser!")
-        );
-
-  const handleCopy = (text: string) =>
-    clipboardWriteText(text)
-      .then(() => {
-        setCopied(true);
-        setTimeout(() => {
-          setCopied(false);
-        }, timeoutInMs);
-      })
-      .catch((reason) => console.error(reason));
-
-  const copyButton = copied ? (
-    <span className="text-green-800 text-xl py-1 px-4">Copied!</span>
-  ) : (
-    <button
-      className=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
-      onClick={(_e) => handleCopy(text)}
-    >
-      Copy To Clipboard
-    </button>
-  );
-
-  return copyButton;
 }
 
 function ColorSquare({
@@ -964,7 +926,11 @@ export default function App() {
         >
           Go Back
         </button>
-        <Clipboard text={serializeConfig(state)} timeoutInMs={2000} />
+        <Clipboard
+          label="Copy To Clipboard"
+          contents={serializeConfig(state)}
+          timeoutInMs={2000}
+        />
       </div>
       <div className="grid grid-cols-2 mb-4">
         <TreeEditor
