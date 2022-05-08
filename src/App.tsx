@@ -9,7 +9,7 @@ import {
 } from "./color";
 import * as example from "./example";
 
-import { Clipboard } from "./clipboard";
+import { ClipboardButton } from "./clipboard";
 
 interface UnparsedColorTheme {
   classnames: string;
@@ -926,7 +926,7 @@ export default function App() {
         >
           Go Back
         </button>
-        <Clipboard
+        <ClipboardButton
           label="Copy To Clipboard"
           content={serializeConfig(state)}
           timeoutInMs={2000}

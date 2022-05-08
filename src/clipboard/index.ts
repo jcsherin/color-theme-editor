@@ -1,1 +1,1 @@
-export { default as Clipboard } from "./Clipboard";
+export { default as ClipboardButton } from "./Button";

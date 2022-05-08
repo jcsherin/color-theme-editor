@@ -20,7 +20,7 @@ const clipboardWriteText = (text: string) =>
         )
       );
 
-export default function Clipboard({
+export default function Button({
   label,
   content,
   timeoutInMs,
