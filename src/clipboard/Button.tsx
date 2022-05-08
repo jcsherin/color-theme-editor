@@ -25,7 +25,7 @@ export default function Button({
   content,
   timeoutInMs,
   className,
-  flashClassName: flashMsgClassName,
+  flashClassName,
 }: CopyTextProps & ClassNameProps) {
   const [copied, setCopied] = useState(false);
 
@@ -40,7 +40,7 @@ export default function Button({
       .catch((msg) => console.error(msg));
 
   return copied ? (
-    <span className={flashMsgClassName}>Copied!</span>
+    <span className={flashClassName}>Copied!</span>
   ) : (
     <button className={className} onClick={handleCopy}>
       {label}
