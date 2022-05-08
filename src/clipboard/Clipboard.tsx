@@ -2,26 +2,35 @@ import React, { useState } from "react";
 
 interface CopyTextProps {
   label: string;
-  contents: string;
+  content: string;
   timeoutInMs: number;
+}
+
+interface ClassNameProps {
+  className?: string;
+  flashClassName?: string;
 }
 
 const clipboardWriteText = (text: string) =>
   navigator && navigator.clipboard
     ? navigator.clipboard.writeText(text)
     : Promise.reject(
-        new Error("Copying to clipboard not supported in browser!")
+        new Error(
+          "The `navigator.clipboard` Web API is not supported in this browser!"
+        )
       );
 
 export default function Clipboard({
   label,
-  contents,
+  content,
   timeoutInMs,
-}: CopyTextProps) {
+  className,
+  flashClassName: flashMsgClassName,
+}: CopyTextProps & ClassNameProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = (_event: React.MouseEvent) =>
-    clipboardWriteText(contents)
+    clipboardWriteText(content)
       .then(() => setCopied(true))
       .then(() =>
         setTimeout(() => {
@@ -31,12 +40,9 @@ export default function Clipboard({
       .catch((msg) => console.error(msg));
 
   return copied ? (
-    <span className="text-green-800 text-xl py-1 px-4">Copied!</span>
+    <span className={flashMsgClassName}>Copied!</span>
   ) : (
-    <button
-      className=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
-      onClick={handleCopy}
-    >
+    <button className={className} onClick={handleCopy}>
       {label}
     </button>
   );

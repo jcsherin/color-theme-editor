@@ -928,8 +928,10 @@ export default function App() {
         </button>
         <Clipboard
           label="Copy To Clipboard"
-          contents={serializeConfig(state)}
+          content={serializeConfig(state)}
           timeoutInMs={2000}
+          className=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
+          flashClassName="text-green-800 text-xl py-1 px-4"
         />
       </div>
       <div className="grid grid-cols-2 mb-4">
