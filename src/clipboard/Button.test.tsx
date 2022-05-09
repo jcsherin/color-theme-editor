@@ -67,8 +67,8 @@ describe("ClipboardButton component", () => {
     user.click(button);
 
     await waitForElementToBeRemoved(button);
-    expect(button).not.toBeInTheDocument();
 
+    expect(button).not.toBeInTheDocument();
     expect(
       await screen.findByText(/^Copied!$/, { exact: true })
     ).toBeInTheDocument();
@@ -91,11 +91,11 @@ describe("ClipboardButton component", () => {
 
     const flash = await screen.findByText(/^Copied!$/, { exact: true });
     await waitForElementToBeRemoved(flash, { timeout: props.expiryInMs });
-    expect(flash).not.toBeInTheDocument();
-
     const newButton = await screen.findByRole("button", {
       name: props.label,
     });
+
+    expect(flash).not.toBeInTheDocument();
     expect(newButton).toBeInTheDocument();
   });
 
