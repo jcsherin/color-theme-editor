@@ -11,7 +11,7 @@ interface ClassNameProps {
   flashClassName?: string;
 }
 
-export default function Button({
+export default function ClipboardButton({
   label,
   content,
   expiryInMs,
