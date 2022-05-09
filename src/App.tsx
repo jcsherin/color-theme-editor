@@ -929,7 +929,7 @@ export default function App() {
         <ClipboardButton
           label="Copy To Clipboard"
           content={serializeConfig(state)}
-          timeoutInMs={2000}
+          expiryInMs={2000}
           className=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
           flashClassName="text-green-800 text-xl py-1 px-4"
         />

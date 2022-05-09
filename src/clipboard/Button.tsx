@@ -3,7 +3,7 @@ import React, { useState } from "react";
 interface CopyTextProps {
   label: string;
   content: string;
-  timeoutInMs: number;
+  expiryInMs: number;
 }
 
 interface ClassNameProps {
@@ -11,33 +11,31 @@ interface ClassNameProps {
   flashClassName?: string;
 }
 
-const clipboardWriteText = (text: string) =>
-  navigator && navigator.clipboard
-    ? navigator.clipboard.writeText(text)
-    : Promise.reject(
-        new Error(
-          "The `navigator.clipboard` Web API is not supported in this browser!"
-        )
-      );
-
 export default function Button({
   label,
   content,
-  timeoutInMs,
+  expiryInMs,
   className,
   flashClassName,
 }: CopyTextProps & ClassNameProps) {
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = (_event: React.MouseEvent) =>
-    clipboardWriteText(content)
+  const copyToClipboard = (text: string) => {
+    if (!(navigator && navigator.clipboard))
+      return Promise.reject(
+        new Error(
+          "The `navigator.clipboard` Web API is not supported in this browser!"
+        )
+      );
+
+    return navigator.clipboard
+      .writeText(text)
       .then(() => setCopied(true))
-      .then(() =>
-        setTimeout(() => {
-          setCopied(false);
-        }, timeoutInMs)
-      )
-      .catch((msg) => console.error(msg));
+      .then(() => setTimeout(() => setCopied(false), expiryInMs));
+  };
+
+  const handleCopy = (_event: React.MouseEvent) =>
+    copyToClipboard(content).catch((msg) => console.error(msg));
 
   return copied ? (
     <span className={flashClassName}>Copied!</span>
