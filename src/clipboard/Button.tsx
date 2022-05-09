@@ -20,19 +20,11 @@ export default function Button({
 }: CopyTextProps & ClassNameProps) {
   const [copied, setCopied] = useState(false);
 
-  const copyToClipboard = (text: string) => {
-    if (!(navigator && navigator.clipboard))
-      return Promise.reject(
-        new Error(
-          "The `navigator.clipboard` Web API is not supported in this browser!"
-        )
-      );
-
-    return navigator.clipboard
+  const copyToClipboard = (text: string) =>
+    navigator.clipboard
       .writeText(text)
       .then(() => setCopied(true))
       .then(() => setTimeout(() => setCopied(false), expiryInMs));
-  };
 
   const handleCopy = (_event: React.MouseEvent) =>
     copyToClipboard(content).catch((msg) => console.error(msg));
