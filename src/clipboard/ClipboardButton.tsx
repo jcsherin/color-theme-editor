@@ -20,14 +20,19 @@ export default function ClipboardButton({
 }: CopyTextProps & ClassNameProps) {
   const [copied, setCopied] = useState(false);
 
-  const copyToClipboard = (text: string) =>
-    navigator.clipboard
-      .writeText(text)
-      .then(() => setCopied(true))
-      .then(() => setTimeout(() => setCopied(false), expiryInMs));
-
   const handleCopy = (_event: React.MouseEvent) =>
-    copyToClipboard(content).catch((msg) => console.error(msg));
+    navigator.clipboard
+      .writeText(content)
+      .then(() => setCopied(true))
+      .then(() => setTimeout(() => setCopied(false), expiryInMs))
+      .catch((msg) => console.error(msg));
+
+  if (!navigator || !navigator.clipboard)
+    return (
+      <span className="py-1 px-4 text-xl text-red-600">
+        Copying to clipboard is not supported in this browser!
+      </span>
+    );
 
   return copied ? (
     <span className={flashClassName}>Copied!</span>

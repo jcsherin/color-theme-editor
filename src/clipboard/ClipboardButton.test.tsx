@@ -44,11 +44,11 @@ describe("ClipboardButton component", () => {
       .toJSON();
 
     expect(tree).toMatchInlineSnapshot(`
-<button
-  onClick={[Function]}
+<span
+  className="py-1 px-4 text-xl text-red-600"
 >
-  Copy to clipboard
-</button>
+  Copying to clipboard is not supported in this browser!
+</span>
 `);
   });
 
@@ -117,5 +117,36 @@ describe("ClipboardButton component", () => {
     await waitForElementToBeRemoved(button);
 
     expect(spy).toHaveBeenCalledWith(props.content);
+  });
+
+  it("warn when the browser lacks Clipboard API support", () => {
+    Object.defineProperty(window.navigator, "clipboard", {
+      value: undefined,
+      configurable: true,
+    });
+
+    render(
+      <ClipboardButton
+        label={props.label}
+        content={props.content}
+        expiryInMs={props.expiryInMs}
+      />
+    );
+
+    const button = screen.queryByRole("button", {
+      name: props.label,
+    });
+    const warn = screen.getByText(
+      /^Copying to clipboard is not supported in this browser!$/
+    );
+
+    expect(button).toBeNull();
+    expect(warn).toMatchInlineSnapshot(`
+<span
+  class="py-1 px-4 text-xl text-red-600"
+>
+  Copying to clipboard is not supported in this browser!
+</span>
+`);
   });
 });
