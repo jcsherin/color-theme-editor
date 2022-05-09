@@ -1,6 +1,7 @@
 import React from "react";
 import renderer from "react-test-renderer";
 import {
+  fireEvent,
   render,
   screen,
   waitForElementToBeRemoved,
@@ -97,5 +98,25 @@ describe("ClipboardButton component", () => {
       name: props.label,
     });
     expect(newButton).toBeInTheDocument();
+  });
+
+  it("copies the content to clipboard when clicked", async () => {
+    const { user } = setup(
+      <ClipboardButton
+        label={props.label}
+        content={props.content}
+        expiryInMs={props.expiryInMs}
+      />
+    );
+
+    const spy = jest.spyOn(navigator.clipboard, "writeText");
+
+    const button = screen.getByRole("button", {
+      name: props.label,
+    });
+    user.click(button);
+    await waitForElementToBeRemoved(button);
+
+    expect(spy).toHaveBeenCalledWith(props.content);
   });
 });
