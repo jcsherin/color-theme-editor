@@ -1,8 +1,13 @@
 // TreeEditor Helpers
 
 import React, { useEffect, useReducer, useRef, useState } from "react";
-import { compareColorId, notGrouped } from "../grouping";
-import { getColorName, getColorValue, HexColor } from "../hexColor";
+import { notGrouped } from "../grouping";
+import {
+  compareColorId,
+  getColorName,
+  getColorValue,
+  HexColor,
+} from "../color";
 import { State } from "../state";
 import { initialInputMode, reducerInputAction } from "./editor";
 import { TreeLeafEdit } from "./TreeLeafEdit";

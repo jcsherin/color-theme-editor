@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
-import { getColorId, getColorName, getColorValue, HexColor } from "../hexColor";
+import { getColorId, getColorName, getColorValue, HexColor } from "../color";
 
 export function TreeLeafEdit({
   color,

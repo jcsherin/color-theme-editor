@@ -1,10 +1,10 @@
+import { ColorGroup, ColorListItem, notGrouped } from "./grouping";
 import {
-  ColorGroup,
-  ColorListItem,
   compareColorId,
-  notGrouped,
-} from "./grouping";
-import { getColorName, getColorValue, HexColor } from "./hexColor";
+  getColorName,
+  getColorValue,
+  HexColor,
+} from "./color";
 
 export interface State {
   colorDict: Map<string, HexColor>;

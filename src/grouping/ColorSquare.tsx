@@ -1,5 +1,5 @@
 import React from "react";
-import { getColorValue, HexColor } from "../hexColor";
+import { getColorValue, HexColor } from "../color";
 import { ColorListItem } from "./colorListItem";
 
 export function ColorSquare({

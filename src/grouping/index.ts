@@ -12,12 +12,6 @@ export {
 } from "./colorListItem";
 export { ColorGroupButton } from "./ColorGroupButton";
 export {
-  ColorDict,
-  compareColorId,
-  makeColorDict,
-  parseColors,
-} from "./colorDict";
-export {
   ColorGroup,
   ColorGroupDict,
   makeColorGroupDict,

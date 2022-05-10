@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { getColorId, updateColorName } from "./hexColor";
+import { ColorDict, parseColors, updateColorName } from "./color";
 import * as example from "./utils/example";
 
 import { CopyButton } from "./clipboard";
@@ -14,9 +14,7 @@ import {
   toggleStatus,
   ungroup,
   ColorGroupButton,
-  ColorDict,
   ColorGroupDict,
-  parseColors,
   parseColorGroups,
 } from "./grouping";
 import {
@@ -244,7 +242,7 @@ export default function App() {
     .map(({ item, color }) => (
       <ColorSquare
         className="mr-1 mb-1 p-1"
-        key={getColorId(color)}
+        key={item.colorId}
         color={color}
         item={item}
         handleSelection={(item) =>
