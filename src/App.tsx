@@ -6,12 +6,12 @@ import {
   HexColor,
   parseColor,
   updateColorName,
-} from "./color";
+} from "./hexColor";
 import * as example from "./example";
 
 import { CopyButton } from "./clipboard";
-import { ColorSquare } from "./grouping/ColorSquare";
 import {
+  ColorSquare,
   allGrouped,
   ColorListItem,
   groupSelected,
@@ -21,21 +21,20 @@ import {
   someSelected,
   toggleStatus,
   ungroup,
-} from "./grouping/colorListItem";
-import { ColorGroupButton } from "./grouping/ColorGroupButton";
+  ColorGroupButton,
+  ColorDict,
+  compareColorId,
+  makeColorDict,
+  ColorGroupDict,
+  makeColorGroupDict,
+  parseColorGroup,
+  ColorGroup,
+} from "./grouping";
 
 interface UnparsedColorTheme {
   classnames: string;
   colors: string;
 }
-
-interface ColorGroup {
-  name: string;
-  colorIds: string[];
-}
-
-type ColorDict = Map<string, HexColor>;
-type ColorGroupDict = Map<string, ColorGroup>;
 
 interface ViewMode {
   kind: "view";
@@ -76,15 +75,44 @@ interface Wizard {
   currStep: number;
 }
 
-function makeColorGroup(name: string): ColorGroup {
-  return { name: name, colorIds: [] };
+interface State {
+  colorDict: Map<string, HexColor>;
+  colorGroupDict: Map<string, ColorGroup>;
+  colorList: ColorListItem[];
 }
 
-function parseColorGroup(value: string): ColorGroup | undefined {
-  const name = value.trim().replace(/\s+/g, "-");
-  if (name.length > 0) {
-    return makeColorGroup(name);
-  }
+function serializeConfig({ colorDict, colorGroupDict, colorList }: State) {
+  const serialized: { [name: string]: string | { [name: string]: string } } =
+    {};
+  Array.from(colorGroupDict.values()).forEach((colorGroup) => {
+    const inner: { [name: string]: string } = {};
+    Array.from(colorGroup.colorIds)
+      .sort(compareColorId(colorDict))
+      .forEach((colorId) => {
+        const color = colorDict.get(colorId);
+        if (color) {
+          const key = getColorName(color);
+          const value = getColorValue(color);
+          inner[key] = value;
+        }
+      });
+    serialized[colorGroup.name] = inner;
+  });
+  colorList
+    .filter(notGrouped)
+    .map((item) => item.colorId)
+    .sort(compareColorId(colorDict))
+    .forEach((colorId) => {
+      const color = colorDict.get(colorId);
+      if (color) {
+        const key = getColorName(color);
+        const value = getColorValue(color);
+        serialized[key] = value;
+      }
+    });
+  const wrapper = { theme: { colors: serialized } };
+  const template = `module.exports = ${JSON.stringify(wrapper, null, 2)}`;
+  return template;
 }
 
 function TreeNode({
@@ -218,65 +246,6 @@ function reducerInputAction(state: InputMode, action: InputAction): InputMode {
           return { ...state, kind: "view" };
       }
   }
-}
-
-function makeColorDict(colors: HexColor[]): ColorDict {
-  const map = new Map();
-  colors.forEach((color) => {
-    const key = getColorId(color);
-    map.set(key, color);
-  });
-  return map;
-}
-
-function makeColorGroupDict(colorGroups: ColorGroup[]): ColorGroupDict {
-  const map = new Map();
-  colorGroups.forEach((group) => {
-    map.set(group.name, group);
-  });
-  return map;
-}
-
-const compareColorId = (colorDict: ColorDict) => (x: string, y: string) => {
-  const xname = getColorName(colorDict.get(x)!);
-  const yname = getColorName(colorDict.get(y)!);
-  if (xname < yname) return -1;
-  if (xname > yname) return 1;
-  return 0;
-};
-
-function serializeConfig({ colorDict, colorGroupDict, colorList }: State) {
-  const serialized: { [name: string]: string | { [name: string]: string } } =
-    {};
-  Array.from(colorGroupDict.values()).forEach((colorGroup) => {
-    const inner: { [name: string]: string } = {};
-    Array.from(colorGroup.colorIds)
-      .sort(compareColorId(colorDict))
-      .forEach((colorId) => {
-        const color = colorDict.get(colorId);
-        if (color) {
-          const key = getColorName(color);
-          const value = getColorValue(color);
-          inner[key] = value;
-        }
-      });
-    serialized[colorGroup.name] = inner;
-  });
-  colorList
-    .filter(notGrouped)
-    .map((item) => item.colorId)
-    .sort(compareColorId(colorDict))
-    .forEach((colorId) => {
-      const color = colorDict.get(colorId);
-      if (color) {
-        const key = getColorName(color);
-        const value = getColorValue(color);
-        serialized[key] = value;
-      }
-    });
-  const wrapper = { theme: { colors: serialized } };
-  const template = `module.exports = ${JSON.stringify(wrapper, null, 2)}`;
-  return template;
 }
 
 // TreeEditor Helpers
@@ -530,12 +499,6 @@ function wizardPrevStep(wizard: Wizard): Wizard {
   return wizard.currStep > 0
     ? { ...wizard, currStep: wizard.currStep - 1 }
     : wizard;
-}
-
-interface State {
-  colorDict: Map<string, HexColor>;
-  colorGroupDict: Map<string, ColorGroup>;
-  colorList: ColorListItem[];
 }
 
 interface ActionParse {
