@@ -10,15 +10,23 @@ import {
 import * as example from "./example";
 
 import { CopyButton } from "./clipboard";
+import { ColorSquare } from "./grouping/ColorSquare";
+import {
+  allGrouped,
+  ColorListItem,
+  groupSelected,
+  isSelected,
+  makeColorListItem,
+  notGrouped,
+  someSelected,
+  toggleStatus,
+  ungroup,
+} from "./grouping/colorListItem";
+import { ColorGroupButton } from "./grouping/ColorGroupButton";
 
 interface UnparsedColorTheme {
   classnames: string;
   colors: string;
-}
-
-interface ColorListItem {
-  colorId: string;
-  status: "default" | "selected" | "grouped";
 }
 
 interface ColorGroup {
@@ -66,48 +74,6 @@ interface WizardStep {
 interface Wizard {
   steps: WizardStep[];
   currStep: number;
-}
-
-function ColorSquare({
-  className: overrideClassName,
-  color,
-  item,
-  handleSelection,
-}: {
-  className: string;
-  color: HexColor;
-  item: ColorListItem;
-  handleSelection: (color: ColorListItem) => void;
-}) {
-  const getClassName = (item: ColorListItem): string => {
-    switch (item.status) {
-      case "selected":
-        return "border-4 border-indigo-500";
-      case "default":
-        return "border-4 border-white";
-      case "grouped":
-        return "hidden";
-    }
-  };
-
-  return (
-    <button
-      className={`${overrideClassName} ${getClassName(item)}`}
-      onClick={(_event) => handleSelection(item)}
-    >
-      <span
-        className="w-16 h-12 block border-b"
-        style={{ backgroundColor: getColorValue(color) }}
-      ></span>
-      <span className="block text-xs text-center truncate bg-black text-white">
-        {getColorValue(color)}
-      </span>
-    </button>
-  );
-}
-
-function makeColorListItem(colorId: string): ColorListItem {
-  return { colorId: colorId, status: "default" };
 }
 
 function makeColorGroup(name: string): ColorGroup {
@@ -297,7 +263,7 @@ function serializeConfig({ colorDict, colorGroupDict, colorList }: State) {
     serialized[colorGroup.name] = inner;
   });
   colorList
-    .filter((item) => item.status !== "grouped")
+    .filter(notGrouped)
     .map((item) => item.colorId)
     .sort(compareColorId(colorDict))
     .forEach((colorId) => {
@@ -433,7 +399,7 @@ function TreeEditor({
     )
     .concat(
       state.colorList
-        .filter((item) => item.status !== "grouped")
+        .filter(notGrouped)
         .map((item) => item.colorId)
         .sort(compareColorId(state.colorDict))
     );
@@ -505,7 +471,7 @@ function TreeEditor({
   );
 
   const singleColorNodes = state.colorList
-    .filter((item) => item.status !== "grouped")
+    .filter(notGrouped)
     .map((item) => item.colorId)
     .sort(compareColorId(state.colorDict))
     .flatMap((colorId) => {
@@ -659,17 +625,6 @@ const parseColorGroups = (groupNames: string): ColorGroupDict => {
   return makeColorGroupDict(parsed);
 };
 
-const toggleStatus = (item: ColorListItem): ColorListItem => {
-  switch (item.status) {
-    case "default":
-      return { ...item, status: "selected" };
-    case "selected":
-      return { ...item, status: "default" };
-    case "grouped":
-      return item;
-  }
-};
-
 const reducer = (state: State, action: Action): State => {
   switch (action.kind) {
     case "parse": {
@@ -695,21 +650,17 @@ const reducer = (state: State, action: Action): State => {
       if (!group) return state;
 
       const selected = state.colorList
-        .filter((item) => item.status === "selected")
+        .filter(isSelected)
         .map((item) => item.colorId);
 
       const deduped = new Set([...group.colorIds, ...selected]);
       const newGroup = { ...group, colorIds: Array.from(deduped) };
       state.colorGroupDict.set(group.name, newGroup);
 
-      const colorList = state.colorList.map<ColorListItem>((item) =>
-        item.status === "selected" ? { ...item, status: "grouped" } : item
-      );
-
       return {
         ...state,
         colorGroupDict: new Map(Array.from(state.colorGroupDict)),
-        colorList: colorList,
+        colorList: groupSelected(state.colorList),
       };
     }
 
@@ -723,14 +674,10 @@ const reducer = (state: State, action: Action): State => {
       const newGroup = { ...group, colorIds: colorIds };
       state.colorGroupDict.set(group.name, newGroup);
 
-      const colorList = state.colorList.map<ColorListItem>((item) =>
-        item.colorId === action.colorId ? { ...item, status: "default" } : item
-      );
-
       return {
         ...state,
         colorGroupDict: new Map(Array.from(state.colorGroupDict)),
-        colorList: colorList,
+        colorList: state.colorList.map(ungroup(action.colorId)),
       };
     }
 
@@ -750,13 +697,12 @@ const reducer = (state: State, action: Action): State => {
     }
 
     case "toggleStatus": {
-      const colorList = state.colorList.map((item) =>
-        item.colorId === action.colorListItem.colorId
-          ? toggleStatus(item)
-          : item
-      );
-
-      return { ...state, colorList: colorList };
+      return {
+        ...state,
+        colorList: state.colorList.map(
+          toggleStatus(action.colorListItem.colorId)
+        ),
+      };
     }
 
     case "reset": {
@@ -840,12 +786,8 @@ export default function App() {
       />
     ));
 
-  const isDisabledGroupButton = state.colorList.every(
-    (item) => item.status === "default" || item.status === "grouped"
-  );
-  const colorGroupsButtonRow = state.colorList.every(
-    (item) => item.status === "grouped"
-  ) ? (
+  const isDisabledGroupButton = !someSelected(state.colorList);
+  const colorGroupsButtonRow = allGrouped(state.colorList) ? (
     <p className="text-2xl text-center bg-yellow-200 py-2">
       Great! You've completed grouping all the colors.
     </p>
@@ -856,16 +798,15 @@ export default function App() {
         return colorGroup ? [{ groupId, colorGroup }] : [];
       })
       .map(({ groupId, colorGroup }) => (
-        <button
-          disabled={isDisabledGroupButton}
+        <ColorGroupButton
           key={groupId}
           className={`mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300`}
-          onClick={(_e) =>
+          groupName={colorGroup.name}
+          disabled={isDisabledGroupButton}
+          handleClick={(_event) =>
             dispatch({ kind: "addToGroup", groupName: colorGroup.name })
           }
-        >
-          {colorGroup.name}
-        </button>
+        />
       ))
   );
 
