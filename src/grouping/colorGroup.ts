@@ -9,7 +9,7 @@ export function makeColorGroup(name: string): ColorGroup {
   return { name: name, colorIds: [] };
 }
 
-export function parseColorGroup(value: string): ColorGroup | undefined {
+function parseColorGroup(value: string): ColorGroup | undefined {
   const name = value.trim().replace(/\s+/g, "-");
   if (name.length > 0) {
     return makeColorGroup(name);
@@ -22,4 +22,12 @@ export function makeColorGroupDict(colorGroups: ColorGroup[]): ColorGroupDict {
     map.set(group.name, group);
   });
   return map;
+}
+
+export function parseColorGroups(groupNames: string): ColorGroupDict {
+  const deduped = new Set(groupNames.split("\n"));
+  const parsed = Array.from(deduped)
+    .map(parseColorGroup)
+    .flatMap((classname) => (classname ? [classname] : []));
+  return makeColorGroupDict(parsed);
 }

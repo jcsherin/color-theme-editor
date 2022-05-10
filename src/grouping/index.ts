@@ -11,10 +11,15 @@ export {
   ungroup,
 } from "./colorListItem";
 export { ColorGroupButton } from "./ColorGroupButton";
-export { ColorDict, compareColorId, makeColorDict } from "./colorDict";
+export {
+  ColorDict,
+  compareColorId,
+  makeColorDict,
+  parseColors,
+} from "./colorDict";
 export {
   ColorGroup,
   ColorGroupDict,
   makeColorGroupDict,
-  parseColorGroup,
+  parseColorGroups,
 } from "./colorGroup";

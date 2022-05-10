@@ -4,7 +4,6 @@ import {
   getColorName,
   getColorValue,
   HexColor,
-  parseColor,
   updateColorName,
 } from "./hexColor";
 import * as example from "./utils/example";
@@ -24,17 +23,11 @@ import {
   ColorGroupButton,
   ColorDict,
   compareColorId,
-  makeColorDict,
   ColorGroupDict,
-  makeColorGroupDict,
-  parseColorGroup,
   ColorGroup,
+  parseColors,
+  parseColorGroups,
 } from "./grouping";
-
-interface UnparsedColorTheme {
-  classnames: string;
-  colors: string;
-}
 
 interface ViewMode {
   kind: "view";
@@ -501,6 +494,11 @@ function wizardPrevStep(wizard: Wizard): Wizard {
     : wizard;
 }
 
+interface UnparsedColorTheme {
+  classnames: string;
+  colors: string;
+}
+
 interface ActionParse {
   kind: "parse";
   unparsedColorTheme: UnparsedColorTheme;
@@ -570,22 +568,6 @@ const getInitialState = (reset: boolean = false) => {
     colorGroupDict: colorGroupDict,
     colorList: colorList,
   };
-};
-
-const parseColors = (colors: string): ColorDict => {
-  const deduped = new Set(colors.split("\n"));
-  const parsed = Array.from(deduped)
-    .map(parseColor)
-    .flatMap((color) => (color ? [color] : []));
-  return makeColorDict(parsed);
-};
-
-const parseColorGroups = (groupNames: string): ColorGroupDict => {
-  const deduped = new Set(groupNames.split("\n"));
-  const parsed = Array.from(deduped)
-    .map(parseColorGroup)
-    .flatMap((classname) => (classname ? [classname] : []));
-  return makeColorGroupDict(parsed);
 };
 
 const reducer = (state: State, action: Action): State => {

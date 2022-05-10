@@ -33,14 +33,6 @@ export function getColorName(color: HexColor) {
   }
 }
 
-export function parseColor(v: string) {
-  const hexColor = /^#(?:[0-9a-fA-F]{3}){1,2}$/;
-  const value = v.trim();
-  if (hexColor.test(value)) {
-    return makeHexColor(value, value);
-  }
-}
-
 export function updateColorName(color: HexColor, name: string): HexColor {
   return { ...color, name: name };
 }
