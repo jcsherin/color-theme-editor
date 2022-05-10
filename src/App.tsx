@@ -1,10 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import {
-  getColorId,
-  getColorName,
-  getColorValue,
-  updateColorName,
-} from "./hexColor";
+import { getColorId, updateColorName } from "./hexColor";
 import * as example from "./utils/example";
 
 import { CopyButton } from "./clipboard";
@@ -15,13 +10,11 @@ import {
   groupSelected,
   isSelected,
   makeColorListItem,
-  notGrouped,
   someSelected,
   toggleStatus,
   ungroup,
   ColorGroupButton,
   ColorDict,
-  compareColorId,
   ColorGroupDict,
   parseColors,
   parseColorGroups,
@@ -32,7 +25,7 @@ import {
   UnparsedColorTheme,
 } from "./input";
 import { TreeEditor } from "./editor";
-import { State } from "./state";
+import { serializeConfig, State } from "./state";
 
 interface WizardStep {
   kind: "colorThemeInput" | "colorThemeConfig";
@@ -40,40 +33,6 @@ interface WizardStep {
 interface Wizard {
   steps: WizardStep[];
   currStep: number;
-}
-
-function serializeConfig({ colorDict, colorGroupDict, colorList }: State) {
-  const serialized: { [name: string]: string | { [name: string]: string } } =
-    {};
-  Array.from(colorGroupDict.values()).forEach((colorGroup) => {
-    const inner: { [name: string]: string } = {};
-    Array.from(colorGroup.colorIds)
-      .sort(compareColorId(colorDict))
-      .forEach((colorId) => {
-        const color = colorDict.get(colorId);
-        if (color) {
-          const key = getColorName(color);
-          const value = getColorValue(color);
-          inner[key] = value;
-        }
-      });
-    serialized[colorGroup.name] = inner;
-  });
-  colorList
-    .filter(notGrouped)
-    .map((item) => item.colorId)
-    .sort(compareColorId(colorDict))
-    .forEach((colorId) => {
-      const color = colorDict.get(colorId);
-      if (color) {
-        const key = getColorName(color);
-        const value = getColorValue(color);
-        serialized[key] = value;
-      }
-    });
-  const wrapper = { theme: { colors: serialized } };
-  const template = `module.exports = ${JSON.stringify(wrapper, null, 2)}`;
-  return template;
 }
 
 function makeWizard(): Wizard {
