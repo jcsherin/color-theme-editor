@@ -7,7 +7,7 @@ import {
   parseColor,
   updateColorName,
 } from "./hexColor";
-import * as example from "./example";
+import * as example from "./utils/example";
 
 import { CopyButton } from "./clipboard";
 import {
