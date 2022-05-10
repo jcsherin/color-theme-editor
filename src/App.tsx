@@ -28,6 +28,11 @@ import {
   parseColors,
   parseColorGroups,
 } from "./grouping";
+import {
+  ColorThemeInput,
+  isUnparsedColorThemeEmpty,
+  UnparsedColorTheme,
+} from "./input";
 
 interface ViewMode {
   kind: "view";
@@ -494,11 +499,6 @@ function wizardPrevStep(wizard: Wizard): Wizard {
     : wizard;
 }
 
-interface UnparsedColorTheme {
-  classnames: string;
-  colors: string;
-}
-
 interface ActionParse {
   kind: "parse";
   unparsedColorTheme: UnparsedColorTheme;
@@ -707,10 +707,6 @@ export default function App() {
     dispatch({ kind: "reset" });
   };
 
-  const isInputEmpty = () =>
-    unparsedColorTheme.classnames.trim().length === 0 &&
-    unparsedColorTheme.colors.trim().length === 0;
-
   const colorListItems = state.colorList
     .flatMap((item) => {
       const color = state.colorDict.get(item.colorId);
@@ -761,11 +757,11 @@ export default function App() {
         <button
           onClick={(_e) => handleNextUI()}
           className="mr-4 py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
-          disabled={isInputEmpty()}
+          disabled={isUnparsedColorThemeEmpty(unparsedColorTheme)}
         >
           Next
         </button>
-        {isInputEmpty() ? (
+        {isUnparsedColorThemeEmpty(unparsedColorTheme) ? (
           <button
             onClick={(_e) => handleLoadExample()}
             className="text-blue-500 hover:text-blue-700 text-xl"
@@ -781,26 +777,7 @@ export default function App() {
           </button>
         )}
       </div>
-      <div className="grid grid-cols-2">
-        <div className="mr-4">
-          <p className="text-xl mb-1">Utility Classnames</p>
-          <textarea
-            className="w-full bg-slate-100 h-60 py-2 px-4"
-            placeholder="One name per line"
-            value={unparsedColorTheme.classnames}
-            onChange={(_e) => {}}
-          />
-        </div>
-        <div>
-          <p className="text-xl mb-1">Color Values:</p>
-          <textarea
-            className="w-full bg-slate-100 h-60 py-2 px-4"
-            placeholder="One color value per line"
-            value={unparsedColorTheme.colors}
-            onChange={(_e) => {}}
-          />
-        </div>
-      </div>
+      <ColorThemeInput unparsedColorTheme={unparsedColorTheme} />
     </>
   );
   const colorThemeConfigUI = (
