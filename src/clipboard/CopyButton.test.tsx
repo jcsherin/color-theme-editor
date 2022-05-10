@@ -7,7 +7,7 @@ import {
 } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-import { ClipboardButton } from "./index";
+import { CopyButton } from "./index";
 
 const props = {
   label: "Copy to clipboard",
@@ -35,7 +35,7 @@ describe("ClipboardButton component", () => {
   it("renders a button for copying content to clipboard", () => {
     let tree = renderer
       .create(
-        <ClipboardButton
+        <CopyButton
           label={props.label}
           content={props.content}
           expiryInMs={props.expiryInMs}
@@ -54,7 +54,7 @@ describe("ClipboardButton component", () => {
 
   it("when the user clicks the button a flash message replaces it", async () => {
     const { user } = setup(
-      <ClipboardButton
+      <CopyButton
         label={props.label}
         content={props.content}
         expiryInMs={props.expiryInMs}
@@ -76,7 +76,7 @@ describe("ClipboardButton component", () => {
 
   it("the flash message expires and the copy to clipboard button reppears", async () => {
     const { user } = setup(
-      <ClipboardButton
+      <CopyButton
         label={props.label}
         content={props.content}
         expiryInMs={props.expiryInMs}
@@ -101,7 +101,7 @@ describe("ClipboardButton component", () => {
 
   it("copies the content to clipboard when clicked", async () => {
     const { user } = setup(
-      <ClipboardButton
+      <CopyButton
         label={props.label}
         content={props.content}
         expiryInMs={props.expiryInMs}
@@ -126,7 +126,7 @@ describe("ClipboardButton component", () => {
     });
 
     render(
-      <ClipboardButton
+      <CopyButton
         label={props.label}
         content={props.content}
         expiryInMs={props.expiryInMs}
