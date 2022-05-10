@@ -235,16 +235,16 @@ export default function App() {
   };
 
   const colorListItems = state.colorList
-    .flatMap((item) => {
-      const color = state.colorDict.get(item.colorId);
-      return color ? [{ item: item, color: color }] : [];
+    .flatMap((colorListItem) => {
+      const color = state.colorDict.get(colorListItem.colorId);
+      return color ? [{ colorListItem, color: color }] : [];
     })
-    .map(({ item, color }) => (
+    .map(({ colorListItem, color }) => (
       <ColorSquare
         className="mr-1 mb-1 p-1"
-        key={item.colorId}
+        key={colorListItem.colorId}
         color={color}
-        item={item}
+        item={colorListItem}
         handleSelection={(item) =>
           dispatch({
             kind: "toggleStatus",
@@ -253,6 +253,8 @@ export default function App() {
         }
       />
     ));
+
+  console.log(Array.from(state.colorGroupDict.values()));
 
   const isDisabledGroupButton = !someSelected(state.colorList);
   const colorGroupsButtonRow = allGrouped(state.colorList) ? (
@@ -263,11 +265,11 @@ export default function App() {
     Array.from(state.colorGroupDict.keys())
       .flatMap((groupId) => {
         const colorGroup = state.colorGroupDict.get(groupId);
-        return colorGroup ? [{ groupId, colorGroup }] : [];
+        return colorGroup ? [colorGroup] : [];
       })
-      .map(({ groupId, colorGroup }) => (
+      .map((colorGroup) => (
         <ColorGroupButton
-          key={groupId}
+          key={colorGroup.name}
           className={`mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300`}
           groupName={colorGroup.name}
           disabled={isDisabledGroupButton}
