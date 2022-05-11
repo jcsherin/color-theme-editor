@@ -1,6 +1,6 @@
 import React from "react";
 
-interface ColorGroupButtonProps {
+interface GroupButtonProps {
   groupName: string;
   disabled: boolean;
   handleClick: (_event: React.MouseEvent) => void;
@@ -10,12 +10,12 @@ interface ClassNameProps {
   className: string;
 }
 
-export function ColorGroupButton({
+export function GroupButton({
   groupName,
   disabled,
   className,
   handleClick,
-}: ColorGroupButtonProps & ClassNameProps) {
+}: GroupButtonProps & ClassNameProps) {
   return (
     <button disabled={disabled} className={className} onClick={handleClick}>
       {groupName}

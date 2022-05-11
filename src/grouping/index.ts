@@ -10,10 +10,10 @@ export {
   toggleStatus,
   ungroup,
 } from "./selectableItem";
-export { ColorGroupButton } from "./ColorGroupButton";
+export { GroupButton } from "./GroupButton";
 export {
-  ColorGroup,
-  ColorGroupDict,
+  Group,
+  GroupDict,
   makeColorGroupDict,
   parseColorGroups,
-} from "./colorGroup";
+} from "./group";

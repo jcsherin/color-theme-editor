@@ -1,5 +1,5 @@
 import {
-  ColorGroup,
+  Group,
   SelectableItem,
   notGrouped,
   parseColorGroups,
@@ -16,7 +16,7 @@ import { UnparsedColorTheme } from "./input";
 
 export interface State {
   colorDict: Map<string, HexColor>;
-  colorGroupDict: Map<string, ColorGroup>;
+  colorGroupDict: Map<string, Group>;
   colorList: SelectableItem[];
 }
 

@@ -12,8 +12,8 @@ import {
   someSelected,
   toggleStatus,
   ungroup,
-  ColorGroupButton,
-  ColorGroupDict,
+  GroupButton,
+  GroupDict,
 } from "./grouping";
 import {
   ColorThemeInput,
@@ -86,7 +86,7 @@ const getInitialState = (reset: boolean = false) => {
 
   const state = JSON.parse(cached);
   const colorDict: ColorDict = new Map(state.colorDict);
-  const colorGroupDict: ColorGroupDict = new Map(state.colorGroupDict);
+  const colorGroupDict: GroupDict = new Map(state.colorGroupDict);
   const colorList: SelectableItem[] = state.colorList;
   return {
     colorDict: colorDict,
@@ -254,7 +254,7 @@ export default function App() {
         return colorGroup ? [colorGroup] : [];
       })
       .map((colorGroup) => (
-        <ColorGroupButton
+        <GroupButton
           key={colorGroup.name}
           className={`mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300`}
           groupName={colorGroup.name}
