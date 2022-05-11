@@ -1,9 +1,23 @@
+import userEvent from "@testing-library/user-event";
 import React from "react";
-import renderer from "react-test-renderer";
+import { render, screen } from "@testing-library/react";
+import renderer, { act } from "react-test-renderer";
 
 import { getColorId, makeHexColor } from "../color";
 import { Selectable } from "./Selectable";
-import { groupSelected, makeSelectable, toggleStatus } from "./selectableItem";
+import {
+  groupSelected,
+  makeSelectable,
+  SelectableItem,
+  toggleStatus,
+} from "./selectableItem";
+
+function setup(jsx: JSX.Element) {
+  return {
+    user: userEvent.setup(),
+    ...render(jsx),
+  };
+}
 
 describe("Selectable component", () => {
   it("renders the `default` state", () => {
@@ -114,5 +128,25 @@ describe("Selectable component", () => {
   </span>
 </button>
 `);
+  });
+
+  it("when clicked `handleSelection` prop is invoked", async () => {
+    const red = makeHexColor("red", "#f44336");
+    const defaultItem = makeSelectable(getColorId(red));
+
+    const mockHandleSelection = jest.fn();
+    const { user } = setup(
+      <Selectable
+        className="mr-1 mb-1 p-1"
+        color={red}
+        selectableItem={defaultItem}
+        handleSelection={mockHandleSelection}
+      />
+    );
+
+    await user.click(screen.getByRole("button"));
+
+    expect(mockHandleSelection).toBeCalled();
+    expect(mockHandleSelection).toBeCalledWith(defaultItem);
   });
 });
