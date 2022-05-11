@@ -4,12 +4,12 @@ import * as example from "./utils/example";
 
 import { CopyButton } from "./clipboard";
 import {
-  ColorSquare,
+  Selectable,
   allGrouped,
-  ColorListItem,
+  SelectableItem,
   groupSelected,
   isSelected,
-  makeColorListItem,
+  makeSelectable,
   someSelected,
   toggleStatus,
   ungroup,
@@ -50,7 +50,7 @@ interface ActionRenameColor {
 
 interface ActionToggleStatus {
   kind: "toggleStatus";
-  colorListItem: ColorListItem;
+  colorListItem: SelectableItem;
 }
 
 interface ActionReset {
@@ -89,7 +89,7 @@ const getInitialState = (reset: boolean = false) => {
   const state = JSON.parse(cached);
   const colorDict: ColorDict = new Map(state.colorDict);
   const colorGroupDict: ColorGroupDict = new Map(state.colorGroupDict);
-  const colorList: ColorListItem[] = state.colorList;
+  const colorList: SelectableItem[] = state.colorList;
   return {
     colorDict: colorDict,
     colorGroupDict: colorGroupDict,
@@ -108,7 +108,7 @@ const reducer = (state: State, action: Action): State => {
       const colorGroupDict = parseColorGroups(
         action.unparsedColorTheme.classnames
       );
-      const colorList = Array.from(colorDict.keys()).map(makeColorListItem);
+      const colorList = Array.from(colorDict.keys()).map(makeSelectable);
 
       return {
         colorDict: colorDict,
@@ -240,11 +240,11 @@ export default function App() {
       return color ? [{ colorListItem, color: color }] : [];
     })
     .map(({ colorListItem, color }) => (
-      <ColorSquare
+      <Selectable
         className="mr-1 mb-1 p-1"
         key={colorListItem.colorId}
         color={color}
-        item={colorListItem}
+        selectableItem={colorListItem}
         handleSelection={(item) =>
           dispatch({
             kind: "toggleStatus",

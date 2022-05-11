@@ -1,15 +1,15 @@
-export { ColorSquare } from "./ColorSquare";
+export { Selectable } from "./Selectable";
 export {
   allGrouped,
-  ColorListItem,
+  SelectableItem,
   groupSelected,
   isSelected,
-  makeColorListItem,
+  makeSelectable,
   notGrouped,
   someSelected,
   toggleStatus,
   ungroup,
-} from "./colorListItem";
+} from "./selectableItem";
 export { ColorGroupButton } from "./ColorGroupButton";
 export {
   ColorGroup,

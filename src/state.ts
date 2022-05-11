@@ -1,10 +1,10 @@
-import { ColorGroup, ColorListItem, notGrouped } from "./grouping";
+import { ColorGroup, SelectableItem, notGrouped } from "./grouping";
 import { compareColorId, getColorName, getColorValue, HexColor } from "./color";
 
 export interface State {
   colorDict: Map<string, HexColor>;
   colorGroupDict: Map<string, ColorGroup>;
-  colorList: ColorListItem[];
+  colorList: SelectableItem[];
 }
 
 export function serializeConfig({

@@ -1,19 +1,24 @@
 import React from "react";
 import { getColorValue, HexColor } from "../color";
-import { ColorListItem } from "./colorListItem";
+import { SelectableItem } from "./selectableItem";
 
-export function ColorSquare({
-  className: overrideClassName,
-  color,
-  item,
-  handleSelection,
-}: {
-  className: string;
+interface SelectableProps {
   color: HexColor;
-  item: ColorListItem;
-  handleSelection: (color: ColorListItem) => void;
-}) {
-  const getClassName = (item: ColorListItem): string => {
+  selectableItem: SelectableItem;
+  handleSelection: (color: SelectableItem) => void;
+}
+
+interface ClassNameProps {
+  className: string;
+}
+
+export function Selectable({
+  className,
+  color,
+  selectableItem,
+  handleSelection,
+}: SelectableProps & ClassNameProps) {
+  const getClassName = (item: SelectableItem): string => {
     switch (item.status) {
       case "selected":
         return "border-4 border-indigo-500";
@@ -26,8 +31,8 @@ export function ColorSquare({
 
   return (
     <button
-      className={`${overrideClassName} ${getClassName(item)}`}
-      onClick={(_event) => handleSelection(item)}
+      className={`${className} ${getClassName(selectableItem)}`}
+      onClick={(_event) => handleSelection(selectableItem)}
     >
       <span
         className="w-16 h-12 block border-b"
