@@ -3,7 +3,7 @@ import React from "react";
 interface GroupButtonProps {
   groupName: string;
   disabled: boolean;
-  handleClick: (_event: React.MouseEvent) => void;
+  handleClick: (groupName: string) => void;
 }
 
 interface ClassNameProps {
@@ -17,7 +17,11 @@ export function GroupButton({
   handleClick,
 }: GroupButtonProps & ClassNameProps) {
   return (
-    <button disabled={disabled} className={className} onClick={handleClick}>
+    <button
+      disabled={disabled}
+      className={className}
+      onClick={(_event) => handleClick(groupName)}
+    >
       {groupName}
     </button>
   );

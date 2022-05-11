@@ -4,15 +4,11 @@ import * as example from "./utils/example";
 
 import { CopyButton } from "./clipboard";
 import {
-  Selectable,
-  allGrouped,
   SelectableItem,
   groupSelected,
   isSelected,
-  someSelected,
   toggleStatus,
   ungroup,
-  GroupButton,
   GroupDict,
 } from "./grouping";
 import {
@@ -23,6 +19,7 @@ import {
 import { TreeEditor } from "./editor";
 import { parse, serializeConfig, State } from "./state";
 import { Wizard, wizardNextStep, wizardPrevStep, makeWizard } from "./wizard";
+import { GroupColors } from "./grouping/GroupColors";
 
 interface ActionParse {
   kind: "parse";
@@ -48,7 +45,7 @@ interface ActionRenameColor {
 
 interface ActionToggleStatus {
   kind: "toggleStatus";
-  colorListItem: SelectableItem;
+  selectableItem: SelectableItem;
 }
 
 interface ActionReset {
@@ -160,7 +157,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         colorList: state.colorList.map(
-          toggleStatus(action.colorListItem.colorId)
+          toggleStatus(action.selectableItem.colorId)
         ),
       };
     }
@@ -221,50 +218,6 @@ export default function App() {
     setUnparsedColorTheme({ classnames: "", colors: "" });
     dispatch({ kind: "reset" });
   };
-
-  const colorListItems = state.colorList
-    .flatMap((colorListItem) => {
-      const color = state.colorDict.get(colorListItem.colorId);
-      return color ? [{ colorListItem, color: color }] : [];
-    })
-    .map(({ colorListItem, color }) => (
-      <Selectable
-        className="mr-1 mb-1 p-1"
-        key={colorListItem.colorId}
-        color={color}
-        selectableItem={colorListItem}
-        handleSelection={(item) =>
-          dispatch({
-            kind: "toggleStatus",
-            colorListItem: item,
-          })
-        }
-      />
-    ));
-
-  const isDisabledGroupButton = !someSelected(state.colorList);
-  const colorGroupsButtonRow = allGrouped(state.colorList) ? (
-    <p className="text-2xl text-center bg-yellow-200 py-2">
-      Great! You've completed grouping all the colors.
-    </p>
-  ) : (
-    Array.from(state.colorGroupDict.keys())
-      .flatMap((groupId) => {
-        const colorGroup = state.colorGroupDict.get(groupId);
-        return colorGroup ? [colorGroup] : [];
-      })
-      .map((colorGroup) => (
-        <GroupButton
-          key={colorGroup.name}
-          className={`mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300`}
-          groupName={colorGroup.name}
-          disabled={isDisabledGroupButton}
-          handleClick={(_event) =>
-            dispatch({ kind: "addToGroup", groupName: colorGroup.name })
-          }
-        />
-      ))
-  );
 
   const colorThemeInputUI = (
     <>
@@ -330,10 +283,18 @@ export default function App() {
             })
           }
         />
-        <div>
-          <div className="flex flex-wrap mb-4">{colorListItems}</div>
-          <div className={"pl-2"}>{colorGroupsButtonRow}</div>
-        </div>
+        <GroupColors
+          state={state}
+          handleSelection={(selectableItem) =>
+            dispatch({
+              kind: "toggleStatus",
+              selectableItem: selectableItem,
+            })
+          }
+          handleAddToGroup={(groupName) =>
+            dispatch({ kind: "addToGroup", groupName: groupName })
+          }
+        />
       </div>
     </>
   );
