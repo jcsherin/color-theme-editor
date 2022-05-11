@@ -1,16 +1,11 @@
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import renderer, { act } from "react-test-renderer";
+import renderer from "react-test-renderer";
 
 import { getColorId, makeHexColor } from "../color";
 import { Selectable } from "./Selectable";
-import {
-  groupSelected,
-  makeSelectable,
-  SelectableItem,
-  toggleStatus,
-} from "./selectableItem";
+import { groupSelected, makeSelectable, toggleStatus } from "./selectableItem";
 
 function setup(jsx: JSX.Element) {
   return {
