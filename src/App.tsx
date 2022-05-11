@@ -210,7 +210,7 @@ export default function App() {
 
   const handleLoadExample = () =>
     setUnparsedColorTheme({
-      classnames: example.utilityClassnames().join("\n"),
+      classnames: example.groupNames().join("\n"),
       colors: example.colors().join("\n"),
     });
 

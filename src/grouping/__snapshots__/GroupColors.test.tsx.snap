@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component for adding selected colors to a group renders a list of selectable colors and buttons with group names 1`] = `
+<div>
+  <div
+    class="flex flex-wrap mb-4"
+  >
+    <button
+      class="mr-1 mb-1 p-1 border-4 border-white"
+    >
+      <span
+        class="w-16 h-12 block border-b"
+        style="background-color: rgb(0, 0, 0);"
+      />
+      <span
+        class="block text-xs text-center truncate bg-black text-white"
+      >
+        #000000
+      </span>
+    </button>
+    <button
+      class="mr-1 mb-1 p-1 border-4 border-white"
+    >
+      <span
+        class="w-16 h-12 block border-b"
+        style="background-color: rgb(255, 255, 255);"
+      />
+      <span
+        class="block text-xs text-center truncate bg-black text-white"
+      >
+        #ffffff
+      </span>
+    </button>
+    <button
+      class="mr-1 mb-1 p-1 border-4 border-white"
+    >
+      <span
+        class="w-16 h-12 block border-b"
+        style="background-color: rgb(244, 67, 54);"
+      />
+      <span
+        class="block text-xs text-center truncate bg-black text-white"
+      >
+        #f44336
+      </span>
+    </button>
+    <button
+      class="mr-1 mb-1 p-1 border-4 border-white"
+    >
+      <span
+        class="w-16 h-12 block border-b"
+        style="background-color: rgb(255, 235, 238);"
+      />
+      <span
+        class="block text-xs text-center truncate bg-black text-white"
+      >
+        #ffebee
+      </span>
+    </button>
+    <button
+      class="mr-1 mb-1 p-1 border-4 border-white"
+    >
+      <span
+        class="w-16 h-12 block border-b"
+        style="background-color: rgb(255, 205, 210);"
+      />
+      <span
+        class="block text-xs text-center truncate bg-black text-white"
+      >
+        #ffcdd2
+      </span>
+    </button>
+    <button
+      class="mr-1 mb-1 p-1 border-4 border-white"
+    >
+      <span
+        class="w-16 h-12 block border-b"
+        style="background-color: rgb(239, 154, 154);"
+      />
+      <span
+        class="block text-xs text-center truncate bg-black text-white"
+      >
+        #ef9a9a
+      </span>
+    </button>
+  </div>
+  <div
+    class="pl-2"
+  >
+    <button
+      class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+      disabled=""
+    >
+      primary
+    </button>
+    <button
+      class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+      disabled=""
+    >
+      secondary
+    </button>
+  </div>
+</div>
+`;
