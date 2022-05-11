@@ -5,21 +5,21 @@ import { SelectableItem } from "./selectableItem";
 interface SelectableProps {
   color: HexColor;
   selectableItem: SelectableItem;
-  handleSelection: (color: SelectableItem) => void;
+  handleSelection: (selectableItem: SelectableItem) => void;
 }
 
 interface ClassNameProps {
-  className: string;
+  className?: string;
 }
 
 export function Selectable({
-  className,
+  className = "",
   color,
   selectableItem,
   handleSelection,
 }: SelectableProps & ClassNameProps) {
-  const getClassName = (item: SelectableItem): string => {
-    switch (item.status) {
+  const getClassName = (selectable: SelectableItem): string => {
+    switch (selectable.status) {
       case "selected":
         return "border-4 border-indigo-500";
       case "default":
