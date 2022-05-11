@@ -68,11 +68,8 @@ export function TreeEditor({
     initialInputMode
   );
 
-  const handleInputFocus = (colorId: string) => {
+  const handleInputFocus = (colorId: string) =>
     inputActionDispatch({ kind: "focus", colorId: colorId });
-    const color = state.colorDict.get(colorId);
-    if (color) console.log(`Editing -> ${JSON.stringify(color, null, 2)}`);
-  };
 
   const handleKeyboardNavigate = (key: string, target: string) => {
     switch (key) {

@@ -254,8 +254,6 @@ export default function App() {
       />
     ));
 
-  console.log(Array.from(state.colorGroupDict.values()));
-
   const isDisabledGroupButton = !someSelected(state.colorList);
   const colorGroupsButtonRow = allGrouped(state.colorList) ? (
     <p className="text-2xl text-center bg-yellow-200 py-2">
