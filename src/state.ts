@@ -1,5 +1,18 @@
-import { ColorGroup, SelectableItem, notGrouped } from "./grouping";
-import { compareColorId, getColorName, getColorValue, HexColor } from "./color";
+import {
+  ColorGroup,
+  SelectableItem,
+  notGrouped,
+  parseColorGroups,
+  makeSelectable,
+} from "./grouping";
+import {
+  compareColorId,
+  getColorName,
+  getColorValue,
+  HexColor,
+  parseColors,
+} from "./color";
+import { UnparsedColorTheme } from "./input";
 
 export interface State {
   colorDict: Map<string, HexColor>;
@@ -43,4 +56,15 @@ export function serializeConfig({
   const wrapper = { theme: { colors: serialized } };
   const template = `module.exports = ${JSON.stringify(wrapper, null, 2)}`;
   return template;
+}
+
+export function parse(unparsedColorTheme: UnparsedColorTheme): State {
+  const colorDict = parseColors(unparsedColorTheme.colors);
+  const colorGroupDict = parseColorGroups(unparsedColorTheme.classnames);
+  const colorList = Array.from(colorDict.keys()).map(makeSelectable);
+  return {
+    colorDict: colorDict,
+    colorGroupDict: colorGroupDict,
+    colorList: colorList,
+  };
 }

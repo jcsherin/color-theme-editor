@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { ColorDict, parseColors, updateColorName } from "./color";
+import { ColorDict, updateColorName } from "./color";
 import * as example from "./utils/example";
 
 import { CopyButton } from "./clipboard";
@@ -9,13 +9,11 @@ import {
   SelectableItem,
   groupSelected,
   isSelected,
-  makeSelectable,
   someSelected,
   toggleStatus,
   ungroup,
   ColorGroupButton,
   ColorGroupDict,
-  parseColorGroups,
 } from "./grouping";
 import {
   ColorThemeInput,
@@ -23,7 +21,7 @@ import {
   UnparsedColorTheme,
 } from "./input";
 import { TreeEditor } from "./editor";
-import { serializeConfig, State } from "./state";
+import { parse, serializeConfig, State } from "./state";
 import { Wizard, wizardNextStep, wizardPrevStep, makeWizard } from "./wizard";
 
 interface ActionParse {
@@ -104,17 +102,7 @@ const reducer = (state: State, action: Action): State => {
       if (state.colorDict.size > 0 && state.colorGroupDict.size > 0)
         return state;
 
-      const colorDict = parseColors(action.unparsedColorTheme.colors);
-      const colorGroupDict = parseColorGroups(
-        action.unparsedColorTheme.classnames
-      );
-      const colorList = Array.from(colorDict.keys()).map(makeSelectable);
-
-      return {
-        colorDict: colorDict,
-        colorGroupDict: colorGroupDict,
-        colorList: colorList,
-      };
+      return parse(action.unparsedColorTheme);
     }
 
     case "addToGroup": {
