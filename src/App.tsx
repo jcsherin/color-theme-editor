@@ -59,6 +59,37 @@ function serializeList<T>(entry: List<T>, serializerFn: (value: T) => any) {
   }
   return items;
 }
+
+function serializeUnparsedColorTheme(unparsedColorTheme: UnparsedColorTheme) {
+  return unparsedColorTheme;
+}
+
+function serializeState(state: State) {
+  return {
+    colorDict: Array.from(state.colorDict),
+    colorGroupDict: Array.from(state.colorGroupDict),
+    colorList: state.colorList,
+  };
+}
+function serializeFormEntryUI(ui: FormEntryUI) {
+  return {
+    ...ui,
+    state: serializeUnparsedColorTheme(ui.state),
+  };
+}
+
+function serializeMainUI(ui: MainUI) {
+  return { ...ui, state: serializeState(ui.state) };
+}
+
+function serializeWizUI(ui: FormEntryUI | MainUI) {
+  switch (ui.kind) {
+    case "formEntry":
+      return serializeFormEntryUI(ui);
+    case "main":
+      return serializeMainUI(ui);
+  }
+}
 export default function App() {
   const [wizard, setWizard] = useState<Wizard>(() => {
     const cached = localStorage.getItem("wizard");
