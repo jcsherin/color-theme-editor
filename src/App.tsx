@@ -12,6 +12,27 @@ import { serializeConfig, reducer, getInitialState } from "./state";
 import { Wizard, wizardNextStep, wizardPrevStep, makeWizard } from "./wizard";
 import { GroupColors } from "./grouping/GroupColors";
 
+interface List<T> {
+  value: T;
+  prev: List<T> | undefined;
+  next: List<T> | undefined;
+}
+function createListEntry<T>(value: T): List<T> {
+  return {
+    value: value,
+    prev: undefined,
+    next: undefined,
+  };
+}
+function serializeList<T>(entry: List<T>, serializerFn: (value: T) => any) {
+  const items = [];
+  let item: List<T> | undefined = entry;
+  while (item) {
+    items.push(serializerFn(item.value));
+    item = item.next;
+  }
+  return items;
+}
 export default function App() {
   const [wizard, setWizard] = useState<Wizard>(() => {
     const cached = localStorage.getItem("wizard");
