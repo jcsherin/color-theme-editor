@@ -8,7 +8,7 @@ import {
   UnparsedColorTheme,
 } from "./input";
 import { TreeEditor } from "./editor";
-import { serializeConfig, reducer, getInitialState } from "./state";
+import { serializeConfig, reducer, getInitialState, State } from "./state";
 import { Wizard, wizardNextStep, wizardPrevStep, makeWizard } from "./wizard";
 import { GroupColors } from "./grouping/GroupColors";
 
@@ -29,6 +29,12 @@ interface MainUI {
 }
 
 type WizUI = FormEntryUI | MainUI;
+
+interface Wiz {
+  start: List<WizUI>;
+  current: List<WizUI>;
+}
+
 function createFormEntryUI(state: UnparsedColorTheme): FormEntryUI {
   return {
     kind: "formEntry",
@@ -50,6 +56,34 @@ function createListEntry<T>(value: T): List<T> {
     next: undefined,
   };
 }
+
+function createWiz(unparsedColorTheme: UnparsedColorTheme, state: State) {
+  const firstUI: List<WizUI> = createListEntry(
+    createFormEntryUI(unparsedColorTheme)
+  );
+  const secondUI: List<WizUI> = createListEntry(createMainUI(state));
+
+  firstUI.next = secondUI;
+  secondUI.prev = firstUI;
+
+  return {
+    start: firstUI,
+    current: firstUI,
+  };
+}
+
+function nextWizUI(wiz: Wiz): Wiz {
+  return wiz.current && wiz.current.next
+    ? { ...wiz, current: wiz.current.next }
+    : wiz;
+}
+
+function prevWizUI(wiz: Wiz): Wiz {
+  return wiz.current && wiz.current.prev
+    ? { ...wiz, current: wiz.current.prev }
+    : wiz;
+}
+
 function serializeList<T>(entry: List<T>, serializerFn: (value: T) => any) {
   const items = [];
   let item: List<T> | undefined = entry;
@@ -71,6 +105,7 @@ function serializeState(state: State) {
     colorList: state.colorList,
   };
 }
+
 function serializeFormEntryUI(ui: FormEntryUI) {
   return {
     ...ui,
@@ -90,6 +125,25 @@ function serializeWizUI(ui: FormEntryUI | MainUI) {
       return serializeMainUI(ui);
   }
 }
+
+function serializeWiz(wiz: Wiz) {
+  const start = serializeList(wiz.start, serializeWizUI);
+  const current = wiz.current.value.kind;
+
+  return { start, current };
+}
+
+const wiz = createWiz({ classnames: "", colors: "" }, getInitialState());
+const wiz2 = nextWizUI(wiz);
+const wiz3 = prevWizUI(wiz);
+
+console.log(wiz);
+console.log(serializeWiz(wiz));
+console.log(serializeWiz(wiz2));
+console.log(serializeWiz(nextWizUI(wiz2)));
+console.log(serializeWiz(wiz3));
+console.log(serializeWiz(prevWizUI(wiz3)));
+
 export default function App() {
   const [wizard, setWizard] = useState<Wizard>(() => {
     const cached = localStorage.getItem("wizard");
