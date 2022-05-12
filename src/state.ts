@@ -27,6 +27,12 @@ export interface State {
   colorList: SelectableItem[];
 }
 
+export interface SerializedState {
+  colorDict: [string, HexColor][];
+  colorGroupDict: [string, Group][];
+  colorList: SelectableItem[];
+}
+
 export function serializeConfig({
   colorDict,
   colorGroupDict,

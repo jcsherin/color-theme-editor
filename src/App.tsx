@@ -8,7 +8,13 @@ import {
   UnparsedColorTheme,
 } from "./input";
 import { TreeEditor } from "./editor";
-import { serializeConfig, reducer, getInitialState, State } from "./state";
+import {
+  serializeConfig,
+  reducer,
+  getInitialState,
+  State,
+  SerializedState,
+} from "./state";
 import { Wizard, wizardNextStep, wizardPrevStep, makeWizard } from "./wizard";
 import { GroupColors } from "./grouping/GroupColors";
 
@@ -28,7 +34,13 @@ interface MainUI {
   state: State;
 }
 
+interface MainUISerialized {
+  kind: "main";
+  state: SerializedState;
+}
+
 type WizUI = FormEntryUI | MainUI;
+type WizUISerialized = FormEntryUI | MainUISerialized;
 
 interface Wiz {
   start: List<WizUI>;
@@ -94,11 +106,21 @@ function serializeList<T>(entry: List<T>, serializerFn: (value: T) => any) {
   return items;
 }
 
-function serializeUnparsedColorTheme(unparsedColorTheme: UnparsedColorTheme) {
-  return unparsedColorTheme;
+function deserializeList<T>(
+  entries: any[],
+  deserializerFn: (value: any) => T
+): List<T> | undefined {
+  if (entries.length === 0) return;
+
+  const items = entries.map((x) => createListEntry(deserializerFn(x)));
+  for (let i = 1; i < items.length; ++i) {
+    items[i - 1].next = items[i];
+    items[i].prev = items[i - 1];
+  }
+  return items[0];
 }
 
-function serializeState(state: State) {
+function serializeState(state: State): SerializedState {
   return {
     colorDict: Array.from(state.colorDict),
     colorGroupDict: Array.from(state.colorGroupDict),
@@ -106,23 +128,46 @@ function serializeState(state: State) {
   };
 }
 
-function serializeFormEntryUI(ui: FormEntryUI) {
+function deserializeState(state: SerializedState): State {
   return {
-    ...ui,
-    state: serializeUnparsedColorTheme(ui.state),
+    ...state,
+    colorDict: new Map(state.colorDict),
+    colorGroupDict: new Map(state.colorGroupDict),
   };
 }
 
-function serializeMainUI(ui: MainUI) {
+function serializeMainUI(ui: MainUI): {
+  state: SerializedState;
+  kind: "main";
+} {
   return { ...ui, state: serializeState(ui.state) };
+}
+
+function deserializeMainUI(ui: {
+  kind: "main";
+  state: SerializedState;
+}): MainUI {
+  return {
+    ...ui,
+    state: deserializeState(ui.state),
+  };
 }
 
 function serializeWizUI(ui: FormEntryUI | MainUI) {
   switch (ui.kind) {
     case "formEntry":
-      return serializeFormEntryUI(ui);
+      return ui;
     case "main":
       return serializeMainUI(ui);
+  }
+}
+
+function deserializeWizUI(ui: WizUISerialized): WizUI {
+  switch (ui.kind) {
+    case "formEntry":
+      return ui;
+    case "main":
+      return deserializeMainUI(ui);
   }
 }
 
@@ -131,6 +176,24 @@ function serializeWiz(wiz: Wiz) {
   const current = wiz.current.value.kind;
 
   return { start, current };
+}
+
+function deserializeWiz(obj: {
+  start: any[];
+  current: "main" | "formEntry";
+}): Wiz | undefined {
+  const start = deserializeList(obj.start, deserializeWizUI);
+  if (!start) return undefined;
+
+  let current: List<WizUI> | undefined = start;
+  while (current) {
+    if (current.value.kind === obj.current)
+      return {
+        start: start,
+        current: current,
+      };
+    current = current.next;
+  }
 }
 
 const wiz = createWiz({ classnames: "", colors: "" }, getInitialState());
@@ -143,6 +206,7 @@ console.log(serializeWiz(wiz2));
 console.log(serializeWiz(nextWizUI(wiz2)));
 console.log(serializeWiz(wiz3));
 console.log(serializeWiz(prevWizUI(wiz3)));
+console.log(deserializeWiz(serializeWiz(wiz2)));
 
 export default function App() {
   const [wizard, setWizard] = useState<Wizard>(() => {
