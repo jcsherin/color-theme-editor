@@ -17,6 +17,32 @@ interface List<T> {
   prev: List<T> | undefined;
   next: List<T> | undefined;
 }
+
+interface FormEntryUI {
+  kind: "formEntry";
+  state: UnparsedColorTheme;
+}
+
+interface MainUI {
+  kind: "main";
+  state: State;
+}
+
+type WizUI = FormEntryUI | MainUI;
+function createFormEntryUI(state: UnparsedColorTheme): FormEntryUI {
+  return {
+    kind: "formEntry",
+    state: state,
+  };
+}
+
+function createMainUI(state: State): MainUI {
+  return {
+    kind: "main",
+    state: state,
+  };
+}
+
 function createListEntry<T>(value: T): List<T> {
   return {
     value: value,
