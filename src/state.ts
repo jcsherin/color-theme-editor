@@ -113,7 +113,7 @@ interface ActionReset {
   kind: "reset";
 }
 
-type Action =
+export type Action =
   | ActionParse
   | ActionAddToGroup
   | ActionRemoveFromGroup

@@ -14,6 +14,7 @@ import {
   getInitialState,
   State,
   SerializedState,
+  Action,
 } from "./state";
 import { Wizard, wizardNextStep, wizardPrevStep, makeWizard } from "./wizard";
 import { GroupColors } from "./grouping/GroupColors";
@@ -208,7 +209,101 @@ console.log(serializeWiz(wiz3));
 console.log(serializeWiz(prevWizUI(wiz3)));
 console.log(deserializeWiz(serializeWiz(wiz2)));
 
+interface NextWizUI {
+  kind: "next";
+}
+
+interface PrevWizUI {
+  kind: "prev";
+}
+
+interface FormLoadExample {
+  kind: "loadExample";
+}
+
+interface FormReset {
+  kind: "resetForm";
+}
+
+type WizAction = NextWizUI | PrevWizUI;
+type FormAction = FormLoadExample | FormReset;
+
+function _topLevelReducer(
+  wiz: Wiz,
+  action: WizAction | FormAction | Action
+): Wiz {
+  switch (action.kind) {
+    case "next":
+      return nextWizUI(wiz);
+    case "prev":
+      return prevWizUI(wiz);
+    case "loadExample":
+    case "resetForm":
+      switch (wiz.current.value.kind) {
+        case "formEntry":
+          return {
+            ...wiz,
+            current: {
+              ...wiz.current,
+              value: {
+                ...wiz.current.value,
+                state: formReducer(wiz.current.value.state, action),
+              },
+            },
+          };
+        case "main":
+          return wiz;
+      }
+    case "parse":
+    case "addToGroup":
+    case "removeFromGroup":
+    case "renameColor":
+    case "toggleStatus":
+    case "reset":
+      switch (wiz.current.value.kind) {
+        case "formEntry":
+          return wiz;
+        case "main":
+          return {
+            ...wiz,
+            current: {
+              ...wiz.current,
+              value: {
+                ...wiz.current.value,
+                state: reducer(wiz.current.value.state, action),
+              },
+            },
+          };
+      }
+  }
+}
+
+function formReducer(
+  _form: UnparsedColorTheme,
+  action: FormAction
+): UnparsedColorTheme {
+  switch (action.kind) {
+    case "loadExample":
+      return {
+        classnames: example.groupNames().join("\n"),
+        colors: example.colors().join("\n"),
+      };
+    case "resetForm":
+      return { classnames: "", colors: "" };
+  }
+}
+
 export default function App() {
+  const [_topLevel, _dispatchTopLevel] = useReducer(
+    _topLevelReducer,
+    createWiz(
+      {
+        classnames: "",
+        colors: "",
+      },
+      getInitialState(true)
+    )
+  );
   const [wizard, setWizard] = useState<Wizard>(() => {
     const cached = localStorage.getItem("wizard");
     return cached ? JSON.parse(cached) : makeWizard();
