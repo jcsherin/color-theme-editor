@@ -252,17 +252,35 @@ function formReducer(
   }
 }
 
+function init({ cacheKey }: { cacheKey: string }) {
+  const cached = localStorage.getItem(cacheKey);
+  return cached
+    ? deserializeWiz(JSON.parse(cached))
+    : createWiz(
+        {
+          classnames: "",
+          colors: "",
+        },
+        {
+          colorDict: new Map(),
+          colorGroupDict: new Map(),
+          colorList: [],
+        }
+      );
+}
+
+const cacheKey = "wiz";
+
 export default function App() {
   const [_topLevel, _dispatchTopLevel] = useReducer(
     _topLevelReducer,
-    createWiz(
-      {
-        classnames: "",
-        colors: "",
-      },
-      getInitialState(true)
-    )
+    { cacheKey: cacheKey },
+    init
   );
+
+  useEffect(() => {
+    localStorage.setItem(cacheKey, JSON.stringify(serializeWiz(_topLevel)));
+  }, [_topLevel]);
   const [wizard, setWizard] = useState<Wizard>(() => {
     const cached = localStorage.getItem("wizard");
     return cached ? JSON.parse(cached) : makeWizard();
