@@ -16,7 +16,7 @@ interface MainUI {
   state: State;
 }
 
-type WizUI = FormEntryUI | MainUI;
+type WizardUI = FormEntryUI | MainUI;
 
 interface MainUISerialized {
   kind: "main";
@@ -24,15 +24,15 @@ interface MainUISerialized {
 }
 
 type FormEntryUISerialized = FormEntryUI;
-type SerializedWizUI = FormEntryUISerialized | MainUISerialized;
+type SerializedWizardUI = FormEntryUISerialized | MainUISerialized;
 
-interface Wiz {
-  steps: WizUI[];
+interface Wizard {
+  steps: WizardUI[];
   currentIdx: number;
 }
 
-interface SerializedWiz {
-  steps: SerializedWizUI[];
+interface SerializedWizard {
+  steps: SerializedWizardUI[];
   currentIdx: number;
 }
 
@@ -50,7 +50,10 @@ function createMainUI(state: State): MainUI {
   };
 }
 
-function createWiz(unparsedColorTheme: UnparsedColorTheme, state: State): Wiz {
+function createWizard(
+  unparsedColorTheme: UnparsedColorTheme,
+  state: State
+): Wizard {
   const formEntryUI = createFormEntryUI(unparsedColorTheme);
   const mainUI = createMainUI(state);
 
@@ -60,16 +63,16 @@ function createWiz(unparsedColorTheme: UnparsedColorTheme, state: State): Wiz {
   };
 }
 
-function nextWizUI(wiz: Wiz): Wiz {
-  return wiz.currentIdx === wiz.steps.length - 1
-    ? wiz
-    : { ...wiz, currentIdx: wiz.currentIdx + 1 };
+function nextWizardUI(wizard: Wizard): Wizard {
+  return wizard.currentIdx === wizard.steps.length - 1
+    ? wizard
+    : { ...wizard, currentIdx: wizard.currentIdx + 1 };
 }
 
-function prevWizUI(wiz: Wiz): Wiz {
-  return wiz.currentIdx === 0
-    ? wiz
-    : { ...wiz, currentIdx: wiz.currentIdx - 1 };
+function prevWizardUI(wizard: Wizard): Wizard {
+  return wizard.currentIdx === 0
+    ? wizard
+    : { ...wizard, currentIdx: wizard.currentIdx - 1 };
 }
 
 function serializeState(state: State): SerializedState {
@@ -105,7 +108,7 @@ function deserializeMainUI(ui: {
   };
 }
 
-function serializeWizUI(ui: FormEntryUI | MainUI): SerializedWizUI {
+function serializeWizardUI(ui: FormEntryUI | MainUI): SerializedWizardUI {
   switch (ui.kind) {
     case "formEntry":
       return ui;
@@ -114,7 +117,7 @@ function serializeWizUI(ui: FormEntryUI | MainUI): SerializedWizUI {
   }
 }
 
-function deserializeWizUI(ui: SerializedWizUI): WizUI {
+function deserializeWizardUI(ui: SerializedWizardUI): WizardUI {
   switch (ui.kind) {
     case "formEntry":
       return ui;
@@ -123,25 +126,25 @@ function deserializeWizUI(ui: SerializedWizUI): WizUI {
   }
 }
 
-function serializeWiz(wiz: Wiz): SerializedWiz {
+function serializeWizard(wizard: Wizard): SerializedWizard {
   return {
-    ...wiz,
-    steps: wiz.steps.map(serializeWizUI),
+    ...wizard,
+    steps: wizard.steps.map(serializeWizardUI),
   };
 }
 
-function deserializeWiz(serialized: SerializedWiz): Wiz {
+function deserializeWiz(serialized: SerializedWizard): Wizard {
   return {
     ...serialized,
-    steps: serialized.steps.map(deserializeWizUI),
+    steps: serialized.steps.map(deserializeWizardUI),
   };
 }
 
-interface NextWizUI {
+interface NextWizardUI {
   kind: "next";
 }
 
-interface PrevWizUI {
+interface PrevWizardUI {
   kind: "prev";
 }
 
@@ -153,37 +156,37 @@ interface FormReset {
   kind: "resetForm";
 }
 
-type WizAction = NextWizUI | PrevWizUI;
+type WizardAction = NextWizardUI | PrevWizardUI;
 type FormAction = FormLoadExample | FormReset;
 
 function topLevelReducer(
-  wiz: Wiz,
-  action: WizAction | FormAction | Action
-): Wiz {
+  wizard: Wizard,
+  action: WizardAction | FormAction | Action
+): Wizard {
   switch (action.kind) {
     case "next":
-      return nextWizUI(wiz);
+      return nextWizardUI(wizard);
     case "prev":
-      return prevWizUI(wiz);
+      return prevWizardUI(wizard);
     case "loadExample":
     case "resetForm":
-      switch (wiz.steps[wiz.currentIdx].kind) {
+      switch (wizard.steps[wizard.currentIdx].kind) {
         case "formEntry": {
           const state = formReducer(
-            wiz.steps[wiz.currentIdx].state as UnparsedColorTheme,
+            wizard.steps[wizard.currentIdx].state as UnparsedColorTheme,
             action
           );
           return {
-            ...wiz,
-            steps: wiz.steps.map((ui, idx) =>
-              ui.kind === "formEntry" && idx === wiz.currentIdx
+            ...wizard,
+            steps: wizard.steps.map((ui, idx) =>
+              ui.kind === "formEntry" && idx === wizard.currentIdx
                 ? { ...ui, state: state }
                 : ui
             ),
           };
         }
         case "main":
-          return wiz;
+          return wizard;
       }
     case "parse":
     case "addToGroup":
@@ -191,18 +194,18 @@ function topLevelReducer(
     case "renameColor":
     case "toggleStatus":
     case "reset":
-      switch (wiz.steps[wiz.currentIdx].kind) {
+      switch (wizard.steps[wizard.currentIdx].kind) {
         case "formEntry":
-          return wiz;
+          return wizard;
         case "main": {
           const state = reducer(
-            wiz.steps[wiz.currentIdx].state as State,
+            wizard.steps[wizard.currentIdx].state as State,
             action
           );
           return {
-            ...wiz,
-            steps: wiz.steps.map((ui, idx) =>
-              ui.kind === "main" && idx === wiz.currentIdx
+            ...wizard,
+            steps: wizard.steps.map((ui, idx) =>
+              ui.kind === "main" && idx === wizard.currentIdx
                 ? { ...ui, state: state }
                 : ui
             ),
@@ -231,7 +234,7 @@ function init({ cacheKey }: { cacheKey: string }) {
   const cached = localStorage.getItem(cacheKey);
   return cached
     ? deserializeWiz(JSON.parse(cached))
-    : createWiz(
+    : createWizard(
         {
           classnames: "",
           colors: "",
@@ -254,7 +257,7 @@ export default function App() {
   );
 
   useEffect(() => {
-    localStorage.setItem(cacheKey, JSON.stringify(serializeWiz(wizard)));
+    localStorage.setItem(cacheKey, JSON.stringify(serializeWizard(wizard)));
   }, [wizard]);
   const handleNextUI = () => {
     dispatch({ kind: "next" });
@@ -268,7 +271,7 @@ export default function App() {
   const handleLoadExample = () => dispatch({ kind: "loadExample" });
   const handleResetData = () => dispatch({ kind: "resetForm" });
 
-  const renderWizardUI = (wizard: Wiz) => {
+  const renderWizardUI = (wizard: Wizard) => {
     switch (wizard.steps[wizard.currentIdx].kind) {
       case "formEntry": {
         const state = wizard.steps[wizard.currentIdx]
