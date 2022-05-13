@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import * as example from "./utils/example";
 
 import { CopyButton } from "./clipboard";
@@ -11,12 +11,10 @@ import { TreeEditor } from "./editor";
 import {
   serializeConfig,
   reducer,
-  getInitialState,
   State,
   SerializedState,
   Action,
 } from "./state";
-import { Wizard, wizardNextStep, wizardPrevStep, makeWizard } from "./wizard";
 import { GroupColors } from "./grouping/GroupColors";
 
 interface FormEntryUI {
@@ -145,22 +143,10 @@ function serializeWiz(wiz: Wiz): SerializedWiz {
 
 function deserializeWiz(serialized: SerializedWiz): Wiz {
   return {
-    ...wiz,
+    ...serialized,
     steps: serialized.steps.map(deserializeWizUI),
   };
 }
-
-const wiz = createWiz({ classnames: "", colors: "" }, getInitialState());
-const wiz2 = nextWizUI(wiz);
-const wiz3 = prevWizUI(wiz);
-
-console.log(wiz);
-console.log(serializeWiz(wiz));
-console.log(serializeWiz(wiz2));
-console.log(serializeWiz(nextWizUI(wiz2)));
-console.log(serializeWiz(wiz3));
-console.log(serializeWiz(prevWizUI(wiz3)));
-console.log(deserializeWiz(serializeWiz(wiz2)));
 
 interface NextWizUI {
   kind: "next";
@@ -281,57 +267,23 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem(cacheKey, JSON.stringify(serializeWiz(_topLevel)));
   }, [_topLevel]);
-  const [wizard, setWizard] = useState<Wizard>(() => {
-    const cached = localStorage.getItem("wizard");
-    return cached ? JSON.parse(cached) : makeWizard();
-  });
-  const [unparsedColorTheme, setUnparsedColorTheme] =
-    useState<UnparsedColorTheme>(() => {
-      const cached = localStorage.getItem("unparsedColorTheme");
-      return cached
-        ? JSON.parse(cached)
-        : {
-            classnames: "",
-            colors: "",
-          };
-    });
-  const [state, dispatch] = useReducer(reducer, getInitialState());
-
-  useEffect(() => {
-    localStorage.setItem("wizard", JSON.stringify(wizard));
-    localStorage.setItem(
-      "unparsedColorTheme",
-      JSON.stringify(unparsedColorTheme)
-    );
-    localStorage.setItem(
-      "state",
-      JSON.stringify({
-        colorDict: Array.from(state.colorDict),
-        colorGroupDict: Array.from(state.colorGroupDict),
-        colorList: state.colorList,
-      })
-    );
-  }, [wizard, unparsedColorTheme, state]);
-
   const handleNextUI = () => {
-    setWizard((wizard) => wizardNextStep(wizard));
-
-    dispatch({ kind: "parse", unparsedColorTheme: unparsedColorTheme });
-  };
-  const handlePrevUI = () => setWizard((wizard) => wizardPrevStep(wizard));
-
-  const handleLoadExample = () =>
-    setUnparsedColorTheme({
-      classnames: example.groupNames().join("\n"),
-      colors: example.colors().join("\n"),
+    _dispatchTopLevel({ kind: "next" });
+    _dispatchTopLevel({
+      kind: "parse",
+      unparsedColorTheme: _topLevel.steps[_topLevel.currentIdx]
+        .state as UnparsedColorTheme,
     });
-
-  const handleResetData = () => {
-    setUnparsedColorTheme({ classnames: "", colors: "" });
-    dispatch({ kind: "reset" });
   };
+  const handlePrevUI = () => _dispatchTopLevel({ kind: "prev" });
+  const handleLoadExample = () => _dispatchTopLevel({ kind: "loadExample" });
+  const handleResetData = () => _dispatchTopLevel({ kind: "resetForm" });
 
-  const colorThemeInputUI = (
+  const colorThemeInputUI = ({
+    state: unparsedColorTheme,
+  }: {
+    state: UnparsedColorTheme;
+  }) => (
     <>
       <div className="mb-4">
         <button
@@ -360,7 +312,7 @@ export default function App() {
       <ColorThemeInput unparsedColorTheme={unparsedColorTheme} />
     </>
   );
-  const colorThemeConfigUI = (
+  const colorThemeConfigUI = ({ state }: { state: State }) => (
     <>
       <div className="mb-4">
         <button
@@ -381,14 +333,14 @@ export default function App() {
         <TreeEditor
           state={state}
           handleRenameColor={(colorId, newName) =>
-            dispatch({
+            _dispatchTopLevel({
               kind: "renameColor",
               colorId: colorId,
               newName: newName,
             })
           }
           handleRemoveFromGroup={(colorId, groupName) =>
-            dispatch({
+            _dispatchTopLevel({
               kind: "removeFromGroup",
               groupName: groupName,
               colorId: colorId,
@@ -398,27 +350,31 @@ export default function App() {
         <GroupColors
           state={state}
           handleSelection={(selectableItem) =>
-            dispatch({
+            _dispatchTopLevel({
               kind: "toggleStatus",
               selectableItem: selectableItem,
             })
           }
           handleAddToGroup={(groupName) =>
-            dispatch({ kind: "addToGroup", groupName: groupName })
+            _dispatchTopLevel({ kind: "addToGroup", groupName: groupName })
           }
         />
       </div>
     </>
   );
 
-  const showUI = (wizard: Wizard) => {
-    switch (wizard.steps[wizard.currStep].kind) {
-      case "colorThemeInput":
-        return colorThemeInputUI;
-      case "colorThemeConfig":
-        return colorThemeConfigUI;
+  const showUI = (wizard: Wiz) => {
+    switch (wizard.steps[wizard.currentIdx].kind) {
+      case "formEntry":
+        return colorThemeInputUI({
+          state: wizard.steps[wizard.currentIdx].state as UnparsedColorTheme,
+        });
+      case "main":
+        return colorThemeConfigUI({
+          state: wizard.steps[wizard.currentIdx].state as State,
+        });
     }
   };
 
-  return <div className="mx-2 my-8">{showUI(wizard)}</div>;
+  return <div className="mx-2 my-8">{showUI(_topLevel)}</div>;
 }
