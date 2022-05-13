@@ -76,11 +76,13 @@ function createWiz(unparsedColorTheme: UnparsedColorTheme, state: State): Wiz {
 function nextWizUI(wiz: Wiz): Wiz {
   return wiz.currentIdx === wiz.steps.length - 1
     ? wiz
-    : { ...wiz, currentIdx: wiz.currentIdx++ };
+    : { ...wiz, currentIdx: wiz.currentIdx + 1 };
 }
 
 function prevWizUI(wiz: Wiz): Wiz {
-  return wiz.currentIdx === 0 ? wiz : { ...wiz, currentIdx: wiz.currentIdx-- };
+  return wiz.currentIdx === 0
+    ? wiz
+    : { ...wiz, currentIdx: wiz.currentIdx - 1 };
 }
 
 function serializeState(state: State): SerializedState {
