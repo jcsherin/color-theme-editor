@@ -1,18 +1,10 @@
 import React, { useEffect, useReducer } from "react";
 import * as example from "./utils/example";
 
-import { CopyButton } from "./clipboard";
 import { UnparsedColorTheme } from "./input";
-import { TreeEditor } from "./editor";
-import {
-  serializeConfig,
-  reducer,
-  State,
-  SerializedState,
-  Action,
-} from "./state";
-import { GroupColors } from "./grouping/GroupColors";
+import { reducer, State, SerializedState, Action } from "./state";
 import { FormEntry } from "./FormEntry";
+import { ThemeConfig } from "./ThemeConfig";
 
 interface FormEntryUI {
   kind: "formEntry";
@@ -164,7 +156,7 @@ interface FormReset {
 type WizAction = NextWizUI | PrevWizUI;
 type FormAction = FormLoadExample | FormReset;
 
-function _topLevelReducer(
+function topLevelReducer(
   wiz: Wiz,
   action: WizAction | FormAction | Action
 ): Wiz {
@@ -252,82 +244,31 @@ function init({ cacheKey }: { cacheKey: string }) {
       );
 }
 
-const cacheKey = "wiz";
+const cacheKey = "wizard";
 
 export default function App() {
-  const [_topLevel, _dispatchTopLevel] = useReducer(
-    _topLevelReducer,
+  const [wizard, dispatch] = useReducer(
+    topLevelReducer,
     { cacheKey: cacheKey },
     init
   );
 
   useEffect(() => {
-    localStorage.setItem(cacheKey, JSON.stringify(serializeWiz(_topLevel)));
-  }, [_topLevel]);
+    localStorage.setItem(cacheKey, JSON.stringify(serializeWiz(wizard)));
+  }, [wizard]);
   const handleNextUI = () => {
-    _dispatchTopLevel({ kind: "next" });
-    _dispatchTopLevel({
+    dispatch({ kind: "next" });
+    dispatch({
       kind: "parse",
-      unparsedColorTheme: _topLevel.steps[_topLevel.currentIdx]
+      unparsedColorTheme: wizard.steps[wizard.currentIdx]
         .state as UnparsedColorTheme,
     });
   };
-  const handlePrevUI = () => _dispatchTopLevel({ kind: "prev" });
-  const handleLoadExample = () => _dispatchTopLevel({ kind: "loadExample" });
-  const handleResetData = () => _dispatchTopLevel({ kind: "resetForm" });
+  const handlePrevUI = () => dispatch({ kind: "prev" });
+  const handleLoadExample = () => dispatch({ kind: "loadExample" });
+  const handleResetData = () => dispatch({ kind: "resetForm" });
 
-  const colorThemeConfigUI = ({ state }: { state: State }) => (
-    <>
-      <div className="mb-4">
-        <button
-          onClick={(_e) => handlePrevUI()}
-          className="py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
-        >
-          Go Back
-        </button>
-        <CopyButton
-          label="Copy To Clipboard"
-          content={serializeConfig(state)}
-          expiryInMs={2000}
-          className=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
-          flashClassName="text-green-800 text-xl py-1 px-4"
-        />
-      </div>
-      <div className="grid grid-cols-2 mb-4">
-        <TreeEditor
-          state={state}
-          handleRenameColor={(colorId, newName) =>
-            _dispatchTopLevel({
-              kind: "renameColor",
-              colorId: colorId,
-              newName: newName,
-            })
-          }
-          handleRemoveFromGroup={(colorId, groupName) =>
-            _dispatchTopLevel({
-              kind: "removeFromGroup",
-              groupName: groupName,
-              colorId: colorId,
-            })
-          }
-        />
-        <GroupColors
-          state={state}
-          handleSelection={(selectableItem) =>
-            _dispatchTopLevel({
-              kind: "toggleStatus",
-              selectableItem: selectableItem,
-            })
-          }
-          handleAddToGroup={(groupName) =>
-            _dispatchTopLevel({ kind: "addToGroup", groupName: groupName })
-          }
-        />
-      </div>
-    </>
-  );
-
-  const showUI = (wizard: Wiz) => {
+  const renderWizardUI = (wizard: Wiz) => {
     switch (wizard.steps[wizard.currentIdx].kind) {
       case "formEntry": {
         const state = wizard.steps[wizard.currentIdx]
@@ -343,12 +284,41 @@ export default function App() {
         );
       }
 
-      case "main":
-        return colorThemeConfigUI({
-          state: wizard.steps[wizard.currentIdx].state as State,
-        });
+      case "main": {
+        const state = wizard.steps[wizard.currentIdx].state as State;
+
+        return (
+          <ThemeConfig
+            state={state}
+            handlePrevUI={(_e) => handlePrevUI()}
+            handleRenameColor={(colorId, newName) =>
+              dispatch({
+                kind: "renameColor",
+                colorId: colorId,
+                newName: newName,
+              })
+            }
+            handleRemoveFromGroup={(colorId, groupName) =>
+              dispatch({
+                kind: "removeFromGroup",
+                groupName: groupName,
+                colorId: colorId,
+              })
+            }
+            handleAddToGroup={(groupName) =>
+              dispatch({ kind: "addToGroup", groupName: groupName })
+            }
+            handleToggleStatus={(selectableItem) =>
+              dispatch({
+                kind: "toggleStatus",
+                selectableItem: selectableItem,
+              })
+            }
+          />
+        );
+      }
     }
   };
 
-  return <div className="mx-2 my-8">{showUI(_topLevel)}</div>;
+  return <div className="mx-2 my-8">{renderWizardUI(wizard)}</div>;
 }
