@@ -2,11 +2,7 @@ import React, { useEffect, useReducer } from "react";
 import * as example from "./utils/example";
 
 import { CopyButton } from "./clipboard";
-import {
-  ColorThemeInput,
-  isUnparsedColorThemeEmpty,
-  UnparsedColorTheme,
-} from "./input";
+import { UnparsedColorTheme } from "./input";
 import { TreeEditor } from "./editor";
 import {
   serializeConfig,
@@ -16,6 +12,7 @@ import {
   Action,
 } from "./state";
 import { GroupColors } from "./grouping/GroupColors";
+import { FormEntry } from "./FormEntry";
 
 interface FormEntryUI {
   kind: "formEntry";
@@ -279,39 +276,6 @@ export default function App() {
   const handleLoadExample = () => _dispatchTopLevel({ kind: "loadExample" });
   const handleResetData = () => _dispatchTopLevel({ kind: "resetForm" });
 
-  const colorThemeInputUI = ({
-    state: unparsedColorTheme,
-  }: {
-    state: UnparsedColorTheme;
-  }) => (
-    <>
-      <div className="mb-4">
-        <button
-          onClick={(_e) => handleNextUI()}
-          className="mr-4 py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
-          disabled={isUnparsedColorThemeEmpty(unparsedColorTheme)}
-        >
-          Next
-        </button>
-        {isUnparsedColorThemeEmpty(unparsedColorTheme) ? (
-          <button
-            onClick={(_e) => handleLoadExample()}
-            className="text-blue-500 hover:text-blue-700 text-xl"
-          >
-            Load Example
-          </button>
-        ) : (
-          <button
-            onClick={(_e) => handleResetData()}
-            className="text-red-500 hover:text-red-700 text-xl"
-          >
-            Reset All Values
-          </button>
-        )}
-      </div>
-      <ColorThemeInput unparsedColorTheme={unparsedColorTheme} />
-    </>
-  );
   const colorThemeConfigUI = ({ state }: { state: State }) => (
     <>
       <div className="mb-4">
@@ -365,10 +329,20 @@ export default function App() {
 
   const showUI = (wizard: Wiz) => {
     switch (wizard.steps[wizard.currentIdx].kind) {
-      case "formEntry":
-        return colorThemeInputUI({
-          state: wizard.steps[wizard.currentIdx].state as UnparsedColorTheme,
-        });
+      case "formEntry": {
+        const state = wizard.steps[wizard.currentIdx]
+          .state as UnparsedColorTheme;
+
+        return (
+          <FormEntry
+            state={state}
+            handleNextUI={(_e) => handleNextUI()}
+            handleLoadExample={(_e) => handleLoadExample()}
+            handleResetForm={(_e) => handleResetData()}
+          />
+        );
+      }
+
       case "main":
         return colorThemeConfigUI({
           state: wizard.steps[wizard.currentIdx].state as State,
