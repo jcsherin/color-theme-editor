@@ -19,12 +19,6 @@ import {
 import { Wizard, wizardNextStep, wizardPrevStep, makeWizard } from "./wizard";
 import { GroupColors } from "./grouping/GroupColors";
 
-interface List<T> {
-  value: T;
-  prev: List<T> | undefined;
-  next: List<T> | undefined;
-}
-
 interface FormEntryUI {
   kind: "formEntry";
   state: UnparsedColorTheme;
@@ -35,17 +29,24 @@ interface MainUI {
   state: State;
 }
 
+type WizUI = FormEntryUI | MainUI;
+
 interface MainUISerialized {
   kind: "main";
   state: SerializedState;
 }
 
-type WizUI = FormEntryUI | MainUI;
-type WizUISerialized = FormEntryUI | MainUISerialized;
+type FormEntryUISerialized = FormEntryUI;
+type SerializedWizUI = FormEntryUISerialized | MainUISerialized;
 
 interface Wiz {
-  start: List<WizUI>;
-  current: List<WizUI>;
+  steps: WizUI[];
+  currentIdx: number;
+}
+
+interface SerializedWiz {
+  steps: SerializedWizUI[];
+  currentIdx: number;
 }
 
 function createFormEntryUI(state: UnparsedColorTheme): FormEntryUI {
@@ -62,63 +63,24 @@ function createMainUI(state: State): MainUI {
   };
 }
 
-function createListEntry<T>(value: T): List<T> {
-  return {
-    value: value,
-    prev: undefined,
-    next: undefined,
-  };
-}
-
-function createWiz(unparsedColorTheme: UnparsedColorTheme, state: State) {
-  const firstUI: List<WizUI> = createListEntry(
-    createFormEntryUI(unparsedColorTheme)
-  );
-  const secondUI: List<WizUI> = createListEntry(createMainUI(state));
-
-  firstUI.next = secondUI;
-  secondUI.prev = firstUI;
+function createWiz(unparsedColorTheme: UnparsedColorTheme, state: State): Wiz {
+  const formEntryUI = createFormEntryUI(unparsedColorTheme);
+  const mainUI = createMainUI(state);
 
   return {
-    start: firstUI,
-    current: firstUI,
+    steps: [formEntryUI, mainUI],
+    currentIdx: 0,
   };
 }
 
 function nextWizUI(wiz: Wiz): Wiz {
-  return wiz.current && wiz.current.next
-    ? { ...wiz, current: wiz.current.next }
-    : wiz;
+  return wiz.currentIdx === wiz.steps.length - 1
+    ? wiz
+    : { ...wiz, currentIdx: wiz.currentIdx++ };
 }
 
 function prevWizUI(wiz: Wiz): Wiz {
-  return wiz.current && wiz.current.prev
-    ? { ...wiz, current: wiz.current.prev }
-    : wiz;
-}
-
-function serializeList<T>(entry: List<T>, serializerFn: (value: T) => any) {
-  const items = [];
-  let item: List<T> | undefined = entry;
-  while (item) {
-    items.push(serializerFn(item.value));
-    item = item.next;
-  }
-  return items;
-}
-
-function deserializeList<T>(
-  entries: any[],
-  deserializerFn: (value: any) => T
-): List<T> | undefined {
-  if (entries.length === 0) return;
-
-  const items = entries.map((x) => createListEntry(deserializerFn(x)));
-  for (let i = 1; i < items.length; ++i) {
-    items[i - 1].next = items[i];
-    items[i].prev = items[i - 1];
-  }
-  return items[0];
+  return wiz.currentIdx === 0 ? wiz : { ...wiz, currentIdx: wiz.currentIdx-- };
 }
 
 function serializeState(state: State): SerializedState {
@@ -154,7 +116,7 @@ function deserializeMainUI(ui: {
   };
 }
 
-function serializeWizUI(ui: FormEntryUI | MainUI) {
+function serializeWizUI(ui: FormEntryUI | MainUI): SerializedWizUI {
   switch (ui.kind) {
     case "formEntry":
       return ui;
@@ -163,7 +125,7 @@ function serializeWizUI(ui: FormEntryUI | MainUI) {
   }
 }
 
-function deserializeWizUI(ui: WizUISerialized): WizUI {
+function deserializeWizUI(ui: SerializedWizUI): WizUI {
   switch (ui.kind) {
     case "formEntry":
       return ui;
@@ -172,29 +134,18 @@ function deserializeWizUI(ui: WizUISerialized): WizUI {
   }
 }
 
-function serializeWiz(wiz: Wiz) {
-  const start = serializeList(wiz.start, serializeWizUI);
-  const current = wiz.current.value.kind;
-
-  return { start, current };
+function serializeWiz(wiz: Wiz): SerializedWiz {
+  return {
+    ...wiz,
+    steps: wiz.steps.map(serializeWizUI),
+  };
 }
 
-function deserializeWiz(obj: {
-  start: any[];
-  current: "main" | "formEntry";
-}): Wiz | undefined {
-  const start = deserializeList(obj.start, deserializeWizUI);
-  if (!start) return undefined;
-
-  let current: List<WizUI> | undefined = start;
-  while (current) {
-    if (current.value.kind === obj.current)
-      return {
-        start: start,
-        current: current,
-      };
-    current = current.next;
-  }
+function deserializeWiz(serialized: SerializedWiz): Wiz {
+  return {
+    ...wiz,
+    steps: serialized.steps.map(deserializeWizUI),
+  };
 }
 
 const wiz = createWiz({ classnames: "", colors: "" }, getInitialState());
@@ -239,18 +190,21 @@ function _topLevelReducer(
       return prevWizUI(wiz);
     case "loadExample":
     case "resetForm":
-      switch (wiz.current.value.kind) {
-        case "formEntry":
+      switch (wiz.steps[wiz.currentIdx].kind) {
+        case "formEntry": {
+          const state = formReducer(
+            wiz.steps[wiz.currentIdx].state as UnparsedColorTheme,
+            action
+          );
           return {
             ...wiz,
-            current: {
-              ...wiz.current,
-              value: {
-                ...wiz.current.value,
-                state: formReducer(wiz.current.value.state, action),
-              },
-            },
+            steps: wiz.steps.map((ui, idx) =>
+              ui.kind === "formEntry" && idx === wiz.currentIdx
+                ? { ...ui, state: state }
+                : ui
+            ),
           };
+        }
         case "main":
           return wiz;
       }
@@ -260,20 +214,23 @@ function _topLevelReducer(
     case "renameColor":
     case "toggleStatus":
     case "reset":
-      switch (wiz.current.value.kind) {
+      switch (wiz.steps[wiz.currentIdx].kind) {
         case "formEntry":
           return wiz;
-        case "main":
+        case "main": {
+          const state = reducer(
+            wiz.steps[wiz.currentIdx].state as State,
+            action
+          );
           return {
             ...wiz,
-            current: {
-              ...wiz.current,
-              value: {
-                ...wiz.current.value,
-                state: reducer(wiz.current.value.state, action),
-              },
-            },
+            steps: wiz.steps.map((ui, idx) =>
+              ui.kind === "main" && idx === wiz.currentIdx
+                ? { ...ui, state: state }
+                : ui
+            ),
           };
+        }
       }
   }
 }
