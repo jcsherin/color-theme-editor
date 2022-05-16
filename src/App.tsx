@@ -180,6 +180,8 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem(cacheKey, JSON.stringify(serializeWizard(wizard)));
   }, [wizard]);
+
+  // FIXME: batch reduce
   const handleNextUI = () => {
     dispatch({ kind: "next" });
     dispatch({
@@ -187,9 +189,6 @@ export default function App() {
       form: wizard.steps[wizard.currentIdx].state as FormData,
     });
   };
-  const handlePrevUI = () => dispatch({ kind: "prev" });
-  const handleLoadExample = () => dispatch({ kind: "loadExample" });
-  const handleResetData = () => dispatch({ kind: "resetForm" });
 
   const renderWizardUI = (wizard: Wizard) => {
     switch (wizard.steps[wizard.currentIdx].kind) {
@@ -200,8 +199,8 @@ export default function App() {
           <FormEntry
             state={state}
             handleNextUI={handleNextUI}
-            handleLoadExample={handleLoadExample}
-            handleResetForm={handleResetData}
+            handleLoadExample={() => dispatch({ kind: "loadExample" })}
+            handleResetForm={() => dispatch({ kind: "resetForm" })}
           />
         );
       }
@@ -212,7 +211,7 @@ export default function App() {
         return (
           <ThemeEditor
             state={state}
-            handlePrevUI={handlePrevUI}
+            handlePrevUI={() => dispatch({ kind: "prev" })}
             handleRenameColor={(colorId, newName) =>
               dispatch({
                 kind: "renameColor",
