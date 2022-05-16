@@ -5,8 +5,8 @@ import {
   deserializeWizard,
   serializeWizard,
   wizardReducer,
+  WizardUI,
 } from "./wizard";
-import { WizardUI } from "./wizard";
 
 function init({ cacheKey }: { cacheKey: string }) {
   const cached = localStorage.getItem(cacheKey);

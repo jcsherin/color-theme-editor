@@ -1,7 +1,7 @@
 import { formReducer } from "../form";
 import { Action, reducer } from "../state";
 
-import type { Wizard } from "./wizard";
+import type { Wizard } from "./index";
 import type { FormAction, FormData } from "../form";
 import type { State } from "../state";
 

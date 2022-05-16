@@ -4,7 +4,7 @@ import { FormAction, FormData, FormEntry } from "../form";
 import { ThemeEditor } from "../grouping";
 import type { Action, State } from "../state";
 import type { WizardAction } from "./reducer";
-import type { Wizard } from "./wizard";
+import type { Wizard } from "./index";
 
 export function WizardUI({
   wizard,
