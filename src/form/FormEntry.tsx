@@ -12,6 +12,13 @@ export interface FormData {
   colors: string;
 }
 
+export function createFormEntryUI(state: FormData): FormEntryUI {
+  return {
+    kind: "formEntry",
+    state: state,
+  };
+}
+
 function isEmptyForm(form: FormData): boolean {
   return form.classnames.trim().length === 0 && form.colors.trim().length === 0;
 }

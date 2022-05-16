@@ -1,11 +1,47 @@
 import React from "react";
-import { CopyButton } from "./clipboard";
-import { TreeEditor } from "./editor";
-import { SelectableItem } from "./grouping";
-import { GroupColors } from "./grouping/GroupColors";
-import { serializeConfig, State } from "./state";
+import { CopyButton } from "../clipboard";
+import { TreeEditor } from "../editor";
+import { SelectableItem } from ".";
+import { GroupColors } from "./GroupColors";
+import { deserializeState, serializeConfig, serializeState } from "../state";
 
-export function ThemeConfig({
+import type { State, SerializedState } from "../state";
+
+export interface EditUI {
+  kind: "main";
+  state: State;
+}
+
+export interface EditUISerialized {
+  kind: "main";
+  state: SerializedState;
+}
+
+export function createEditUI(state: State): EditUI {
+  return {
+    kind: "main",
+    state: state,
+  };
+}
+
+export function serializeEditUI(ui: EditUI): {
+  state: SerializedState;
+  kind: "main";
+} {
+  return { ...ui, state: serializeState(ui.state) };
+}
+
+export function deserializeEditUI(ui: {
+  kind: "main";
+  state: SerializedState;
+}): EditUI {
+  return {
+    ...ui,
+    state: deserializeState(ui.state),
+  };
+}
+
+export function ThemeEditor({
   state,
   handlePrevUI,
   handleRenameColor,
@@ -14,7 +50,7 @@ export function ThemeConfig({
   handleToggleStatus,
 }: {
   state: State;
-  handlePrevUI: (_event: React.MouseEvent) => void;
+  handlePrevUI: () => void;
   handleRenameColor: (colorId: string, groupName: string) => void;
   handleRemoveFromGroup: (colorId: string, groupName: string) => void;
   handleAddToGroup: (groupName: string) => void;
@@ -24,7 +60,7 @@ export function ThemeConfig({
     <>
       <div className="mb-4">
         <button
-          onClick={handlePrevUI}
+          onClick={(_event) => handlePrevUI()}
           className="py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
         >
           Go Back

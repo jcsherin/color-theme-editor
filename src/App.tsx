@@ -2,24 +2,20 @@ import React, { useEffect, useReducer } from "react";
 import * as example from "./utils/example";
 
 import type { FormData, FormEntryUI, FormEntryUISerialized } from "./form";
-import { FormEntry } from "./form";
-import { reducer, State, SerializedState, Action } from "./state";
+import type { EditUI, EditUISerialized } from "./grouping";
 
-import { ThemeConfig } from "./ThemeConfig";
+import { FormEntry, createFormEntryUI } from "./form";
+import {
+  ThemeEditor,
+  createEditUI,
+  serializeEditUI,
+  deserializeEditUI,
+} from "./grouping";
+import { reducer, State, Action } from "./state";
 
-interface MainUI {
-  kind: "main";
-  state: State;
-}
+type WizardUI = FormEntryUI | EditUI;
 
-type WizardUI = FormEntryUI | MainUI;
-
-interface MainUISerialized {
-  kind: "main";
-  state: SerializedState;
-}
-
-type SerializedWizardUI = FormEntryUISerialized | MainUISerialized;
+type SerializedWizardUI = FormEntryUISerialized | EditUISerialized;
 
 interface Wizard {
   steps: WizardUI[];
@@ -31,26 +27,12 @@ interface SerializedWizard {
   currentIdx: number;
 }
 
-function createFormEntryUI(state: FormData): FormEntryUI {
-  return {
-    kind: "formEntry",
-    state: state,
-  };
-}
-
-function createMainUI(state: State): MainUI {
-  return {
-    kind: "main",
-    state: state,
-  };
-}
-
 function createWizard(formData: FormData, state: State): Wizard {
   const formEntryUI = createFormEntryUI(formData);
-  const mainUI = createMainUI(state);
+  const editUI = createEditUI(state);
 
   return {
-    steps: [formEntryUI, mainUI],
+    steps: [formEntryUI, editUI],
     currentIdx: 0,
   };
 }
@@ -67,45 +49,12 @@ function prevWizardUI(wizard: Wizard): Wizard {
     : { ...wizard, currentIdx: wizard.currentIdx - 1 };
 }
 
-function serializeState(state: State): SerializedState {
-  return {
-    colorDict: Array.from(state.colorDict),
-    colorGroupDict: Array.from(state.colorGroupDict),
-    colorList: state.colorList,
-  };
-}
-
-function deserializeState(state: SerializedState): State {
-  return {
-    ...state,
-    colorDict: new Map(state.colorDict),
-    colorGroupDict: new Map(state.colorGroupDict),
-  };
-}
-
-function serializeMainUI(ui: MainUI): {
-  state: SerializedState;
-  kind: "main";
-} {
-  return { ...ui, state: serializeState(ui.state) };
-}
-
-function deserializeMainUI(ui: {
-  kind: "main";
-  state: SerializedState;
-}): MainUI {
-  return {
-    ...ui,
-    state: deserializeState(ui.state),
-  };
-}
-
-function serializeWizardUI(ui: FormEntryUI | MainUI): SerializedWizardUI {
+function serializeWizardUI(ui: FormEntryUI | EditUI): SerializedWizardUI {
   switch (ui.kind) {
     case "formEntry":
       return ui;
     case "main":
-      return serializeMainUI(ui);
+      return serializeEditUI(ui);
   }
 }
 
@@ -114,7 +63,7 @@ function deserializeWizardUI(ui: SerializedWizardUI): WizardUI {
     case "formEntry":
       return ui;
     case "main":
-      return deserializeMainUI(ui);
+      return deserializeEditUI(ui);
   }
 }
 
@@ -278,9 +227,9 @@ export default function App() {
         const state = wizard.steps[wizard.currentIdx].state as State;
 
         return (
-          <ThemeConfig
+          <ThemeEditor
             state={state}
-            handlePrevUI={(_e) => handlePrevUI()}
+            handlePrevUI={handlePrevUI}
             handleRenameColor={(colorId, newName) =>
               dispatch({
                 kind: "renameColor",

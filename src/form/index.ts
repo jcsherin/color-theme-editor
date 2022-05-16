@@ -1,2 +1,2 @@
 export type { FormData, FormEntryUI, FormEntryUISerialized } from "./FormEntry";
-export { FormEntry } from "./FormEntry";
+export { FormEntry, createFormEntryUI } from "./FormEntry";

@@ -33,6 +33,22 @@ export interface SerializedState {
   colorList: SelectableItem[];
 }
 
+export function serializeState(state: State): SerializedState {
+  return {
+    colorDict: Array.from(state.colorDict),
+    colorGroupDict: Array.from(state.colorGroupDict),
+    colorList: state.colorList,
+  };
+}
+
+export function deserializeState(state: SerializedState): State {
+  return {
+    ...state,
+    colorDict: new Map(state.colorDict),
+    colorGroupDict: new Map(state.colorGroupDict),
+  };
+}
+
 export function serializeConfig({
   colorDict,
   colorGroupDict,

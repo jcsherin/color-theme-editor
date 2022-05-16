@@ -17,3 +17,6 @@ export {
   makeColorGroupDict,
   parseColorGroups,
 } from "./group";
+
+export type { EditUI, EditUISerialized } from "./ThemeEditor";
+export { ThemeEditor, createEditUI, serializeEditUI, deserializeEditUI } from "./ThemeEditor";
