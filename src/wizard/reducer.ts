@@ -13,7 +13,7 @@ interface PrevWizardUI {
   kind: "prev";
 }
 
-type WizardAction = NextWizardUI | PrevWizardUI;
+export type WizardAction = NextWizardUI | PrevWizardUI;
 
 function nextWizardUI(wizard: Wizard): Wizard {
   return wizard.currentIdx === wizard.steps.length - 1
