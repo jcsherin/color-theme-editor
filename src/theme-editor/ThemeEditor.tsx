@@ -1,6 +1,6 @@
 import React from "react";
 import { CopyButton } from "../clipboard";
-import { TreeEditor } from "../editor";
+import { TreeEditor } from "../tree-editor";
 import { SelectableItem, GroupColors } from "./index";
 import { deserializeState, serializeConfig, serializeState } from "../state";
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
-import { notGrouped } from "../grouping";
+import { notGrouped } from "../theme-editor";
 import {
   compareColorId,
   getColorName,

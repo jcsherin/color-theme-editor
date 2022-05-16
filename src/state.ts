@@ -9,7 +9,7 @@ import {
   groupSelected,
   isSelected,
   GroupDict,
-} from "./grouping";
+} from "./theme-editor";
 import {
   ColorDict,
   compareColorId,

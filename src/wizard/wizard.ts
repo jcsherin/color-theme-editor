@@ -8,7 +8,7 @@ import {
   EditUI,
   EditUISerialized,
   serializeEditUI,
-} from "../grouping";
+} from "../theme-editor";
 
 type WizardUI = FormEntryUI | EditUI;
 
