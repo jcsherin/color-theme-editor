@@ -1,10 +1,14 @@
 import React, { useEffect, useReducer } from "react";
-import * as example from "./utils/example";
 
-import type { FormData, FormEntryUI, FormEntryUISerialized } from "./form";
+import type {
+  FormAction,
+  FormData,
+  FormEntryUI,
+  FormEntryUISerialized,
+} from "./form";
 import type { EditUI, EditUISerialized } from "./grouping";
 
-import { FormEntry, createFormEntryUI } from "./form";
+import { FormEntry, createFormEntryUI, formReducer } from "./form";
 import {
   ThemeEditor,
   createEditUI,
@@ -89,16 +93,7 @@ interface PrevWizardUI {
   kind: "prev";
 }
 
-interface FormLoadExample {
-  kind: "loadExample";
-}
-
-interface FormReset {
-  kind: "resetForm";
-}
-
 type WizardAction = NextWizardUI | PrevWizardUI;
-type FormAction = FormLoadExample | FormReset;
 
 function topLevelReducer(
   wizard: Wizard,
@@ -153,18 +148,6 @@ function topLevelReducer(
           };
         }
       }
-  }
-}
-
-function formReducer(_form: FormData, action: FormAction): FormData {
-  switch (action.kind) {
-    case "loadExample":
-      return {
-        classnames: example.groupNames().join("\n"),
-        colors: example.colors().join("\n"),
-      };
-    case "resetForm":
-      return { classnames: "", colors: "" };
   }
 }
 
