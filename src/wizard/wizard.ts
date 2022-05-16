@@ -34,18 +34,6 @@ export function createWizard(formData: FormData, state: State): Wizard {
   };
 }
 
-export function nextWizardUI(wizard: Wizard): Wizard {
-  return wizard.currentIdx === wizard.steps.length - 1
-    ? wizard
-    : { ...wizard, currentIdx: wizard.currentIdx + 1 };
-}
-
-export function prevWizardUI(wizard: Wizard): Wizard {
-  return wizard.currentIdx === 0
-    ? wizard
-    : { ...wizard, currentIdx: wizard.currentIdx - 1 };
-}
-
 function serializeWizardUI(ui: FormEntryUI | EditUI): SerializedWizardUI {
   switch (ui.kind) {
     case "formEntry":
@@ -71,7 +59,7 @@ export function serializeWizard(wizard: Wizard): SerializedWizard {
   };
 }
 
-export function deserializeWiz(serialized: SerializedWizard): Wizard {
+export function deserializeWizard(serialized: SerializedWizard): Wizard {
   return {
     ...serialized,
     steps: serialized.steps.map(deserializeWizardUI),

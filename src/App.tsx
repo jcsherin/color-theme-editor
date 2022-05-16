@@ -1,89 +1,22 @@
 import React, { useEffect, useReducer } from "react";
 
-import type { FormAction, FormData } from "./form";
+import type { FormData } from "./form";
+import type { State } from "./state";
+import type { Wizard } from "./wizard";
+
+import { FormEntry } from "./form";
+import { ThemeEditor } from "./grouping";
 import {
   createWizard,
-  deserializeWiz,
-  nextWizardUI,
-  prevWizardUI,
+  deserializeWizard,
   serializeWizard,
-  Wizard,
+  wizardReducer,
 } from "./wizard";
-
-import { FormEntry, formReducer } from "./form";
-import { ThemeEditor } from "./grouping";
-import { reducer, State, Action } from "./state";
-
-interface NextWizardUI {
-  kind: "next";
-}
-
-interface PrevWizardUI {
-  kind: "prev";
-}
-
-type WizardAction = NextWizardUI | PrevWizardUI;
-
-function topLevelReducer(
-  wizard: Wizard,
-  action: WizardAction | FormAction | Action
-): Wizard {
-  switch (action.kind) {
-    case "next":
-      return nextWizardUI(wizard);
-    case "prev":
-      return prevWizardUI(wizard);
-    case "loadExample":
-    case "resetForm":
-      switch (wizard.steps[wizard.currentIdx].kind) {
-        case "formEntry": {
-          const state = formReducer(
-            wizard.steps[wizard.currentIdx].state as FormData,
-            action
-          );
-          return {
-            ...wizard,
-            steps: wizard.steps.map((ui, idx) =>
-              ui.kind === "formEntry" && idx === wizard.currentIdx
-                ? { ...ui, state: state }
-                : ui
-            ),
-          };
-        }
-        case "main":
-          return wizard;
-      }
-    case "parse":
-    case "addToGroup":
-    case "removeFromGroup":
-    case "renameColor":
-    case "toggleStatus":
-    case "reset":
-      switch (wizard.steps[wizard.currentIdx].kind) {
-        case "formEntry":
-          return wizard;
-        case "main": {
-          const state = reducer(
-            wizard.steps[wizard.currentIdx].state as State,
-            action
-          );
-          return {
-            ...wizard,
-            steps: wizard.steps.map((ui, idx) =>
-              ui.kind === "main" && idx === wizard.currentIdx
-                ? { ...ui, state: state }
-                : ui
-            ),
-          };
-        }
-      }
-  }
-}
 
 function init({ cacheKey }: { cacheKey: string }) {
   const cached = localStorage.getItem(cacheKey);
   return cached
-    ? deserializeWiz(JSON.parse(cached))
+    ? deserializeWizard(JSON.parse(cached))
     : createWizard(
         {
           classnames: "",
@@ -101,7 +34,7 @@ const cacheKey = "wizard";
 
 export default function App() {
   const [wizard, dispatch] = useReducer(
-    topLevelReducer,
+    wizardReducer,
     { cacheKey: cacheKey },
     init
   );
