@@ -1,15 +1,11 @@
 import React, { useEffect, useReducer } from "react";
 import * as example from "./utils/example";
 
-import { UnparsedColorTheme } from "./input";
+import type { FormData, FormEntryUI, FormEntryUISerialized } from "./form";
+import { FormEntry } from "./form";
 import { reducer, State, SerializedState, Action } from "./state";
-import { FormEntry } from "./FormEntry";
-import { ThemeConfig } from "./ThemeConfig";
 
-interface FormEntryUI {
-  kind: "formEntry";
-  state: UnparsedColorTheme;
-}
+import { ThemeConfig } from "./ThemeConfig";
 
 interface MainUI {
   kind: "main";
@@ -23,7 +19,6 @@ interface MainUISerialized {
   state: SerializedState;
 }
 
-type FormEntryUISerialized = FormEntryUI;
 type SerializedWizardUI = FormEntryUISerialized | MainUISerialized;
 
 interface Wizard {
@@ -36,7 +31,7 @@ interface SerializedWizard {
   currentIdx: number;
 }
 
-function createFormEntryUI(state: UnparsedColorTheme): FormEntryUI {
+function createFormEntryUI(state: FormData): FormEntryUI {
   return {
     kind: "formEntry",
     state: state,
@@ -50,11 +45,8 @@ function createMainUI(state: State): MainUI {
   };
 }
 
-function createWizard(
-  unparsedColorTheme: UnparsedColorTheme,
-  state: State
-): Wizard {
-  const formEntryUI = createFormEntryUI(unparsedColorTheme);
+function createWizard(formData: FormData, state: State): Wizard {
+  const formEntryUI = createFormEntryUI(formData);
   const mainUI = createMainUI(state);
 
   return {
@@ -173,7 +165,7 @@ function topLevelReducer(
       switch (wizard.steps[wizard.currentIdx].kind) {
         case "formEntry": {
           const state = formReducer(
-            wizard.steps[wizard.currentIdx].state as UnparsedColorTheme,
+            wizard.steps[wizard.currentIdx].state as FormData,
             action
           );
           return {
@@ -215,10 +207,7 @@ function topLevelReducer(
   }
 }
 
-function formReducer(
-  _form: UnparsedColorTheme,
-  action: FormAction
-): UnparsedColorTheme {
+function formReducer(_form: FormData, action: FormAction): FormData {
   switch (action.kind) {
     case "loadExample":
       return {
@@ -263,8 +252,7 @@ export default function App() {
     dispatch({ kind: "next" });
     dispatch({
       kind: "parse",
-      unparsedColorTheme: wizard.steps[wizard.currentIdx]
-        .state as UnparsedColorTheme,
+      form: wizard.steps[wizard.currentIdx].state as FormData,
     });
   };
   const handlePrevUI = () => dispatch({ kind: "prev" });
@@ -274,15 +262,14 @@ export default function App() {
   const renderWizardUI = (wizard: Wizard) => {
     switch (wizard.steps[wizard.currentIdx].kind) {
       case "formEntry": {
-        const state = wizard.steps[wizard.currentIdx]
-          .state as UnparsedColorTheme;
+        const state = wizard.steps[wizard.currentIdx].state as FormData;
 
         return (
           <FormEntry
             state={state}
-            handleNextUI={(_e) => handleNextUI()}
-            handleLoadExample={(_e) => handleLoadExample()}
-            handleResetForm={(_e) => handleResetData()}
+            handleNextUI={handleNextUI}
+            handleLoadExample={handleLoadExample}
+            handleResetForm={handleResetData}
           />
         );
       }

@@ -19,7 +19,7 @@ import {
   parseColors,
   updateColorName,
 } from "./color";
-import { UnparsedColorTheme } from "./input";
+import { FormData } from "./form";
 
 export interface State {
   colorDict: Map<string, HexColor>;
@@ -71,9 +71,9 @@ export function serializeConfig({
   return template;
 }
 
-export function parse(unparsedColorTheme: UnparsedColorTheme): State {
-  const colorDict = parseColors(unparsedColorTheme.colors);
-  const colorGroupDict = parseColorGroups(unparsedColorTheme.classnames);
+export function parse(form: FormData): State {
+  const colorDict = parseColors(form.colors);
+  const colorGroupDict = parseColorGroups(form.classnames);
   const colorList = Array.from(colorDict.keys()).map(makeSelectable);
   return {
     colorDict: colorDict,
@@ -84,7 +84,7 @@ export function parse(unparsedColorTheme: UnparsedColorTheme): State {
 
 interface ActionParse {
   kind: "parse";
-  unparsedColorTheme: UnparsedColorTheme;
+  form: FormData;
 }
 
 interface ActionAddToGroup {
@@ -160,7 +160,7 @@ export const reducer = (state: State, action: Action): State => {
       if (state.colorDict.size > 0 && state.colorGroupDict.size > 0)
         return state;
 
-      return parse(action.unparsedColorTheme);
+      return parse(action.form);
     }
 
     case "addToGroup": {
