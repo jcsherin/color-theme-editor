@@ -4,8 +4,12 @@ import { render, screen } from "@testing-library/react";
 import renderer from "react-test-renderer";
 
 import { getColorId, makeHexColor } from "../color";
-import { Selectable } from "./Selectable";
-import { groupSelected, makeSelectable, toggleStatus } from "./selectableItem";
+import {
+  Selectable,
+  groupSelected,
+  makeSelectable,
+  toggleStatus,
+} from "./index";
 
 function setup(jsx: JSX.Element) {
   return {

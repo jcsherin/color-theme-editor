@@ -1,6 +1,6 @@
 import React from "react";
 import { getColorValue, HexColor } from "../color";
-import { SelectableItem } from "./selectableItem";
+import { SelectableItem } from "./index";
 
 interface SelectableProps {
   color: HexColor;

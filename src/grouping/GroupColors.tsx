@@ -1,8 +1,12 @@
 import React from "react";
 import { State } from "../state";
-import { GroupButton } from "./GroupButton";
-import { Selectable } from "./Selectable";
-import { allGrouped, SelectableItem, someSelected } from "./selectableItem";
+import {
+  GroupButton,
+  Selectable,
+  SelectableItem,
+  allGrouped,
+  someSelected,
+} from "./index";
 
 interface GroupColorsProps {
   state: State;

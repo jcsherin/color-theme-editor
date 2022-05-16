@@ -1,8 +1,7 @@
 import React from "react";
 import { CopyButton } from "../clipboard";
 import { TreeEditor } from "../editor";
-import { SelectableItem } from ".";
-import { GroupColors } from "./GroupColors";
+import { SelectableItem, GroupColors } from "./index";
 import { deserializeState, serializeConfig, serializeState } from "../state";
 
 import type { State, SerializedState } from "../state";

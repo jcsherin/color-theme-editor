@@ -1,4 +1,13 @@
 export { Selectable } from "./Selectable";
+export { GroupButton } from "./GroupButton";
+export { GroupColors } from "./GroupColors";
+export {
+  ThemeEditor,
+  createEditUI,
+  serializeEditUI,
+  deserializeEditUI,
+} from "./ThemeEditor";
+
 export {
   allGrouped,
   SelectableItem,
@@ -10,7 +19,6 @@ export {
   toggleStatus,
   ungroup,
 } from "./selectableItem";
-export { GroupButton } from "./GroupButton";
 export {
   Group,
   GroupDict,
@@ -19,4 +27,3 @@ export {
 } from "./group";
 
 export type { EditUI, EditUISerialized } from "./ThemeEditor";
-export { ThemeEditor, createEditUI, serializeEditUI, deserializeEditUI } from "./ThemeEditor";
