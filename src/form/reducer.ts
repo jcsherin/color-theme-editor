@@ -1,5 +1,5 @@
 import * as example from "../utils/example";
-import type { FormData } from "./FormEntry";
+import type { FormData } from "./index";
 
 interface FormLoadExample {
   kind: "loadExample";
