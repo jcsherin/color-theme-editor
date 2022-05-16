@@ -1,5 +1,3 @@
-// TreeEditor Helpers
-
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { notGrouped } from "../grouping";
 import {
@@ -9,10 +7,13 @@ import {
   HexColor,
 } from "../color";
 import { State } from "../state";
-import { initialInputMode, reducerInputAction } from "./editor";
-import { TreeLeafEdit } from "./TreeLeafEdit";
-import { TreeLeafView } from "./TreeLeafView";
-import { TreeNode } from "./TreeNode";
+import {
+  TreeNode,
+  TreeLeafView,
+  TreeLeafEdit,
+  initialInputMode,
+  reducerInputAction,
+} from "./index";
 
 const treeLeafView = (
   color: HexColor,
