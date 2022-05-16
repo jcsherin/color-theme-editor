@@ -1,26 +1,79 @@
-interface WizardStep {
-  kind: "colorThemeInput" | "colorThemeConfig";
-}
+import type { State } from "../state";
+import type { FormData } from "../form";
+
+import { createFormEntryUI, FormEntryUI, FormEntryUISerialized } from "../form";
+import {
+  createEditUI,
+  deserializeEditUI,
+  EditUI,
+  EditUISerialized,
+  serializeEditUI,
+} from "../grouping";
+
+type WizardUI = FormEntryUI | EditUI;
+
+type SerializedWizardUI = FormEntryUISerialized | EditUISerialized;
+
 export interface Wizard {
-  steps: WizardStep[];
-  currStep: number;
+  steps: WizardUI[];
+  currentIdx: number;
 }
 
-export function makeWizard(): Wizard {
+interface SerializedWizard {
+  steps: SerializedWizardUI[];
+  currentIdx: number;
+}
+
+export function createWizard(formData: FormData, state: State): Wizard {
+  const formEntryUI = createFormEntryUI(formData);
+  const editUI = createEditUI(state);
+
   return {
-    steps: [{ kind: "colorThemeInput" }, { kind: "colorThemeConfig" }],
-    currStep: 0,
+    steps: [formEntryUI, editUI],
+    currentIdx: 0,
   };
 }
 
-export function wizardNextStep(wizard: Wizard): Wizard {
-  return wizard.currStep < wizard.steps.length - 1
-    ? { ...wizard, currStep: wizard.currStep + 1 }
-    : wizard;
+export function nextWizardUI(wizard: Wizard): Wizard {
+  return wizard.currentIdx === wizard.steps.length - 1
+    ? wizard
+    : { ...wizard, currentIdx: wizard.currentIdx + 1 };
 }
 
-export function wizardPrevStep(wizard: Wizard): Wizard {
-  return wizard.currStep > 0
-    ? { ...wizard, currStep: wizard.currStep - 1 }
-    : wizard;
+export function prevWizardUI(wizard: Wizard): Wizard {
+  return wizard.currentIdx === 0
+    ? wizard
+    : { ...wizard, currentIdx: wizard.currentIdx - 1 };
+}
+
+function serializeWizardUI(ui: FormEntryUI | EditUI): SerializedWizardUI {
+  switch (ui.kind) {
+    case "formEntry":
+      return ui;
+    case "main":
+      return serializeEditUI(ui);
+  }
+}
+
+function deserializeWizardUI(ui: SerializedWizardUI): WizardUI {
+  switch (ui.kind) {
+    case "formEntry":
+      return ui;
+    case "main":
+      return deserializeEditUI(ui);
+  }
+}
+
+export function serializeWizard(wizard: Wizard): SerializedWizard {
+  return {
+    ...wizard,
+    steps: wizard.steps.map(serializeWizardUI),
+  };
+}
+
+export function deserializeWiz(serialized: SerializedWizard): Wizard {
+  return {
+    ...serialized,
+    steps: serialized.steps.map(deserializeWizardUI),
+  };
 }

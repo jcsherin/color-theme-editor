@@ -1,89 +1,18 @@
 import React, { useEffect, useReducer } from "react";
 
-import type {
-  FormAction,
-  FormData,
-  FormEntryUI,
-  FormEntryUISerialized,
-} from "./form";
-import type { EditUI, EditUISerialized } from "./grouping";
-
-import { FormEntry, createFormEntryUI, formReducer } from "./form";
+import type { FormAction, FormData } from "./form";
 import {
-  ThemeEditor,
-  createEditUI,
-  serializeEditUI,
-  deserializeEditUI,
-} from "./grouping";
+  createWizard,
+  deserializeWiz,
+  nextWizardUI,
+  prevWizardUI,
+  serializeWizard,
+  Wizard,
+} from "./wizard";
+
+import { FormEntry, formReducer } from "./form";
+import { ThemeEditor } from "./grouping";
 import { reducer, State, Action } from "./state";
-
-type WizardUI = FormEntryUI | EditUI;
-
-type SerializedWizardUI = FormEntryUISerialized | EditUISerialized;
-
-interface Wizard {
-  steps: WizardUI[];
-  currentIdx: number;
-}
-
-interface SerializedWizard {
-  steps: SerializedWizardUI[];
-  currentIdx: number;
-}
-
-function createWizard(formData: FormData, state: State): Wizard {
-  const formEntryUI = createFormEntryUI(formData);
-  const editUI = createEditUI(state);
-
-  return {
-    steps: [formEntryUI, editUI],
-    currentIdx: 0,
-  };
-}
-
-function nextWizardUI(wizard: Wizard): Wizard {
-  return wizard.currentIdx === wizard.steps.length - 1
-    ? wizard
-    : { ...wizard, currentIdx: wizard.currentIdx + 1 };
-}
-
-function prevWizardUI(wizard: Wizard): Wizard {
-  return wizard.currentIdx === 0
-    ? wizard
-    : { ...wizard, currentIdx: wizard.currentIdx - 1 };
-}
-
-function serializeWizardUI(ui: FormEntryUI | EditUI): SerializedWizardUI {
-  switch (ui.kind) {
-    case "formEntry":
-      return ui;
-    case "main":
-      return serializeEditUI(ui);
-  }
-}
-
-function deserializeWizardUI(ui: SerializedWizardUI): WizardUI {
-  switch (ui.kind) {
-    case "formEntry":
-      return ui;
-    case "main":
-      return deserializeEditUI(ui);
-  }
-}
-
-function serializeWizard(wizard: Wizard): SerializedWizard {
-  return {
-    ...wizard,
-    steps: wizard.steps.map(serializeWizardUI),
-  };
-}
-
-function deserializeWiz(serialized: SerializedWizard): Wizard {
-  return {
-    ...serialized,
-    steps: serialized.steps.map(deserializeWizardUI),
-  };
-}
 
 interface NextWizardUI {
   kind: "next";
