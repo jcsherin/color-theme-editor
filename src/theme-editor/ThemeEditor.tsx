@@ -2,21 +2,25 @@ import React from "react";
 import { CopyButton } from "../clipboard";
 import { TreeEditor } from "../tree-editor";
 import { SelectableItem, GroupColors } from "./index";
-import { deserializeState, serializeConfig, serializeState } from "../state";
+import {
+  deserializeThemeEditorState,
+  serializeForTailwind,
+  serializeThemeEditorState,
+} from "./reducer";
 
-import type { State, SerializedState } from "../state";
+import type { ThemeEditorState, SerializedThemeEditorState } from "./reducer";
 
 export interface EditUI {
   kind: "main";
-  state: State;
+  state: ThemeEditorState;
 }
 
 export interface EditUISerialized {
   kind: "main";
-  state: SerializedState;
+  state: SerializedThemeEditorState;
 }
 
-export function createEditUI(state: State): EditUI {
+export function createEditUI(state: ThemeEditorState): EditUI {
   return {
     kind: "main",
     state: state,
@@ -24,19 +28,19 @@ export function createEditUI(state: State): EditUI {
 }
 
 export function serializeEditUI(ui: EditUI): {
-  state: SerializedState;
+  state: SerializedThemeEditorState;
   kind: "main";
 } {
-  return { ...ui, state: serializeState(ui.state) };
+  return { ...ui, state: serializeThemeEditorState(ui.state) };
 }
 
 export function deserializeEditUI(ui: {
   kind: "main";
-  state: SerializedState;
+  state: SerializedThemeEditorState;
 }): EditUI {
   return {
     ...ui,
-    state: deserializeState(ui.state),
+    state: deserializeThemeEditorState(ui.state),
   };
 }
 
@@ -48,7 +52,7 @@ export function ThemeEditor({
   handleAddToGroup,
   handleToggleStatus,
 }: {
-  state: State;
+  state: ThemeEditorState;
   handlePrevUI: () => void;
   handleRenameColor: (colorId: string, groupName: string) => void;
   handleRemoveFromGroup: (colorId: string, groupName: string) => void;
@@ -66,7 +70,7 @@ export function ThemeEditor({
         </button>
         <CopyButton
           label="Copy To Clipboard"
-          content={serializeConfig(state)}
+          content={serializeForTailwind(state)}
           expiryInMs={2000}
           className=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
           flashClassName="text-green-800 text-xl py-1 px-4"

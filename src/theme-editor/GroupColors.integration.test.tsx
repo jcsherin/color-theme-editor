@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
-import { parse } from "../state";
+import { parse } from "./reducer";
 import { testColors } from "../utils/example";
 import { GroupColors } from "./GroupColors";
 

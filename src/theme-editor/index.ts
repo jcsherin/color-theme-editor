@@ -27,3 +27,5 @@ export {
 } from "./group";
 
 export type { EditUI, EditUISerialized } from "./ThemeEditor";
+export type { ThemeEditorState, ThemeEditorAction } from "./reducer";
+export { reducer } from "./reducer";

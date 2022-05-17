@@ -6,7 +6,7 @@ import {
   getColorValue,
   HexColor,
 } from "../color";
-import { State } from "../state";
+import { ThemeEditorState } from "../theme-editor";
 import {
   TreeNode,
   TreeLeafView,
@@ -40,7 +40,7 @@ export function TreeEditor({
   handleRenameColor,
   handleRemoveFromGroup,
 }: {
-  state: State;
+  state: ThemeEditorState;
   handleRenameColor: (colorId: string, newName: string) => void;
   handleRemoveFromGroup: (colorId: string, gorupName: string) => void;
 }) {

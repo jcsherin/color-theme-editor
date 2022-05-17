@@ -1,5 +1,5 @@
 import React from "react";
-import { State } from "../state";
+import { ThemeEditorState } from "./reducer";
 import {
   GroupButton,
   Selectable,
@@ -9,7 +9,7 @@ import {
 } from "./index";
 
 interface GroupColorsProps {
-  state: State;
+  state: ThemeEditorState;
   handleSelection: (selectableItem: SelectableItem) => void;
   handleAddToGroup: (groupName: string) => void;
 }

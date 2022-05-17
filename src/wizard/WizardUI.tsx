@@ -2,7 +2,7 @@ import React from "react";
 
 import { FormAction, FormData, FormEntry } from "../form";
 import { ThemeEditor } from "../theme-editor";
-import type { Action, State } from "../state";
+import type { ThemeEditorAction, ThemeEditorState } from "../theme-editor";
 import type { WizardAction } from "./reducer";
 import type { Wizard } from "./index";
 
@@ -11,7 +11,7 @@ export function WizardUI({
   dispatch,
 }: {
   wizard: Wizard;
-  dispatch: React.Dispatch<WizardAction | FormAction | Action>;
+  dispatch: React.Dispatch<WizardAction | FormAction | ThemeEditorAction>;
 }) {
   // FIXME: batch reduce
   const handleNextUI = () => {
@@ -37,7 +37,7 @@ export function WizardUI({
     }
 
     case "main": {
-      const state = wizard.steps[wizard.currentIdx].state as State;
+      const state = wizard.steps[wizard.currentIdx].state as ThemeEditorState;
 
       return (
         <ThemeEditor

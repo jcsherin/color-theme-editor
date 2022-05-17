@@ -1,9 +1,9 @@
 import { formReducer } from "../form";
-import { Action, reducer } from "../state";
+import { reducer } from "../theme-editor";
 
 import type { Wizard } from "./index";
 import type { FormAction, FormData } from "../form";
-import type { State } from "../state";
+import type { ThemeEditorState, ThemeEditorAction } from "../theme-editor";
 
 interface NextWizardUI {
   kind: "next";
@@ -29,7 +29,7 @@ function prevWizardUI(wizard: Wizard): Wizard {
 
 export function wizardReducer(
   wizard: Wizard,
-  action: WizardAction | FormAction | Action
+  action: WizardAction | FormAction | ThemeEditorAction
 ): Wizard {
   switch (action.kind) {
     case "next":
@@ -67,7 +67,7 @@ export function wizardReducer(
           return wizard;
         case "main": {
           const state = reducer(
-            wizard.steps[wizard.currentIdx].state as State,
+            wizard.steps[wizard.currentIdx].state as ThemeEditorState,
             action
           );
           return {

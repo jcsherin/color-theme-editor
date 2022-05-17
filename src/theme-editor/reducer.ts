@@ -9,7 +9,7 @@ import {
   groupSelected,
   isSelected,
   GroupDict,
-} from "./theme-editor";
+} from "./index";
 import {
   ColorDict,
   compareColorId,
@@ -18,30 +18,34 @@ import {
   HexColor,
   parseColors,
   updateColorName,
-} from "./color";
-import { FormData } from "./form";
+} from "../color";
+import { FormData } from "../form";
 
-export interface State {
+export interface ThemeEditorState {
   colorDict: Map<string, HexColor>;
   colorGroupDict: Map<string, Group>;
   colorList: SelectableItem[];
 }
 
-export interface SerializedState {
+export interface SerializedThemeEditorState {
   colorDict: [string, HexColor][];
   colorGroupDict: [string, Group][];
   colorList: SelectableItem[];
 }
 
-export function serializeState(state: State): SerializedState {
+export function serializeThemeEditorState(
+  themeEditor: ThemeEditorState
+): SerializedThemeEditorState {
   return {
-    colorDict: Array.from(state.colorDict),
-    colorGroupDict: Array.from(state.colorGroupDict),
-    colorList: state.colorList,
+    colorDict: Array.from(themeEditor.colorDict),
+    colorGroupDict: Array.from(themeEditor.colorGroupDict),
+    colorList: themeEditor.colorList,
   };
 }
 
-export function deserializeState(state: SerializedState): State {
+export function deserializeThemeEditorState(
+  state: SerializedThemeEditorState
+): ThemeEditorState {
   return {
     ...state,
     colorDict: new Map(state.colorDict),
@@ -49,11 +53,11 @@ export function deserializeState(state: SerializedState): State {
   };
 }
 
-export function serializeConfig({
+export function serializeForTailwind({
   colorDict,
   colorGroupDict,
   colorList,
-}: State) {
+}: ThemeEditorState) {
   const serialized: { [name: string]: string | { [name: string]: string } } =
     {};
   Array.from(colorGroupDict.values()).forEach((colorGroup) => {
@@ -87,7 +91,7 @@ export function serializeConfig({
   return template;
 }
 
-export function parse(form: FormData): State {
+export function parse(form: FormData): ThemeEditorState {
   const colorDict = parseColors(form.colors);
   const colorGroupDict = parseColorGroups(form.classnames);
   const colorList = Array.from(colorDict.keys()).map(makeSelectable);
@@ -98,46 +102,46 @@ export function parse(form: FormData): State {
   };
 }
 
-interface ActionParse {
+interface ThemeEditorActionParse {
   kind: "parse";
   form: FormData;
 }
 
-interface ActionAddToGroup {
+interface ThemeEditorActionAddToGroup {
   kind: "addToGroup";
   groupName: string;
 }
 
-interface ActionRemoveFromGroup {
+interface ThemeEditorActionRemoveFromGroup {
   kind: "removeFromGroup";
   groupName: string;
   colorId: string;
 }
 
-interface ActionRenameColor {
+interface ThemeEditorActionRenameColor {
   kind: "renameColor";
   colorId: string;
   newName: string;
 }
 
-interface ActionToggleStatus {
+interface ThemeEditorActionToggleStatus {
   kind: "toggleStatus";
   selectableItem: SelectableItem;
 }
 
-interface ActionReset {
+interface ThemeEditorActionReset {
   kind: "reset";
 }
 
-export type Action =
-  | ActionParse
-  | ActionAddToGroup
-  | ActionRemoveFromGroup
-  | ActionRenameColor
-  | ActionToggleStatus
-  | ActionReset;
+export type ThemeEditorAction =
+  | ThemeEditorActionParse
+  | ThemeEditorActionAddToGroup
+  | ThemeEditorActionRemoveFromGroup
+  | ThemeEditorActionRenameColor
+  | ThemeEditorActionToggleStatus
+  | ThemeEditorActionReset;
 
-export const getInitialState = (reset: boolean = false) => {
+export const getInitialThemeEditorState = (reset: boolean = false) => {
   const key = "state";
 
   if (reset) {
@@ -169,7 +173,10 @@ export const getInitialState = (reset: boolean = false) => {
   };
 };
 
-export const reducer = (state: State, action: Action): State => {
+export const reducer = (
+  state: ThemeEditorState,
+  action: ThemeEditorAction
+): ThemeEditorState => {
   switch (action.kind) {
     case "parse": {
       // Don't reparse user input!
@@ -240,7 +247,7 @@ export const reducer = (state: State, action: Action): State => {
     }
 
     case "reset": {
-      return getInitialState(true);
+      return getInitialThemeEditorState(true);
     }
   }
 };
