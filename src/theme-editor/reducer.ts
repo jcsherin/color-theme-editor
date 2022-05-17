@@ -11,8 +11,8 @@ import {
   GroupDict,
 } from "./index";
 import {
-  ColorDict,
-  compareColorId,
+  ColorMap,
+  colorComparator,
   getColorName,
   getColorValue,
   HexColor,
@@ -22,7 +22,7 @@ import {
 import { FormData } from "../form";
 
 export interface ThemeEditorState {
-  colorDict: Map<string, HexColor>;
+  colorDict: ColorMap;
   colorGroupDict: Map<string, Group>;
   colorList: SelectableItem[];
 }
@@ -63,7 +63,7 @@ export function serializeForTailwind({
   Array.from(colorGroupDict.values()).forEach((colorGroup) => {
     const inner: { [name: string]: string } = {};
     Array.from(colorGroup.colorIds)
-      .sort(compareColorId(colorDict))
+      .sort(colorComparator(colorDict))
       .forEach((colorId) => {
         const color = colorDict.get(colorId);
         if (color) {
@@ -77,7 +77,7 @@ export function serializeForTailwind({
   colorList
     .filter(notGrouped)
     .map((item) => item.colorId)
-    .sort(compareColorId(colorDict))
+    .sort(colorComparator(colorDict))
     .forEach((colorId) => {
       const color = colorDict.get(colorId);
       if (color) {
@@ -163,7 +163,7 @@ export const getInitialThemeEditorState = (reset: boolean = false) => {
   }
 
   const state = JSON.parse(cached);
-  const colorDict: ColorDict = new Map(state.colorDict);
+  const colorDict: ColorMap = new Map(state.colorDict);
   const colorGroupDict: GroupDict = new Map(state.colorGroupDict);
   const colorList: SelectableItem[] = state.colorList;
   return {

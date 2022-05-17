@@ -37,9 +37,9 @@ export function updateColorName(color: HexColor, name: string): HexColor {
   return { ...color, name: name };
 }
 
-export type ColorDict = Map<string, HexColor>;
+export type ColorMap = Map<string, HexColor>;
 
-export function makeColorDict(colors: HexColor[]): ColorDict {
+export function makeColorMap(colors: HexColor[]): ColorMap {
   const map = new Map();
   colors.forEach((color) => {
     const key = getColorId(color);
@@ -48,10 +48,10 @@ export function makeColorDict(colors: HexColor[]): ColorDict {
   return map;
 }
 
-export function compareColorId(colorDict: ColorDict) {
+export function colorComparator(map: ColorMap) {
   return (x: string, y: string) => {
-    const xname = getColorName(colorDict.get(x)!);
-    const yname = getColorName(colorDict.get(y)!);
+    const xname = getColorName(map.get(x)!);
+    const yname = getColorName(map.get(y)!);
     if (xname < yname) return -1;
     if (xname > yname) return 1;
     return 0;
@@ -66,10 +66,10 @@ function parseColor(v: string): HexColor | undefined {
   }
 }
 
-export function parseColors(colors: string): ColorDict {
+export function parseColors(colors: string): ColorMap {
   const deduped = new Set(colors.split("\n"));
   const parsed = Array.from(deduped)
     .map(parseColor)
     .flatMap((color) => (color ? [color] : []));
-  return makeColorDict(parsed);
+  return makeColorMap(parsed);
 }

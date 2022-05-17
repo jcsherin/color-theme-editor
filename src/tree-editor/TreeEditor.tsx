@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { notGrouped } from "../theme-editor";
 import {
-  compareColorId,
+  colorComparator,
   getColorName,
   getColorValue,
   HexColor,
@@ -126,13 +126,13 @@ export function TreeEditor({
 
   const configOrderedColorIds = Array.from(state.colorGroupDict.values())
     .flatMap((colorGroup) =>
-      Array.from(colorGroup.colorIds).sort(compareColorId(state.colorDict))
+      Array.from(colorGroup.colorIds).sort(colorComparator(state.colorDict))
     )
     .concat(
       state.colorList
         .filter(notGrouped)
         .map((item) => item.colorId)
-        .sort(compareColorId(state.colorDict))
+        .sort(colorComparator(state.colorDict))
     );
 
   const getNodeIdx = (colorId: string) =>
@@ -154,7 +154,7 @@ export function TreeEditor({
   const colorGroupNodes = Array.from(state.colorGroupDict.values()).map(
     (colorGroup) => {
       const children = Array.from(colorGroup.colorIds)
-        .sort(compareColorId(state.colorDict))
+        .sort(colorComparator(state.colorDict))
         .flatMap((colorId) => {
           const color = state.colorDict.get(colorId);
           return color
@@ -204,7 +204,7 @@ export function TreeEditor({
   const singleColorNodes = state.colorList
     .filter(notGrouped)
     .map((item) => item.colorId)
-    .sort(compareColorId(state.colorDict))
+    .sort(colorComparator(state.colorDict))
     .flatMap((colorId) => {
       const color = state.colorDict.get(colorId);
       return color
