@@ -22,24 +22,24 @@ import {
 import { FormData } from "../form";
 
 export interface ThemeEditorState {
-  colorDict: ColorMap;
-  colorGroupDict: Map<string, Group>;
-  colorList: SelectableItem[];
+  colorMap: ColorMap;
+  groupMap: Map<string, Group>;
+  selectables: SelectableItem[];
 }
 
 export interface SerializedThemeEditorState {
-  colorDict: [string, HexColor][];
-  colorGroupDict: [string, Group][];
-  colorList: SelectableItem[];
+  colorMap: [string, HexColor][];
+  groupMap: [string, Group][];
+  selectables: SelectableItem[];
 }
 
 export function serializeThemeEditorState(
   themeEditor: ThemeEditorState
 ): SerializedThemeEditorState {
   return {
-    colorDict: Array.from(themeEditor.colorDict),
-    colorGroupDict: Array.from(themeEditor.colorGroupDict),
-    colorList: themeEditor.colorList,
+    colorMap: Array.from(themeEditor.colorMap),
+    groupMap: Array.from(themeEditor.groupMap),
+    selectables: themeEditor.selectables,
   };
 }
 
@@ -48,24 +48,24 @@ export function deserializeThemeEditorState(
 ): ThemeEditorState {
   return {
     ...state,
-    colorDict: new Map(state.colorDict),
-    colorGroupDict: new Map(state.colorGroupDict),
+    colorMap: new Map(state.colorMap),
+    groupMap: new Map(state.groupMap),
   };
 }
 
 export function serializeForTailwind({
-  colorDict,
-  colorGroupDict,
-  colorList,
+  colorMap,
+  groupMap,
+  selectables,
 }: ThemeEditorState) {
   const serialized: { [name: string]: string | { [name: string]: string } } =
     {};
-  Array.from(colorGroupDict.values()).forEach((colorGroup) => {
+  Array.from(groupMap.values()).forEach((colorGroup) => {
     const inner: { [name: string]: string } = {};
     Array.from(colorGroup.colorIds)
-      .sort(colorComparator(colorDict))
+      .sort(colorComparator(colorMap))
       .forEach((colorId) => {
-        const color = colorDict.get(colorId);
+        const color = colorMap.get(colorId);
         if (color) {
           const key = getColorName(color);
           const value = getColorValue(color);
@@ -74,12 +74,12 @@ export function serializeForTailwind({
       });
     serialized[colorGroup.name] = inner;
   });
-  colorList
+  selectables
     .filter(notGrouped)
     .map((item) => item.colorId)
-    .sort(colorComparator(colorDict))
+    .sort(colorComparator(colorMap))
     .forEach((colorId) => {
-      const color = colorDict.get(colorId);
+      const color = colorMap.get(colorId);
       if (color) {
         const key = getColorName(color);
         const value = getColorValue(color);
@@ -96,9 +96,9 @@ export function parse(form: FormData): ThemeEditorState {
   const colorGroupDict = parseColorGroups(form.classnames);
   const colorList = Array.from(colorDict.keys()).map(makeSelectable);
   return {
-    colorDict: colorDict,
-    colorGroupDict: colorGroupDict,
-    colorList: colorList,
+    colorMap: colorDict,
+    groupMap: colorGroupDict,
+    selectables: colorList,
   };
 }
 
@@ -141,14 +141,16 @@ export type ThemeEditorAction =
   | ThemeEditorActionToggleStatus
   | ThemeEditorActionReset;
 
-export const getInitialThemeEditorState = (reset: boolean = false) => {
+export const getInitialThemeEditorState = (
+  reset: boolean = false
+): ThemeEditorState => {
   const key = "state";
 
   if (reset) {
     const emptyJSON = JSON.stringify({
-      colorDict: [],
-      colorGroupDict: [],
-      colorList: [],
+      colorMap: [],
+      groupMap: [],
+      selectables: [],
     });
     localStorage.setItem(key, emptyJSON);
   }
@@ -156,20 +158,20 @@ export const getInitialThemeEditorState = (reset: boolean = false) => {
   const cached = localStorage.getItem(key);
   if (!cached) {
     return {
-      colorDict: new Map(),
-      colorGroupDict: new Map(),
-      colorList: [],
+      colorMap: new Map(),
+      groupMap: new Map(),
+      selectables: [],
     };
   }
 
   const state = JSON.parse(cached);
-  const colorDict: ColorMap = new Map(state.colorDict);
-  const colorGroupDict: GroupDict = new Map(state.colorGroupDict);
-  const colorList: SelectableItem[] = state.colorList;
+  const colorMap: ColorMap = new Map(state.colorDict);
+  const groupMap: GroupDict = new Map(state.colorGroupDict);
+  const selectables: SelectableItem[] = state.colorList;
   return {
-    colorDict: colorDict,
-    colorGroupDict: colorGroupDict,
-    colorList: colorList,
+    colorMap,
+    groupMap,
+    selectables,
   };
 };
 
@@ -180,67 +182,66 @@ export const reducer = (
   switch (action.kind) {
     case "parse": {
       // Don't reparse user input!
-      if (state.colorDict.size > 0 && state.colorGroupDict.size > 0)
-        return state;
+      if (state.colorMap.size > 0 && state.groupMap.size > 0) return state;
 
       return parse(action.form);
     }
 
     case "addToGroup": {
-      const group = state.colorGroupDict.get(action.groupName);
+      const group = state.groupMap.get(action.groupName);
       if (!group) return state;
 
-      const selected = state.colorList
+      const selected = state.selectables
         .filter(isSelected)
         .map((item) => item.colorId);
 
       const deduped = new Set([...group.colorIds, ...selected]);
       const newGroup = { ...group, colorIds: Array.from(deduped) };
-      state.colorGroupDict.set(group.name, newGroup);
+      state.groupMap.set(group.name, newGroup);
 
       return {
         ...state,
-        colorGroupDict: new Map(Array.from(state.colorGroupDict)),
-        colorList: groupSelected(state.colorList),
+        groupMap: new Map(Array.from(state.groupMap)),
+        selectables: groupSelected(state.selectables),
       };
     }
 
     case "removeFromGroup": {
-      const group = state.colorGroupDict.get(action.groupName);
+      const group = state.groupMap.get(action.groupName);
       if (!group) return state;
 
       const colorIds = group.colorIds.filter(
         (colorId) => colorId !== action.colorId
       );
       const newGroup = { ...group, colorIds: colorIds };
-      state.colorGroupDict.set(group.name, newGroup);
+      state.groupMap.set(group.name, newGroup);
 
       return {
         ...state,
-        colorGroupDict: new Map(Array.from(state.colorGroupDict)),
-        colorList: state.colorList.map(ungroup(action.colorId)),
+        groupMap: new Map(Array.from(state.groupMap)),
+        selectables: state.selectables.map(ungroup(action.colorId)),
       };
     }
 
     case "renameColor": {
-      const color = state.colorDict.get(action.colorId);
+      const color = state.colorMap.get(action.colorId);
       if (!color) return state;
 
-      state.colorDict.set(
+      state.colorMap.set(
         action.colorId,
         updateColorName(color, action.newName)
       );
 
       return {
         ...state,
-        colorDict: new Map(Array.from(state.colorDict)),
+        colorMap: new Map(Array.from(state.colorMap)),
       };
     }
 
     case "toggleStatus": {
       return {
         ...state,
-        colorList: state.colorList.map(
+        selectables: state.selectables.map(
           toggleStatus(action.selectableItem.colorId)
         ),
       };

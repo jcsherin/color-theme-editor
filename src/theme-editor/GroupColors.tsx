@@ -19,9 +19,9 @@ export function GroupColors({
   handleSelection,
   handleAddToGroup,
 }: GroupColorsProps) {
-  const colorListItems = state.colorList
+  const colorListItems = state.selectables
     .flatMap((colorListItem) => {
-      const color = state.colorDict.get(colorListItem.colorId);
+      const color = state.colorMap.get(colorListItem.colorId);
       return color ? [{ colorListItem, color: color }] : [];
     })
     .map(({ colorListItem, color }) => (
@@ -34,17 +34,17 @@ export function GroupColors({
       />
     ));
 
-  const colorGroupsButtonRow = allGrouped(state.colorList) ? (
+  const colorGroupsButtonRow = allGrouped(state.selectables) ? (
     <p className="text-2xl text-center bg-yellow-200 py-2">
       Great! You've completed grouping all the colors.
     </p>
   ) : (
-    Array.from(state.colorGroupDict.values()).map((colorGroup) => (
+    Array.from(state.groupMap.values()).map((colorGroup) => (
       <GroupButton
         key={colorGroup.name}
         className={`mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300`}
         groupName={colorGroup.name}
-        disabled={!someSelected(state.colorList)}
+        disabled={!someSelected(state.selectables)}
         handleClick={handleAddToGroup}
       />
     ))

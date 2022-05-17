@@ -124,15 +124,15 @@ export function TreeEditor({
     }
   };
 
-  const configOrderedColorIds = Array.from(state.colorGroupDict.values())
+  const configOrderedColorIds = Array.from(state.groupMap.values())
     .flatMap((colorGroup) =>
-      Array.from(colorGroup.colorIds).sort(colorComparator(state.colorDict))
+      Array.from(colorGroup.colorIds).sort(colorComparator(state.colorMap))
     )
     .concat(
-      state.colorList
+      state.selectables
         .filter(notGrouped)
         .map((item) => item.colorId)
-        .sort(colorComparator(state.colorDict))
+        .sort(colorComparator(state.colorMap))
     );
 
   const getNodeIdx = (colorId: string) =>
@@ -151,12 +151,12 @@ export function TreeEditor({
     return configOrderedColorIds[nextIdx];
   };
 
-  const colorGroupNodes = Array.from(state.colorGroupDict.values()).map(
+  const colorGroupNodes = Array.from(state.groupMap.values()).map(
     (colorGroup) => {
       const children = Array.from(colorGroup.colorIds)
-        .sort(colorComparator(state.colorDict))
+        .sort(colorComparator(state.colorMap))
         .flatMap((colorId) => {
-          const color = state.colorDict.get(colorId);
+          const color = state.colorMap.get(colorId);
           return color
             ? [
                 {
@@ -201,12 +201,12 @@ export function TreeEditor({
     }
   );
 
-  const singleColorNodes = state.colorList
+  const singleColorNodes = state.selectables
     .filter(notGrouped)
     .map((item) => item.colorId)
-    .sort(colorComparator(state.colorDict))
+    .sort(colorComparator(state.colorMap))
     .flatMap((colorId) => {
-      const color = state.colorDict.get(colorId);
+      const color = state.colorMap.get(colorId);
       return color
         ? [
             {

@@ -18,9 +18,9 @@ function init({ cacheKey }: { cacheKey: string }) {
           colors: "",
         },
         {
-          colorDict: new Map(),
-          colorGroupDict: new Map(),
-          colorList: [],
+          colorMap: new Map(),
+          groupMap: new Map(),
+          selectables: [],
         }
       );
 }
