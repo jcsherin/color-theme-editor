@@ -1,7 +1,7 @@
 import { formReducer } from "../form";
 import { reducer } from "../theme-editor";
 
-import type { Wizard } from "./index";
+import { nextWizard, prevWizard, Wizard } from "./index";
 import type { FormAction, FormData } from "../form";
 import type { ThemeEditorState, ThemeEditorAction } from "../theme-editor";
 
@@ -13,20 +13,7 @@ interface PrevWizardUI {
   kind: "prev";
 }
 
-export type WizardAction = NextWizardUI | PrevWizardUI;
-
-function nextWizardUI(wizard: Wizard): Wizard {
-  return wizard.currentIdx === wizard.steps.length - 1
-    ? wizard
-    : { ...wizard, currentIdx: wizard.currentIdx + 1 };
-}
-
-function prevWizardUI(wizard: Wizard): Wizard {
-  return wizard.currentIdx === 0
-    ? wizard
-    : { ...wizard, currentIdx: wizard.currentIdx - 1 };
-}
-
+type WizardAction = NextWizardUI | PrevWizardUI;
 type Action = WizardAction | FormAction | ThemeEditorAction;
 
 interface BatchOrdered<T> {
@@ -45,9 +32,9 @@ export function wizardReducer(
         wizard
       );
     case "next":
-      return nextWizardUI(wizard);
+      return nextWizard(wizard);
     case "prev":
-      return prevWizardUI(wizard);
+      return prevWizard(wizard);
     case "loadExample":
     case "resetForm":
       switch (wizard.steps[wizard.currentIdx].kind) {

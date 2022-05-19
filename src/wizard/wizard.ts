@@ -7,7 +7,6 @@ import {
 } from "../theme-editor";
 
 type WizardUI = FormEntryUI | EditUI;
-
 type SerializedWizardUI = FormEntryUISerialized | EditUISerialized;
 
 export interface Wizard {
@@ -57,4 +56,16 @@ export function deserializeWizard(serialized: SerializedWizard): Wizard {
     ...serialized,
     steps: serialized.steps.map(deserializeWizardUI),
   };
+}
+
+export function nextWizard(wizard: Wizard): Wizard {
+  return wizard.currentIdx === wizard.steps.length - 1
+    ? wizard
+    : { ...wizard, currentIdx: wizard.currentIdx + 1 };
+}
+
+export function prevWizard(wizard: Wizard): Wizard {
+  return wizard.currentIdx === 0
+    ? wizard
+    : { ...wizard, currentIdx: wizard.currentIdx - 1 };
 }
