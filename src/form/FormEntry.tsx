@@ -12,6 +12,10 @@ export interface FormData {
   colors: string;
 }
 
+export function initFormData(): FormData {
+  return { classnames: "", colors: "" };
+}
+
 export function createFormEntryUI(state: FormData): FormEntryUI {
   return {
     kind: "formEntry",

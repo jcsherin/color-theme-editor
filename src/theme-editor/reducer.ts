@@ -33,6 +33,10 @@ export interface SerializedThemeEditorState {
   selectables: SelectableItem[];
 }
 
+export function initThemeEditorState(): ThemeEditorState {
+  return { colorMap: new Map(), groupMap: new Map(), selectables: [] };
+}
+
 export function serializeThemeEditorState(
   themeEditor: ThemeEditorState
 ): SerializedThemeEditorState {

@@ -10,22 +10,14 @@ import {
 
 import { FormData, FormEntry } from "./form";
 import { ThemeEditor, ThemeEditorState } from "./theme-editor";
+import { initFormData } from "./form/FormEntry";
+import { initThemeEditorState } from "./theme-editor/reducer";
 
 function init({ cacheKey }: { cacheKey: string }) {
   const cached = localStorage.getItem(cacheKey);
   return cached
     ? deserializeWizard(JSON.parse(cached))
-    : createWizard(
-        {
-          classnames: "",
-          colors: "",
-        },
-        {
-          colorMap: new Map(),
-          groupMap: new Map(),
-          selectables: [],
-        }
-      );
+    : createWizard(initFormData(), initThemeEditorState());
 }
 
 const cacheKey = "wizard";
