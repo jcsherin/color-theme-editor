@@ -93,4 +93,30 @@ describe("App", () => {
 
     expect(tree.container.firstChild).toMatchSnapshot();
   });
+
+  it("navigate back and forth between the form and theme editor", async () => {
+    const { user } = setup(<App sampleFormData={sampleFormData} />);
+
+    const nextButton = screen.getByRole("button", { name: "Next" });
+    const loadExampleButton = screen.getByRole("button", {
+      name: "Load Example",
+    });
+
+    await user.click(loadExampleButton);
+    await user.click(nextButton);
+
+    const prevButton = screen.getByRole("button", { name: "Go Back" });
+    await user.click(prevButton);
+
+    expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Reset All Values" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/^One name per line$/)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/^One color value per line$/)
+    ).toBeInTheDocument();
+  });
 });
