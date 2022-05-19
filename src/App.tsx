@@ -7,11 +7,12 @@ import {
   Wizard,
   wizardReducer,
 } from "./wizard";
-
-import { FormData, FormEntry } from "./form";
-import { ThemeEditor, ThemeEditorState } from "./theme-editor";
-import { initFormData } from "./form/FormEntry";
-import { initThemeEditorState } from "./theme-editor/reducer";
+import { FormData, FormEntry, initFormData } from "./form";
+import {
+  ThemeEditor,
+  ThemeEditorState,
+  initThemeEditorState,
+} from "./theme-editor";
 
 function init({
   cacheKey,

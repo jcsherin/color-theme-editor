@@ -28,4 +28,4 @@ export {
 
 export type { EditUI, EditUISerialized } from "./ThemeEditor";
 export type { ThemeEditorState, ThemeEditorAction } from "./reducer";
-export { reducer } from "./reducer";
+export { reducer, initThemeEditorState } from "./reducer";
