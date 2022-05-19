@@ -4,9 +4,12 @@ import {
   createWizard,
   deserializeWizard,
   serializeWizard,
+  Wizard,
   wizardReducer,
-  WizardUI,
 } from "./wizard";
+
+import { FormData, FormEntry } from "./form";
+import { ThemeEditor, ThemeEditorState } from "./theme-editor";
 
 function init({ cacheKey }: { cacheKey: string }) {
   const cached = localStorage.getItem(cacheKey);
@@ -38,9 +41,64 @@ export default function App() {
     localStorage.setItem(cacheKey, JSON.stringify(serializeWizard(wizard)));
   }, [wizard]);
 
-  return (
-    <div className="mx-2 my-8">
-      <WizardUI wizard={wizard} dispatch={dispatch} />
-    </div>
-  );
+  const handleNextUI = (wizard: Wizard) => () => {
+    dispatch({ kind: "next" });
+    dispatch({
+      kind: "parse",
+      form: wizard.steps[wizard.currentIdx].state as FormData,
+    });
+  };
+
+  const renderWizard = (wizard: Wizard) => {
+    switch (wizard.steps[wizard.currentIdx].kind) {
+      case "formEntry": {
+        const state = wizard.steps[wizard.currentIdx].state as FormData;
+
+        return (
+          <FormEntry
+            state={state}
+            handleNextUI={handleNextUI(wizard)}
+            handleLoadExample={() => dispatch({ kind: "loadExample" })}
+            handleResetForm={() => dispatch({ kind: "resetForm" })}
+          />
+        );
+      }
+
+      case "main": {
+        const state = wizard.steps[wizard.currentIdx].state as ThemeEditorState;
+
+        return (
+          <ThemeEditor
+            state={state}
+            handlePrevUI={() => dispatch({ kind: "prev" })}
+            handleRenameColor={(colorId, newName) =>
+              dispatch({
+                kind: "renameColor",
+                colorId: colorId,
+                newName: newName,
+              })
+            }
+            handleRemoveFromGroup={(colorId, groupName) =>
+              dispatch({
+                kind: "removeFromGroup",
+                groupName: groupName,
+                colorId: colorId,
+              })
+            }
+            handleAddToGroup={(groupName) =>
+              dispatch({ kind: "addToGroup", groupName: groupName })
+            }
+            handleToggleStatus={(selectableItem) =>
+              dispatch({
+                kind: "toggleStatus",
+                selectableItem: selectableItem,
+              })
+            }
+          />
+        );
+      }
+    }
+  };
+
+  return <div className="mx-2 my-8">{renderWizard(wizard)}</div>;
 }
