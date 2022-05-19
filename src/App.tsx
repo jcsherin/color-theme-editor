@@ -13,11 +13,19 @@ import { ThemeEditor, ThemeEditorState } from "./theme-editor";
 import { initFormData } from "./form/FormEntry";
 import { initThemeEditorState } from "./theme-editor/reducer";
 
-function init({ cacheKey }: { cacheKey: string }) {
+function init({
+  cacheKey,
+  formData,
+  themeEditorState,
+}: {
+  cacheKey: string;
+  formData: FormData;
+  themeEditorState: ThemeEditorState;
+}) {
   const cached = localStorage.getItem(cacheKey);
   return cached
     ? deserializeWizard(JSON.parse(cached))
-    : createWizard(initFormData(), initThemeEditorState());
+    : createWizard(formData, themeEditorState);
 }
 
 const cacheKey = "wizard";
@@ -25,7 +33,11 @@ const cacheKey = "wizard";
 export default function App() {
   const [wizard, dispatch] = useReducer(
     wizardReducer,
-    { cacheKey: cacheKey },
+    {
+      cacheKey: cacheKey,
+      formData: initFormData(),
+      themeEditorState: initThemeEditorState(),
+    },
     init
   );
 
