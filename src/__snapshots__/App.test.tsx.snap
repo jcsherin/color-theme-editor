@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App renders the default state of the first in the wizard 1`] = `
+<div>
+  <div
+    class="mx-2 my-8"
+  >
+    <div
+      class="mb-4"
+    >
+      <button
+        class="mr-4 py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+        disabled=""
+      >
+        Next
+      </button>
+      <button
+        class="text-blue-500 hover:text-blue-700 text-xl"
+      >
+        Load Example
+      </button>
+    </div>
+    <div
+      class="grid grid-cols-2"
+    >
+      <div
+        class="mr-4"
+      >
+        <p
+          class="text-xl mb-1"
+        >
+          Group Names
+        </p>
+        <textarea
+          class="w-full bg-slate-100 h-60 py-2 px-4"
+          placeholder="One name per line"
+        />
+      </div>
+      <div>
+        <p
+          class="text-xl mb-1"
+        >
+          Color Values
+        </p>
+        <textarea
+          class="w-full bg-slate-100 h-60 py-2 px-4"
+          placeholder="One color value per line"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

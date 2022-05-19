@@ -53,12 +53,12 @@ function Form({ form }: { form: FormData }) {
 }
 
 function ActionBar({
-  isEmptyForm,
+  isEmpty,
   handleNextUI,
   handleLoadExample,
   handleResetForm,
 }: {
-  isEmptyForm: boolean;
+  isEmpty: boolean;
   handleNextUI: () => void;
   handleLoadExample: () => void;
   handleResetForm: () => void;
@@ -68,11 +68,11 @@ function ActionBar({
       <button
         onClick={(_event) => handleNextUI()}
         className="mr-4 py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
-        disabled={isEmptyForm}
+        disabled={isEmpty}
       >
         Next
       </button>
-      {isEmptyForm ? (
+      {isEmpty ? (
         <button
           onClick={(_event) => handleLoadExample()}
           className="text-blue-500 hover:text-blue-700 text-xl"
@@ -105,7 +105,7 @@ export function FormEntry({
   return (
     <>
       <ActionBar
-        isEmptyForm={isEmptyForm(form)}
+        isEmpty={isEmptyForm(form)}
         handleNextUI={handleNextUI}
         handleLoadExample={handleLoadExample}
         handleResetForm={handleResetForm}
