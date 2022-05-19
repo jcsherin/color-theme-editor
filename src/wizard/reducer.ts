@@ -27,11 +27,23 @@ function prevWizardUI(wizard: Wizard): Wizard {
     : { ...wizard, currentIdx: wizard.currentIdx - 1 };
 }
 
+type Action = WizardAction | FormAction | ThemeEditorAction;
+
+interface BatchOrdered<T> {
+  kind: "batchOrdered";
+  actions: T[];
+}
+
 export function wizardReducer(
   wizard: Wizard,
-  action: WizardAction | FormAction | ThemeEditorAction
+  action: Action | BatchOrdered<Action>
 ): Wizard {
   switch (action.kind) {
+    case "batchOrdered":
+      return action.actions.reduce(
+        (prevState, currAction) => wizardReducer(prevState, currAction),
+        wizard
+      );
     case "next":
       return nextWizardUI(wizard);
     case "prev":

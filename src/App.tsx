@@ -51,10 +51,15 @@ export default function App() {
   }, [wizard]);
 
   const handleNextUI = (wizard: Wizard) => () => {
-    dispatch({ kind: "next" });
     dispatch({
-      kind: "parse",
-      form: wizard.steps[wizard.currentIdx].state as FormData,
+      kind: "batchOrdered",
+      actions: [
+        { kind: "next" },
+        {
+          kind: "parse",
+          form: wizard.steps[wizard.currentIdx].state as FormData,
+        },
+      ],
     });
   };
 
