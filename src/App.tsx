@@ -7,11 +7,12 @@ import {
   Wizard,
   wizardReducer,
 } from "./wizard";
-import { FormData, FormEntry, initFormData } from "./form";
+import { createFormEntryUI, FormData, FormEntry, initFormData } from "./form";
 import {
   ThemeEditor,
   ThemeEditorState,
   initThemeEditorState,
+  createEditUI,
 } from "./theme-editor";
 
 function init({
@@ -24,9 +25,12 @@ function init({
   themeEditorState: ThemeEditorState;
 }) {
   const cached = localStorage.getItem(cacheKey);
-  return cached
-    ? deserializeWizard(JSON.parse(cached))
-    : createWizard(formData, themeEditorState);
+
+  const formEntryUI = createFormEntryUI(formData);
+  const editUI = createEditUI(themeEditorState);
+  const steps = [formEntryUI, editUI];
+
+  return cached ? deserializeWizard(JSON.parse(cached)) : createWizard(steps);
 }
 
 const cacheKey = "wizard";

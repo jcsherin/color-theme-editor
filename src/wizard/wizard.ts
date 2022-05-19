@@ -1,9 +1,5 @@
-import type { ThemeEditorState } from "../theme-editor";
-import type { FormData } from "../form";
-
-import { createFormEntryUI, FormEntryUI, FormEntryUISerialized } from "../form";
+import { FormEntryUI, FormEntryUISerialized } from "../form";
 import {
-  createEditUI,
   deserializeEditUI,
   EditUI,
   EditUISerialized,
@@ -24,15 +20,9 @@ interface SerializedWizard {
   currentIdx: number;
 }
 
-export function createWizard(
-  formData: FormData,
-  state: ThemeEditorState
-): Wizard {
-  const formEntryUI = createFormEntryUI(formData);
-  const editUI = createEditUI(state);
-
+export function createWizard(steps: WizardUI[]): Wizard {
   return {
-    steps: [formEntryUI, editUI],
+    steps: steps,
     currentIdx: 0,
   };
 }
