@@ -78,4 +78,19 @@ describe("App", () => {
     expect(colorValuesInput).toHaveValue(sampleColors);
     expect(nextButton).not.toBeDisabled();
   });
+
+  it("navigates to the color theme editor", async () => {
+    const tree = render(<App sampleFormData={sampleFormData} />);
+    const user = userEvent.setup();
+
+    const nextButton = screen.getByRole("button", { name: "Next" });
+    const loadExampleButton = screen.getByRole("button", {
+      name: "Load Example",
+    });
+
+    await user.click(loadExampleButton);
+    await user.click(nextButton);
+
+    expect(tree.container.firstChild).toMatchSnapshot();
+  });
 });
