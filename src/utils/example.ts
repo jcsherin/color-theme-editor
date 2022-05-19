@@ -1,4 +1,5 @@
 import { shuffle } from "./random";
+import type { FormData } from "../form";
 
 // https://gist.github.com/davidpiesse/74f5eaa23eb405e61b58cfe535d9907c
 let tailwind = {
@@ -557,13 +558,10 @@ let tailwindColors = Array.from(
   new Set(Object.values(tailwind).filter((x) => x.startsWith("#")))
 );
 
-export const groupNames = () => [
-  "primary",
-  "secondary",
-  "notification",
-  "background",
-];
-export const colors = () => shuffle(tailwindColors).slice(0, 20);
+export const sampleFormData: FormData = {
+  classnames: ["primary", "secondary", "notification", "background"].join("\n"),
+  colors: shuffle(tailwindColors).slice(0, 20).join("\n"),
+};
 
 export const testColors = (limit: number): string[] =>
   tailwindColors.slice(0, limit);

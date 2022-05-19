@@ -4,7 +4,6 @@ import App from "./App";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
-import { notGrouped } from "./theme-editor";
 
 function setup(jsx: JSX.Element) {
   return {
@@ -13,9 +12,33 @@ function setup(jsx: JSX.Element) {
   };
 }
 
+let sampleFormData = { classnames: "", colors: "" };
+const sampleClassnames = ["green", "secondary"].join("\n");
+const sampleColors = [
+  "#00695c",
+  "#388e3c",
+  "#64ffda",
+  "#a5d6a7",
+  "#039be5",
+  "#1e88e5",
+  "#536dfe",
+  "#90caf9",
+].join("\n");
+
+beforeEach(() => {
+  sampleFormData = {
+    classnames: sampleClassnames,
+    colors: sampleColors,
+  };
+});
+
+afterEach(() => {
+  localStorage.clear();
+});
+
 describe("App", () => {
   it("renders the default state of the first in the wizard", () => {
-    const tree = render(<App />);
+    const tree = render(<App sampleFormData={sampleFormData} />);
 
     const groupNamesInput = screen.getByPlaceholderText(/^One name per line$/);
     const colorValuesInput = screen.getByPlaceholderText(
@@ -37,7 +60,7 @@ describe("App", () => {
   });
 
   it("preloads example values into the form", async () => {
-    const { user } = setup(<App />);
+    const { user } = setup(<App sampleFormData={sampleFormData} />);
 
     const groupNamesInput = screen.getByPlaceholderText(/^One name per line$/);
     const colorValuesInput = screen.getByPlaceholderText(
@@ -51,8 +74,8 @@ describe("App", () => {
 
     await user.click(loadExampleButton);
 
-    expect(groupNamesInput).not.toHaveValue("");
-    expect(colorValuesInput).not.toHaveValue("");
+    expect(groupNamesInput).toHaveValue(sampleClassnames);
+    expect(colorValuesInput).toHaveValue(sampleColors);
     expect(nextButton).not.toBeDisabled();
   });
 });

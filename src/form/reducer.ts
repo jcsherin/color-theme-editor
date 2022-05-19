@@ -1,8 +1,9 @@
-import * as example from "../utils/example";
 import type { FormData } from "./index";
 
 interface FormLoadExample {
   kind: "loadExample";
+  classnames: string;
+  colors: string;
 }
 
 interface FormReset {
@@ -15,8 +16,8 @@ export function formReducer(_form: FormData, action: FormAction): FormData {
   switch (action.kind) {
     case "loadExample":
       return {
-        classnames: example.groupNames().join("\n"),
-        colors: example.colors().join("\n"),
+        classnames: action.classnames,
+        colors: action.colors,
       };
     case "resetForm":
       return { classnames: "", colors: "" };

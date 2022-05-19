@@ -35,7 +35,7 @@ function init({
 
 const cacheKey = "wizard";
 
-export default function App() {
+export default function App({ sampleFormData }: { sampleFormData: FormData }) {
   const [wizard, dispatch] = useReducer(
     wizardReducer,
     {
@@ -72,7 +72,13 @@ export default function App() {
           <FormEntry
             state={state}
             handleNextUI={handleNextUI(wizard)}
-            handleLoadExample={() => dispatch({ kind: "loadExample" })}
+            handleLoadExample={() =>
+              dispatch({
+                kind: "loadExample",
+                classnames: sampleFormData.classnames,
+                colors: sampleFormData.colors,
+              })
+            }
             handleResetForm={() => dispatch({ kind: "resetForm" })}
           />
         );
