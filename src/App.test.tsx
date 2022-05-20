@@ -37,7 +37,7 @@ afterEach(() => {
 });
 
 describe("App", () => {
-  it("renders the default state of the first in the wizard", () => {
+  it("renders the default state of the first step in the wizard", () => {
     const tree = render(<App sampleFormData={sampleFormData} />);
 
     const groupNamesInput = screen.getByPlaceholderText(/^One name per line$/);
@@ -77,6 +77,11 @@ describe("App", () => {
     expect(groupNamesInput).toHaveValue(sampleClassnames);
     expect(colorValuesInput).toHaveValue(sampleColors);
     expect(nextButton).not.toBeDisabled();
+    expect(
+      screen.queryByRole("button", {
+        name: "Load Example",
+      })
+    ).not.toBeInTheDocument();
   });
 
   it("navigates to the color theme editor", async () => {
@@ -108,9 +113,9 @@ describe("App", () => {
     const prevButton = screen.getByRole("button", { name: "Go Back" });
     await user.click(prevButton);
 
-    expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Next" })).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Reset All Values" })
+      screen.queryByRole("button", { name: "Reset All Values" })
     ).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText(/^One name per line$/)

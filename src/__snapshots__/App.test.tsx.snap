@@ -405,7 +405,7 @@ exports[`App navigates to the color theme editor 1`] = `
 </div>
 `;
 
-exports[`App renders the default state of the first in the wizard 1`] = `
+exports[`App renders the default state of the first step in the wizard 1`] = `
 <div>
   <div
     class="mx-2 my-8"
