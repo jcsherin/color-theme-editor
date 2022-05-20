@@ -124,4 +124,33 @@ describe("App", () => {
       screen.getByPlaceholderText(/^One color value per line$/)
     ).toBeInTheDocument();
   });
+
+  it("resets all the form values", async () => {
+    const { user } = setup(<App sampleFormData={sampleFormData} />);
+
+    const loadExampleButton = screen.getByRole("button", {
+      name: "Load Example",
+    });
+    await user.click(loadExampleButton);
+
+    const resetButton = screen.getByRole("button", {
+      name: "Reset All Values",
+    });
+    await user.click(resetButton);
+
+    const groupNamesInput = screen.getByPlaceholderText(/^One name per line$/);
+    const colorValuesInput = screen.getByPlaceholderText(
+      /^One color value per line$/
+    );
+    expect(groupNamesInput).toHaveValue("");
+    expect(colorValuesInput).toHaveValue("");
+    expect(
+      screen.queryByRole("button", {
+        name: "Load Example",
+      })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Reset All Values" })
+    ).not.toBeInTheDocument();
+  });
 });
