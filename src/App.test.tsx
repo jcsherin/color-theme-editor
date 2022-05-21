@@ -82,6 +82,9 @@ describe("App", () => {
         name: "Load Example",
       })
     ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Reset All Values" })
+    ).toBeInTheDocument();
   });
 
   it("navigates to the color theme editor", async () => {
