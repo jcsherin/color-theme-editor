@@ -34,7 +34,6 @@ export function TreeLeafEdit({
   return (
     <div className="my-2 h-10">
       <input
-        id="tree-leaf-input"
         ref={renameRef}
         type="text"
         placeholder={`Rename ${getColorName(color)}`}

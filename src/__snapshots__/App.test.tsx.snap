@@ -65,7 +65,7 @@ exports[`App navigates to the color theme editor 1`] = `
                   <p
                     class="my-2 h-10"
                   >
-                    "secondary" : {}
+                    "blue" : {}
                   </p>
                   <button
                     class="my-2 block h-10"
@@ -397,7 +397,7 @@ exports[`App navigates to the color theme editor 1`] = `
           class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
           disabled=""
         >
-          secondary
+          blue
         </button>
       </div>
     </div>
@@ -451,6 +451,842 @@ exports[`App renders the default state of the first step in the wizard 1`] = `
           class="w-full bg-slate-100 h-60 py-2 px-4"
           placeholder="One color value per line"
         />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`App renders the theme editor 1`] = `
+<div>
+  <div
+    class="mx-2 my-8"
+  >
+    <div
+      class="mb-4"
+    >
+      <button
+        class="py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
+      >
+        Go Back
+      </button>
+      <button
+        class=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
+      >
+        Copy To Clipboard
+      </button>
+    </div>
+    <div
+      class="grid grid-cols-2 mb-4"
+    >
+      <div
+        class="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
+      >
+        <div
+          class="my-2"
+        >
+          <p
+            class="mb-1"
+          >
+            module.exports = {
+          </p>
+          <div
+            class="ml-4"
+          >
+            <div
+              class="my-2"
+            >
+              <p
+                class="mb-1"
+              >
+                theme: {
+              </p>
+              <div
+                class="ml-4"
+              >
+                <div
+                  class="my-2"
+                >
+                  <p
+                    class="mb-1"
+                  >
+                    colors: {
+                  </p>
+                  <div
+                    class="ml-4"
+                  >
+                    <p
+                      class="my-2 h-10"
+                    >
+                      "green" : {}
+                    </p>
+                    <p
+                      class="my-2 h-10"
+                    >
+                      "blue" : {}
+                    </p>
+                    <button
+                      class="my-2 block h-10"
+                    >
+                      <span
+                        class="mr-4"
+                      >
+                        "
+                        #00695c
+                        "
+                      </span>
+                      <span
+                        class="mr-4"
+                      >
+                        :
+                      </span>
+                      <span
+                        class="w-4 h-4 inline-block mr-2 rounded-sm"
+                        style="background-color: rgb(0, 105, 92);"
+                      />
+                      <span>
+                        #00695c
+                        ,
+                      </span>
+                    </button>
+                    <button
+                      class="my-2 block h-10"
+                    >
+                      <span
+                        class="mr-4"
+                      >
+                        "
+                        #039be5
+                        "
+                      </span>
+                      <span
+                        class="mr-4"
+                      >
+                        :
+                      </span>
+                      <span
+                        class="w-4 h-4 inline-block mr-2 rounded-sm"
+                        style="background-color: rgb(3, 155, 229);"
+                      />
+                      <span>
+                        #039be5
+                        ,
+                      </span>
+                    </button>
+                    <button
+                      class="my-2 block h-10"
+                    >
+                      <span
+                        class="mr-4"
+                      >
+                        "
+                        #1e88e5
+                        "
+                      </span>
+                      <span
+                        class="mr-4"
+                      >
+                        :
+                      </span>
+                      <span
+                        class="w-4 h-4 inline-block mr-2 rounded-sm"
+                        style="background-color: rgb(30, 136, 229);"
+                      />
+                      <span>
+                        #1e88e5
+                        ,
+                      </span>
+                    </button>
+                    <button
+                      class="my-2 block h-10"
+                    >
+                      <span
+                        class="mr-4"
+                      >
+                        "
+                        #388e3c
+                        "
+                      </span>
+                      <span
+                        class="mr-4"
+                      >
+                        :
+                      </span>
+                      <span
+                        class="w-4 h-4 inline-block mr-2 rounded-sm"
+                        style="background-color: rgb(56, 142, 60);"
+                      />
+                      <span>
+                        #388e3c
+                        ,
+                      </span>
+                    </button>
+                    <button
+                      class="my-2 block h-10"
+                    >
+                      <span
+                        class="mr-4"
+                      >
+                        "
+                        #536dfe
+                        "
+                      </span>
+                      <span
+                        class="mr-4"
+                      >
+                        :
+                      </span>
+                      <span
+                        class="w-4 h-4 inline-block mr-2 rounded-sm"
+                        style="background-color: rgb(83, 109, 254);"
+                      />
+                      <span>
+                        #536dfe
+                        ,
+                      </span>
+                    </button>
+                    <button
+                      class="my-2 block h-10"
+                    >
+                      <span
+                        class="mr-4"
+                      >
+                        "
+                        #64ffda
+                        "
+                      </span>
+                      <span
+                        class="mr-4"
+                      >
+                        :
+                      </span>
+                      <span
+                        class="w-4 h-4 inline-block mr-2 rounded-sm"
+                        style="background-color: rgb(100, 255, 218);"
+                      />
+                      <span>
+                        #64ffda
+                        ,
+                      </span>
+                    </button>
+                    <button
+                      class="my-2 block h-10"
+                    >
+                      <span
+                        class="mr-4"
+                      >
+                        "
+                        #90caf9
+                        "
+                      </span>
+                      <span
+                        class="mr-4"
+                      >
+                        :
+                      </span>
+                      <span
+                        class="w-4 h-4 inline-block mr-2 rounded-sm"
+                        style="background-color: rgb(144, 202, 249);"
+                      />
+                      <span>
+                        #90caf9
+                        ,
+                      </span>
+                    </button>
+                    <button
+                      class="my-2 block h-10"
+                    >
+                      <span
+                        class="mr-4"
+                      >
+                        "
+                        #a5d6a7
+                        "
+                      </span>
+                      <span
+                        class="mr-4"
+                      >
+                        :
+                      </span>
+                      <span
+                        class="w-4 h-4 inline-block mr-2 rounded-sm"
+                        style="background-color: rgb(165, 214, 167);"
+                      />
+                      <span>
+                        #a5d6a7
+                        ,
+                      </span>
+                    </button>
+                  </div>
+                  <p>
+                    }
+                  </p>
+                </div>
+              </div>
+              <p>
+                }
+              </p>
+            </div>
+          </div>
+          <p>
+            }
+          </p>
+        </div>
+      </div>
+      <div>
+        <div
+          class="flex flex-wrap mb-4"
+        >
+          <button
+            class="mr-1 mb-1 p-1 border-4 border-white"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(0, 105, 92);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #00695c
+            </span>
+          </button>
+          <button
+            class="mr-1 mb-1 p-1 border-4 border-white"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(56, 142, 60);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #388e3c
+            </span>
+          </button>
+          <button
+            class="mr-1 mb-1 p-1 border-4 border-white"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(100, 255, 218);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #64ffda
+            </span>
+          </button>
+          <button
+            class="mr-1 mb-1 p-1 border-4 border-white"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(165, 214, 167);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #a5d6a7
+            </span>
+          </button>
+          <button
+            class="mr-1 mb-1 p-1 border-4 border-white"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(3, 155, 229);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #039be5
+            </span>
+          </button>
+          <button
+            class="mr-1 mb-1 p-1 border-4 border-white"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(30, 136, 229);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #1e88e5
+            </span>
+          </button>
+          <button
+            class="mr-1 mb-1 p-1 border-4 border-white"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(83, 109, 254);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #536dfe
+            </span>
+          </button>
+          <button
+            class="mr-1 mb-1 p-1 border-4 border-white"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(144, 202, 249);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #90caf9
+            </span>
+          </button>
+        </div>
+        <div
+          class="pl-2"
+        >
+          <button
+            class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+            disabled=""
+          >
+            green
+          </button>
+          <button
+            class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+            disabled=""
+          >
+            blue
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`App use the theme editor to group colors 1`] = `
+<div>
+  <div
+    class="mx-2 my-8"
+  >
+    <div
+      class="mb-4"
+    >
+      <button
+        class="py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
+      >
+        Go Back
+      </button>
+      <button
+        class=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
+      >
+        Copy To Clipboard
+      </button>
+    </div>
+    <div
+      class="grid grid-cols-2 mb-4"
+    >
+      <div
+        class="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
+      >
+        <div
+          class="my-2"
+        >
+          <p
+            class="mb-1"
+          >
+            module.exports = {
+          </p>
+          <div
+            class="ml-4"
+          >
+            <div
+              class="my-2"
+            >
+              <p
+                class="mb-1"
+              >
+                theme: {
+              </p>
+              <div
+                class="ml-4"
+              >
+                <div
+                  class="my-2"
+                >
+                  <p
+                    class="mb-1"
+                  >
+                    colors: {
+                  </p>
+                  <div
+                    class="ml-4"
+                  >
+                    <div
+                      class="my-2"
+                    >
+                      <p
+                        class="mb-1"
+                      >
+                        "green" : {
+                      </p>
+                      <div
+                        class="ml-4"
+                      >
+                        <button
+                          class="my-2 block h-10"
+                        >
+                          <span
+                            class="mr-4"
+                          >
+                            "
+                            #64ffda
+                            "
+                          </span>
+                          <span
+                            class="mr-4"
+                          >
+                            :
+                          </span>
+                          <span
+                            class="w-4 h-4 inline-block mr-2 rounded-sm"
+                            style="background-color: rgb(100, 255, 218);"
+                          />
+                          <span>
+                            #64ffda
+                            ,
+                          </span>
+                        </button>
+                        <button
+                          class="my-2 block h-10"
+                        >
+                          <span
+                            class="mr-4"
+                          >
+                            "
+                            #a5d6a7
+                            "
+                          </span>
+                          <span
+                            class="mr-4"
+                          >
+                            :
+                          </span>
+                          <span
+                            class="w-4 h-4 inline-block mr-2 rounded-sm"
+                            style="background-color: rgb(165, 214, 167);"
+                          />
+                          <span>
+                            #a5d6a7
+                            ,
+                          </span>
+                        </button>
+                      </div>
+                      <p>
+                        }
+                      </p>
+                    </div>
+                    <div
+                      class="my-2"
+                    >
+                      <p
+                        class="mb-1"
+                      >
+                        "blue" : {
+                      </p>
+                      <div
+                        class="ml-4"
+                      >
+                        <button
+                          class="my-2 block h-10"
+                        >
+                          <span
+                            class="mr-4"
+                          >
+                            "
+                            #039be5
+                            "
+                          </span>
+                          <span
+                            class="mr-4"
+                          >
+                            :
+                          </span>
+                          <span
+                            class="w-4 h-4 inline-block mr-2 rounded-sm"
+                            style="background-color: rgb(3, 155, 229);"
+                          />
+                          <span>
+                            #039be5
+                            ,
+                          </span>
+                        </button>
+                        <button
+                          class="my-2 block h-10"
+                        >
+                          <span
+                            class="mr-4"
+                          >
+                            "
+                            #90caf9
+                            "
+                          </span>
+                          <span
+                            class="mr-4"
+                          >
+                            :
+                          </span>
+                          <span
+                            class="w-4 h-4 inline-block mr-2 rounded-sm"
+                            style="background-color: rgb(144, 202, 249);"
+                          />
+                          <span>
+                            #90caf9
+                            ,
+                          </span>
+                        </button>
+                      </div>
+                      <p>
+                        }
+                      </p>
+                    </div>
+                    <button
+                      class="my-2 block h-10"
+                    >
+                      <span
+                        class="mr-4"
+                      >
+                        "
+                        #00695c
+                        "
+                      </span>
+                      <span
+                        class="mr-4"
+                      >
+                        :
+                      </span>
+                      <span
+                        class="w-4 h-4 inline-block mr-2 rounded-sm"
+                        style="background-color: rgb(0, 105, 92);"
+                      />
+                      <span>
+                        #00695c
+                        ,
+                      </span>
+                    </button>
+                    <button
+                      class="my-2 block h-10"
+                    >
+                      <span
+                        class="mr-4"
+                      >
+                        "
+                        #1e88e5
+                        "
+                      </span>
+                      <span
+                        class="mr-4"
+                      >
+                        :
+                      </span>
+                      <span
+                        class="w-4 h-4 inline-block mr-2 rounded-sm"
+                        style="background-color: rgb(30, 136, 229);"
+                      />
+                      <span>
+                        #1e88e5
+                        ,
+                      </span>
+                    </button>
+                    <button
+                      class="my-2 block h-10"
+                    >
+                      <span
+                        class="mr-4"
+                      >
+                        "
+                        #388e3c
+                        "
+                      </span>
+                      <span
+                        class="mr-4"
+                      >
+                        :
+                      </span>
+                      <span
+                        class="w-4 h-4 inline-block mr-2 rounded-sm"
+                        style="background-color: rgb(56, 142, 60);"
+                      />
+                      <span>
+                        #388e3c
+                        ,
+                      </span>
+                    </button>
+                    <button
+                      class="my-2 block h-10"
+                    >
+                      <span
+                        class="mr-4"
+                      >
+                        "
+                        #536dfe
+                        "
+                      </span>
+                      <span
+                        class="mr-4"
+                      >
+                        :
+                      </span>
+                      <span
+                        class="w-4 h-4 inline-block mr-2 rounded-sm"
+                        style="background-color: rgb(83, 109, 254);"
+                      />
+                      <span>
+                        #536dfe
+                        ,
+                      </span>
+                    </button>
+                  </div>
+                  <p>
+                    }
+                  </p>
+                </div>
+              </div>
+              <p>
+                }
+              </p>
+            </div>
+          </div>
+          <p>
+            }
+          </p>
+        </div>
+      </div>
+      <div>
+        <div
+          class="flex flex-wrap mb-4"
+        >
+          <button
+            class="mr-1 mb-1 p-1 border-4 border-white"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(0, 105, 92);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #00695c
+            </span>
+          </button>
+          <button
+            class="mr-1 mb-1 p-1 border-4 border-white"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(56, 142, 60);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #388e3c
+            </span>
+          </button>
+          <button
+            class="mr-1 mb-1 p-1 hidden"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(100, 255, 218);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #64ffda
+            </span>
+          </button>
+          <button
+            class="mr-1 mb-1 p-1 hidden"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(165, 214, 167);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #a5d6a7
+            </span>
+          </button>
+          <button
+            class="mr-1 mb-1 p-1 hidden"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(3, 155, 229);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #039be5
+            </span>
+          </button>
+          <button
+            class="mr-1 mb-1 p-1 border-4 border-white"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(30, 136, 229);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #1e88e5
+            </span>
+          </button>
+          <button
+            class="mr-1 mb-1 p-1 border-4 border-white"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(83, 109, 254);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #536dfe
+            </span>
+          </button>
+          <button
+            class="mr-1 mb-1 p-1 hidden"
+          >
+            <span
+              class="w-16 h-12 block border-b"
+              style="background-color: rgb(144, 202, 249);"
+            />
+            <span
+              class="block text-xs text-center truncate bg-black text-white"
+            >
+              #90caf9
+            </span>
+          </button>
+        </div>
+        <div
+          class="pl-2"
+        >
+          <button
+            class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+            disabled=""
+          >
+            green
+          </button>
+          <button
+            class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+            disabled=""
+          >
+            blue
+          </button>
+        </div>
       </div>
     </div>
   </div>

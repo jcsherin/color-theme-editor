@@ -1,7 +1,7 @@
 import React from "react";
 import App from "./App";
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
@@ -13,7 +13,7 @@ function setup(jsx: JSX.Element) {
 }
 
 let sampleFormData = { classnames: "", colors: "" };
-const sampleClassnames = ["green", "secondary"].join("\n");
+const sampleClassnames = ["green", "blue"].join("\n");
 const sampleColors = [
   "#00695c",
   "#388e3c",
@@ -155,5 +155,87 @@ describe("App", () => {
     expect(
       screen.queryByRole("button", { name: "Reset All Values" })
     ).not.toBeInTheDocument();
+  });
+
+  it("renders the theme editor", async () => {
+    const { user, container } = setup(<App sampleFormData={sampleFormData} />);
+
+    const nextButton = screen.getByRole("button", { name: "Next" });
+    const loadExampleButton = screen.getByRole("button", {
+      name: "Load Example",
+    });
+
+    await user.click(loadExampleButton);
+    await user.click(nextButton);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("use the theme editor to group colors", async () => {
+    const { user, container } = setup(<App sampleFormData={sampleFormData} />);
+
+    const nextButton = screen.getByRole("button", { name: "Next" });
+    const loadExampleButton = screen.getByRole("button", {
+      name: "Load Example",
+    });
+
+    await user.click(loadExampleButton);
+    await user.click(nextButton);
+
+    const green100 = screen.getByRole("button", { name: "#a5d6a7" });
+    const green200 = screen.getByRole("button", { name: "#64ffda" });
+    const greenGroup = screen.getByRole("button", { name: "green" });
+
+    await user.click(green100);
+    await user.click(green200);
+    await user.click(greenGroup);
+
+    const blue100 = screen.getByRole("button", { name: "#90caf9" });
+    const blue200 = screen.getByRole("button", { name: "#039be5" });
+    const blueGroup = screen.getByRole("button", { name: "blue" });
+
+    await user.click(blue100);
+    await user.click(blue200);
+    await user.click(blueGroup);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("click on a color in tree to edit it", async () => {
+    const { user } = setup(<App sampleFormData={sampleFormData} />);
+
+    const nextButton = screen.getByRole("button", { name: "Next" });
+    const loadExampleButton = screen.getByRole("button", {
+      name: "Load Example",
+    });
+
+    await user.click(loadExampleButton);
+    await user.click(nextButton);
+
+    const green100 = screen.getByRole("button", { name: "#a5d6a7" });
+    const green200 = screen.getByRole("button", { name: "#64ffda" });
+    const greenGroup = screen.getByRole("button", { name: "green" });
+
+    await user.click(green100);
+    await user.click(green200);
+    await user.click(greenGroup);
+
+    const blue100 = screen.getByRole("button", { name: "#90caf9" });
+    const blue200 = screen.getByRole("button", { name: "#039be5" });
+    const blueGroup = screen.getByRole("button", { name: "blue" });
+
+    await user.click(blue100);
+    await user.click(blue200);
+    await user.click(blueGroup);
+
+    const editGreen200Button = screen.getByRole("button", {
+      name: /^"#64ffda" : #64ffda,$/,
+    });
+    await user.click(editGreen200Button);
+
+    const textInput = screen.getByDisplayValue(/#64ffda/);
+
+    expect(textInput).toBeInTheDocument();
+    await waitFor(() => expect(textInput).toHaveFocus(), { timeout: 100 });
   });
 });
