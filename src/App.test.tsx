@@ -182,17 +182,29 @@ describe("App", () => {
     await user.click(loadExampleButton);
     await user.click(nextButton);
 
-    const green100 = screen.getByRole("button", { name: "#a5d6a7" });
-    const green200 = screen.getByRole("button", { name: "#64ffda" });
-    const greenGroup = screen.getByRole("button", { name: "green" });
+    const green100 = screen.getByText(/^#a5d6a7$/, {
+      exact: true,
+    });
+    const green200 = screen.getByText(/^#64ffda$/, {
+      exact: true,
+    });
+    const greenGroup = screen.getByText(/^green$/, {
+      exact: true,
+    });
 
     await user.click(green100);
     await user.click(green200);
     await user.click(greenGroup);
 
-    const blue100 = screen.getByRole("button", { name: "#90caf9" });
-    const blue200 = screen.getByRole("button", { name: "#039be5" });
-    const blueGroup = screen.getByRole("button", { name: "blue" });
+    const blue100 = screen.getByText(/^#90caf9$/, {
+      exact: true,
+    });
+    const blue200 = screen.getByText(/^#039be5$/, {
+      exact: true,
+    });
+    const blueGroup = screen.getByText(/^blue$/, {
+      exact: true,
+    });
 
     await user.click(blue100);
     await user.click(blue200);
@@ -212,17 +224,29 @@ describe("App", () => {
     await user.click(loadExampleButton);
     await user.click(nextButton);
 
-    const green100 = screen.getByRole("button", { name: "#a5d6a7" });
-    const green200 = screen.getByRole("button", { name: "#64ffda" });
-    const greenGroup = screen.getByRole("button", { name: "green" });
+    const green100 = screen.getByText(/^#a5d6a7$/, {
+      exact: true,
+    });
+    const green200 = screen.getByText(/^#64ffda$/, {
+      exact: true,
+    });
+    const greenGroup = screen.getByText(/^green$/, {
+      exact: true,
+    });
 
     await user.click(green100);
     await user.click(green200);
     await user.click(greenGroup);
 
-    const blue100 = screen.getByRole("button", { name: "#90caf9" });
-    const blue200 = screen.getByRole("button", { name: "#039be5" });
-    const blueGroup = screen.getByRole("button", { name: "blue" });
+    const blue100 = screen.getByText(/^#90caf9$/, {
+      exact: true,
+    });
+    const blue200 = screen.getByText(/^#039be5$/, {
+      exact: true,
+    });
+    const blueGroup = screen.getByText(/^blue$/, {
+      exact: true,
+    });
 
     await user.click(blue100);
     await user.click(blue200);
