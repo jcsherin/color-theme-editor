@@ -346,4 +346,60 @@ describe("App", () => {
 }`;
     expect(spy).toHaveBeenCalledWith(clipboardContents);
   });
+
+  it("remove color from a group using the tree editor", async () => {
+    const { user } = setup(<App sampleFormData={sampleFormData} />);
+
+    const nextButton = screen.getByRole("button", { name: "Next" });
+    const loadExampleButton = screen.getByRole("button", {
+      name: "Load Example",
+    });
+
+    await user.click(loadExampleButton);
+    await user.click(nextButton);
+
+    const green100 = screen.getByText(/^#a5d6a7$/, {
+      exact: true,
+    });
+    const green200 = screen.getByText(/^#64ffda$/, {
+      exact: true,
+    });
+    const greenGroup = screen.getByText(/^green$/, {
+      exact: true,
+    });
+
+    await user.click(green100);
+    await user.click(green200);
+    await user.click(greenGroup);
+
+    const editGreen200Button = screen.getByRole("button", {
+      name: /^"#64ffda" : #64ffda,$/,
+    });
+    await user.click(editGreen200Button);
+    await user.click(screen.getByRole("button", { name: /^Remove$/ }));
+
+    const copyToClipboardButton = screen.getByText(/^Copy To Clipboard$/);
+    const spy = jest.spyOn(navigator.clipboard, "writeText");
+
+    await user.click(copyToClipboardButton);
+
+    const clipboardContents = `module.exports = {
+  \"theme\": {
+    \"colors\": {
+      \"green\": {
+        \"#a5d6a7\": \"#a5d6a7\"
+      },
+      \"blue\": {},
+      \"#00695c\": \"#00695c\",
+      \"#039be5\": \"#039be5\",
+      \"#1e88e5\": \"#1e88e5\",
+      \"#388e3c\": \"#388e3c\",
+      \"#536dfe\": \"#536dfe\",
+      \"#64ffda\": \"#64ffda\",
+      \"#90caf9\": \"#90caf9\"
+    }
+  }
+}`;
+    expect(spy).toHaveBeenCalledWith(clipboardContents);
+  });
 });
