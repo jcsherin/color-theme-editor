@@ -262,4 +262,88 @@ describe("App", () => {
     expect(textInput).toBeInTheDocument();
     await waitFor(() => expect(textInput).toHaveFocus(), { timeout: 100 });
   });
+
+  it("rename multiple colors in tree editor using keyboard", async () => {
+    const { user } = setup(<App sampleFormData={sampleFormData} />);
+
+    const nextButton = screen.getByRole("button", { name: "Next" });
+    const loadExampleButton = screen.getByRole("button", {
+      name: "Load Example",
+    });
+
+    await user.click(loadExampleButton);
+    await user.click(nextButton);
+
+    const green100 = screen.getByText(/^#a5d6a7$/, {
+      exact: true,
+    });
+    const green200 = screen.getByText(/^#64ffda$/, {
+      exact: true,
+    });
+    const greenGroup = screen.getByText(/^green$/, {
+      exact: true,
+    });
+
+    await user.click(green100);
+    await user.click(green200);
+    await user.click(greenGroup);
+
+    const blue100 = screen.getByText(/^#90caf9$/, {
+      exact: true,
+    });
+    const blue200 = screen.getByText(/^#039be5$/, {
+      exact: true,
+    });
+    const blueGroup = screen.getByText(/^blue$/, {
+      exact: true,
+    });
+
+    await user.click(blue100);
+    await user.click(blue200);
+    await user.click(blueGroup);
+
+    const editGreen200Button = screen.getByRole("button", {
+      name: /^"#64ffda" : #64ffda,$/,
+    });
+    await user.click(editGreen200Button);
+
+    await user.clear(screen.getByRole("textbox"));
+    await user.type(screen.getByRole("textbox"), "200{enter}");
+    await user.clear(screen.getByRole("textbox"));
+    await user.type(screen.getByRole("textbox"), "100{enter}");
+
+    await user.type(screen.getByRole("textbox"), "{enter}");
+
+    await user.clear(screen.getByRole("textbox"));
+    await user.type(screen.getByRole("textbox"), "200{enter}");
+    await user.clear(screen.getByRole("textbox"));
+    await user.type(screen.getByRole("textbox"), "100{enter}");
+
+    await user.type(screen.getByRole("textbox"), "{escape}");
+
+    const copyToClipboardButton = screen.getByText(/^Copy To Clipboard$/);
+    const spy = jest.spyOn(navigator.clipboard, "writeText");
+
+    await user.click(copyToClipboardButton);
+
+    const clipboardContents = `module.exports = {
+  \"theme\": {
+    \"colors\": {
+      \"green\": {
+        \"100\": \"#a5d6a7\",
+        \"200\": \"#64ffda\"
+      },
+      \"blue\": {
+        \"100\": \"#90caf9\",
+        \"200\": \"#039be5\"
+      },
+      \"#00695c\": \"#00695c\",
+      \"#1e88e5\": \"#1e88e5\",
+      \"#388e3c\": \"#388e3c\",
+      \"#536dfe\": \"#536dfe\"
+    }
+  }
+}`;
+    expect(spy).toHaveBeenCalledWith(clipboardContents);
+  });
 });
