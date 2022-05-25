@@ -210,7 +210,32 @@ describe("App", () => {
     await user.click(blue200);
     await user.click(blueGroup);
 
+    const copyToClipboardButton = screen.getByText(/^Copy To Clipboard$/);
+    const spy = jest.spyOn(navigator.clipboard, "writeText");
+
+    await user.click(copyToClipboardButton);
+
+    const clipboardContents = `module.exports = {
+  \"theme\": {
+    \"colors\": {
+      \"green\": {
+        \"#64ffda\": \"#64ffda\",
+        \"#a5d6a7\": \"#a5d6a7\"
+      },
+      \"blue\": {
+        \"#039be5\": \"#039be5\",
+        \"#90caf9\": \"#90caf9\"
+      },
+      \"#00695c\": \"#00695c\",
+      \"#1e88e5\": \"#1e88e5\",
+      \"#388e3c\": \"#388e3c\",
+      \"#536dfe\": \"#536dfe\"
+    }
+  }
+}`;
+
     expect(container).toMatchSnapshot();
+    expect(spy).toHaveBeenCalledWith(clipboardContents);
   });
 
   it("click on a color in tree to edit it", async () => {
