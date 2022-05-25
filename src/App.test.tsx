@@ -1,7 +1,7 @@
 import React from "react";
 import App from "./App";
 
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
@@ -85,6 +85,30 @@ describe("App", () => {
     expect(
       screen.queryByRole("button", { name: "Reset All Values" })
     ).toBeInTheDocument();
+  });
+
+  it("user is able to input group names", async () => {
+    setup(<App sampleFormData={sampleFormData} />);
+
+    const textboxGroupNames = screen.getByPlaceholderText(/one name per line/i);
+    fireEvent.change(textboxGroupNames, {
+      target: { value: "green\nblue\n" },
+    });
+
+    expect(textboxGroupNames).toHaveValue("green\nblue\n");
+  });
+
+  it("user is able to input color values", async () => {
+    setup(<App sampleFormData={sampleFormData} />);
+
+    const textboxColorValues = screen.getByPlaceholderText(
+      /one color value per line/i
+    );
+    fireEvent.change(textboxColorValues, {
+      target: { value: "#ffffff\n#000000\n" },
+    });
+
+    expect(textboxColorValues).toHaveValue("#ffffff\n#000000\n");
   });
 
   it("navigates to the color theme editor", async () => {

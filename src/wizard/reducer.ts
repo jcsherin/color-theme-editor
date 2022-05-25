@@ -37,6 +37,7 @@ export function wizardReducer(
       return prevWizard(wizard);
     case "loadExample":
     case "resetForm":
+    case "updateForm":
       switch (wizard.steps[wizard.currentIdx].kind) {
         case "formEntry": {
           const state = formReducer(

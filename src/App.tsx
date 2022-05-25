@@ -80,6 +80,9 @@ export default function App({ sampleFormData }: { sampleFormData: FormData }) {
               })
             }
             handleResetForm={() => dispatch({ kind: "resetForm" })}
+            handleUpdateForm={(formData) =>
+              dispatch({ kind: "updateForm", formData: formData })
+            }
           />
         );
       }

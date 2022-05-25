@@ -27,7 +27,13 @@ function isEmptyForm(form: FormData): boolean {
   return form.classnames.trim().length === 0 && form.colors.trim().length === 0;
 }
 
-function Form({ form }: { form: FormData }) {
+function Form({
+  form,
+  handleUpdateForm,
+}: {
+  form: FormData;
+  handleUpdateForm: (form: FormData) => void;
+}) {
   return (
     <div className="grid grid-cols-2">
       <div className="mr-4">
@@ -36,7 +42,12 @@ function Form({ form }: { form: FormData }) {
           className="w-full bg-slate-100 h-60 py-2 px-4"
           placeholder="One name per line"
           value={form.classnames}
-          onChange={(_e) => {}}
+          onChange={(event) => {
+            handleUpdateForm({
+              ...form,
+              classnames: event.currentTarget.value,
+            });
+          }}
         />
       </div>
       <div>
@@ -45,7 +56,9 @@ function Form({ form }: { form: FormData }) {
           className="w-full bg-slate-100 h-60 py-2 px-4"
           placeholder="One color value per line"
           value={form.colors}
-          onChange={(_e) => {}}
+          onChange={(event) => {
+            handleUpdateForm({ ...form, colors: event.currentTarget.value });
+          }}
         />
       </div>
     </div>
@@ -96,11 +109,13 @@ export function FormEntry({
   handleNextUI,
   handleLoadExample,
   handleResetForm,
+  handleUpdateForm,
 }: {
   state: FormData;
   handleNextUI: () => void;
   handleLoadExample: () => void;
   handleResetForm: () => void;
+  handleUpdateForm: (form: FormData) => void;
 }) {
   return (
     <>
@@ -110,7 +125,7 @@ export function FormEntry({
         handleLoadExample={handleLoadExample}
         handleResetForm={handleResetForm}
       />
-      <Form form={form} />
+      <Form form={form} handleUpdateForm={handleUpdateForm} />
     </>
   );
 }

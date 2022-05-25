@@ -10,7 +10,12 @@ interface FormReset {
   kind: "resetForm";
 }
 
-export type FormAction = FormLoadExample | FormReset;
+interface FormUpdate {
+  kind: "updateForm";
+  formData: FormData;
+}
+
+export type FormAction = FormLoadExample | FormReset | FormUpdate;
 
 export function formReducer(_form: FormData, action: FormAction): FormData {
   switch (action.kind) {
@@ -21,5 +26,7 @@ export function formReducer(_form: FormData, action: FormAction): FormData {
       };
     case "resetForm":
       return { classnames: "", colors: "" };
+    case "updateForm":
+      return action.formData;
   }
 }
