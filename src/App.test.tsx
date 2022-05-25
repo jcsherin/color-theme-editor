@@ -307,19 +307,21 @@ describe("App", () => {
     });
     await user.click(editGreen200Button);
 
-    await user.clear(screen.getByRole("textbox"));
-    await user.type(screen.getByRole("textbox"), "200{enter}");
-    await user.clear(screen.getByRole("textbox"));
-    await user.type(screen.getByRole("textbox"), "100{enter}");
+    const textboxGreen200 = screen.getByPlaceholderText(/rename #64ffda/i);
+    await user.clear(textboxGreen200);
+    await user.type(textboxGreen200, "200{enter}");
+    const textboxGreen100 = screen.getByPlaceholderText(/rename #a5d6a7/i);
+    await user.clear(textboxGreen100);
+    await user.type(textboxGreen100, "100{enter}");
 
     await user.type(screen.getByRole("textbox"), "{enter}");
 
-    await user.clear(screen.getByRole("textbox"));
-    await user.type(screen.getByRole("textbox"), "200{enter}");
-    await user.clear(screen.getByRole("textbox"));
-    await user.type(screen.getByRole("textbox"), "100{enter}");
-
-    await user.type(screen.getByRole("textbox"), "{escape}");
+    const textboxBlue200 = screen.getByPlaceholderText(/rename #039be5/i);
+    await user.clear(textboxBlue200);
+    await user.type(textboxBlue200, "200{enter}");
+    const textboxBlue100 = screen.getByPlaceholderText(/rename #90caf9/i);
+    await user.clear(textboxBlue100);
+    await user.type(textboxBlue100, "100{enter}");
 
     const copyToClipboardButton = screen.getByText(/^Copy To Clipboard$/);
     const spy = jest.spyOn(navigator.clipboard, "writeText");
