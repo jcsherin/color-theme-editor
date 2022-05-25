@@ -24,7 +24,7 @@ export function createFormEntryUI(state: FormData): FormEntryUI {
 }
 
 function isEmptyForm(form: FormData): boolean {
-  return form.classnames.trim().length === 0 && form.colors.trim().length === 0;
+  return form.classnames.trim().length === 0 || form.colors.trim().length === 0;
 }
 
 function Form({

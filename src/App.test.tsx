@@ -95,7 +95,10 @@ describe("App", () => {
       target: { value: "green\nblue\n" },
     });
 
+    const nextButton = screen.getByRole("button", { name: "Next" });
+
     expect(textboxGroupNames).toHaveValue("green\nblue\n");
+    expect(nextButton).toBeDisabled();
   });
 
   it("user is able to input color values", async () => {
@@ -108,7 +111,10 @@ describe("App", () => {
       target: { value: "#ffffff\n#000000\n" },
     });
 
+    const nextButton = screen.getByRole("button", { name: "Next" });
+
     expect(textboxColorValues).toHaveValue("#ffffff\n#000000\n");
+    expect(nextButton).toBeDisabled();
   });
 
   it("navigates to the color theme editor", async () => {
