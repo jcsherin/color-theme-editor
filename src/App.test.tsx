@@ -135,8 +135,8 @@ describe("App", () => {
     await user.click(loadExampleButton);
     await user.click(nextButton);
 
-    const prevButton = screen.getByRole("button", { name: "Go Back" });
-    await user.click(prevButton);
+    const createNewButton = screen.getByText(/create new/i);
+    await user.click(createNewButton);
 
     expect(screen.getByText(/group colors >>/i)).toBeInTheDocument();
     expect(screen.getByText(/reset all values/i)).toBeInTheDocument();

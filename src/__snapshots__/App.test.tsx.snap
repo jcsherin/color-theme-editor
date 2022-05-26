@@ -8,9 +8,9 @@ exports[`App navigates to the color theme editor 1`] = `
     class="mb-4"
   >
     <button
-      class="py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
+      class="py-1 px-4 text-xl rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
     >
-      Go Back
+      Create New
     </button>
     <button
       class=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
@@ -466,9 +466,9 @@ exports[`App renders the theme editor 1`] = `
       class="mb-4"
     >
       <button
-        class="py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
+        class="py-1 px-4 text-xl rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
       >
-        Go Back
+        Create New
       </button>
       <button
         class=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
@@ -873,9 +873,9 @@ exports[`App use the theme editor to group colors 1`] = `
       class="mb-4"
     >
       <button
-        class="py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
+        class="py-1 px-4 text-xl rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
       >
-        Go Back
+        Create New
       </button>
       <button
         class=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"

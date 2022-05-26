@@ -64,9 +64,9 @@ export function ThemeEditor({
       <div className="mb-4">
         <button
           onClick={(_event) => handlePrevUI()}
-          className="py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700"
+          className="py-1 px-4 text-xl rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
         >
-          Go Back
+          Create New
         </button>
         <CopyButton
           label="Copy To Clipboard"
