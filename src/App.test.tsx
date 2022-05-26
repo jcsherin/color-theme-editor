@@ -45,10 +45,8 @@ describe("App", () => {
       /^One color value per line$/
     );
 
-    const nextButton = screen.getByRole("button", { name: "Next" });
-    const loadExampleButton = screen.getByRole("button", {
-      name: "Load Example",
-    });
+    const nextButton = screen.getByText(/group colors >>/i);
+    const loadExampleButton = screen.getByText(/load example/i);
 
     expect(tree.container).toMatchSnapshot();
 
@@ -67,10 +65,8 @@ describe("App", () => {
       /^One color value per line$/
     );
 
-    const nextButton = screen.getByRole("button", { name: "Next" });
-    const loadExampleButton = screen.getByRole("button", {
-      name: "Load Example",
-    });
+    const nextButton = screen.getByText(/group colors >>/i);
+    const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
 
@@ -95,7 +91,7 @@ describe("App", () => {
       target: { value: "green\nblue\n" },
     });
 
-    const nextButton = screen.getByRole("button", { name: "Next" });
+    const nextButton = screen.getByText(/group colors >>/i);
 
     expect(textboxGroupNames).toHaveValue("green\nblue\n");
     expect(nextButton).toBeDisabled();
@@ -111,7 +107,7 @@ describe("App", () => {
       target: { value: "#ffffff\n#000000\n" },
     });
 
-    const nextButton = screen.getByRole("button", { name: "Next" });
+    const nextButton = screen.getByText(/group colors >>/i);
 
     expect(textboxColorValues).toHaveValue("#ffffff\n#000000\n");
     expect(nextButton).toBeDisabled();
@@ -121,10 +117,8 @@ describe("App", () => {
     const tree = render(<App sampleFormData={sampleFormData} />);
     const user = userEvent.setup();
 
-    const nextButton = screen.getByRole("button", { name: "Next" });
-    const loadExampleButton = screen.getByRole("button", {
-      name: "Load Example",
-    });
+    const nextButton = screen.getByText(/group colors >>/i);
+    const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
     await user.click(nextButton);
@@ -135,10 +129,8 @@ describe("App", () => {
   it("navigate back and forth between the form and theme editor", async () => {
     const { user } = setup(<App sampleFormData={sampleFormData} />);
 
-    const nextButton = screen.getByRole("button", { name: "Next" });
-    const loadExampleButton = screen.getByRole("button", {
-      name: "Load Example",
-    });
+    const nextButton = screen.getByText(/group colors >>/i);
+    const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
     await user.click(nextButton);
@@ -146,10 +138,8 @@ describe("App", () => {
     const prevButton = screen.getByRole("button", { name: "Go Back" });
     await user.click(prevButton);
 
-    expect(screen.queryByRole("button", { name: "Next" })).toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: "Reset All Values" })
-    ).toBeInTheDocument();
+    expect(screen.getByText(/group colors >>/i)).toBeInTheDocument();
+    expect(screen.getByText(/reset all values/i)).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText(/^One name per line$/)
     ).toBeInTheDocument();
@@ -190,10 +180,8 @@ describe("App", () => {
   it("renders the theme editor", async () => {
     const { user, container } = setup(<App sampleFormData={sampleFormData} />);
 
-    const nextButton = screen.getByRole("button", { name: "Next" });
-    const loadExampleButton = screen.getByRole("button", {
-      name: "Load Example",
-    });
+    const nextButton = screen.getByText(/group colors >>/i);
+    const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
     await user.click(nextButton);
@@ -204,10 +192,8 @@ describe("App", () => {
   it("use the theme editor to group colors", async () => {
     const { user, container } = setup(<App sampleFormData={sampleFormData} />);
 
-    const nextButton = screen.getByRole("button", { name: "Next" });
-    const loadExampleButton = screen.getByRole("button", {
-      name: "Load Example",
-    });
+    const nextButton = screen.getByText(/group colors >>/i);
+    const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
     await user.click(nextButton);
@@ -271,10 +257,8 @@ describe("App", () => {
   it("click on a color in tree to edit it", async () => {
     const { user } = setup(<App sampleFormData={sampleFormData} />);
 
-    const nextButton = screen.getByRole("button", { name: "Next" });
-    const loadExampleButton = screen.getByRole("button", {
-      name: "Load Example",
-    });
+    const nextButton = screen.getByText(/group colors >>/i);
+    const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
     await user.click(nextButton);
@@ -321,10 +305,8 @@ describe("App", () => {
   it("rename multiple colors in tree editor using keyboard", async () => {
     const { user } = setup(<App sampleFormData={sampleFormData} />);
 
-    const nextButton = screen.getByRole("button", { name: "Next" });
-    const loadExampleButton = screen.getByRole("button", {
-      name: "Load Example",
-    });
+    const nextButton = screen.getByText(/group colors >>/i);
+    const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
     await user.click(nextButton);
@@ -407,10 +389,8 @@ describe("App", () => {
   it("remove color from a group using the tree editor", async () => {
     const { user } = setup(<App sampleFormData={sampleFormData} />);
 
-    const nextButton = screen.getByRole("button", { name: "Next" });
-    const loadExampleButton = screen.getByRole("button", {
-      name: "Load Example",
-    });
+    const nextButton = screen.getByText(/group colors >>/i);
+    const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
     await user.click(nextButton);

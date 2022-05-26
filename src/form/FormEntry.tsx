@@ -83,7 +83,7 @@ function ActionBar({
         className="mr-4 py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
         disabled={isEmpty}
       >
-        Next
+        Group Colors &gt;&gt;
       </button>
       {isEmpty ? (
         <button
