@@ -97,7 +97,7 @@ function ActionBar({
           onClick={(_event) => handleResetForm()}
           className="text-red-500 hover:text-red-700 text-xl"
         >
-          Reset All Values
+          Reset form
         </button>
       )}
     </div>

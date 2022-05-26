@@ -78,9 +78,7 @@ describe("App", () => {
         name: "Load Example",
       })
     ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: "Reset All Values" })
-    ).toBeInTheDocument();
+    expect(screen.getByText(/reset form/i)).toBeInTheDocument();
   });
 
   it("user is able to input group names", async () => {
@@ -139,7 +137,7 @@ describe("App", () => {
     await user.click(createNewButton);
 
     expect(screen.getByText(/group colors >>/i)).toBeInTheDocument();
-    expect(screen.getByText(/reset all values/i)).toBeInTheDocument();
+    expect(screen.getByText(/reset form/i)).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText(/^One name per line$/)
     ).toBeInTheDocument();
@@ -156,9 +154,7 @@ describe("App", () => {
     });
     await user.click(loadExampleButton);
 
-    const resetButton = screen.getByRole("button", {
-      name: "Reset All Values",
-    });
+    const resetButton = screen.getByText(/reset form/i);
     await user.click(resetButton);
 
     const groupNamesInput = screen.getByPlaceholderText(/^One name per line$/);
@@ -226,7 +222,7 @@ describe("App", () => {
     await user.click(blue200);
     await user.click(blueGroup);
 
-    const copyToClipboardButton = screen.getByText(/^Copy To Clipboard$/);
+    const copyToClipboardButton = screen.getByText(/copy theme to clipboard/i);
     const spy = jest.spyOn(navigator.clipboard, "writeText");
 
     await user.click(copyToClipboardButton);
@@ -360,7 +356,7 @@ describe("App", () => {
     await user.clear(textboxBlue100);
     await user.type(textboxBlue100, "100{enter}");
 
-    const copyToClipboardButton = screen.getByText(/^Copy To Clipboard$/);
+    const copyToClipboardButton = screen.getByText(/copy theme to clipboard/i);
     const spy = jest.spyOn(navigator.clipboard, "writeText");
 
     await user.click(copyToClipboardButton);
@@ -415,7 +411,7 @@ describe("App", () => {
     await user.click(editGreen200Button);
     await user.click(screen.getByRole("button", { name: /^Remove$/ }));
 
-    const copyToClipboardButton = screen.getByText(/^Copy To Clipboard$/);
+    const copyToClipboardButton = screen.getByText(/copy theme to clipboard/i);
     const spy = jest.spyOn(navigator.clipboard, "writeText");
 
     await user.click(copyToClipboardButton);

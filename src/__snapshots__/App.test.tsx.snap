@@ -15,7 +15,7 @@ exports[`App navigates to the color theme editor 1`] = `
     <button
       class=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
     >
-      Copy To Clipboard
+      Copy theme to clipboard
     </button>
   </div>
   <div
@@ -473,7 +473,7 @@ exports[`App renders the theme editor 1`] = `
       <button
         class=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
       >
-        Copy To Clipboard
+        Copy theme to clipboard
       </button>
     </div>
     <div
@@ -880,7 +880,7 @@ exports[`App use the theme editor to group colors 1`] = `
       <button
         class=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
       >
-        Copy To Clipboard
+        Copy theme to clipboard
       </button>
     </div>
     <div

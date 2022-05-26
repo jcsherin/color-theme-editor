@@ -69,7 +69,7 @@ export function ThemeEditor({
           Create New
         </button>
         <CopyButton
-          label="Copy To Clipboard"
+          label="Copy theme to clipboard"
           content={serializeForTailwind(state)}
           expiryInMs={2000}
           className=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
