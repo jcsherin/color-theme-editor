@@ -12,6 +12,15 @@ export interface FormData {
   colors: string;
 }
 
+type FillState = "empty" | "partiallyFilled" | "filled";
+
+function toFillState(form: FormData): FillState {
+  if (form.classnames.length === 0 && form.colors.length === 0) return "empty";
+  if (form.classnames.length === 0 || form.colors.length === 0)
+    return "partiallyFilled";
+  return "filled";
+}
+
 export function initFormData(): FormData {
   return { classnames: "", colors: "" };
 }
@@ -65,13 +74,47 @@ function Form({
   );
 }
 
+function HelperAction({
+  form,
+  handleLoadExample,
+  handleResetForm,
+}: {
+  form: FormData;
+  handleLoadExample: () => void;
+  handleResetForm: () => void;
+}) {
+  switch (toFillState(form)) {
+    case "empty": {
+      return (
+        <button
+          onClick={(_event) => handleLoadExample()}
+          className="text-blue-500 hover:text-blue-700 text-xl"
+        >
+          Load Example
+        </button>
+      );
+    }
+    case "partiallyFilled":
+    case "filled": {
+      return (
+        <button
+          onClick={(_event) => handleResetForm()}
+          className="text-red-500 hover:text-red-700 text-xl"
+        >
+          Reset form
+        </button>
+      );
+    }
+  }
+}
+
 function ActionBar({
-  isEmpty,
+  form,
   handleNextUI,
   handleLoadExample,
   handleResetForm,
 }: {
-  isEmpty: boolean;
+  form: FormData;
   handleNextUI: () => void;
   handleLoadExample: () => void;
   handleResetForm: () => void;
@@ -81,25 +124,15 @@ function ActionBar({
       <button
         onClick={(_event) => handleNextUI()}
         className="mr-4 py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
-        disabled={isEmpty}
+        disabled={isEmptyForm(form)}
       >
         Group Colors &gt;&gt;
       </button>
-      {isEmpty ? (
-        <button
-          onClick={(_event) => handleLoadExample()}
-          className="text-blue-500 hover:text-blue-700 text-xl"
-        >
-          Load Example
-        </button>
-      ) : (
-        <button
-          onClick={(_event) => handleResetForm()}
-          className="text-red-500 hover:text-red-700 text-xl"
-        >
-          Reset form
-        </button>
-      )}
+      <HelperAction
+        form={form}
+        handleLoadExample={handleLoadExample}
+        handleResetForm={handleResetForm}
+      />
     </div>
   );
 }
@@ -120,7 +153,7 @@ export function FormEntry({
   return (
     <>
       <ActionBar
-        isEmpty={isEmptyForm(form)}
+        form={form}
         handleNextUI={handleNextUI}
         handleLoadExample={handleLoadExample}
         handleResetForm={handleResetForm}
