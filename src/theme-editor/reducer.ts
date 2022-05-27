@@ -185,9 +185,6 @@ export const reducer = (
 ): ThemeEditorState => {
   switch (action.kind) {
     case "parse": {
-      // Don't reparse user input!
-      if (state.colorMap.size > 0 && state.groupMap.size > 0) return state;
-
       return parse(action.form);
     }
 
