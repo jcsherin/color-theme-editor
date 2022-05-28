@@ -2,7 +2,7 @@
 
 exports[`App navigates to the color theme editor 1`] = `
 <div
-  class="mx-2 my-8"
+  class="px-4 py-4 h-screen bg-neutral-200"
 >
   <div
     class="mb-4"
@@ -408,19 +408,19 @@ exports[`App navigates to the color theme editor 1`] = `
 exports[`App renders the default state of the first step in the wizard 1`] = `
 <div>
   <div
-    class="mx-2 my-8"
+    class="px-4 py-4 h-screen bg-neutral-200"
   >
     <div
-      class="mb-4"
+      class="mb-8"
     >
       <button
-        class="mr-4 py-1 px-4 text-xl rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+        class="mr-4 py-1 px-4 rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
         disabled=""
       >
-        Group Colors &gt;&gt;
+        Group Colors
       </button>
       <button
-        class="text-blue-500 hover:text-blue-700 text-xl"
+        class="text-blue-500 hover:text-blue-700"
       >
         Load Example
       </button>
@@ -429,26 +429,26 @@ exports[`App renders the default state of the first step in the wizard 1`] = `
       class="grid grid-cols-2"
     >
       <div
-        class="mr-4"
+        class="mr-2"
       >
         <p
-          class="text-xl mb-1"
+          class="mb-1"
         >
-          Group Names
+          Enter Group Names
         </p>
         <textarea
-          class="w-full bg-slate-100 h-60 py-2 px-4"
+          class="w-full bg-slate-800 text-slate-200 font-mono h-80 py-2 px-4"
           placeholder="One name per line"
         />
       </div>
       <div>
         <p
-          class="text-xl mb-1"
+          class="mb-1"
         >
-          Color Values
+          Enter Color Values
         </p>
         <textarea
-          class="w-full bg-slate-100 h-60 py-2 px-4"
+          class="w-full bg-slate-800 text-slate-200 font-mono h-80 py-2 px-4"
           placeholder="One color value per line"
         />
       </div>
@@ -460,7 +460,7 @@ exports[`App renders the default state of the first step in the wizard 1`] = `
 exports[`App renders the theme editor 1`] = `
 <div>
   <div
-    class="mx-2 my-8"
+    class="px-4 py-4 h-screen bg-neutral-200"
   >
     <div
       class="mb-4"
@@ -867,7 +867,7 @@ exports[`App renders the theme editor 1`] = `
 exports[`App use the theme editor to group colors 1`] = `
 <div>
   <div
-    class="mx-2 my-8"
+    class="px-4 py-4 h-screen bg-neutral-200"
   >
     <div
       class="mb-4"

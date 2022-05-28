@@ -130,5 +130,9 @@ export default function App({ sampleFormData }: { sampleFormData: FormData }) {
     }
   };
 
-  return <div className="mx-2 my-8">{renderWizard(wizard)}</div>;
+  return (
+    <div className="px-4 py-4 h-screen bg-neutral-200">
+      {renderWizard(wizard)}
+    </div>
+  );
 }

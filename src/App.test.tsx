@@ -45,7 +45,7 @@ describe("App", () => {
       /^One color value per line$/
     );
 
-    const nextButton = screen.getByText(/group colors >>/i);
+    const nextButton = screen.getByText(/group colors/i);
     const loadExampleButton = screen.getByText(/load example/i);
 
     expect(tree.container).toMatchSnapshot();
@@ -65,7 +65,7 @@ describe("App", () => {
       /^One color value per line$/
     );
 
-    const nextButton = screen.getByText(/group colors >>/i);
+    const nextButton = screen.getByText(/group colors/i);
     const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
@@ -89,7 +89,7 @@ describe("App", () => {
       target: { value: "green\nblue\n" },
     });
 
-    const nextButton = screen.getByText(/group colors >>/i);
+    const nextButton = screen.getByText(/group colors/i);
 
     expect(textboxGroupNames).toHaveValue("green\nblue\n");
     expect(nextButton).toBeDisabled();
@@ -105,7 +105,7 @@ describe("App", () => {
       target: { value: "#ffffff\n#000000\n" },
     });
 
-    const nextButton = screen.getByText(/group colors >>/i);
+    const nextButton = screen.getByText(/group colors/i);
 
     expect(textboxColorValues).toHaveValue("#ffffff\n#000000\n");
     expect(nextButton).toBeDisabled();
@@ -115,7 +115,7 @@ describe("App", () => {
     const tree = render(<App sampleFormData={sampleFormData} />);
     const user = userEvent.setup();
 
-    const nextButton = screen.getByText(/group colors >>/i);
+    const nextButton = screen.getByText(/group colors/i);
     const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
@@ -127,7 +127,7 @@ describe("App", () => {
   it("Click on `create new` in theme editor to navigate back to form", async () => {
     const { user } = setup(<App sampleFormData={sampleFormData} />);
 
-    const nextButton = screen.getByText(/group colors >>/i);
+    const nextButton = screen.getByText(/group colors/i);
     const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
@@ -142,7 +142,7 @@ describe("App", () => {
       /^One color value per line$/
     );
 
-    expect(screen.getByText(/group colors >>/i)).toBeInTheDocument();
+    expect(screen.getByText(/group colors/i)).toBeInTheDocument();
     expect(screen.getByText(/load example/i)).toBeInTheDocument();
     expect(textboxGroupNames).toBeInTheDocument();
     expect(textboxColors).toBeInTheDocument();
@@ -180,7 +180,7 @@ describe("App", () => {
   it("renders the theme editor", async () => {
     const { user, container } = setup(<App sampleFormData={sampleFormData} />);
 
-    const nextButton = screen.getByText(/group colors >>/i);
+    const nextButton = screen.getByText(/group colors/i);
     const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
@@ -192,7 +192,7 @@ describe("App", () => {
   it("use the theme editor to group colors", async () => {
     const { user, container } = setup(<App sampleFormData={sampleFormData} />);
 
-    const nextButton = screen.getByText(/group colors >>/i);
+    const nextButton = screen.getByText(/group colors/i);
     const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
@@ -257,7 +257,7 @@ describe("App", () => {
   it("click on a color in tree to edit it", async () => {
     const { user } = setup(<App sampleFormData={sampleFormData} />);
 
-    const nextButton = screen.getByText(/group colors >>/i);
+    const nextButton = screen.getByText(/group colors/i);
     const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
@@ -305,7 +305,7 @@ describe("App", () => {
   it("rename multiple colors in tree editor using keyboard", async () => {
     const { user } = setup(<App sampleFormData={sampleFormData} />);
 
-    const nextButton = screen.getByText(/group colors >>/i);
+    const nextButton = screen.getByText(/group colors/i);
     const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
@@ -389,7 +389,7 @@ describe("App", () => {
   it("remove color from a group using the tree editor", async () => {
     const { user } = setup(<App sampleFormData={sampleFormData} />);
 
-    const nextButton = screen.getByText(/group colors >>/i);
+    const nextButton = screen.getByText(/group colors/i);
     const loadExampleButton = screen.getByText(/load example/i);
 
     await user.click(loadExampleButton);
