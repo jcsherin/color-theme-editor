@@ -32,7 +32,7 @@ export function TreeLeafEdit({
   }, [focus]);
 
   return (
-    <div className="my-2 h-10">
+    <div className="my-2 h-10 flex items-center">
       <input
         ref={renameRef}
         type="text"

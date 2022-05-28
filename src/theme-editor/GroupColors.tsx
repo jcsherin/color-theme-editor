@@ -42,7 +42,7 @@ export function GroupColors({
     Array.from(state.groupMap.values()).map((colorGroup) => (
       <GroupButton
         key={colorGroup.name}
-        className={`mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300`}
+        className={`mr-4 mb-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300`}
         groupName={colorGroup.name}
         disabled={!someSelected(state.selectables)}
         handleClick={handleAddToGroup}
@@ -52,7 +52,7 @@ export function GroupColors({
 
   return (
     <div>
-      <div className="flex flex-wrap mb-4">{colorListItems}</div>
+      <div className="flex flex-wrap mb-8">{colorListItems}</div>
       <div className={"pl-2"}>{colorGroupsButtonRow}</div>
     </div>
   );

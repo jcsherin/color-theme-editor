@@ -21,9 +21,9 @@ export function Selectable({
   const getClassName = (selectable: SelectableItem): string => {
     switch (selectable.status) {
       case "selected":
-        return "border-4 border-indigo-500";
+        return "border-4 border-neutral-500";
       case "default":
-        return "border-4 border-white";
+        return "border-4 border-transparent";
       case "grouped":
         return "hidden";
     }

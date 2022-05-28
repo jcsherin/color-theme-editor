@@ -131,7 +131,7 @@ export default function App({ sampleFormData }: { sampleFormData: FormData }) {
   };
 
   return (
-    <div className="px-4 py-4 h-screen bg-neutral-200">
+    <div className="px-4 py-4 h-screen overflow-y-hidden bg-neutral-200">
       {renderWizard(wizard)}
     </div>
   );

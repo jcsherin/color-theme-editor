@@ -64,7 +64,7 @@ export function ThemeEditor({
       <div className="mb-4">
         <button
           onClick={(_event) => handlePrevUI()}
-          className="py-1 px-4 text-xl rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
+          className="mr-4 py-1 px-4 rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
         >
           Create New
         </button>
@@ -72,11 +72,11 @@ export function ThemeEditor({
           label="Copy theme to clipboard"
           content={serializeForTailwind(state)}
           expiryInMs={2000}
-          className=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
-          flashClassName="text-green-800 text-xl py-1 px-4"
+          className=" text-blue-500 hover:text-blue-800"
+          flashClassName="text-green-800"
         />
       </div>
-      <div className="grid grid-cols-2 mb-4">
+      <div className="grid grid-cols-2 mb-4 h-full">
         <TreeEditor
           state={state}
           handleRenameColor={handleRenameColor}

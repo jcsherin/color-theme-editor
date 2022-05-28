@@ -233,7 +233,7 @@ export function TreeEditor({
   return (
     <div
       ref={mouseRef}
-      className="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
+      className="bg-slate-900 text-slate-200 font-mono px-4 py-4 mr-2 overflow-y-scroll"
     >
       <TreeNode contents="module.exports =">
         <TreeNode contents="theme:">

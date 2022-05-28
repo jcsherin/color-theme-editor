@@ -34,7 +34,7 @@ describe("Selectable component", () => {
 
     expect(tree).toMatchInlineSnapshot(`
 <button
-  className="mr-1 mb-1 p-1 border-4 border-white"
+  className="mr-1 mb-1 p-1 border-4 border-transparent"
   onClick={[Function]}
 >
   <span
@@ -71,7 +71,7 @@ describe("Selectable component", () => {
 
     expect(tree).toMatchInlineSnapshot(`
 <button
-  className="mr-1 mb-1 p-1 border-4 border-indigo-500"
+  className="mr-1 mb-1 p-1 border-4 border-neutral-500"
   onClick={[Function]}
 >
   <span

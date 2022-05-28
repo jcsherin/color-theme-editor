@@ -10,7 +10,7 @@ export function TreeLeafView({
   children: React.ReactNode;
 }) {
   return (
-    <button className="my-2 block h-10" onClick={(_e) => handleFocus(colorId)}>
+    <button className="flex items-center" onClick={(_e) => handleFocus(colorId)}>
       {children}
     </button>
   );

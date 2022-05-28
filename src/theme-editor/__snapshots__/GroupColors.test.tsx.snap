@@ -3,10 +3,10 @@
 exports[`Component for adding selected colors to a group renders a list of selectable colors and buttons with group names 1`] = `
 <div>
   <div
-    class="flex flex-wrap mb-4"
+    class="flex flex-wrap mb-8"
   >
     <button
-      class="mr-1 mb-1 p-1 border-4 border-white"
+      class="mr-1 mb-1 p-1 border-4 border-transparent"
     >
       <span
         class="w-16 h-12 block border-b"
@@ -19,7 +19,7 @@ exports[`Component for adding selected colors to a group renders a list of selec
       </span>
     </button>
     <button
-      class="mr-1 mb-1 p-1 border-4 border-white"
+      class="mr-1 mb-1 p-1 border-4 border-transparent"
     >
       <span
         class="w-16 h-12 block border-b"
@@ -32,7 +32,7 @@ exports[`Component for adding selected colors to a group renders a list of selec
       </span>
     </button>
     <button
-      class="mr-1 mb-1 p-1 border-4 border-white"
+      class="mr-1 mb-1 p-1 border-4 border-transparent"
     >
       <span
         class="w-16 h-12 block border-b"
@@ -45,7 +45,7 @@ exports[`Component for adding selected colors to a group renders a list of selec
       </span>
     </button>
     <button
-      class="mr-1 mb-1 p-1 border-4 border-white"
+      class="mr-1 mb-1 p-1 border-4 border-transparent"
     >
       <span
         class="w-16 h-12 block border-b"
@@ -58,7 +58,7 @@ exports[`Component for adding selected colors to a group renders a list of selec
       </span>
     </button>
     <button
-      class="mr-1 mb-1 p-1 border-4 border-white"
+      class="mr-1 mb-1 p-1 border-4 border-transparent"
     >
       <span
         class="w-16 h-12 block border-b"
@@ -71,7 +71,7 @@ exports[`Component for adding selected colors to a group renders a list of selec
       </span>
     </button>
     <button
-      class="mr-1 mb-1 p-1 border-4 border-white"
+      class="mr-1 mb-1 p-1 border-4 border-transparent"
     >
       <span
         class="w-16 h-12 block border-b"
@@ -88,13 +88,13 @@ exports[`Component for adding selected colors to a group renders a list of selec
     class="pl-2"
   >
     <button
-      class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+      class="mr-4 mb-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
       disabled=""
     >
       primary
     </button>
     <button
-      class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+      class="mr-4 mb-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
       disabled=""
     >
       secondary

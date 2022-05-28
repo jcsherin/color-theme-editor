@@ -2,73 +2,57 @@
 
 exports[`App navigates to the color theme editor 1`] = `
 <div
-  class="px-4 py-4 h-screen bg-neutral-200"
+  class="px-4 py-4 h-screen overflow-y-hidden bg-neutral-200"
 >
   <div
     class="mb-4"
   >
     <button
-      class="py-1 px-4 text-xl rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
+      class="mr-4 py-1 px-4 rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
     >
       Create New
     </button>
     <button
-      class=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
+      class=" text-blue-500 hover:text-blue-800"
     >
       Copy theme to clipboard
     </button>
   </div>
   <div
-    class="grid grid-cols-2 mb-4"
+    class="grid grid-cols-2 mb-4 h-full"
   >
     <div
-      class="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
+      class="bg-slate-900 text-slate-200 font-mono px-4 py-4 mr-2 overflow-y-scroll"
     >
-      <div
-        class="my-2"
-      >
-        <p
-          class="mb-1"
-        >
+      <div>
+        <p>
           module.exports = {
         </p>
         <div
           class="ml-4"
         >
-          <div
-            class="my-2"
-          >
-            <p
-              class="mb-1"
-            >
+          <div>
+            <p>
               theme: {
             </p>
             <div
               class="ml-4"
             >
-              <div
-                class="my-2"
-              >
-                <p
-                  class="mb-1"
-                >
+              <div>
+                <p>
                   colors: {
                 </p>
                 <div
                   class="ml-4"
                 >
-                  <p
-                    class="my-2 h-10"
-                  >
+                  <p>
                     "green" : {}
                   </p>
-                  <p
-                    class="my-2 h-10"
-                  >
+                  <p>
                     "blue" : {}
                   </p>
                   <button
-                    class="my-2 block h-10"
+                    class="flex items-center"
                   >
                     <span
                       class="mr-4"
@@ -92,7 +76,7 @@ exports[`App navigates to the color theme editor 1`] = `
                     </span>
                   </button>
                   <button
-                    class="my-2 block h-10"
+                    class="flex items-center"
                   >
                     <span
                       class="mr-4"
@@ -116,7 +100,7 @@ exports[`App navigates to the color theme editor 1`] = `
                     </span>
                   </button>
                   <button
-                    class="my-2 block h-10"
+                    class="flex items-center"
                   >
                     <span
                       class="mr-4"
@@ -140,7 +124,7 @@ exports[`App navigates to the color theme editor 1`] = `
                     </span>
                   </button>
                   <button
-                    class="my-2 block h-10"
+                    class="flex items-center"
                   >
                     <span
                       class="mr-4"
@@ -164,7 +148,7 @@ exports[`App navigates to the color theme editor 1`] = `
                     </span>
                   </button>
                   <button
-                    class="my-2 block h-10"
+                    class="flex items-center"
                   >
                     <span
                       class="mr-4"
@@ -188,7 +172,7 @@ exports[`App navigates to the color theme editor 1`] = `
                     </span>
                   </button>
                   <button
-                    class="my-2 block h-10"
+                    class="flex items-center"
                   >
                     <span
                       class="mr-4"
@@ -212,7 +196,7 @@ exports[`App navigates to the color theme editor 1`] = `
                     </span>
                   </button>
                   <button
-                    class="my-2 block h-10"
+                    class="flex items-center"
                   >
                     <span
                       class="mr-4"
@@ -236,7 +220,7 @@ exports[`App navigates to the color theme editor 1`] = `
                     </span>
                   </button>
                   <button
-                    class="my-2 block h-10"
+                    class="flex items-center"
                   >
                     <span
                       class="mr-4"
@@ -277,10 +261,10 @@ exports[`App navigates to the color theme editor 1`] = `
     </div>
     <div>
       <div
-        class="flex flex-wrap mb-4"
+        class="flex flex-wrap mb-8"
       >
         <button
-          class="mr-1 mb-1 p-1 border-4 border-white"
+          class="mr-1 mb-1 p-1 border-4 border-transparent"
         >
           <span
             class="w-16 h-12 block border-b"
@@ -293,7 +277,7 @@ exports[`App navigates to the color theme editor 1`] = `
           </span>
         </button>
         <button
-          class="mr-1 mb-1 p-1 border-4 border-white"
+          class="mr-1 mb-1 p-1 border-4 border-transparent"
         >
           <span
             class="w-16 h-12 block border-b"
@@ -306,7 +290,7 @@ exports[`App navigates to the color theme editor 1`] = `
           </span>
         </button>
         <button
-          class="mr-1 mb-1 p-1 border-4 border-white"
+          class="mr-1 mb-1 p-1 border-4 border-transparent"
         >
           <span
             class="w-16 h-12 block border-b"
@@ -319,7 +303,7 @@ exports[`App navigates to the color theme editor 1`] = `
           </span>
         </button>
         <button
-          class="mr-1 mb-1 p-1 border-4 border-white"
+          class="mr-1 mb-1 p-1 border-4 border-transparent"
         >
           <span
             class="w-16 h-12 block border-b"
@@ -332,7 +316,7 @@ exports[`App navigates to the color theme editor 1`] = `
           </span>
         </button>
         <button
-          class="mr-1 mb-1 p-1 border-4 border-white"
+          class="mr-1 mb-1 p-1 border-4 border-transparent"
         >
           <span
             class="w-16 h-12 block border-b"
@@ -345,7 +329,7 @@ exports[`App navigates to the color theme editor 1`] = `
           </span>
         </button>
         <button
-          class="mr-1 mb-1 p-1 border-4 border-white"
+          class="mr-1 mb-1 p-1 border-4 border-transparent"
         >
           <span
             class="w-16 h-12 block border-b"
@@ -358,7 +342,7 @@ exports[`App navigates to the color theme editor 1`] = `
           </span>
         </button>
         <button
-          class="mr-1 mb-1 p-1 border-4 border-white"
+          class="mr-1 mb-1 p-1 border-4 border-transparent"
         >
           <span
             class="w-16 h-12 block border-b"
@@ -371,7 +355,7 @@ exports[`App navigates to the color theme editor 1`] = `
           </span>
         </button>
         <button
-          class="mr-1 mb-1 p-1 border-4 border-white"
+          class="mr-1 mb-1 p-1 border-4 border-transparent"
         >
           <span
             class="w-16 h-12 block border-b"
@@ -388,13 +372,13 @@ exports[`App navigates to the color theme editor 1`] = `
         class="pl-2"
       >
         <button
-          class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+          class="mr-4 mb-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
           disabled=""
         >
           green
         </button>
         <button
-          class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+          class="mr-4 mb-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
           disabled=""
         >
           blue
@@ -408,7 +392,7 @@ exports[`App navigates to the color theme editor 1`] = `
 exports[`App renders the default state of the first step in the wizard 1`] = `
 <div>
   <div
-    class="px-4 py-4 h-screen bg-neutral-200"
+    class="px-4 py-4 h-screen overflow-y-hidden bg-neutral-200"
   >
     <div
       class="mb-8"
@@ -460,73 +444,57 @@ exports[`App renders the default state of the first step in the wizard 1`] = `
 exports[`App renders the theme editor 1`] = `
 <div>
   <div
-    class="px-4 py-4 h-screen bg-neutral-200"
+    class="px-4 py-4 h-screen overflow-y-hidden bg-neutral-200"
   >
     <div
       class="mb-4"
     >
       <button
-        class="py-1 px-4 text-xl rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
+        class="mr-4 py-1 px-4 rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
       >
         Create New
       </button>
       <button
-        class=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
+        class=" text-blue-500 hover:text-blue-800"
       >
         Copy theme to clipboard
       </button>
     </div>
     <div
-      class="grid grid-cols-2 mb-4"
+      class="grid grid-cols-2 mb-4 h-full"
     >
       <div
-        class="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
+        class="bg-slate-900 text-slate-200 font-mono px-4 py-4 mr-2 overflow-y-scroll"
       >
-        <div
-          class="my-2"
-        >
-          <p
-            class="mb-1"
-          >
+        <div>
+          <p>
             module.exports = {
           </p>
           <div
             class="ml-4"
           >
-            <div
-              class="my-2"
-            >
-              <p
-                class="mb-1"
-              >
+            <div>
+              <p>
                 theme: {
               </p>
               <div
                 class="ml-4"
               >
-                <div
-                  class="my-2"
-                >
-                  <p
-                    class="mb-1"
-                  >
+                <div>
+                  <p>
                     colors: {
                   </p>
                   <div
                     class="ml-4"
                   >
-                    <p
-                      class="my-2 h-10"
-                    >
+                    <p>
                       "green" : {}
                     </p>
-                    <p
-                      class="my-2 h-10"
-                    >
+                    <p>
                       "blue" : {}
                     </p>
                     <button
-                      class="my-2 block h-10"
+                      class="flex items-center"
                     >
                       <span
                         class="mr-4"
@@ -550,7 +518,7 @@ exports[`App renders the theme editor 1`] = `
                       </span>
                     </button>
                     <button
-                      class="my-2 block h-10"
+                      class="flex items-center"
                     >
                       <span
                         class="mr-4"
@@ -574,7 +542,7 @@ exports[`App renders the theme editor 1`] = `
                       </span>
                     </button>
                     <button
-                      class="my-2 block h-10"
+                      class="flex items-center"
                     >
                       <span
                         class="mr-4"
@@ -598,7 +566,7 @@ exports[`App renders the theme editor 1`] = `
                       </span>
                     </button>
                     <button
-                      class="my-2 block h-10"
+                      class="flex items-center"
                     >
                       <span
                         class="mr-4"
@@ -622,7 +590,7 @@ exports[`App renders the theme editor 1`] = `
                       </span>
                     </button>
                     <button
-                      class="my-2 block h-10"
+                      class="flex items-center"
                     >
                       <span
                         class="mr-4"
@@ -646,7 +614,7 @@ exports[`App renders the theme editor 1`] = `
                       </span>
                     </button>
                     <button
-                      class="my-2 block h-10"
+                      class="flex items-center"
                     >
                       <span
                         class="mr-4"
@@ -670,7 +638,7 @@ exports[`App renders the theme editor 1`] = `
                       </span>
                     </button>
                     <button
-                      class="my-2 block h-10"
+                      class="flex items-center"
                     >
                       <span
                         class="mr-4"
@@ -694,7 +662,7 @@ exports[`App renders the theme editor 1`] = `
                       </span>
                     </button>
                     <button
-                      class="my-2 block h-10"
+                      class="flex items-center"
                     >
                       <span
                         class="mr-4"
@@ -735,10 +703,10 @@ exports[`App renders the theme editor 1`] = `
       </div>
       <div>
         <div
-          class="flex flex-wrap mb-4"
+          class="flex flex-wrap mb-8"
         >
           <button
-            class="mr-1 mb-1 p-1 border-4 border-white"
+            class="mr-1 mb-1 p-1 border-4 border-transparent"
           >
             <span
               class="w-16 h-12 block border-b"
@@ -751,7 +719,7 @@ exports[`App renders the theme editor 1`] = `
             </span>
           </button>
           <button
-            class="mr-1 mb-1 p-1 border-4 border-white"
+            class="mr-1 mb-1 p-1 border-4 border-transparent"
           >
             <span
               class="w-16 h-12 block border-b"
@@ -764,7 +732,7 @@ exports[`App renders the theme editor 1`] = `
             </span>
           </button>
           <button
-            class="mr-1 mb-1 p-1 border-4 border-white"
+            class="mr-1 mb-1 p-1 border-4 border-transparent"
           >
             <span
               class="w-16 h-12 block border-b"
@@ -777,7 +745,7 @@ exports[`App renders the theme editor 1`] = `
             </span>
           </button>
           <button
-            class="mr-1 mb-1 p-1 border-4 border-white"
+            class="mr-1 mb-1 p-1 border-4 border-transparent"
           >
             <span
               class="w-16 h-12 block border-b"
@@ -790,7 +758,7 @@ exports[`App renders the theme editor 1`] = `
             </span>
           </button>
           <button
-            class="mr-1 mb-1 p-1 border-4 border-white"
+            class="mr-1 mb-1 p-1 border-4 border-transparent"
           >
             <span
               class="w-16 h-12 block border-b"
@@ -803,7 +771,7 @@ exports[`App renders the theme editor 1`] = `
             </span>
           </button>
           <button
-            class="mr-1 mb-1 p-1 border-4 border-white"
+            class="mr-1 mb-1 p-1 border-4 border-transparent"
           >
             <span
               class="w-16 h-12 block border-b"
@@ -816,7 +784,7 @@ exports[`App renders the theme editor 1`] = `
             </span>
           </button>
           <button
-            class="mr-1 mb-1 p-1 border-4 border-white"
+            class="mr-1 mb-1 p-1 border-4 border-transparent"
           >
             <span
               class="w-16 h-12 block border-b"
@@ -829,7 +797,7 @@ exports[`App renders the theme editor 1`] = `
             </span>
           </button>
           <button
-            class="mr-1 mb-1 p-1 border-4 border-white"
+            class="mr-1 mb-1 p-1 border-4 border-transparent"
           >
             <span
               class="w-16 h-12 block border-b"
@@ -846,13 +814,13 @@ exports[`App renders the theme editor 1`] = `
           class="pl-2"
         >
           <button
-            class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+            class="mr-4 mb-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
             disabled=""
           >
             green
           </button>
           <button
-            class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+            class="mr-4 mb-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
             disabled=""
           >
             blue
@@ -867,74 +835,58 @@ exports[`App renders the theme editor 1`] = `
 exports[`App use the theme editor to group colors 1`] = `
 <div>
   <div
-    class="px-4 py-4 h-screen bg-neutral-200"
+    class="px-4 py-4 h-screen overflow-y-hidden bg-neutral-200"
   >
     <div
       class="mb-4"
     >
       <button
-        class="py-1 px-4 text-xl rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
+        class="mr-4 py-1 px-4 rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
       >
         Create New
       </button>
       <button
-        class=" text-blue-500 hover:text-blue-800 text-xl py-1 px-4"
+        class=" text-blue-500 hover:text-blue-800"
       >
         Copy theme to clipboard
       </button>
     </div>
     <div
-      class="grid grid-cols-2 mb-4"
+      class="grid grid-cols-2 mb-4 h-full"
     >
       <div
-        class="bg-slate-900 text-slate-200 font-mono px-4 py-2 mr-2"
+        class="bg-slate-900 text-slate-200 font-mono px-4 py-4 mr-2 overflow-y-scroll"
       >
-        <div
-          class="my-2"
-        >
-          <p
-            class="mb-1"
-          >
+        <div>
+          <p>
             module.exports = {
           </p>
           <div
             class="ml-4"
           >
-            <div
-              class="my-2"
-            >
-              <p
-                class="mb-1"
-              >
+            <div>
+              <p>
                 theme: {
               </p>
               <div
                 class="ml-4"
               >
-                <div
-                  class="my-2"
-                >
-                  <p
-                    class="mb-1"
-                  >
+                <div>
+                  <p>
                     colors: {
                   </p>
                   <div
                     class="ml-4"
                   >
-                    <div
-                      class="my-2"
-                    >
-                      <p
-                        class="mb-1"
-                      >
+                    <div>
+                      <p>
                         "green" : {
                       </p>
                       <div
                         class="ml-4"
                       >
                         <button
-                          class="my-2 block h-10"
+                          class="flex items-center"
                         >
                           <span
                             class="mr-4"
@@ -958,7 +910,7 @@ exports[`App use the theme editor to group colors 1`] = `
                           </span>
                         </button>
                         <button
-                          class="my-2 block h-10"
+                          class="flex items-center"
                         >
                           <span
                             class="mr-4"
@@ -986,19 +938,15 @@ exports[`App use the theme editor to group colors 1`] = `
                         }
                       </p>
                     </div>
-                    <div
-                      class="my-2"
-                    >
-                      <p
-                        class="mb-1"
-                      >
+                    <div>
+                      <p>
                         "blue" : {
                       </p>
                       <div
                         class="ml-4"
                       >
                         <button
-                          class="my-2 block h-10"
+                          class="flex items-center"
                         >
                           <span
                             class="mr-4"
@@ -1022,7 +970,7 @@ exports[`App use the theme editor to group colors 1`] = `
                           </span>
                         </button>
                         <button
-                          class="my-2 block h-10"
+                          class="flex items-center"
                         >
                           <span
                             class="mr-4"
@@ -1051,7 +999,7 @@ exports[`App use the theme editor to group colors 1`] = `
                       </p>
                     </div>
                     <button
-                      class="my-2 block h-10"
+                      class="flex items-center"
                     >
                       <span
                         class="mr-4"
@@ -1075,7 +1023,7 @@ exports[`App use the theme editor to group colors 1`] = `
                       </span>
                     </button>
                     <button
-                      class="my-2 block h-10"
+                      class="flex items-center"
                     >
                       <span
                         class="mr-4"
@@ -1099,7 +1047,7 @@ exports[`App use the theme editor to group colors 1`] = `
                       </span>
                     </button>
                     <button
-                      class="my-2 block h-10"
+                      class="flex items-center"
                     >
                       <span
                         class="mr-4"
@@ -1123,7 +1071,7 @@ exports[`App use the theme editor to group colors 1`] = `
                       </span>
                     </button>
                     <button
-                      class="my-2 block h-10"
+                      class="flex items-center"
                     >
                       <span
                         class="mr-4"
@@ -1164,10 +1112,10 @@ exports[`App use the theme editor to group colors 1`] = `
       </div>
       <div>
         <div
-          class="flex flex-wrap mb-4"
+          class="flex flex-wrap mb-8"
         >
           <button
-            class="mr-1 mb-1 p-1 border-4 border-white"
+            class="mr-1 mb-1 p-1 border-4 border-transparent"
           >
             <span
               class="w-16 h-12 block border-b"
@@ -1180,7 +1128,7 @@ exports[`App use the theme editor to group colors 1`] = `
             </span>
           </button>
           <button
-            class="mr-1 mb-1 p-1 border-4 border-white"
+            class="mr-1 mb-1 p-1 border-4 border-transparent"
           >
             <span
               class="w-16 h-12 block border-b"
@@ -1232,7 +1180,7 @@ exports[`App use the theme editor to group colors 1`] = `
             </span>
           </button>
           <button
-            class="mr-1 mb-1 p-1 border-4 border-white"
+            class="mr-1 mb-1 p-1 border-4 border-transparent"
           >
             <span
               class="w-16 h-12 block border-b"
@@ -1245,7 +1193,7 @@ exports[`App use the theme editor to group colors 1`] = `
             </span>
           </button>
           <button
-            class="mr-1 mb-1 p-1 border-4 border-white"
+            class="mr-1 mb-1 p-1 border-4 border-transparent"
           >
             <span
               class="w-16 h-12 block border-b"
@@ -1275,13 +1223,13 @@ exports[`App use the theme editor to group colors 1`] = `
           class="pl-2"
         >
           <button
-            class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+            class="mr-4 mb-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
             disabled=""
           >
             green
           </button>
           <button
-            class="mr-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
+            class="mr-4 mb-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
             disabled=""
           >
             blue
