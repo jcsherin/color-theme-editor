@@ -5,7 +5,7 @@ exports[`App navigates to the color theme editor 1`] = `
   class="px-4 py-4 h-screen overflow-y-hidden bg-neutral-200"
 >
   <div
-    class="mb-4"
+    class="h-10 mb-4 flex items-center"
   >
     <button
       class="mr-4 py-1 px-4 rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
@@ -19,7 +19,8 @@ exports[`App navigates to the color theme editor 1`] = `
     </button>
   </div>
   <div
-    class="grid grid-cols-2 mb-4 h-full"
+    class="grid grid-cols-2"
+    style="height: calc(100% - 56px);"
   >
     <div
       class="bg-slate-900 text-slate-200 font-mono px-4 py-4 mr-2 overflow-y-scroll"
@@ -450,7 +451,7 @@ exports[`App renders the theme editor 1`] = `
     class="px-4 py-4 h-screen overflow-y-hidden bg-neutral-200"
   >
     <div
-      class="mb-4"
+      class="h-10 mb-4 flex items-center"
     >
       <button
         class="mr-4 py-1 px-4 rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
@@ -464,7 +465,8 @@ exports[`App renders the theme editor 1`] = `
       </button>
     </div>
     <div
-      class="grid grid-cols-2 mb-4 h-full"
+      class="grid grid-cols-2"
+      style="height: calc(100% - 56px);"
     >
       <div
         class="bg-slate-900 text-slate-200 font-mono px-4 py-4 mr-2 overflow-y-scroll"
@@ -841,7 +843,7 @@ exports[`App use the theme editor to group colors 1`] = `
     class="px-4 py-4 h-screen overflow-y-hidden bg-neutral-200"
   >
     <div
-      class="mb-4"
+      class="h-10 mb-4 flex items-center"
     >
       <button
         class="mr-4 py-1 px-4 rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
@@ -855,7 +857,8 @@ exports[`App use the theme editor to group colors 1`] = `
       </button>
     </div>
     <div
-      class="grid grid-cols-2 mb-4 h-full"
+      class="grid grid-cols-2"
+      style="height: calc(100% - 56px);"
     >
       <div
         class="bg-slate-900 text-slate-200 font-mono px-4 py-4 mr-2 overflow-y-scroll"

@@ -61,7 +61,7 @@ export function ThemeEditor({
 }) {
   return (
     <>
-      <div className="mb-4">
+      <div className="h-10 mb-4 flex items-center">
         <button
           onClick={(_event) => handlePrevUI()}
           className="mr-4 py-1 px-4 rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
@@ -76,7 +76,7 @@ export function ThemeEditor({
           flashClassName="text-green-800"
         />
       </div>
-      <div className="grid grid-cols-2 mb-4 h-full">
+      <div className="grid grid-cols-2" style={{ height: `calc(100% - 56px)` }}>
         <TreeEditor
           state={state}
           handleRenameColor={handleRenameColor}
