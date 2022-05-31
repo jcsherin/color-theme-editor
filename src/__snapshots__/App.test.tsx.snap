@@ -395,7 +395,7 @@ exports[`App renders the default state of the first step in the wizard 1`] = `
     class="px-4 py-4 h-screen overflow-y-hidden bg-neutral-200"
   >
     <div
-      class="mb-8"
+      class="h-10 mb-4 flex items-center"
     >
       <button
         class="mr-4 py-1 px-4 rounded-sm bg-blue-100 hover:bg-blue-300 text-blue-500 hover:text-blue-700 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
@@ -411,9 +411,10 @@ exports[`App renders the default state of the first step in the wizard 1`] = `
     </div>
     <div
       class="grid grid-cols-2"
+      style="height: calc(100% - 56px);"
     >
       <div
-        class="mr-2"
+        class="mr-2 flex flex-col"
       >
         <p
           class="mb-1"
@@ -421,18 +422,20 @@ exports[`App renders the default state of the first step in the wizard 1`] = `
           Enter Group Names
         </p>
         <textarea
-          class="w-full bg-slate-800 text-slate-200 font-mono h-80 py-2 px-4"
+          class="grow w-full bg-slate-800 text-slate-200 font-mono h-80 py-2 px-4"
           placeholder="One name per line"
         />
       </div>
-      <div>
+      <div
+        class="flex flex-col"
+      >
         <p
           class="mb-1"
         >
           Enter Color Values
         </p>
         <textarea
-          class="w-full bg-slate-800 text-slate-200 font-mono h-80 py-2 px-4"
+          class="grow w-full bg-slate-800 text-slate-200 font-mono h-80 py-2 px-4"
           placeholder="One color value per line"
         />
       </div>
