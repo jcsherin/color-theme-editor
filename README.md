@@ -2,7 +2,7 @@
 
 A UI component for creating a color theme. You can use it to group colors by name, and use the keyboard-friendly editor to quickly rename them.
 
-![How to edit a color theme?](assets/opt.gif)
+![How to edit a color theme?](assets/howto-edit-color-theme.gif)
 
 ## Remaining Tasks
 
