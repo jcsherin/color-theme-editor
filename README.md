@@ -6,11 +6,11 @@ A UI component for creating a color theme. You can use it to group colors by nam
 
 ## Remaining Tasks
 
-- [ ] README.md
-- [ ] Deploy
-- [ ] Add help copy
-- [ ] Color parser
+- [ ] Deploy and link to online demo in README
+- [ ] Add help copy inline within app
+- [ ] Color parser - support other color formats
 - [ ] Fix: missing trailing comma for groups in tree editor
-- [ ] Edit
-  - [ ] add new colors/groups
-  - [ ] remove existing colors/groups
+- [ ] Share URL
+- [ ] Download theme
+- [ ] Unquote keys in config
+- [ ] Be able to add/remove colors & group names
