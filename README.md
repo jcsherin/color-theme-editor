@@ -1,6 +1,6 @@
 ## Description
 
-![How to edit a color theme?](assets/howto-edit-color-theme.gif)
+![How to edit a color theme?](assets/opt.gif)
 
 ## Remaining Tasks
 
