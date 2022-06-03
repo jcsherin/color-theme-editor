@@ -14,3 +14,4 @@ A UI component for creating a color theme. You can use it to group colors by nam
 - [ ] Download theme
 - [ ] Unquote keys in config
 - [ ] Be able to add/remove colors & group names
+- [ ] Split webpack for dev & prod
