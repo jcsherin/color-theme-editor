@@ -6,12 +6,40 @@ Supported representations of color values:
   - Hex notation        : #00FF00
   - HSL                 : hsl(120deg 100% 50%)
 
+
+<color> = 
+  | <hex-color> 
+  | <named-color>
+  | <hsl()>
+  | <hsla()>
+  | <rgb()>
+  | <rgba()>
+
 RGB
 ===
 
 rgb() = rgb( <percentage>{3} , <alpha-value>? ) | rgb( <number>{3}, <alpha-value>? )
 - For <percentage> 0% represents min value, and 100% represents max value.
 - For <number> 0 represents the min value, and 255 represents the max value.
+- RGB & RGBA are synonyms
+
+HSL 
+===
+
+Specified as a triplet of hue, saturation, lightness.
+
+hsl() = hsl( <hue> , <percentage> , <percentage>, <alpha-value>? )
+- first argument specifies the hue angle
+- HSL & HSLA are synonyms
+
+Hue
+===
+
+<hue> = <number> | <angle>
+- It is not constrainted to the range [0, 360] but is unbounded.
+
+Alpha
+=====
 
 <alpha-value> = <number> | <percentage>
 - The range of alpha is from 0 to 1.
