@@ -68,6 +68,12 @@ export function ThemeEditor({
         >
           Create New
         </button>
+        <button
+          onClick={(_event) => {}}
+          className="mr-4 py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
+        >
+          Update groups or colors
+        </button>
         <CopyButton
           label="Copy theme to clipboard"
           content={serializeForTailwind(state)}
