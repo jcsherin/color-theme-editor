@@ -9,7 +9,7 @@ import {
 } from "./reducer";
 
 import type { ThemeEditorState, SerializedThemeEditorState } from "./reducer";
-
+import type { FormData } from "../form";
 export interface EditUI {
   kind: "main";
   state: ThemeEditorState;
@@ -51,6 +51,7 @@ export function ThemeEditor({
   handleRemoveFromGroup,
   handleAddToGroup,
   handleToggleStatus,
+  handleDisplayForm: handleDisplayForm,
 }: {
   state: ThemeEditorState;
   handlePrevUI: () => void;
@@ -58,6 +59,7 @@ export function ThemeEditor({
   handleRemoveFromGroup: (colorId: string, groupName: string) => void;
   handleAddToGroup: (groupName: string) => void;
   handleToggleStatus: (selectableItem: SelectableItem) => void;
+  handleDisplayForm: (formData: FormData) => void;
 }) {
   return (
     <>
@@ -69,7 +71,7 @@ export function ThemeEditor({
           Create New
         </button>
         <button
-          onClick={(_event) => {}}
+          onClick={(_event) => handleDisplayForm(state.formData)}
           className="mr-4 py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
         >
           Update groups or colors

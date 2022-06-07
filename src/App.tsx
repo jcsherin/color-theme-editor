@@ -124,6 +124,7 @@ export default function App({ sampleFormData }: { sampleFormData: FormData }) {
                 selectableItem: selectableItem,
               })
             }
+            handleDisplayForm={(_formData) => {}}
           />
         );
       }
