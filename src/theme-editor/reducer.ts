@@ -19,28 +19,39 @@ import {
   parseColors,
   updateColorName,
 } from "../color";
-import { FormData } from "../form";
+import { FormData, initFormData } from "../form";
 
+type GroupMap = Map<string, Group>;
 export interface ThemeEditorState {
+  formData: FormData;
   colorMap: ColorMap;
-  groupMap: Map<string, Group>;
+  groupMap: GroupMap;
   selectables: SelectableItem[];
 }
 
+type SerializedColorMap = [string, HexColor][];
+type SerializedGroupMap = [string, Group][];
 export interface SerializedThemeEditorState {
-  colorMap: [string, HexColor][];
-  groupMap: [string, Group][];
+  formData: FormData;
+  colorMap: SerializedColorMap;
+  groupMap: SerializedGroupMap;
   selectables: SelectableItem[];
 }
 
 export function initThemeEditorState(): ThemeEditorState {
-  return { colorMap: new Map(), groupMap: new Map(), selectables: [] };
+  return {
+    formData: initFormData(),
+    colorMap: new Map(),
+    groupMap: new Map(),
+    selectables: [],
+  };
 }
 
 export function serializeThemeEditorState(
   themeEditor: ThemeEditorState
 ): SerializedThemeEditorState {
   return {
+    formData: themeEditor.formData,
     colorMap: Array.from(themeEditor.colorMap),
     groupMap: Array.from(themeEditor.groupMap),
     selectables: themeEditor.selectables,
@@ -51,9 +62,10 @@ export function deserializeThemeEditorState(
   state: SerializedThemeEditorState
 ): ThemeEditorState {
   return {
-    ...state,
+    formData: state.formData,
     colorMap: new Map(state.colorMap),
     groupMap: new Map(state.groupMap),
+    selectables: state.selectables,
   };
 }
 
@@ -95,11 +107,12 @@ export function serializeForTailwind({
   return template;
 }
 
-export function parse(form: FormData): ThemeEditorState {
-  const colorDict = parseColors(form.colors);
-  const colorGroupDict = parseColorGroups(form.classnames);
+export function parse(formData: FormData): ThemeEditorState {
+  const colorDict = parseColors(formData.colors);
+  const colorGroupDict = parseColorGroups(formData.classnames);
   const colorList = Array.from(colorDict.keys()).map(makeSelectable);
   return {
+    formData: formData,
     colorMap: colorDict,
     groupMap: colorGroupDict,
     selectables: colorList,
@@ -161,18 +174,16 @@ export const getInitialThemeEditorState = (
 
   const cached = localStorage.getItem(key);
   if (!cached) {
-    return {
-      colorMap: new Map(),
-      groupMap: new Map(),
-      selectables: [],
-    };
+    return initThemeEditorState();
   }
 
   const state = JSON.parse(cached);
+  const formData: FormData = state.formData;
   const colorMap: ColorMap = new Map(state.colorDict);
   const groupMap: GroupDict = new Map(state.colorGroupDict);
   const selectables: SelectableItem[] = state.colorList;
   return {
+    formData,
     colorMap,
     groupMap,
     selectables,
