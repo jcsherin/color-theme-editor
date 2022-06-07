@@ -2,14 +2,18 @@ import React from "react";
 import { FormData } from "./index";
 
 export function Form({
+  className,
+  style,
   form,
   handleUpdateForm,
 }: {
+  className?: string;
+  style?: React.CSSProperties;
   form: FormData;
   handleUpdateForm: (form: FormData) => void;
 }) {
   return (
-    <div className="grid grid-cols-2" style={{ height: `calc(100% - 56px)` }}>
+    <div className={className} style={style}>
       <div className="mr-2 flex flex-col">
         <p className="mb-1">Enter Group Names</p>
         <textarea

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { CopyButton } from "../clipboard";
 import { TreeEditor } from "../tree-editor";
 import { SelectableItem, GroupColors } from "./index";
@@ -9,6 +9,7 @@ import {
 } from "./reducer";
 
 import type { ThemeEditorState, SerializedThemeEditorState } from "./reducer";
+import { Form } from "../form";
 
 export interface EditUI {
   kind: "main";
@@ -44,6 +45,8 @@ export function deserializeEditUI(ui: {
   };
 }
 
+type GroupingMode = "groupAndRename" | "updateFormData";
+
 export function ThemeEditor({
   state,
   handlePrevUI,
@@ -59,6 +62,49 @@ export function ThemeEditor({
   handleAddToGroup: (groupName: string) => void;
   handleToggleStatus: (selectableItem: SelectableItem) => void;
 }) {
+  const [groupingMode, setGroupingMode] =
+    useState<GroupingMode>("groupAndRename");
+
+  const relatedAction = (groupingMode: GroupingMode) => {
+    switch (groupingMode) {
+      case "groupAndRename": {
+        return (
+          <button
+            onClick={(_event) => setGroupingMode("updateFormData")}
+            className="mr-4 py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
+          >
+            Update groups or colors
+          </button>
+        );
+      }
+      case "updateFormData": {
+        return (
+          <button
+            onClick={(_event) => setGroupingMode("groupAndRename")}
+            className="mr-4 py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
+          >
+            Group and rename colors
+          </button>
+        );
+      }
+    }
+  };
+
+  const groupingView = (groupingMode: GroupingMode) => {
+    switch (groupingMode) {
+      case "groupAndRename":
+        return (
+          <GroupColors
+            state={state}
+            handleSelection={handleToggleStatus}
+            handleAddToGroup={handleAddToGroup}
+          />
+        );
+      case "updateFormData":
+        return <Form form={state.formData} handleUpdateForm={(_form) => {}} />;
+    }
+  };
+
   return (
     <>
       <div className="h-10 mb-4 flex items-center">
@@ -68,12 +114,7 @@ export function ThemeEditor({
         >
           Create New
         </button>
-        <button
-          onClick={(_event) => {}}
-          className="mr-4 py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
-        >
-          Update groups or colors
-        </button>
+        {relatedAction(groupingMode)}
         <CopyButton
           label="Copy theme to clipboard"
           content={serializeForTailwind(state)}
@@ -88,11 +129,7 @@ export function ThemeEditor({
           handleRenameColor={handleRenameColor}
           handleRemoveFromGroup={handleRemoveFromGroup}
         />
-        <GroupColors
-          state={state}
-          handleSelection={handleToggleStatus}
-          handleAddToGroup={handleAddToGroup}
-        />
+        {groupingView(groupingMode)}
       </div>
     </>
   );

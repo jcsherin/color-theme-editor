@@ -113,7 +113,12 @@ export function FormEntry({
         handleLoadExample={handleLoadExample}
         handleResetForm={handleResetForm}
       />
-      <Form form={form} handleUpdateForm={handleUpdateForm} />
+      <Form
+        className="grid grid-cols-2"
+        style={{ height: `calc(100% - 56px)` }}
+        form={form}
+        handleUpdateForm={handleUpdateForm}
+      />
     </>
   );
 }
