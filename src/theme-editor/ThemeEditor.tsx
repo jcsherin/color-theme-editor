@@ -45,7 +45,7 @@ export function deserializeEditUI(ui: {
   };
 }
 
-type GroupingMode = "groupAndRename" | "updateFormData";
+type GroupingMode = "saveForm" | "updateForm";
 
 export function ThemeEditor({
   state,
@@ -62,28 +62,27 @@ export function ThemeEditor({
   handleAddToGroup: (groupName: string) => void;
   handleToggleStatus: (selectableItem: SelectableItem) => void;
 }) {
-  const [groupingMode, setGroupingMode] =
-    useState<GroupingMode>("groupAndRename");
+  const [groupingMode, setGroupingMode] = useState<GroupingMode>("saveForm");
 
   const relatedAction = (groupingMode: GroupingMode) => {
     switch (groupingMode) {
-      case "groupAndRename": {
+      case "saveForm": {
         return (
           <button
-            onClick={(_event) => setGroupingMode("updateFormData")}
-            className="mr-4 py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
+            onClick={(_event) => setGroupingMode("updateForm")}
+            className="justify-self-end ml-auto py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
           >
-            Update groups or colors
+            Update
           </button>
         );
       }
-      case "updateFormData": {
+      case "updateForm": {
         return (
           <button
-            onClick={(_event) => setGroupingMode("groupAndRename")}
-            className="mr-4 py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
+            onClick={(_event) => setGroupingMode("saveForm")}
+            className="justify-self-end ml-auto py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
           >
-            Group and rename colors
+            Save
           </button>
         );
       }
@@ -92,7 +91,7 @@ export function ThemeEditor({
 
   const groupingView = (groupingMode: GroupingMode) => {
     switch (groupingMode) {
-      case "groupAndRename":
+      case "saveForm":
         return (
           <GroupColors
             state={state}
@@ -100,7 +99,7 @@ export function ThemeEditor({
             handleAddToGroup={handleAddToGroup}
           />
         );
-      case "updateFormData":
+      case "updateForm":
         return <Form form={state.formData} handleUpdateForm={(_form) => {}} />;
     }
   };
@@ -114,14 +113,14 @@ export function ThemeEditor({
         >
           Create New
         </button>
-        {relatedAction(groupingMode)}
         <CopyButton
           label="Copy theme to clipboard"
           content={serializeForTailwind(state)}
           expiryInMs={2000}
-          className=" text-blue-500 hover:text-blue-800"
+          className="mr-4 text-blue-500 hover:text-blue-800"
           flashClassName="text-green-800"
         />
+        {relatedAction(groupingMode)}
       </div>
       <div className="grid grid-cols-2" style={{ height: `calc(100% - 56px)` }}>
         <TreeEditor
