@@ -3,7 +3,7 @@ export interface Group {
   colorIds: string[];
 }
 
-export type GroupDict = Map<string, Group>;
+export type GroupMap = Map<string, Group>;
 
 export function makeColorGroup(name: string): Group {
   return { name: name, colorIds: [] };
@@ -16,7 +16,7 @@ function parseColorGroup(value: string): Group | undefined {
   }
 }
 
-export function makeGroupMap(colorGroups: Set<Group>): GroupDict {
+export function makeGroupMap(colorGroups: Set<Group>): GroupMap {
   const map = new Map();
   colorGroups.forEach((group) => {
     map.set(group.name, group);

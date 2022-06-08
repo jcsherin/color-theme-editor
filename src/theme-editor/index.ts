@@ -19,12 +19,7 @@ export {
   toggleStatus,
   ungroup,
 } from "./selectableItem";
-export {
-  Group,
-  GroupDict,
-  makeGroupMap,
-  parseColorGroups,
-} from "./group";
+export { Group, GroupMap, makeGroupMap, parseColorGroups } from "./group";
 
 export type { EditUI, EditUISerialized } from "./ThemeEditor";
 export type { ThemeEditorState, ThemeEditorAction } from "./reducer";

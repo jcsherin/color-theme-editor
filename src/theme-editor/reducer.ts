@@ -8,7 +8,7 @@ import {
   ungroup,
   groupSelected,
   isSelected,
-  GroupDict,
+  GroupMap,
 } from "./index";
 import {
   ColorMap,
@@ -182,7 +182,7 @@ export const getInitialThemeEditorState = (
   const state = JSON.parse(cached);
   const formData: FormData = state.formData;
   const colorMap: ColorMap = new Map(state.colorDict);
-  const groupMap: GroupDict = new Map(state.colorGroupDict);
+  const groupMap: GroupMap = new Map(state.colorGroupDict);
   const selectables: SelectableItem[] = state.colorList;
   return {
     formData,
