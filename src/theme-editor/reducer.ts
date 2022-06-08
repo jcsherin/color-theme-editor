@@ -19,6 +19,8 @@ import {
   parseColors,
   updateColorName,
   makeColorMap,
+  removeColorsFromColorMap,
+  addColorsToColorMap,
 } from "../color";
 import { FormData, initFormData } from "../form";
 import { makeGroupMap, removeColorsFromGroupMap } from "./group";
@@ -292,21 +294,30 @@ export const reducer = (
     case "updateFormData": {
       if (action.formData === state.formData) return state;
 
+      let newState = state;
+
       const existingColors = parseColors(state.formData.colors);
       const incomingColors = parseColors(action.formData.colors);
 
-      // 1. Remove `removedColors` from groups in `groupMap`
       const removedColors = new Set(
         Array.from(existingColors).filter((color) => !incomingColors.has(color))
       );
-      let newState = state;
       newState = {
         ...newState,
         groupMap: removeColorsFromGroupMap(newState.groupMap, removedColors),
       };
-      // const addedColors = new Set(
-      //   Array.from(incomingColors).filter((color) => !existingColors.has(color))
-      // );
+      newState = {
+        ...newState,
+        colorMap: removeColorsFromColorMap(newState.colorMap, removedColors),
+      };
+
+      const addedColors = new Set(
+        Array.from(incomingColors).filter((color) => !existingColors.has(color))
+      );
+      newState = {
+        ...newState,
+        colorMap: addColorsToColorMap(newState.colorMap, addedColors),
+      };
 
       // const existingGroups = parseColorGroups(state.formData.classnames);
       // const incomingGroups = parseColorGroups(action.formData.classnames);

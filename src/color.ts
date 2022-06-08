@@ -39,6 +39,27 @@ export function updateColorName(color: HexColor, name: string): HexColor {
 
 export type ColorMap = Map<string, HexColor>;
 
+export function removeColorsFromColorMap(
+  colorMap: ColorMap,
+  removedColors: Set<HexColor>
+): ColorMap {
+  Array.from(removedColors, getColorId).forEach((colorId) =>
+    colorMap.delete(colorId)
+  );
+  return new Map(Array.from(colorMap));
+}
+
+export function addColorsToColorMap(
+  colorMap: ColorMap,
+  colors: Set<HexColor>
+): ColorMap {
+  colors.forEach((color) => {
+    const key = getColorId(color);
+    colorMap.set(key, color);
+  });
+  return new Map(Array.from(colorMap));
+}
+
 export function makeColorMap(colors: Set<HexColor>): ColorMap {
   const map = new Map();
   colors.forEach((color) => {
