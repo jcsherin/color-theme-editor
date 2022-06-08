@@ -343,6 +343,12 @@ export const reducer = (
         groupMap: removeGroupsFromGroupMap(newState.groupMap, removedGroups),
       };
 
+      newState = {
+        ...newState,
+        formData: action.formData,
+        selectables: Array.from(newState.colorMap.keys(), makeSelectable),
+      };
+
       return newState;
     }
   }
