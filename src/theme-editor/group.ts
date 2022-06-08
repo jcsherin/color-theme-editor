@@ -16,7 +16,7 @@ function parseColorGroup(value: string): Group | undefined {
   }
 }
 
-export function makeColorGroupDict(colorGroups: Group[]): GroupDict {
+export function makeGroupMap(colorGroups: Set<Group>): GroupDict {
   const map = new Map();
   colorGroups.forEach((group) => {
     map.set(group.name, group);
@@ -24,10 +24,10 @@ export function makeColorGroupDict(colorGroups: Group[]): GroupDict {
   return map;
 }
 
-export function parseColorGroups(groupNames: string): GroupDict {
-  const deduped = new Set(groupNames.split("\n"));
-  const parsed = Array.from(deduped)
+export function parseColorGroups(groupNames: string): Set<Group> {
+  const deduped = Array.from(new Set(groupNames.split("\n")));
+  const parsed = deduped
     .map(parseColorGroup)
     .flatMap((classname) => (classname ? [classname] : []));
-  return makeColorGroupDict(parsed);
+  return new Set(parsed);
 }

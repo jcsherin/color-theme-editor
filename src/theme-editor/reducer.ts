@@ -18,8 +18,10 @@ import {
   HexColor,
   parseColors,
   updateColorName,
+  makeColorMap,
 } from "../color";
 import { FormData, initFormData } from "../form";
+import { makeGroupMap } from "./group";
 
 type GroupMap = Map<string, Group>;
 export interface ThemeEditorState {
@@ -108,13 +110,13 @@ export function serializeForTailwind({
 }
 
 export function parse(formData: FormData): ThemeEditorState {
-  const colorDict = parseColors(formData.colors);
-  const colorGroupDict = parseColorGroups(formData.classnames);
-  const colorList = Array.from(colorDict.keys()).map(makeSelectable);
+  const colorMap = makeColorMap(parseColors(formData.colors));
+  const groupMap = makeGroupMap(parseColorGroups(formData.classnames));
+  const colorList = Array.from(colorMap.keys()).map(makeSelectable);
   return {
     formData: formData,
-    colorMap: colorDict,
-    groupMap: colorGroupDict,
+    colorMap: colorMap,
+    groupMap: groupMap,
     selectables: colorList,
   };
 }

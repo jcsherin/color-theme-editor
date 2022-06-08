@@ -39,7 +39,7 @@ export function updateColorName(color: HexColor, name: string): HexColor {
 
 export type ColorMap = Map<string, HexColor>;
 
-export function makeColorMap(colors: HexColor[]): ColorMap {
+export function makeColorMap(colors: Set<HexColor>): ColorMap {
   const map = new Map();
   colors.forEach((color) => {
     const key = getColorId(color);
@@ -66,10 +66,10 @@ function parseColor(v: string): HexColor | undefined {
   }
 }
 
-export function parseColors(colors: string): ColorMap {
-  const deduped = new Set(colors.split("\n"));
-  const parsed = Array.from(deduped)
+export function parseColors(colors: string): Set<HexColor> {
+  const deduped = Array.from(new Set(colors.split("\n")));
+  const parsed = deduped
     .map(parseColor)
     .flatMap((color) => (color ? [color] : []));
-  return makeColorMap(parsed);
+  return new Set(parsed);
 }

@@ -22,7 +22,7 @@ export {
 export {
   Group,
   GroupDict,
-  makeColorGroupDict,
+  makeGroupMap,
   parseColorGroups,
 } from "./group";
 
