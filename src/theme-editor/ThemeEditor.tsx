@@ -64,7 +64,7 @@ export function ThemeEditor({
 }) {
   const [groupingMode, setGroupingMode] = useState<GroupingMode>("saveForm");
 
-  const relatedAction = (groupingMode: GroupingMode) => {
+  const groupingAction = (groupingMode: GroupingMode) => {
     switch (groupingMode) {
       case "saveForm": {
         return (
@@ -120,7 +120,7 @@ export function ThemeEditor({
           className="mr-4 text-blue-500 hover:text-blue-800"
           flashClassName="text-green-800"
         />
-        {relatedAction(groupingMode)}
+        {groupingAction(groupingMode)}
       </div>
       <div className="grid grid-cols-2" style={{ height: `calc(100% - 56px)` }}>
         <TreeEditor
