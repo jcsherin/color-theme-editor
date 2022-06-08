@@ -152,13 +152,19 @@ interface ThemeEditorActionReset {
   kind: "reset";
 }
 
+interface ThemeEditorActionUpdateFormData {
+  kind: "updateFormData";
+  formData: FormData;
+}
+
 export type ThemeEditorAction =
   | ThemeEditorActionParse
   | ThemeEditorActionAddToGroup
   | ThemeEditorActionRemoveFromGroup
   | ThemeEditorActionRenameColor
   | ThemeEditorActionToggleStatus
-  | ThemeEditorActionReset;
+  | ThemeEditorActionReset
+  | ThemeEditorActionUpdateFormData;
 
 export const getInitialThemeEditorState = (
   reset: boolean = false
@@ -263,6 +269,45 @@ export const reducer = (
 
     case "reset": {
       return getInitialThemeEditorState(true);
+    }
+
+    case "updateFormData": {
+      if (action.formData === state.formData) return state;
+
+      const existingColors = parseColors(state.formData.colors);
+      const incomingColors = parseColors(action.formData.colors);
+      const removedColors = new Set(
+        Array.from(existingColors).filter((color) => !incomingColors.has(color))
+      );
+      const addedColors = new Set(
+        Array.from(incomingColors).filter((color) => !existingColors.has(color))
+      );
+
+      const existingGroups = parseColorGroups(state.formData.classnames);
+      const incomingGroups = parseColorGroups(action.formData.classnames);
+      const removedGroups = new Set(
+        Array.from(existingGroups).filter((group) => !incomingGroups.has(group))
+      );
+      const addedGroups = new Set(
+        Array.from(incomingGroups).filter((group) => !existingGroups.has(group))
+      );
+
+      /*
+      State Reconciliation algorithm
+      ==============================
+
+      * Update `formData` field with `action.formData`
+      * Groups
+        * Add `addedGroups` to `groupMap`
+        * Remove `removedGroups` from `groupMap`
+          * Update status of each color in removed group in `selectables` (see `removeFromGroup`)      
+      * Colors
+        * Add `addedColors` to `colorMap`
+        * Remove `removedColors` from `colorMap`
+        * Recreate `selectables` from `colorMap`
+        * Remove `removedColors` from `groupMap`
+      */
+      return state;
     }
   }
 };
