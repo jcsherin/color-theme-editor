@@ -62,7 +62,7 @@ export function wizardReducer(
     case "renameColor":
     case "toggleStatus":
     case "reset":
-    case "updateFormData":
+    case "mergeState":
       switch (wizard.steps[wizard.currentIdx].kind) {
         case "formEntry":
           return wizard;

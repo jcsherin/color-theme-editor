@@ -42,6 +42,22 @@ export function makeGroupMap(colorGroups: Set<Group>): GroupMap {
   return map;
 }
 
+export function addGroupsToGroupMap(
+  groupMap: GroupMap,
+  groups: Set<Group>
+): GroupMap {
+  groups.forEach((group) => groupMap.set(group.name, group));
+  return new Map(Array.from(groupMap));
+}
+
+export function removeGroupsFromGroupMap(
+  groupMap: GroupMap,
+  groups: Set<Group>
+): GroupMap {
+  groups.forEach((group) => groupMap.delete(group.name));
+  return new Map(Array.from(groupMap));
+}
+
 export function parseColorGroups(groupNames: string): Set<Group> {
   const deduped = Array.from(new Set(groupNames.split("\n")));
   const parsed = deduped

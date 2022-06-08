@@ -23,7 +23,12 @@ import {
   addColorsToColorMap,
 } from "../color";
 import { FormData, initFormData } from "../form";
-import { makeGroupMap, removeColorsFromGroupMap } from "./group";
+import {
+  addGroupsToGroupMap,
+  makeGroupMap,
+  removeColorsFromGroupMap,
+  removeGroupsFromGroupMap,
+} from "./group";
 
 export interface ThemeEditorState {
   formData: FormData;
@@ -153,8 +158,8 @@ interface ThemeEditorActionReset {
   kind: "reset";
 }
 
-interface ThemeEditorActionUpdateFormData {
-  kind: "updateFormData";
+interface ThemeEditorActionMergeState {
+  kind: "mergeState";
   formData: FormData;
 }
 
@@ -165,7 +170,7 @@ export type ThemeEditorAction =
   | ThemeEditorActionRenameColor
   | ThemeEditorActionToggleStatus
   | ThemeEditorActionReset
-  | ThemeEditorActionUpdateFormData;
+  | ThemeEditorActionMergeState;
 
 export const getInitialThemeEditorState = (
   reset: boolean = false
@@ -283,15 +288,15 @@ export const reducer = (
 
       ## Groups
       4. Add `addedGroups` to `groupMap`
-      5. Remove all colors belonging to `removedGroups` in `groupMap`
+      5. Remove `removedGroups` from `groupMap`
 
       ## Selectables
       6. Create new `selectables` from `colorMap`
 
       ## Form Data
-      7. Update `formData` field
+      8. Update `formData` field
       */
-    case "updateFormData": {
+    case "mergeState": {
       if (action.formData === state.formData) return state;
 
       let newState = state;
@@ -319,16 +324,26 @@ export const reducer = (
         colorMap: addColorsToColorMap(newState.colorMap, addedColors),
       };
 
-      // const existingGroups = parseColorGroups(state.formData.classnames);
-      // const incomingGroups = parseColorGroups(action.formData.classnames);
-      // const removedGroups = new Set(
-      //   Array.from(existingGroups).filter((group) => !incomingGroups.has(group))
-      // );
-      // const addedGroups = new Set(
-      //   Array.from(incomingGroups).filter((group) => !existingGroups.has(group))
-      // );
+      const existingGroups = parseColorGroups(state.formData.classnames);
+      const incomingGroups = parseColorGroups(action.formData.classnames);
 
-      return state;
+      const addedGroups = new Set(
+        Array.from(incomingGroups).filter((group) => !existingGroups.has(group))
+      );
+      newState = {
+        ...newState,
+        groupMap: addGroupsToGroupMap(newState.groupMap, addedGroups),
+      };
+
+      const removedGroups = new Set(
+        Array.from(existingGroups).filter((group) => !incomingGroups.has(group))
+      );
+      newState = {
+        ...newState,
+        groupMap: removeGroupsFromGroupMap(newState.groupMap, removedGroups),
+      };
+
+      return newState;
     }
   }
 };

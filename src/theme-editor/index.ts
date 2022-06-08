@@ -25,6 +25,8 @@ export {
   makeGroupMap,
   parseColorGroups,
   removeColorsFromGroupMap,
+  addGroupsToGroupMap,
+  removeGroupsFromGroupMap,
 } from "./group";
 
 export type { EditUI, EditUISerialized } from "./ThemeEditor";
