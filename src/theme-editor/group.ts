@@ -1,9 +1,27 @@
+import { getColorId, HexColor } from "../color";
+
 export interface Group {
   name: string;
   colorIds: string[];
 }
 
 export type GroupMap = Map<string, Group>;
+
+export function removeColorsFromGroupMap(
+  groupMap: GroupMap,
+  removedColors: Set<HexColor>
+): GroupMap {
+  const removedColorIds = new Set(Array.from(removedColors, getColorId));
+  return new Map(
+    Array.from(groupMap, ([key, group]) => [
+      key,
+      {
+        ...group,
+        colorIds: group.colorIds.filter((id) => !removedColorIds.has(id)),
+      },
+    ])
+  );
+}
 
 export function makeColorGroup(name: string): Group {
   return { name: name, colorIds: [] };

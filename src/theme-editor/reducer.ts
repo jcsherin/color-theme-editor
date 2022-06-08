@@ -21,9 +21,8 @@ import {
   makeColorMap,
 } from "../color";
 import { FormData, initFormData } from "../form";
-import { makeGroupMap } from "./group";
+import { makeGroupMap, removeColorsFromGroupMap } from "./group";
 
-type GroupMap = Map<string, Group>;
 export interface ThemeEditorState {
   formData: FormData;
   colorMap: ColorMap;
@@ -112,12 +111,12 @@ export function serializeForTailwind({
 export function parse(formData: FormData): ThemeEditorState {
   const colorMap = makeColorMap(parseColors(formData.colors));
   const groupMap = makeGroupMap(parseColorGroups(formData.classnames));
-  const colorList = Array.from(colorMap.keys()).map(makeSelectable);
+  const selectables = Array.from(colorMap.keys()).map(makeSelectable);
   return {
-    formData: formData,
-    colorMap: colorMap,
-    groupMap: groupMap,
-    selectables: colorList,
+    formData,
+    colorMap,
+    groupMap,
+    selectables,
   };
 }
 
@@ -187,9 +186,9 @@ export const getInitialThemeEditorState = (
 
   const state = JSON.parse(cached);
   const formData: FormData = state.formData;
-  const colorMap: ColorMap = new Map(state.colorDict);
-  const groupMap: GroupMap = new Map(state.colorGroupDict);
-  const selectables: SelectableItem[] = state.colorList;
+  const colorMap: ColorMap = new Map(state.colorMap);
+  const groupMap: GroupMap = new Map(state.groupMap);
+  const selectables: SelectableItem[] = state.slectables;
   return {
     formData,
     colorMap,
@@ -271,28 +270,7 @@ export const reducer = (
       return getInitialThemeEditorState(true);
     }
 
-    case "updateFormData": {
-      if (action.formData === state.formData) return state;
-
-      const existingColors = parseColors(state.formData.colors);
-      const incomingColors = parseColors(action.formData.colors);
-      const removedColors = new Set(
-        Array.from(existingColors).filter((color) => !incomingColors.has(color))
-      );
-      const addedColors = new Set(
-        Array.from(incomingColors).filter((color) => !existingColors.has(color))
-      );
-
-      const existingGroups = parseColorGroups(state.formData.classnames);
-      const incomingGroups = parseColorGroups(action.formData.classnames);
-      const removedGroups = new Set(
-        Array.from(existingGroups).filter((group) => !incomingGroups.has(group))
-      );
-      const addedGroups = new Set(
-        Array.from(incomingGroups).filter((group) => !existingGroups.has(group))
-      );
-
-      /*
+    /*
       State Reconciliation algorithm
       ==============================
 
@@ -311,6 +289,34 @@ export const reducer = (
       ## Form Data
       7. Update `formData` field
       */
+    case "updateFormData": {
+      if (action.formData === state.formData) return state;
+
+      const existingColors = parseColors(state.formData.colors);
+      const incomingColors = parseColors(action.formData.colors);
+
+      // 1. Remove `removedColors` from groups in `groupMap`
+      const removedColors = new Set(
+        Array.from(existingColors).filter((color) => !incomingColors.has(color))
+      );
+      let newState = state;
+      newState = {
+        ...newState,
+        groupMap: removeColorsFromGroupMap(newState.groupMap, removedColors),
+      };
+      // const addedColors = new Set(
+      //   Array.from(incomingColors).filter((color) => !existingColors.has(color))
+      // );
+
+      // const existingGroups = parseColorGroups(state.formData.classnames);
+      // const incomingGroups = parseColorGroups(action.formData.classnames);
+      // const removedGroups = new Set(
+      //   Array.from(existingGroups).filter((group) => !incomingGroups.has(group))
+      // );
+      // const addedGroups = new Set(
+      //   Array.from(incomingGroups).filter((group) => !existingGroups.has(group))
+      // );
+
       return state;
     }
   }
