@@ -296,16 +296,20 @@ export const reducer = (
       State Reconciliation algorithm
       ==============================
 
-      * Update `formData` field with `action.formData`
-      * Groups
-        * Add `addedGroups` to `groupMap`
-        * Remove `removedGroups` from `groupMap`
-          * Update status of each color in removed group in `selectables` (see `removeFromGroup`)      
-      * Colors
-        * Add `addedColors` to `colorMap`
-        * Remove `removedColors` from `colorMap`
-        * Recreate `selectables` from `colorMap`
-        * Remove `removedColors` from `groupMap`
+      ## Colors
+      1. Remove `removedColors` from groups in `groupMap`
+      2. Remove `removedColors` from `colorMap`
+      3. Add `addedColors` to `colorMap`
+
+      ## Groups
+      4. Add `addedGroups` to `groupMap`
+      5. Remove all colors belonging to `removedGroups` in `groupMap`
+
+      ## Selectables
+      6. Create new `selectables` from `colorMap`
+
+      ## Form Data
+      7. Update `formData` field
       */
       return state;
     }
