@@ -277,25 +277,24 @@ export const reducer = (
       State Reconciliation algorithm
       ==============================
 
-      ## Colors
-      1. Remove _deleted_ colors from `groupMap`
-      2. Remove _deleted_ colors from `colorMap`
-      3. Add _new_ colors to `colorMap`
+      ## Add Colors
+      1. Add _new_ colors to `colorMap`
+      2. Add _new_ colors to `selectables`
 
-      ## Colors
-      1. Remove `removedColors` from groups in `groupMap`
-      2. Remove `removedColors` from `colorMap`
-      3. Add `addedColors` to `colorMap`
+      ## Delete Colors
+      3. Remove _deleted_ colors from `colorMap`
+      4. Remove _deleted_ colors from `groupMap`
+      5. Remove _deleted_ colors from `selectables`
 
-      ## Groups
-      4. Add `addedGroups` to `groupMap`
-      5. Remove `removedGroups` from `groupMap`
+      ## Add Groups
+      6. Add _new_ groups to `groupMap`
 
-      ## Selectables
-      6. Create new `selectables` from `colorMap`
+      ## Delete Groups
+      7. Ungroup colors in _deleted_ groups in `selectables`
+      8. Remove _deleted_ group from `groupMap`
 
       ## Form Data
-      8. Update `formData` field
+      9. Rewrite `formData` field with `action.formData`
       */
     case "mergeState": {
       if (action.formData === state.formData) {
