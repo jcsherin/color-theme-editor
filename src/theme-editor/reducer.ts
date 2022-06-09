@@ -28,6 +28,7 @@ import {
   addGroupsToGroupMap,
   makeGroupMap,
   removeColorsFromGroupMap,
+  removeGroupsFromGroupMap,
 } from "./group";
 
 export interface ThemeEditorState {
@@ -297,7 +298,7 @@ export const reducer = (
       7. Ungroup colors in _deleted_ groups in `selectables`
       8. Remove _deleted_ group from `groupMap`
 
-      ## Form Data
+      ## Rewrite Form Data
       9. Rewrite `formData` field with `action.formData`
       */
     case "mergeState": {
@@ -313,6 +314,7 @@ export const reducer = (
         JSON.stringify(color)
       );
 
+      // Add Colors
       const addedColors: HexColor[] = currColors
         .filter((color) => !prevColors.includes(color))
         .map((serialized) => JSON.parse(serialized));
@@ -325,6 +327,7 @@ export const reducer = (
         ],
       };
 
+      // Delete Colors
       const deletedColors: HexColor[] = prevColors
         .filter((color) => !currColors.includes(color))
         .map((serialized) => JSON.parse(serialized));
@@ -345,6 +348,7 @@ export const reducer = (
         (group) => JSON.stringify(group)
       );
 
+      // Add Groups
       const addedGroups: Group[] = currGroups
         .filter((group) => !prevGroups.includes(group))
         .map((serialized) => JSON.parse(serialized));
@@ -353,6 +357,27 @@ export const reducer = (
         groupMap: addGroupsToGroupMap(merged.groupMap, addedGroups),
       };
 
+      // Delete Groups
+      const deletedGroups: Group[] = prevGroups
+        .filter((group) => !currGroups.includes(group))
+        .map((serialized) => JSON.parse(serialized));
+      const deletedGroupNames = deletedGroups.map((group) => group.name);
+      const colorIdsForUngrouping = Array.from(
+        merged.groupMap,
+        ([_key, group]) =>
+          deletedGroupNames.includes(group.name) ? group.colorIds : []
+      ).flat();
+      merged = {
+        ...merged,
+        groupMap: removeGroupsFromGroupMap(merged.groupMap, deletedGroups),
+        selectables: merged.selectables.map((selectable) =>
+          colorIdsForUngrouping.includes(selectable.colorId)
+            ? ungroup(selectable.colorId)(selectable)
+            : selectable
+        ),
+      };
+
+      // Rewrite Form Data
       merged = {
         ...merged,
         formData: action.formData,
