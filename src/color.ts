@@ -40,18 +40,16 @@ export function updateColorName(color: HexColor, name: string): HexColor {
 export type ColorMap = Map<string, HexColor>;
 
 export function removeColorsFromColorMap(
-  colorMap: ColorMap,
-  removedColors: Set<HexColor>
+  colors: ColorMap,
+  deleted: HexColor[]
 ): ColorMap {
-  Array.from(removedColors, getColorId).forEach((colorId) =>
-    colorMap.delete(colorId)
-  );
-  return new Map(Array.from(colorMap));
+  deleted.map(getColorId).forEach((colorId) => colors.delete(colorId));
+  return new Map(Array.from(colors));
 }
 
 export function addColorsToColorMap(
   colorMap: ColorMap,
-  colors: Set<HexColor>
+  colors: HexColor[]
 ): ColorMap {
   colors.forEach((color) => {
     const key = getColorId(color);
@@ -60,7 +58,7 @@ export function addColorsToColorMap(
   return new Map(Array.from(colorMap));
 }
 
-export function makeColorMap(colors: Set<HexColor>): ColorMap {
+export function makeColorMap(colors: HexColor[]): ColorMap {
   const map = new Map();
   colors.forEach((color) => {
     const key = getColorId(color);
@@ -87,10 +85,7 @@ function parseColor(v: string): HexColor | undefined {
   }
 }
 
-export function parseColors(colors: string): Set<HexColor> {
+export function parseColors(colors: string): HexColor[] {
   const deduped = Array.from(new Set(colors.split("\n")));
-  const parsed = deduped
-    .map(parseColor)
-    .flatMap((color) => (color ? [color] : []));
-  return new Set(parsed);
+  return deduped.map(parseColor).flatMap((color) => (color ? [color] : []));
 }

@@ -9,18 +9,21 @@ export type GroupMap = Map<string, Group>;
 
 export function removeColorsFromGroupMap(
   groupMap: GroupMap,
-  removedColors: Set<HexColor>
+  removedColors: HexColor[]
 ): GroupMap {
-  const removedColorIds = new Set(Array.from(removedColors, getColorId));
-  return new Map(
-    Array.from(groupMap, ([key, group]) => [
+  const removedColorIds = removedColors.map(getColorId);
+  const filtered = Array.from(groupMap, ([key, group]): [string, Group] => {
+    return [
       key,
       {
         ...group,
-        colorIds: group.colorIds.filter((id) => !removedColorIds.has(id)),
+        colorIds: group.colorIds.filter(
+          (colorId) => !removedColorIds.includes(colorId)
+        ),
       },
-    ])
-  );
+    ];
+  });
+  return new Map(filtered);
 }
 
 export function makeColorGroup(name: string): Group {
