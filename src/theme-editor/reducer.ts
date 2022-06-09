@@ -19,16 +19,12 @@ import {
   parseColors,
   updateColorName,
   makeColorMap,
-  removeColorsFromColorMap,
   addColorsToColorMap,
+  removeColorsFromColorMap,
+  getColorId,
 } from "../color";
 import { FormData, initFormData } from "../form";
-import {
-  addGroupsToGroupMap,
-  makeGroupMap,
-  removeColorsFromGroupMap,
-  removeGroupsFromGroupMap,
-} from "./group";
+import { makeGroupMap, removeColorsFromGroupMap } from "./group";
 
 export interface ThemeEditorState {
   formData: FormData;
@@ -282,6 +278,11 @@ export const reducer = (
       ==============================
 
       ## Colors
+      1. Remove _deleted_ colors from `groupMap`
+      2. Remove _deleted_ colors from `colorMap`
+      3. Add _new_ colors to `colorMap`
+
+      ## Colors
       1. Remove `removedColors` from groups in `groupMap`
       2. Remove `removedColors` from `colorMap`
       3. Add `addedColors` to `colorMap`
@@ -297,59 +298,135 @@ export const reducer = (
       8. Update `formData` field
       */
     case "mergeState": {
-      if (action.formData === state.formData) return state;
+      if (action.formData === state.formData) {
+        return state;
+      }
 
-      let newState = state;
-
-      const existingColors = parseColors(state.formData.colors);
-      const incomingColors = parseColors(action.formData.colors);
-
-      const removedColors = new Set(
-        Array.from(existingColors).filter((color) => !incomingColors.has(color))
+      let merged = state;
+      const prevColors = parseColors(state.formData.colors).map((color) =>
+        JSON.stringify(color)
       );
-      newState = {
-        ...newState,
-        groupMap: removeColorsFromGroupMap(newState.groupMap, removedColors),
-      };
-      newState = {
-        ...newState,
-        colorMap: removeColorsFromColorMap(newState.colorMap, removedColors),
-      };
-
-      const addedColors = new Set(
-        Array.from(incomingColors).filter((color) => !existingColors.has(color))
+      const currColors = parseColors(action.formData.colors).map((color) =>
+        JSON.stringify(color)
       );
-      newState = {
-        ...newState,
-        colorMap: addColorsToColorMap(newState.colorMap, addedColors),
+
+      const addedColors: HexColor[] = currColors
+        .filter((color) => !prevColors.includes(color))
+        .map((serialized) => JSON.parse(serialized));
+      console.log(`added colors: ${JSON.stringify(addedColors, null, 2)}`);
+      merged = {
+        ...merged,
+        colorMap: addColorsToColorMap(merged.colorMap, addedColors),
+        selectables: [
+          ...merged.selectables,
+          ...addedColors.map(getColorId).map(makeSelectable),
+        ],
       };
 
-      const existingGroups = parseColorGroups(state.formData.classnames);
-      const incomingGroups = parseColorGroups(action.formData.classnames);
-
-      const addedGroups = new Set(
-        Array.from(incomingGroups).filter((group) => !existingGroups.has(group))
-      );
-      newState = {
-        ...newState,
-        groupMap: addGroupsToGroupMap(newState.groupMap, addedGroups),
+      const deletedColors: HexColor[] = prevColors
+        .filter((color) => !currColors.includes(color))
+        .map((serialized) => JSON.parse(serialized));
+      const deletedColorIds = deletedColors.map(getColorId);
+      console.log(`deleted colors: ${JSON.stringify(deletedColors, null, 2)}`);
+      merged = {
+        ...merged,
+        colorMap: removeColorsFromColorMap(merged.colorMap, deletedColors),
+        groupMap: removeColorsFromGroupMap(merged.groupMap, deletedColors),
+        selectables: merged.selectables.filter(
+          (selectable) => !deletedColorIds.includes(selectable.colorId)
+        ),
       };
 
-      const removedGroups = new Set(
-        Array.from(existingGroups).filter((group) => !incomingGroups.has(group))
-      );
-      newState = {
-        ...newState,
-        groupMap: removeGroupsFromGroupMap(newState.groupMap, removedGroups),
-      };
-
-      newState = {
-        ...newState,
+      // ungroup from selectables after removing colors from group map
+      merged = {
+        ...merged,
         formData: action.formData,
-        selectables: Array.from(newState.colorMap.keys(), makeSelectable),
       };
+      // get deleted & new colors
+      // const prevColors = parseColors(state.formData.colors);
+      // const currColors = parseColors(action.formData.colors);
 
-      return newState;
+      // Set stores object references, therefore `set.has(item)`
+      // always returns `false` if the object is treated as an
+      // immutable value. This is what was happening in the code
+      // below when computing `deletedColors`.
+
+      // const deletedColors = new Set(
+      //   Array.from(prevColors).filter((color) => !currColors.has(color))
+      // );
+      // console.log(`prev: ${JSON.stringify(Array.from(prevColors), null, 2)}`);
+      // console.log(`curr: ${JSON.stringify(Array.from(currColors), null, 2)}`);
+      // console.log(
+      //   `Deleted colors: ${JSON.stringify(Array.from(deletedColors), null, 2)}`
+      // );
+
+      // const existingColors = parseColors(state.formData.colors);
+      // const incomingColors = parseColors(action.formData.colors);
+
+      // const removedColors = new Set(
+      //   Array.from(existingColors).filter((color) => !incomingColors.has(color))
+      // );
+      // newState = {
+      //   ...newState,
+      //   groupMap: removeColorsFromGroupMap(newState.groupMap, removedColors),
+      // };
+      // newState = {
+      //   ...newState,
+      //   colorMap: removeColorsFromColorMap(newState.colorMap, removedColors),
+      // };
+
+      // const addedColors = new Set(
+      //   Array.from(incomingColors).filter((color) => !existingColors.has(color))
+      // );
+      // newState = {
+      //   ...newState,
+      //   colorMap: addColorsToColorMap(newState.colorMap, addedColors),
+      // };
+
+      // const existingGroups = new Set(Array.from(state.groupMap.values()));
+      // console.log(
+      //   `Existing Groups: ${JSON.stringify(
+      //     Array.from(existingGroups),
+      //     null,
+      //     2
+      //   )}`
+      // );
+      // const incomingGroups = parseColorGroups(action.formData.classnames);
+      // console.log(
+      //   `Incoming Groups: ${JSON.stringify(
+      //     Array.from(incomingGroups),
+      //     null,
+      //     2
+      //   )}`
+      // );
+
+      // const addedGroups = new Set(
+      //   Array.from(incomingGroups).filter((group) => !existingGroups.has(group))
+      // );
+      // console.log(
+      //   `Added Groups: ${JSON.stringify(Array.from(addedGroups), null, 2)}`
+      // );
+      // // newState = {
+      // //   ...newState,
+      // //   groupMap: addGroupsToGroupMap(newState.groupMap, addedGroups),
+      // // };
+
+      // const removedGroups = new Set(
+      //   Array.from(existingGroups).filter((group) => !incomingGroups.has(group))
+      // );
+      // console.log(`Removed Groups: ${JSON.stringify(removedGroups, null, 2)}`);
+      // // newState = {
+      // //   ...newState,
+      // //   groupMap: removeGroupsFromGroupMap(newState.groupMap, removedGroups),
+      // // };
+
+      // newState = {
+      //   ...newState,
+      //   formData: action.formData,
+      //   selectables: Array.from(newState.colorMap.keys(), makeSelectable),
+      // };
+
+      return merged;
     }
   }
 };

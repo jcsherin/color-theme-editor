@@ -124,6 +124,9 @@ export default function App({ sampleFormData }: { sampleFormData: FormData }) {
                 selectableItem: selectableItem,
               })
             }
+            handleMergeState={(formData) =>
+              dispatch({ kind: "mergeState", formData: formData })
+            }
           />
         );
       }
