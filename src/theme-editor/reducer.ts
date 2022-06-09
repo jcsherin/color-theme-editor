@@ -24,7 +24,11 @@ import {
   getColorId,
 } from "../color";
 import { FormData, initFormData } from "../form";
-import { makeGroupMap, removeColorsFromGroupMap } from "./group";
+import {
+  addGroupsToGroupMap,
+  makeGroupMap,
+  removeColorsFromGroupMap,
+} from "./group";
 
 export interface ThemeEditorState {
   formData: FormData;
@@ -312,7 +316,6 @@ export const reducer = (
       const addedColors: HexColor[] = currColors
         .filter((color) => !prevColors.includes(color))
         .map((serialized) => JSON.parse(serialized));
-      console.log(`added colors: ${JSON.stringify(addedColors, null, 2)}`);
       merged = {
         ...merged,
         colorMap: addColorsToColorMap(merged.colorMap, addedColors),
@@ -326,7 +329,6 @@ export const reducer = (
         .filter((color) => !currColors.includes(color))
         .map((serialized) => JSON.parse(serialized));
       const deletedColorIds = deletedColors.map(getColorId);
-      console.log(`deleted colors: ${JSON.stringify(deletedColors, null, 2)}`);
       merged = {
         ...merged,
         colorMap: removeColorsFromColorMap(merged.colorMap, deletedColors),
@@ -336,7 +338,21 @@ export const reducer = (
         ),
       };
 
-      // ungroup from selectables after removing colors from group map
+      const prevGroups = parseColorGroups(state.formData.classnames).map(
+        (group) => JSON.stringify(group)
+      );
+      const currGroups = parseColorGroups(action.formData.classnames).map(
+        (group) => JSON.stringify(group)
+      );
+
+      const addedGroups: Group[] = currGroups
+        .filter((group) => !prevGroups.includes(group))
+        .map((serialized) => JSON.parse(serialized));
+      merged = {
+        ...merged,
+        groupMap: addGroupsToGroupMap(merged.groupMap, addedGroups),
+      };
+
       merged = {
         ...merged,
         formData: action.formData,

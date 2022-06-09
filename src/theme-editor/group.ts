@@ -37,7 +37,7 @@ function parseColorGroup(value: string): Group | undefined {
   }
 }
 
-export function makeGroupMap(colorGroups: Set<Group>): GroupMap {
+export function makeGroupMap(colorGroups: Group[]): GroupMap {
   const map = new Map();
   colorGroups.forEach((group) => {
     map.set(group.name, group);
@@ -47,7 +47,7 @@ export function makeGroupMap(colorGroups: Set<Group>): GroupMap {
 
 export function addGroupsToGroupMap(
   groupMap: GroupMap,
-  groups: Set<Group>
+  groups: Group[]
 ): GroupMap {
   groups.forEach((group) => groupMap.set(group.name, group));
   return new Map(Array.from(groupMap));
@@ -55,16 +55,15 @@ export function addGroupsToGroupMap(
 
 export function removeGroupsFromGroupMap(
   groupMap: GroupMap,
-  groups: Set<Group>
+  groups: Group[]
 ): GroupMap {
   groups.forEach((group) => groupMap.delete(group.name));
   return new Map(Array.from(groupMap));
 }
 
-export function parseColorGroups(groupNames: string): Set<Group> {
-  const deduped = Array.from(new Set(groupNames.split("\n")));
-  const parsed = deduped
-    .map(parseColorGroup)
-    .flatMap((classname) => (classname ? [classname] : []));
-  return new Set(parsed);
+export function parseColorGroups(groupNames: string): Group[] {
+  const deduped = new Set(groupNames.split("\n"));
+  return Array.from(deduped, parseColorGroup).flatMap((classname) =>
+    classname ? [classname] : []
+  );
 }
