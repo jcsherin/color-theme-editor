@@ -9,7 +9,7 @@ import {
 } from "./reducer";
 
 import type { ThemeEditorState, SerializedThemeEditorState } from "./reducer";
-import { Form } from "../form";
+import { Form, FormData } from "../form";
 
 export interface EditUI {
   kind: "main";
@@ -45,7 +45,7 @@ export function deserializeEditUI(ui: {
   };
 }
 
-type GroupingMode = "saveForm" | "updateForm";
+type GroupingMode = "submitForm" | "updateForm";
 
 export function ThemeEditor({
   state,
@@ -54,6 +54,7 @@ export function ThemeEditor({
   handleRemoveFromGroup,
   handleAddToGroup,
   handleToggleStatus,
+  handleMergeState,
 }: {
   state: ThemeEditorState;
   handlePrevUI: () => void;
@@ -61,12 +62,13 @@ export function ThemeEditor({
   handleRemoveFromGroup: (colorId: string, groupName: string) => void;
   handleAddToGroup: (groupName: string) => void;
   handleToggleStatus: (selectableItem: SelectableItem) => void;
+  handleMergeState: (formData: FormData) => void;
 }) {
-  const [groupingMode, setGroupingMode] = useState<GroupingMode>("saveForm");
+  const [groupingMode, setGroupingMode] = useState<GroupingMode>("submitForm");
 
   const groupingAction = (groupingMode: GroupingMode) => {
     switch (groupingMode) {
-      case "saveForm": {
+      case "submitForm": {
         return (
           <button
             onClick={(_event) => setGroupingMode("updateForm")}
@@ -79,10 +81,10 @@ export function ThemeEditor({
       case "updateForm": {
         return (
           <button
-            onClick={(_event) => setGroupingMode("saveForm")}
+            onClick={(_event) => setGroupingMode("submitForm")}
             className="justify-self-end ml-auto py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
           >
-            Save
+            Submit
           </button>
         );
       }
@@ -91,7 +93,7 @@ export function ThemeEditor({
 
   const groupingView = (groupingMode: GroupingMode) => {
     switch (groupingMode) {
-      case "saveForm":
+      case "submitForm":
         return (
           <GroupColors
             state={state}
@@ -100,7 +102,9 @@ export function ThemeEditor({
           />
         );
       case "updateForm":
-        return <Form form={state.formData} handleUpdateForm={(_form) => {}} />;
+        return (
+          <Form form={state.formData} handleUpdateForm={handleMergeState} />
+        );
     }
   };
 
