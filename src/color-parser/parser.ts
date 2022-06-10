@@ -102,6 +102,23 @@ const hex6 = /^#[0-9A-Fa-f]{6}$/;
 const hex4 = /^#[0-9A-Fa-f]{4}$/;
 const hex3 = /^#[0-9A-Fa-f]{3}$/;
 
+const rgba = /^rgba?\((.*)\)$/;
+
+function parseNumber(str: string): number {
+  return Number(str);
+}
+function containsOnlyNumbers(parts: string[]): boolean {
+  return parts.map(parseNumber).every((num) => !Number.isNaN(num));
+}
+
+function parsePercentage(str: string): number {
+  return str.endsWith("%") ? parseFloat(str) : NaN;
+}
+
+function containsOnlyPercentages(parts: string[]): boolean {
+  return parts.map(parsePercentage).every((num) => !Number.isNaN(num));
+}
+
 export function parse(color: string): BaseColor | undefined {
   const value = color.trim();
   if (keywords[color as keyof Keywords]) {
@@ -113,6 +130,28 @@ export function parse(color: string): BaseColor | undefined {
     hex3.test(color)
   ) {
     return makeColor("hex", value);
+  } else if (rgba.test(color)) {
+    const match = color.match(rgba);
+    if (match && match[1]) {
+      const parts = match[1].split(",");
+      if (parts.length < 3 || parts.length > 4) {
+        return;
+      }
+
+      const rgb = parts.slice(0, 3);
+      if (!(containsOnlyNumbers(rgb) || containsOnlyPercentages(rgb))) {
+        return;
+      }
+      if (parts.length === 3) {
+        return makeColor("rgb", value);
+      }
+
+      const alpha = parts[3];
+      if (parseNumber(alpha) === NaN || parsePercentage(alpha) === NaN) {
+        return;
+      }
+      return makeColor("rgba", value);
+    }
   }
 }
 
@@ -125,3 +164,20 @@ function __debug(color: string) {
 
 __debug("steelblue");
 __debug("notacolor");
+__debug("#4682B4FF");
+__debug("#4682B4");
+__debug("#4682");
+__debug("#468");
+__debug("#46");
+__debug("rgb(0, 255, 0)");
+__debug("rgb(0%, 100%, 0%)");
+__debug("rgba(0, 255, 0)");
+__debug("rgba(0%, 100%, 0%)");
+__debug("rgba(0, 255, 0, 1)");
+__debug("rgba(0%, 100%, 0%, 1)");
+__debug("rgba(0, 255, 0, 100%)");
+__debug("rgba(0%, 100%, 0%, 100%)");
+__debug("rgba(0, 255%, 0, 100%)");
+__debug("rgba(0%, 100, 0%, 100%)");
+__debug("rgba(0%, 100, 0%, 100%, 1)");
+__debug("rgba(100%, 1)");
