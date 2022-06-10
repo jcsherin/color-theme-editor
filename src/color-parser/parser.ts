@@ -107,7 +107,7 @@ const PATTERN_hsla = /^hsla?\((.*)\)$/;
 function parseNumber(str: string): number {
   return Number(str);
 }
-function containsOnlyNumbers(parts: string[]): boolean {
+function isAllNumbers(parts: string[]): boolean {
   return parts.map(parseNumber).every((num) => !Number.isNaN(num));
 }
 
@@ -115,7 +115,7 @@ function parsePercentage(str: string): number {
   return str.endsWith("%") ? parseFloat(str) : NaN;
 }
 
-function containsOnlyPercentages(parts: string[]): boolean {
+function isAllPercentages(parts: string[]): boolean {
   return parts.map(parsePercentage).every((num) => !Number.isNaN(num));
 }
 
@@ -140,7 +140,7 @@ export function parse(color: string): BaseColor | undefined {
     if (parts.length < 3 || parts.length > 4) return;
 
     const rgb = parts.slice(0, 3);
-    if (!(containsOnlyNumbers(rgb) || containsOnlyPercentages(rgb))) return;
+    if (!(isAllNumbers(rgb) || isAllPercentages(rgb))) return;
 
     if (parts.length === 3) {
       return makeColor("rgb", value);
@@ -148,7 +148,7 @@ export function parse(color: string): BaseColor | undefined {
 
     const alpha = parts[3];
     if (
-      Number.isNaN(parseNumber(alpha)) ||
+      Number.isNaN(parseNumber(alpha)) &&
       Number.isNaN(parsePercentage(alpha))
     ) {
       return;
@@ -167,7 +167,7 @@ export function parse(color: string): BaseColor | undefined {
     if (Number.isNaN(parseNumber(hue))) return;
 
     // saturation, lightness
-    if (!containsOnlyPercentages(parts.slice(1, 3))) return;
+    if (!isAllPercentages(parts.slice(1, 3))) return;
 
     if (parts.length === 3) {
       return makeColor("hsl", value);
@@ -175,7 +175,7 @@ export function parse(color: string): BaseColor | undefined {
 
     const alpha = parts[3];
     if (
-      Number.isNaN(parseNumber(alpha)) ||
+      Number.isNaN(parseNumber(alpha)) &&
       Number.isNaN(parsePercentage(alpha))
     ) {
       return;
@@ -200,17 +200,20 @@ __debug("#4682B4");
 __debug("#4682");
 __debug("#468");
 __debug("#46");
+__debug("#4682B4FF00");
 __debug("rgb(0, 255, 0)");
 __debug("rgb(0%, 100%, 0%)");
 __debug("rgba(0, 255, 0)");
 __debug("rgba(0%, 100%, 0%)");
 __debug("rgba(0, 255, 0, 1)");
-__debug("rgba(0%, 100%, 0%, 1)");
 __debug("rgba(0, 255, 0, 100%)");
+__debug("rgba(0%, 100%, 0%, 1)");
 __debug("rgba(0%, 100%, 0%, 100%)");
 __debug("rgba(0, 255%, 0, 100%)");
 __debug("rgba(0%, 100, 0%, 100%)");
 __debug("rgba(0, 255%, 0, abc)");
 __debug("rgba(0%, 100, 0%, abc)");
+__debug("rgba(0%, 100%, 0%, abc)");
+__debug("rgba(0%, 100%, 0%, abc)");
 __debug("rgba(0%, 100, 0%, 100%, 1)");
 __debug("rgba(100%, 1)");
