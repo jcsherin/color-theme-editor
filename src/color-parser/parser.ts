@@ -130,30 +130,30 @@ export function parse(color: string): BaseColor | undefined {
     PATTERN_hex3.test(value)
   ) {
     return makeColor("hex", value);
-  } else if (rgba.test(color)) {
-    const match = color.match(rgba);
-    if (match && match[1]) {
-      const parts = match[1].split(",");
-      if (parts.length < 3 || parts.length > 4) {
-        return;
-      }
-
-      const rgb = parts.slice(0, 3);
-      if (!(containsOnlyNumbers(rgb) || containsOnlyPercentages(rgb))) {
-        return;
-      }
-      if (parts.length === 3) {
-        return makeColor("rgb", value);
-      }
-
-      const alpha = parts[3];
-      if (parseNumber(alpha) === NaN || parsePercentage(alpha) === NaN) {
-        return;
-      }
-      return makeColor("rgba", value);
   } else if (PATTERN_rgba.test(value)) {
     const match = color.match(PATTERN_rgba);
+    if (!match) return;
+    if (!match[1]) return;
+
+    const parts = match[1].split(",");
+    if (parts.length < 3 || parts.length > 4) return;
+
+    const rgb = parts.slice(0, 3);
+    if (!(containsOnlyNumbers(rgb) || containsOnlyPercentages(rgb))) return;
+
+    if (parts.length === 3) {
+      return makeColor("rgb", value);
     }
+
+    const alpha = parts[3];
+    if (
+      Number.isNaN(parseNumber(alpha)) ||
+      Number.isNaN(parsePercentage(alpha))
+    ) {
+      return;
+    }
+
+    return makeColor("rgba", value);
   }
 }
 
