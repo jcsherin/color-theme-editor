@@ -407,7 +407,9 @@ function parse(color: string): Color | undefined {
       kind: "named",
       unparsed: color,
       displayName: color,
-      normalized: namedColors[color as keyof Keywords].decimal,
+      normalized: namedColors[
+        color as keyof Keywords
+      ].decimal.slice() as DecimalSpec,
     };
   }
 }
