@@ -97,12 +97,12 @@ function makeColor(kind: ColorFormat, value: string): BaseColor {
   return { kind, value };
 }
 
-const hex8 = /^#[0-9A-Fa-f]{8}$/;
-const hex6 = /^#[0-9A-Fa-f]{6}$/;
-const hex4 = /^#[0-9A-Fa-f]{4}$/;
-const hex3 = /^#[0-9A-Fa-f]{3}$/;
-
-const rgba = /^rgba?\((.*)\)$/;
+const PATTERN_hex8 = /^#[0-9A-Fa-f]{8}$/;
+const PATTERN_hex6 = /^#[0-9A-Fa-f]{6}$/;
+const PATTERN_hex4 = /^#[0-9A-Fa-f]{4}$/;
+const PATTERN_hex3 = /^#[0-9A-Fa-f]{3}$/;
+const PATTERN_rgba = /^rgba?\((.*)\)$/;
+const PATTERN_hsla = /^hsla?\((.*)\)$/;
 
 function parseNumber(str: string): number {
   return Number(str);
@@ -124,10 +124,10 @@ export function parse(color: string): BaseColor | undefined {
   if (keywords[color as keyof Keywords]) {
     return makeColor("named", value);
   } else if (
-    hex8.test(color) ||
-    hex6.test(color) ||
-    hex4.test(color) ||
-    hex3.test(color)
+    PATTERN_hex8.test(value) ||
+    PATTERN_hex6.test(value) ||
+    PATTERN_hex4.test(value) ||
+    PATTERN_hex3.test(value)
   ) {
     return makeColor("hex", value);
   } else if (rgba.test(color)) {
@@ -151,6 +151,8 @@ export function parse(color: string): BaseColor | undefined {
         return;
       }
       return makeColor("rgba", value);
+  } else if (PATTERN_rgba.test(value)) {
+    const match = color.match(PATTERN_rgba);
     }
   }
 }
