@@ -84,9 +84,10 @@ Digits in `#RRGGBB` are interpreted as a hexadecimal number.
 
 */
 
+type DecimalSpec = [number, number, number];
 interface NumericSpec {
   hex: string;
-  decimal: [number, number, number];
+  decimal: DecimalSpec;
 }
 
 interface Keywords {
@@ -390,3 +391,23 @@ const namedColors: Keywords = {
   yellow: { hex: "#FFFF00", decimal: [255, 255, 0] },
   yellowgreen: { hex: "#9ACD32", decimal: [154, 205, 50] },
 };
+
+interface Color {
+  id: string;
+  kind: "hex" | "named" | "rgb" | "rgba" | "hsl" | "hsla";
+  unparsed: string;
+  displayName: string;
+  normalized: DecimalSpec;
+}
+
+function parse(color: string): Color | undefined {
+  if (namedColors[color as keyof Keywords]) {
+    return {
+      id: color,
+      kind: "named",
+      unparsed: color,
+      displayName: color,
+      normalized: namedColors[color as keyof Keywords].decimal,
+    };
+  }
+}
