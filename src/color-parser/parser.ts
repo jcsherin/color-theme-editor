@@ -121,7 +121,8 @@ function containsOnlyPercentages(parts: string[]): boolean {
 
 export function parse(color: string): BaseColor | undefined {
   const value = color.trim();
-  if (keywords[color as keyof Keywords]) {
+
+  if (keywords[value as keyof Keywords]) {
     return makeColor("named", value);
   } else if (
     PATTERN_hex8.test(value) ||
@@ -154,7 +155,35 @@ export function parse(color: string): BaseColor | undefined {
     }
 
     return makeColor("rgba", value);
+  } else if (PATTERN_hsla.test(value)) {
+    const match = value.match(PATTERN_hsla);
+    if (!match) return;
+    if (!match[1]) return;
+
+    const parts = match[1].split(",");
+    if (parts.length < 3 || parts.length > 4) return;
+
+    const hue = parts[0];
+    if (Number.isNaN(parseNumber(hue))) return;
+
+    // saturation, lightness
+    if (!containsOnlyPercentages(parts.slice(1, 3))) return;
+
+    if (parts.length === 3) {
+      return makeColor("hsl", value);
+    }
+
+    const alpha = parts[3];
+    if (
+      Number.isNaN(parseNumber(alpha)) ||
+      Number.isNaN(parsePercentage(alpha))
+    ) {
+      return;
+    }
+
+    return makeColor("hsla", value);
   }
+  return;
 }
 
 function __debug(color: string) {
@@ -181,5 +210,7 @@ __debug("rgba(0, 255, 0, 100%)");
 __debug("rgba(0%, 100%, 0%, 100%)");
 __debug("rgba(0, 255%, 0, 100%)");
 __debug("rgba(0%, 100, 0%, 100%)");
+__debug("rgba(0, 255%, 0, abc)");
+__debug("rgba(0%, 100, 0%, abc)");
 __debug("rgba(0%, 100, 0%, 100%, 1)");
 __debug("rgba(100%, 1)");
