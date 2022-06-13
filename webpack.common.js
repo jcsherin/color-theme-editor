@@ -1,9 +1,13 @@
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
 module.exports = {
-  mode: "development",
   entry: "./src/index.tsx",
+  optimization: {
+    usedExports: true,
+  },
   module: {
     rules: [
       {
@@ -30,6 +34,7 @@ module.exports = {
       template: "./index.html",
       title: "Development",
     }),
+    new BundleAnalyzerPlugin(),
   ],
   stats: {
     errorDetails: true,
