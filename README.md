@@ -19,3 +19,4 @@ A UI component for creating a color theme. You can use it to group colors by nam
 - [ ] Add `onSubmit` handler for update form
 - [ ] Load example into form
 - [ ] Empty state for form
+- [ ] Improve `mergeState` -> `migrateState` (different algorithm)
