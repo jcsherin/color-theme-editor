@@ -8,15 +8,16 @@ A UI component for creating a color theme. You can use it to group colors by nam
 
 - [ ] Deploy and link to online demo in README
 - [ ] Add help copy inline within app
-- [ ] Color parser - support other color formats
+- [x] Color parser - support other color formats
 - [ ] Fix: missing trailing comma for groups in tree editor
 - [ ] Share URL
 - [ ] Download theme
 - [ ] Unquote keys in config
 - [x] Be able to add/remove colors & group names
-- [ ] Split webpack for dev & prod
+- [x] Split webpack for dev & prod
 - [x] Rewrite `mergeState`
 - [ ] Add `onSubmit` handler for update form
 - [ ] Load example into form
 - [ ] Empty state for form
 - [ ] Improve `mergeState` -> `migrateState` (different algorithm)
+- [ ] Wire new color parser into app
