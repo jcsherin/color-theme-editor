@@ -1,5 +1,3 @@
-const BundleAnalyzerPlugin =
-  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
@@ -34,7 +32,6 @@ module.exports = {
       template: "./index.html",
       title: "Development",
     }),
-    new BundleAnalyzerPlugin(),
   ],
   stats: {
     errorDetails: true,
