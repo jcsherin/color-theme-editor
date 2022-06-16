@@ -124,32 +124,6 @@ describe("App", () => {
     expect(tree.container.firstChild).toMatchSnapshot();
   });
 
-  it("Click on `create new` in theme editor to navigate back to form", async () => {
-    const { user } = setup(<App sampleFormData={sampleFormData} />);
-
-    const nextButton = screen.getByText(/group colors/i);
-    const loadExampleButton = screen.getByText(/load example/i);
-
-    await user.click(loadExampleButton);
-    await user.click(nextButton);
-
-    const createNewButton = screen.getByText(/create new/i);
-    await user.click(createNewButton);
-
-    const textboxGroupNames =
-      screen.getByPlaceholderText(/^One name per line$/);
-    const textboxColors = screen.getByPlaceholderText(
-      /^One color value per line$/
-    );
-
-    expect(screen.getByText(/group colors/i)).toBeInTheDocument();
-    expect(screen.getByText(/load example/i)).toBeInTheDocument();
-    expect(textboxGroupNames).toBeInTheDocument();
-    expect(textboxColors).toBeInTheDocument();
-    expect(textboxGroupNames).toHaveValue("");
-    expect(textboxColors).toHaveValue("");
-  });
-
   it("resets all the form values", async () => {
     const { user } = setup(<App sampleFormData={sampleFormData} />);
 
