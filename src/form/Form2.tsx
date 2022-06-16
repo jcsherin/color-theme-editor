@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from "react";
-import { FormData } from "./index";
+import { sampleFormData } from "../utils/example";
+import { FormData, FormHelper } from "./index";
 
 export function Form2({
   className,
@@ -22,6 +23,22 @@ export function Form2({
   return (
     <form onSubmit={handleSubmit}>
       <div className="h-10 mb-4 flex items-center">
+        <FormHelper
+          formData={state}
+          handleLoadExample={() =>
+            setState(() => {
+              return {
+                classnames: sampleFormData.classnames,
+                colors: sampleFormData.colors,
+              };
+            })
+          }
+          handleResetForm={() =>
+            setState(() => {
+              return { classnames: "", colors: "" };
+            })
+          }
+        />
         <button
           type="submit"
           className="justify-self-end ml-auto py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"

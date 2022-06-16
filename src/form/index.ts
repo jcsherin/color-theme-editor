@@ -3,6 +3,7 @@ export { FormEntry, createFormEntryUI } from "./FormEntry";
 export { Form } from "./Form";
 export { Form2 } from "./Form2";
 export { FormData, initFormData } from "./FormData";
+export { FormHelper } from "./FormHelper";
 
 export type { FormAction } from "./reducer";
 export { formReducer } from "./reducer";

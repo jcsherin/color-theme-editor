@@ -302,7 +302,10 @@ export const reducer = (
       9. Rewrite `formData` field with `action.formData`
       */
     case "mergeState": {
-      if (action.formData === state.formData) {
+      if (
+        action.formData.classnames === state.formData.classnames &&
+        action.formData.colors === state.formData.colors
+      ) {
         return state;
       }
 
