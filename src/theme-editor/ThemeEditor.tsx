@@ -45,7 +45,7 @@ export function deserializeEditUI(ui: {
   };
 }
 
-type GroupingMode = "submitForm" | "updateForm";
+type ViewMode = "viewGroupingUI" | "viewFormUI";
 
 export function ThemeEditor({
   state,
@@ -64,19 +64,19 @@ export function ThemeEditor({
   handleToggleStatus: (selectableItem: SelectableItem) => void;
   handleMergeState: (formData: FormData) => void;
 }) {
-  const [groupingMode, setGroupingMode] = useState<GroupingMode>("submitForm");
+  const [viewMode, setViewMode] = useState<ViewMode>("viewGroupingUI");
 
-  const groupingView = (groupingMode: GroupingMode) => {
-    switch (groupingMode) {
-      case "submitForm":
+  const selectView = (viewMode: ViewMode) => {
+    switch (viewMode) {
+      case "viewGroupingUI":
         return (
           <div>
             <div className="h-10 mb-4 flex items-center">
               <button
-                onClick={(_event) => setGroupingMode("updateForm")}
+                onClick={(_event) => setViewMode("viewFormUI")}
                 className="justify-self-end ml-auto py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
               >
-                Update
+                Edit
               </button>
             </div>
             <GroupColors
@@ -86,12 +86,12 @@ export function ThemeEditor({
             />
           </div>
         );
-      case "updateForm":
+      case "viewFormUI":
         return (
           <Form2
             formData={state.formData}
             handleUpdateForm={(formData) => {
-              setGroupingMode("submitForm");
+              setViewMode("viewGroupingUI");
               handleMergeState(formData);
             }}
           />
@@ -124,7 +124,7 @@ export function ThemeEditor({
             handleRemoveFromGroup={handleRemoveFromGroup}
           />
         </div>
-        {groupingView(groupingMode)}
+        {selectView(viewMode)}
       </div>
     </>
   );
