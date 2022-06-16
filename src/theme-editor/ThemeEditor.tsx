@@ -9,7 +9,7 @@ import {
 } from "./reducer";
 
 import type { ThemeEditorState, SerializedThemeEditorState } from "./reducer";
-import { Form, FormData } from "../form";
+import { Form2, FormData } from "../form";
 
 export interface EditUI {
   kind: "main";
@@ -88,17 +88,13 @@ export function ThemeEditor({
         );
       case "updateForm":
         return (
-          <div>
-            <div className="h-10 mb-4 flex items-center">
-              <button
-                onClick={(_event) => setGroupingMode("submitForm")}
-                className="justify-self-end ml-auto py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
-              >
-                Submit
-              </button>
-            </div>
-            <Form form={state.formData} handleUpdateForm={handleMergeState} />
-          </div>
+          <Form2
+            formData={state.formData}
+            handleUpdateForm={(formData) => {
+              setGroupingMode("submitForm");
+              handleMergeState(formData);
+            }}
+          />
         );
     }
   };
