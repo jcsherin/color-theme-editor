@@ -49,7 +49,6 @@ type ViewMode = "viewGroupingUI" | "viewFormUI";
 
 export function ThemeEditor({
   state,
-  handlePrevUI,
   handleRenameColor,
   handleRemoveFromGroup,
   handleAddToGroup,
@@ -57,7 +56,6 @@ export function ThemeEditor({
   handleMergeState,
 }: {
   state: ThemeEditorState;
-  handlePrevUI: () => void;
   handleRenameColor: (colorId: string, groupName: string) => void;
   handleRemoveFromGroup: (colorId: string, groupName: string) => void;
   handleAddToGroup: (groupName: string) => void;
@@ -104,12 +102,6 @@ export function ThemeEditor({
       <div className="grid grid-cols-2">
         <div>
           <div className="h-10 mb-4 flex items-center">
-            <button
-              onClick={(_event) => handlePrevUI()}
-              className="mr-4 py-1 px-4 rounded-sm bg-green-100 hover:bg-green-300 text-green-500 hover:text-green-700"
-            >
-              Create New
-            </button>
             <CopyButton
               label="Copy theme to clipboard"
               content={serializeForTailwind(state)}

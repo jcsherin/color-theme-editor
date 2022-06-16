@@ -63,13 +63,6 @@ export default function App({ sampleFormData }: { sampleFormData: FormData }) {
     });
   };
 
-  const handlePrevUI = () => {
-    dispatch({
-      kind: "batchOrdered",
-      actions: [{ kind: "prev" }, { kind: "resetForm" }],
-    });
-  };
-
   const renderWizard = (wizard: Wizard) => {
     switch (wizard.steps[wizard.currentIdx].kind) {
       case "formEntry": {
@@ -100,7 +93,6 @@ export default function App({ sampleFormData }: { sampleFormData: FormData }) {
         return (
           <ThemeEditor
             state={state}
-            handlePrevUI={handlePrevUI}
             handleRenameColor={(colorId, newName) =>
               dispatch({
                 kind: "renameColor",
