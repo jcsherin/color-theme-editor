@@ -6,7 +6,58 @@ import {
   SelectableItem,
   allGrouped,
   someSelected,
+  Group,
 } from "./index";
+
+interface NotificationBoxProps {
+  message: string;
+}
+
+function NotificationBox({ message }: NotificationBoxProps) {
+  return (
+    <p className="text-center py-6 border-dashed border-2 border-neutral-500">
+      {message}
+    </p>
+  );
+}
+
+interface GroupButtonsProps {
+  groups: Array<Group>;
+  allSelectablesGrouped: boolean;
+  disabled: boolean;
+  handleAddToGroup: (groupName: string) => void;
+}
+
+function GroupButtons({
+  groups,
+  allSelectablesGrouped,
+  disabled,
+  handleAddToGroup,
+}: GroupButtonsProps) {
+  if (groups.length === 0)
+    return (
+      <NotificationBox
+        message={`Click "Edit" to add one or more group names`}
+      />
+    );
+
+  if (allSelectablesGrouped)
+    return <NotificationBox message={`All colors have been grouped.`} />;
+
+  return (
+    <>
+      {groups.map((group) => (
+        <GroupButton
+          key={group.name}
+          className={`mr-4 mb-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300`}
+          groupName={group.name}
+          disabled={disabled}
+          handleClick={handleAddToGroup}
+        />
+      ))}
+    </>
+  );
+}
 
 interface GroupColorsProps {
   state: ThemeEditorState;
@@ -34,26 +85,17 @@ export function GroupColors({
       />
     ));
 
-  const colorGroupsButtonRow = allGrouped(state.selectables) ? (
-    <p className="text-2xl text-center bg-yellow-200 py-2">
-      Great! You've completed grouping all the colors.
-    </p>
-  ) : (
-    Array.from(state.groupMap.values()).map((colorGroup) => (
-      <GroupButton
-        key={colorGroup.name}
-        className={`mr-4 mb-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300`}
-        groupName={colorGroup.name}
-        disabled={!someSelected(state.selectables)}
-        handleClick={handleAddToGroup}
-      />
-    ))
-  );
-
   return (
     <div>
       <div className="flex flex-wrap mb-8">{colorListItems}</div>
-      <div className={"pl-2"}>{colorGroupsButtonRow}</div>
+      <div className={"pl-2"}>
+        <GroupButtons
+          groups={Array.from(state.groupMap.values())}
+          allSelectablesGrouped={allGrouped(state.selectables)}
+          disabled={!someSelected(state.selectables)}
+          handleAddToGroup={handleAddToGroup}
+        />
+      </div>
     </div>
   );
 }
