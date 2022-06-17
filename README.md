@@ -24,7 +24,7 @@ A UI component for creating a color theme. You can use it to group colors by nam
 - [ ] Remove wizard from app
 - [ ] Update app cache code (localStorage)
 - [x] Fix: missing trailing comma for groups in tree editor
-- [ ] Unquote keys in config
+- [x] Unquote keys in config (already implemented in copied config)
 - [ ] Add help copy inline within app
 - [ ] Share URL
 - [ ] Download theme
