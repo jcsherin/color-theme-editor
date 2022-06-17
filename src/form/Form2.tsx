@@ -3,13 +3,9 @@ import { sampleFormData } from "../utils/example";
 import { FormData, FormHelper } from "./index";
 
 export function Form2({
-  className,
-  style,
   formData,
   handleUpdateForm,
 }: {
-  className?: string;
-  style?: React.CSSProperties;
   formData: FormData;
   handleUpdateForm: (form: FormData) => void;
 }) {
@@ -24,6 +20,7 @@ export function Form2({
     <form onSubmit={handleSubmit}>
       <div className="h-10 mb-4 flex items-center">
         <FormHelper
+          className="justify-self-end ml-auto"
           formData={state}
           handleLoadExample={() =>
             setState(() => {
@@ -41,12 +38,12 @@ export function Form2({
         />
         <button
           type="submit"
-          className="justify-self-end ml-auto py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
+          className="py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
         >
           Submit
         </button>
       </div>
-      <div className={className} style={style}>
+      <div>
         <div className="mr-2 flex flex-col">
           <p className="mb-1">Enter Group Names</p>
           <textarea
