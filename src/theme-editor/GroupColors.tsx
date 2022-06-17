@@ -8,6 +8,7 @@ import {
   someSelected,
   Group,
 } from "./index";
+import { ColorMap } from "../color";
 
 interface NotificationBoxProps {
   message: string;
@@ -23,14 +24,14 @@ function NotificationBox({ message }: NotificationBoxProps) {
 
 interface GroupButtonsProps {
   groups: Array<Group>;
-  allSelectablesGrouped: boolean;
+  workCompleted: boolean;
   disabled: boolean;
   handleAddToGroup: (groupName: string) => void;
 }
 
 function GroupButtons({
   groups,
-  allSelectablesGrouped,
+  workCompleted,
   disabled,
   handleAddToGroup,
 }: GroupButtonsProps) {
@@ -41,7 +42,7 @@ function GroupButtons({
       />
     );
 
-  if (allSelectablesGrouped)
+  if (workCompleted)
     return <NotificationBox message={`All colors have been grouped.`} />;
 
   return (
@@ -59,6 +60,42 @@ function GroupButtons({
   );
 }
 
+interface SelectableButtonsProps {
+  selectables: SelectableItem[];
+  colorMap: ColorMap;
+  handleSelection: (selectableItem: SelectableItem) => void;
+}
+
+function SelectableButtons({
+  selectables,
+  colorMap,
+  handleSelection,
+}: SelectableButtonsProps) {
+  if (colorMap.size === 0)
+    return (
+      <div className="mb-8">
+        <NotificationBox message={`Click "Edit" to add color values.`} />
+      </div>
+    );
+
+  const buttons = selectables
+    .flatMap((selectableItem) => {
+      const color = colorMap.get(selectableItem.colorId);
+      return color ? [{ selectableItem: selectableItem, color: color }] : [];
+    })
+    .map(({ selectableItem, color }) => (
+      <Selectable
+        className="mr-1 mb-1 p-1"
+        key={selectableItem.colorId}
+        color={color}
+        selectableItem={selectableItem}
+        handleSelection={handleSelection}
+      />
+    ));
+
+  return <div className="flex flex-wrap mb-8">{buttons}</div>;
+}
+
 interface GroupColorsProps {
   state: ThemeEditorState;
   handleSelection: (selectableItem: SelectableItem) => void;
@@ -70,32 +107,22 @@ export function GroupColors({
   handleSelection,
   handleAddToGroup,
 }: GroupColorsProps) {
-  const colorListItems = state.selectables
-    .flatMap((colorListItem) => {
-      const color = state.colorMap.get(colorListItem.colorId);
-      return color ? [{ colorListItem, color: color }] : [];
-    })
-    .map(({ colorListItem, color }) => (
-      <Selectable
-        className="mr-1 mb-1 p-1"
-        key={colorListItem.colorId}
-        color={color}
-        selectableItem={colorListItem}
-        handleSelection={handleSelection}
-      />
-    ));
+  const workCompleted =
+    state.colorMap.size !== 0 && allGrouped(state.selectables);
 
   return (
     <div>
-      <div className="flex flex-wrap mb-8">{colorListItems}</div>
-      <div className={"pl-2"}>
-        <GroupButtons
-          groups={Array.from(state.groupMap.values())}
-          allSelectablesGrouped={allGrouped(state.selectables)}
-          disabled={!someSelected(state.selectables)}
-          handleAddToGroup={handleAddToGroup}
-        />
-      </div>
+      <SelectableButtons
+        selectables={state.selectables}
+        colorMap={state.colorMap}
+        handleSelection={handleSelection}
+      />
+      <GroupButtons
+        groups={Array.from(state.groupMap.values())}
+        workCompleted={workCompleted}
+        disabled={!someSelected(state.selectables)}
+        handleAddToGroup={handleAddToGroup}
+      />
     </div>
   );
 }
