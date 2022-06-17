@@ -192,9 +192,19 @@ export function TreeEditor({
 
       const contents = `"${colorGroup.name}" :`;
       return children.length === 0 ? (
-        <TreeNode key={colorGroup.name} contents={contents} />
+        <TreeNode
+          key={colorGroup.name}
+          contents={contents}
+          openMarker="{"
+          closeMarker="},"
+        />
       ) : (
-        <TreeNode key={colorGroup.name} contents={contents}>
+        <TreeNode
+          key={colorGroup.name}
+          contents={contents}
+          openMarker="{"
+          closeMarker="},"
+        >
           {children}
         </TreeNode>
       );
@@ -235,9 +245,11 @@ export function TreeEditor({
       ref={mouseRef}
       className="bg-slate-900 text-slate-200 font-mono px-4 py-4 mr-2 overflow-y-scroll"
     >
-      <TreeNode contents="module.exports =">
-        <TreeNode contents="theme:">
-          <TreeNode contents="colors:">{childNodes}</TreeNode>
+      <TreeNode contents="module.exports =" openMarker="{" closeMarker="}">
+        <TreeNode contents="theme:" openMarker="{" closeMarker="}">
+          <TreeNode contents="colors:" openMarker="{" closeMarker="}">
+            {childNodes}
+          </TreeNode>
         </TreeNode>
       </TreeNode>
     </div>

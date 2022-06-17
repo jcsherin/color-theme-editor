@@ -23,7 +23,7 @@ A UI component for creating a color theme. You can use it to group colors by nam
 - [ ] Improve `mergeState` -> `migrateState` (simplifiy existing algo)
 - [ ] Remove wizard from app
 - [ ] Update app cache code (localStorage)
-- [ ] Fix: missing trailing comma for groups in tree editor
+- [x] Fix: missing trailing comma for groups in tree editor
 - [ ] Unquote keys in config
 - [ ] Add help copy inline within app
 - [ ] Share URL

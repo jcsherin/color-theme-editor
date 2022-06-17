@@ -2,18 +2,22 @@ import React from "react";
 
 export function TreeNode({
   contents,
+  openMarker,
+  closeMarker,
   children,
 }: {
   contents: string;
+  openMarker: string;
+  closeMarker: string;
   children?: React.ReactNode;
 }) {
   return children ? (
     <div>
-      <p>{`${contents} {`}</p>
+      <p>{`${contents} ${openMarker}`}</p>
       <div className="ml-4">{children}</div>
-      <p>{"}"}</p>
+      <p>{closeMarker}</p>
     </div>
   ) : (
-    <p>{`${contents} {}`}</p>
+    <p>{`${contents} ${openMarker}${closeMarker}`}</p>
   );
 }
