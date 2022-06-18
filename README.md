@@ -21,8 +21,8 @@ A UI component for creating a color theme. You can use it to group colors by nam
 - [ ] Persist `viewMode` in `ThemeEditor` component across page reloads
 - [ ] Wire new color parser into app
 - [ ] Improve `mergeState` -> `migrateState` (simplifiy existing algo)
-- [ ] Remove wizard from app
-- [ ] Update app cache code (localStorage)
+- [x] Remove wizard from app
+- [x] Update app cache code (localStorage)
 - [x] Fix: missing trailing comma for groups in tree editor
 - [x] Unquote keys in config (already implemented in copied config)
 - [ ] Add help copy inline within app
