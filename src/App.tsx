@@ -13,17 +13,17 @@ import {
 
 function init({
   cacheKey,
-  themeEditorState,
+  initialState,
 }: {
   cacheKey: string;
-  themeEditorState: ThemeEditorState;
+  initialState: ThemeEditorState;
 }) {
   const cached = localStorage.getItem(cacheKey);
   if (cached) {
     return deserializeThemeEditorState(JSON.parse(cached));
   }
 
-  return themeEditorState;
+  return initialState;
 }
 
 const cacheKey = "themeEditorState";
@@ -33,7 +33,7 @@ export default function App() {
     reducer,
     {
       cacheKey: cacheKey,
-      themeEditorState: initThemeEditorState(),
+      initialState: initThemeEditorState(),
     },
     init
   );
