@@ -16,7 +16,7 @@ interface NotificationBoxProps {
 
 function NotificationBox({ message }: NotificationBoxProps) {
   return (
-    <p className="text-center py-6 border-dashed border-2 rounded-sm border-pink-400 text-pink-700">
+    <p className="text-center py-6 border-double border-2 rounded-sm border-pink-400 text-pink-700">
       {message}
     </p>
   );
@@ -24,27 +24,15 @@ function NotificationBox({ message }: NotificationBoxProps) {
 
 interface GroupButtonsProps {
   groups: Array<Group>;
-  workCompleted: boolean;
   disabled: boolean;
   handleAddToGroup: (groupName: string) => void;
 }
 
 function GroupButtons({
   groups,
-  workCompleted,
   disabled,
   handleAddToGroup,
 }: GroupButtonsProps) {
-  if (groups.length === 0)
-    return (
-      <NotificationBox
-        message={`Click "Edit" to add one or more group names`}
-      />
-    );
-
-  if (workCompleted)
-    return <NotificationBox message={`All colors have been grouped.`} />;
-
   return (
     <div className="grid grid-cols-3 gap-2">
       {groups.map((group) => (
@@ -71,13 +59,6 @@ function SelectableButtons({
   colorMap,
   handleSelection,
 }: SelectableButtonsProps) {
-  if (colorMap.size === 0)
-    return (
-      <div className="mb-8">
-        <NotificationBox message={`Click "Edit" to add color values.`} />
-      </div>
-    );
-
   const buttons = selectables
     .flatMap((selectableItem) => {
       const color = colorMap.get(selectableItem.colorId);
@@ -107,23 +88,37 @@ export function GroupColors({
   handleSelection,
   handleAddToGroup,
 }: GroupColorsProps) {
-  const workCompleted =
+  const groupsCount = Array.from(state.groupMap.values()).length;
+  const groupingWorkCompleted =
     state.colorMap.size !== 0 && allGrouped(state.selectables);
 
   return (
     <div>
+      {state.colorMap.size === 0 && (
+        <div className="mb-8">
+          <NotificationBox message={`Click "Edit" to add color values.`} />
+        </div>
+      )}
       <SelectableButtons
         selectables={state.selectables}
         colorMap={state.colorMap}
         handleSelection={handleSelection}
       />
-      <hr className="h-1 border border-t-red-500 border-dashed mb-8" />
-      <GroupButtons
-        groups={Array.from(state.groupMap.values())}
-        workCompleted={workCompleted}
-        disabled={!someSelected(state.selectables)}
-        handleAddToGroup={handleAddToGroup}
-      />
+      {groupsCount === 0 && (
+        <NotificationBox
+          message={`Click "Edit" to add one or more group names`}
+        />
+      )}
+      {groupingWorkCompleted && (
+        <NotificationBox message={`All colors have been grouped.`} />
+      )}
+      {groupsCount > 0 && !groupingWorkCompleted && (
+        <GroupButtons
+          groups={Array.from(state.groupMap.values())}
+          disabled={!someSelected(state.selectables)}
+          handleAddToGroup={handleAddToGroup}
+        />
+      )}
     </div>
   );
 }

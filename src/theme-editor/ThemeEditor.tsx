@@ -62,7 +62,7 @@ export function ThemeEditor({
   handleToggleStatus: (selectableItem: SelectableItem) => void;
   handleMergeState: (formData: FormData) => void;
 }) {
-  const [viewMode, setViewMode] = useState<Mode>("showForm");
+  const [viewMode, setViewMode] = useState<Mode>("showGrouping");
 
   const selectView = (viewMode: Mode) => {
     switch (viewMode) {
