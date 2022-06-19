@@ -38,7 +38,7 @@ function GroupButtons({
       {groups.map((group) => (
         <GroupButton
           key={group.name}
-          className={`py-1 px-4 rounded-sm border border-pink-700 hover:border-pink-400 text-pink-700 disabled:cursor-not-allowed disabled:border-slate-500 disabled:text-slate-700`}
+          className={`py-1 px-4 rounded-sm border border-pink-700 hover:border-pink-400 text-pink-700 disabled:cursor-not-allowed disabled:border-slate-500 disabled:text-slate-700 disabled:bg-slate-300`}
           groupName={group.name}
           disabled={disabled}
           handleClick={handleAddToGroup}
