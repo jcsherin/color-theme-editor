@@ -39,10 +39,14 @@ export function TreeEditor({
   state,
   handleRenameColor,
   handleRemoveFromGroup,
+  className,
+  style,
 }: {
   state: ThemeEditorState;
   handleRenameColor: (colorId: string, newName: string) => void;
   handleRemoveFromGroup: (colorId: string, gorupName: string) => void;
+  className: string;
+  style: React.CSSProperties;
 }) {
   const [focusRenameInput, setFocusRenameInput] = useState(false);
   const mouseRef = useRef<HTMLDivElement>(null);
@@ -241,10 +245,7 @@ export function TreeEditor({
   const childNodes = [colorGroupNodes, ...singleColorNodes];
 
   return (
-    <div
-      ref={mouseRef}
-      className="bg-slate-900 text-slate-200 font-mono px-4 py-4 mr-2 overflow-y-scroll"
-    >
+    <div ref={mouseRef} className={className} style={style}>
       <TreeNode contents="module.exports =" openMarker="{" closeMarker="}">
         <TreeNode contents="theme:" openMarker="{" closeMarker="}">
           <TreeNode contents="colors:" openMarker="{" closeMarker="}">

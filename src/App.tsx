@@ -46,7 +46,7 @@ export default function App() {
   }, [state]);
 
   return (
-    <div className="px-4 py-4 h-screen overflow-y-hidden bg-neutral-200">
+    <div className="h-screen bg-neutral-200">
       <ThemeEditor
         state={state}
         handleRenameColor={(colorId, newName) =>

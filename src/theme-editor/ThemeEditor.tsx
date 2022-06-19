@@ -99,21 +99,23 @@ export function ThemeEditor({
 
   return (
     <>
-      <div className="grid grid-cols-2">
-        <div>
-          <div className="h-10 mb-4 flex items-center">
+      <div className="grid grid-cols-2 h-full">
+        <div className="ml-4">
+          <div className="h-12 flex items-center">
             <CopyButton
-              label="Copy theme to clipboard"
+              label="Copy"
               content={serializeForTailwind(state)}
               expiryInMs={2000}
-              className="mr-4 text-blue-500 hover:text-blue-800"
-              flashClassName="text-green-800"
+              className="py-1 px-4 rounded-sm border border-pink-700 hover:border-pink-400 text-pink-700"
+              flashClassName="py-1 px-4 rounded-sm text-green-800 bg-green-100"
             />
           </div>
           <TreeEditor
             state={state}
             handleRenameColor={handleRenameColor}
             handleRemoveFromGroup={handleRemoveFromGroup}
+            className="bg-slate-900 text-slate-200 font-mono px-4 py-4 mr-2 mb-4 overflow-y-scroll"
+            style={{ height: `calc(100vh - 4rem)` }}
           />
         </div>
         {selectView(viewMode)}
