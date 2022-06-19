@@ -29,7 +29,7 @@ export function FormHelper({
             event.preventDefault();
             handleLoadExample();
           }}
-          className={`text-blue-500 hover:text-blue-700 mr-4 ${className}`}
+          className={`mr-4 ${className}`}
         >
           Load Example
         </button>

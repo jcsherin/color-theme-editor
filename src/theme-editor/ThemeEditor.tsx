@@ -62,14 +62,14 @@ export function ThemeEditor({
   handleToggleStatus: (selectableItem: SelectableItem) => void;
   handleMergeState: (formData: FormData) => void;
 }) {
-  const [viewMode, setViewMode] = useState<Mode>("showForm");
+  const [viewMode, setViewMode] = useState<Mode>("showGrouping");
 
   const selectView = (viewMode: Mode) => {
     switch (viewMode) {
       case "showGrouping":
         return (
           <div>
-            <div className="h-10 mb-4 flex items-center">
+            <div className="h-12 flex items-center">
               <button
                 onClick={(_event) => setViewMode("showForm")}
                 className="justify-self-end ml-auto py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
@@ -118,7 +118,7 @@ export function ThemeEditor({
             style={{ height: `calc(100vh - 4rem)` }}
           />
         </div>
-        {selectView(viewMode)}
+        <div className="mr-4">{selectView(viewMode)}</div>
       </div>
     </>
   );

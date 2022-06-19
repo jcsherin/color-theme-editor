@@ -46,17 +46,17 @@ function GroupButtons({
     return <NotificationBox message={`All colors have been grouped.`} />;
 
   return (
-    <>
+    <div className="grid grid-cols-3 gap-2">
       {groups.map((group) => (
         <GroupButton
           key={group.name}
-          className={`mr-4 mb-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300`}
+          className={`py-1 px-4 rounded-sm border border-pink-700 hover:border-pink-400 text-pink-700 disabled:cursor-not-allowed disabled:border-slate-500 disabled:text-slate-700`}
           groupName={group.name}
           disabled={disabled}
           handleClick={handleAddToGroup}
         />
       ))}
-    </>
+    </div>
   );
 }
 
@@ -117,6 +117,7 @@ export function GroupColors({
         colorMap={state.colorMap}
         handleSelection={handleSelection}
       />
+      <hr className="h-1 border border-t-red-500 border-dashed mb-8"/>
       <GroupButtons
         groups={Array.from(state.groupMap.values())}
         workCompleted={workCompleted}

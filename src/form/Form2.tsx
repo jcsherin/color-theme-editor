@@ -18,9 +18,9 @@ export function Form2({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="h-10 mb-4 flex items-center">
+      <div className="h-12 flex items-center">
         <FormHelper
-          className="justify-self-end ml-auto"
+          className="justify-self-end ml-auto py-1 px-4 rounded-sm border border-pink-700 hover:border-pink-400 text-pink-700"
           formData={state}
           handleLoadExample={() =>
             setState(() => {
@@ -44,11 +44,10 @@ export function Form2({
         </button>
       </div>
       <div>
-        <div className="mr-2 flex flex-col">
-          <p className="mb-1">Enter Group Names</p>
+        <div className="flex flex-col" style={{ height: `calc(100vh - 4rem)` }}>
           <textarea
-            className="grow w-full bg-slate-800 text-slate-200 font-mono h-80 py-2 px-4"
-            placeholder="One name per line"
+            className="grow w-full bg-slate-900 text-slate-200 font-mono h-80 py-2 px-4 mb-2"
+            placeholder="Enter one group name per line"
             value={state.classnames}
             onChange={(event) => {
               setState(() => {
@@ -56,12 +55,9 @@ export function Form2({
               });
             }}
           />
-        </div>
-        <div className="flex flex-col">
-          <p className="mb-1">Enter Color Values</p>
           <textarea
-            className="grow w-full bg-slate-800 text-slate-200 font-mono h-80 py-2 px-4"
-            placeholder="One color value per line"
+            className="grow w-full bg-slate-900 text-slate-200 font-mono h-80 py-2 px-4"
+            placeholder="Enter one color value per line"
             value={state.colors}
             onChange={(event) => {
               setState(() => {
