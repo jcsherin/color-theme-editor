@@ -103,11 +103,11 @@ export function ThemeEditor({
         <div className="ml-4">
           <div className="h-12 flex items-center">
             <CopyButton
-              label="Copy"
+              label="Copy Tailwind Config"
               content={serializeForTailwind(state)}
               expiryInMs={2000}
-              className="py-1 px-4 rounded-sm border border-pink-700 hover:border-pink-400 text-pink-700"
-              flashClassName="py-1 px-4 rounded-sm text-green-800 bg-green-100"
+              className="py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
+              flashClassName="py-1 px-4 rounded-sm text-green-50 bg-green-700"
             />
           </div>
           <TreeEditor

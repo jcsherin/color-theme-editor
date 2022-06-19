@@ -35,7 +35,7 @@ export default function CopyButton({
     );
 
   return copied ? (
-    <span className={flashClassName}>Copied!</span>
+    <span className={flashClassName}>Copied to clipboard!</span>
   ) : (
     <button className={className} onClick={handleCopy}>
       {label}
