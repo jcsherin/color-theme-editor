@@ -31,5 +31,4 @@ A UI component for creating a color theme. You can use it to group colors by nam
 - [ ] Fully derived selectable color items in grouping
 - [ ] Write a detailed README with screenshots
 - [ ] Link to related blog posts
-- [ ] Improve tests coverage for critical code paths
-- [ ] Refactor pass
+- [ ] Add integration tests for `App`
