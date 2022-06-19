@@ -16,7 +16,7 @@ interface NotificationBoxProps {
 
 function NotificationBox({ message }: NotificationBoxProps) {
   return (
-    <p className="text-center py-6 border-dashed border-2 border-neutral-500">
+    <p className="text-center py-6 border-dashed border-2 rounded-sm border-pink-400 text-pink-700">
       {message}
     </p>
   );
@@ -117,7 +117,7 @@ export function GroupColors({
         colorMap={state.colorMap}
         handleSelection={handleSelection}
       />
-      <hr className="h-1 border border-t-red-500 border-dashed mb-8"/>
+      <hr className="h-1 border border-t-red-500 border-dashed mb-8" />
       <GroupButtons
         groups={Array.from(state.groupMap.values())}
         workCompleted={workCompleted}
