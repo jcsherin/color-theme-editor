@@ -16,7 +16,7 @@ interface NotificationBoxProps {
 
 function NotificationBox({ message }: NotificationBoxProps) {
   return (
-    <p className="text-center py-6 border-double border-2 rounded-sm border-pink-400 text-pink-700">
+    <p className="text-center py-6 border-double border-4 rounded-sm border-pink-400 text-pink-700">
       {message}
     </p>
   );
