@@ -8,6 +8,7 @@
     "test": "jest",
     "build": "webpack --config webpack.prod.js",
     "postbuild": "./node_modules/.bin/tailwindcss -i ./src/index.css -o ./dist/index.css --minify",
+    "startcss": "./node_modules/.bin/tailwindcss -i ./src/index.css -o ./dist/index.css --watch",
     "start": "webpack serve --open --config webpack.dev.js",
     "predeploy": "echo 'Make sure to \"npm run build\" before this step!'",
     "deploy": "cd dist && surge --domain https://melted-powder.surge.sh/"
