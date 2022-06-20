@@ -16,7 +16,7 @@ A UI component for creating a color theme. You can use it to group colors by nam
 - [x] Add `onSubmit` handler for update form
 - [x] Load example into form
 - [x] Empty state for form
-- [ ] Fix: Grid Layout
+- [x] Fix: Grid Layout
 - [x] Add views for empty/partial form input in grouping
 - [ ] Persist `viewMode` in `ThemeEditor` component across page reloads
 - [ ] Wire new color parser into app
@@ -32,3 +32,4 @@ A UI component for creating a color theme. You can use it to group colors by nam
 - [ ] Write a detailed README with screenshots
 - [ ] Link to related blog posts
 - [ ] Add integration tests for `App`
+- [ ] Improve first time user experience
