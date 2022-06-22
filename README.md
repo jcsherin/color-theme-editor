@@ -18,18 +18,18 @@ A UI component for creating a color theme. You can use it to group colors by nam
 - [x] Empty state for form
 - [x] Fix: Grid Layout
 - [x] Add views for empty/partial form input in grouping
-- [ ] Persist `viewMode` in `ThemeEditor` component across page reloads
-- [ ] Wire new color parser into app
-- [ ] Improve `mergeState` -> `migrateState` (simplifiy existing algo)
 - [x] Remove wizard from app
 - [x] Update app cache code (localStorage)
 - [x] Fix: missing trailing comma for groups in tree editor
 - [x] Unquote keys in config (already implemented in copied config)
-- [ ] Add help copy inline within app
 - [ ] Share URL
 - [ ] Download theme
-- [ ] Fully derived selectable color items in grouping
+- [ ] Improve `mergeState` -> `migrateState` (simplifiy existing algo)
+- [ ] Wire new color parser into app (formats: RGBA, HSLA, Keywords)
+  - [ ] Update load example with newly supported formats
 - [ ] Write a detailed README with screenshots
-- [ ] Link to related blog posts
 - [ ] Add integration tests for `App`
 - [ ] Improve first time user experience
+  - [ ] Show color value parse errors
+  - [ ] Turn on edit mode for first grouped color
+  - [ ] Use space in grouping UI column for usage instructions
