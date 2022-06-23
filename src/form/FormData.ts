@@ -1,8 +1,8 @@
 export interface FormData {
-  classnames: string;
+  groupNames: string;
   colors: string;
 }
 
 export function initFormData(): FormData {
-  return { classnames: "", colors: "" };
+  return { groupNames: "", colors: "" };
 }

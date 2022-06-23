@@ -4,8 +4,8 @@ import { FormData } from "./index";
 type FillState = "empty" | "partiallyFilled" | "filled";
 
 function toFillState(form: FormData): FillState {
-  if (form.classnames.length === 0 && form.colors.length === 0) return "empty";
-  if (form.classnames.length === 0 || form.colors.length === 0)
+  if (form.groupNames.length === 0 && form.colors.length === 0) return "empty";
+  if (form.groupNames.length === 0 || form.colors.length === 0)
     return "partiallyFilled";
   return "filled";
 }

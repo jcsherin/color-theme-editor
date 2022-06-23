@@ -19,11 +19,11 @@ export function Form({
         <textarea
           className="grow w-full bg-slate-800 text-slate-200 font-mono h-80 py-2 px-4"
           placeholder="One name per line"
-          value={form.classnames}
+          value={form.groupNames}
           onChange={(event) => {
             handleUpdateForm({
               ...form,
-              classnames: event.currentTarget.value,
+              groupNames: event.currentTarget.value,
             });
           }}
         />

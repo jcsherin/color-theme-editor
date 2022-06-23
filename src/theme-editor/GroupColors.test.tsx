@@ -15,7 +15,7 @@ function setup(jsx: JSX.Element) {
 describe("Component for adding selected colors to a group", () => {
   it("renders a list of selectable colors and buttons with group names", () => {
     const state = parse({
-      classnames: ["primary", "secondary"].join("\n"),
+      groupNames: ["primary", "secondary"].join("\n"),
       colors: testColors(6).join("\n"),
     });
 
@@ -33,7 +33,7 @@ describe("Component for adding selected colors to a group", () => {
   it("adding colors to any group is disabled when no colors are selected", async () => {
     const groupNames = ["primary", "secondary"];
     const state = parse({
-      classnames: groupNames.join("\n"),
+      groupNames: groupNames.join("\n"),
       colors: testColors(6).join("\n"),
     });
 

@@ -118,7 +118,7 @@ export function serializeForTailwind({
 
 export function parse(formData: FormData): ThemeEditorState {
   const colorMap = makeColorMap(parseColors(formData.colors));
-  const groupMap = makeGroupMap(parseColorGroups(formData.classnames));
+  const groupMap = makeGroupMap(parseColorGroups(formData.groupNames));
   const selectables = Array.from(colorMap.keys()).map(makeSelectable);
   return {
     formData,
@@ -303,7 +303,7 @@ export const reducer = (
       */
     case "mergeState": {
       if (
-        action.formData.classnames === state.formData.classnames &&
+        action.formData.groupNames === state.formData.groupNames &&
         action.formData.colors === state.formData.colors
       ) {
         return state;
@@ -344,10 +344,10 @@ export const reducer = (
         ),
       };
 
-      const prevGroups = parseColorGroups(state.formData.classnames).map(
+      const prevGroups = parseColorGroups(state.formData.groupNames).map(
         (group) => JSON.stringify(group)
       );
-      const currGroups = parseColorGroups(action.formData.classnames).map(
+      const currGroups = parseColorGroups(action.formData.groupNames).map(
         (group) => JSON.stringify(group)
       );
 

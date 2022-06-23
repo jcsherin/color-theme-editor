@@ -21,11 +21,11 @@ export function formReducer(_form: FormData, action: FormAction): FormData {
   switch (action.kind) {
     case "loadExample":
       return {
-        classnames: action.classnames,
+        groupNames: action.classnames,
         colors: action.colors,
       };
     case "resetForm":
-      return { classnames: "", colors: "" };
+      return { groupNames: "", colors: "" };
     case "updateForm":
       return action.formData;
   }

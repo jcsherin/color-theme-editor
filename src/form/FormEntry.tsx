@@ -12,8 +12,8 @@ export type FormEntryUISerialized = FormEntryUI;
 type FillState = "empty" | "partiallyFilled" | "filled";
 
 function toFillState(form: FormData): FillState {
-  if (form.classnames.length === 0 && form.colors.length === 0) return "empty";
-  if (form.classnames.length === 0 || form.colors.length === 0)
+  if (form.groupNames.length === 0 && form.colors.length === 0) return "empty";
+  if (form.groupNames.length === 0 || form.colors.length === 0)
     return "partiallyFilled";
   return "filled";
 }
@@ -26,7 +26,7 @@ export function createFormEntryUI(state: FormData): FormEntryUI {
 }
 
 function isEmptyForm(form: FormData): boolean {
-  return form.classnames.trim().length === 0 || form.colors.trim().length === 0;
+  return form.groupNames.trim().length === 0 || form.colors.trim().length === 0;
 }
 
 function HelperAction({

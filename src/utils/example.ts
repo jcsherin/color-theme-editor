@@ -559,7 +559,7 @@ let tailwindColors = Array.from(
 );
 
 export const sampleFormData: FormData = {
-  classnames: ["primary", "secondary", "notification", "background"].join("\n"),
+  groupNames: ["primary", "secondary", "notification", "background"].join("\n"),
   colors: shuffle(tailwindColors).slice(0, 5).join("\n"),
 };
 

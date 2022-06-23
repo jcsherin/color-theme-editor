@@ -25,14 +25,14 @@ export function Form2({
           handleLoadExample={() =>
             setState(() => {
               return {
-                classnames: sampleFormData.classnames,
+                groupNames: sampleFormData.groupNames,
                 colors: sampleFormData.colors,
               };
             })
           }
           handleResetForm={() =>
             setState(() => {
-              return { classnames: "", colors: "" };
+              return { groupNames: "", colors: "" };
             })
           }
         />
@@ -48,10 +48,10 @@ export function Form2({
           <textarea
             className="grow w-full bg-slate-900 text-slate-200 font-mono h-80 py-2 px-4 mb-2"
             placeholder="Enter one group name per line"
-            value={state.classnames}
+            value={state.groupNames}
             onChange={(event) => {
               setState(() => {
-                return { ...state, classnames: event.target.value };
+                return { ...state, groupNames: event.target.value };
               });
             }}
           />
