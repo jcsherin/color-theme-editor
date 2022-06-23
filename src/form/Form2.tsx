@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from "react";
-import { sampleFormData } from "../utils/example";
+import { stagedColorTheme } from "../utils/example";
 import { FormData, FormHelper } from "./index";
 
 export function Form2({
@@ -25,8 +25,8 @@ export function Form2({
           handleLoadExample={() =>
             setState(() => {
               return {
-                groupNames: sampleFormData.groupNames,
-                colors: sampleFormData.colors,
+                groupNames: stagedColorTheme.groupNames,
+                colors: stagedColorTheme.colors,
               };
             })
           }

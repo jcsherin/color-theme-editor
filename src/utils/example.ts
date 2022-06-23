@@ -554,9 +554,63 @@ let tailwind = {
   "blue-grey-900-contrast": "white",
 };
 
+const colors = {
+  red: [
+    "#ffcdd2",
+    "#ef9a9a",
+    "#e57373",
+    "#ef5350",
+    "#f44336",
+    "#e53935",
+    "#d32f2f",
+    "#c62828",
+    "#b71c1c",
+  ],
+  blue: [
+    "#bbdefb",
+    "#90caf9",
+    "#64b5f6",
+    "#42a5f5",
+    "#2196f3",
+    "#1e88e5",
+    "#1976d2",
+    "#1565c0",
+    "#0d47a1",
+  ],
+  green: [
+    "#c8e6c9",
+    "#a5d6a7",
+    "#81c784",
+    "#66bb6a",
+    "#4caf50",
+    "#43a047",
+    "#388e3c",
+    "#2e7d32",
+    "#1b5e20",
+  ],
+  brown: [
+    "#d7ccc8",
+    "#bcaaa4",
+    "#a1887f",
+    "#8d6e63",
+    "#795548",
+    "#6d4c41",
+    "#5d4037",
+    "#4e342e",
+    "#3e2723",
+  ],
+};
+
 let tailwindColors = Array.from(
   new Set(Object.values(tailwind).filter((x) => x.startsWith("#")))
 );
+
+export const stagedColorTheme: FormData = {
+  groupNames: Object.keys(colors).join("\n"),
+  colors: Object.values(colors)
+    .flatMap((arr) => arr.slice(4))
+    .join("\n"),
+};
 
 export const sampleFormData: FormData = {
   groupNames: ["primary", "secondary", "notification", "background"].join("\n"),
