@@ -202,6 +202,17 @@ const parsedColor: ParsedColor = {
 };
 console.log(parsedColor);
 
+interface ParseError {
+  value: string;
+  message: string;
+}
+
+const notHexColor: ParseError = {
+  value: "#ab",
+  message: "is not a well formatted hexadecimal",
+};
+console.log(notHexColor);
+
 export type ColorFormat = "hex" | "named" | "rgb" | "rgba" | "hsl" | "hsla";
 export interface BaseColor {
   kind: ColorFormat;
