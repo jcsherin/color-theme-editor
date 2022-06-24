@@ -88,12 +88,16 @@ import type { Keywords } from "./keywords";
 import { keywords } from "./keywords";
 
 /**
- * Clamps value between a minimum & maximum value
+ * Use clamp to restrict a value to range that is defined by the minimum and
+ * maximum values.
  *
  * @param value
  * @param min
  * @param max
- * @returns Clamped value between min & max
+ * @returns the minimum value if the given value is less than the minimum.
+ * Returns the maximum value if the given value is greater than the maximum
+ * value. Returns the given value if it is within the minimum and maximum
+ * range.
  */
 function clamp(value: number, min: number, max: number): number {
   if (Math.floor(value) < min) return min;
@@ -110,10 +114,10 @@ const PERCENTAGE_MIN = 0;
 const PERCENTAGE_MAX = 100;
 
 /**
- * Clamps percentage to a value between 0% and 100%.
+ * Restrict the given percentage value between 0% and 100%.
  *
  * @param percentage
- * @returns Clamped percentage
+ * @returns a clamped percentage value
  */
 function clampPercentage(percentage: number): number {
   return clamp(percentage, PERCENTAGE_MIN, PERCENTAGE_MAX);
@@ -142,9 +146,8 @@ const ALPHA_MIN = 0;
 const ALPHA_MAX = 1;
 
 /**
- * Create a {Alpha} value.
- * A number is clamped between 0 & 1.
- * A percentage is clamped between 0% & 100%.
+ * The range of alpha is from 0 to 1 when a number is provided. The range of
+ * alpha is from 0% to 100% when a percentage is provided.
  *
  * @param alpha
  * @returns {Alpha}
