@@ -89,6 +89,7 @@ import { keywords } from "./keywords";
 
 interface Percentage {
   value: number;
+  stringify: () => string;
 }
 
 const PERCENTAGE_MIN = 0;
@@ -97,24 +98,26 @@ const PERCENTAGE_MAX = 100;
 /**
  * Clamps percentage to a value between minimum & maximum
  *
- * @param value
- * @returns Clamped value
+ * @param percentage
+ * @returns Clamped percentage
  */
-function clampPercentage(value: number): number {
-  if (Math.floor(value) < PERCENTAGE_MIN) return PERCENTAGE_MIN;
-  if (Math.ceil(value) > PERCENTAGE_MAX) return PERCENTAGE_MAX;
-  return value;
+function clampPercentage(percentage: number): number {
+  if (Math.floor(percentage) < PERCENTAGE_MIN) return PERCENTAGE_MIN;
+  if (Math.ceil(percentage) > PERCENTAGE_MAX) return PERCENTAGE_MAX;
+  return percentage;
 }
 
 /**
  * Create a {Percentage} value
  *
- * @param value
+ * @param percentage
  * @returns {Percentage}
  */
-function createPercentage(value: number): Percentage {
+function createPercentage(percentage: number): Percentage {
+  const value = clampPercentage(percentage);
   return {
-    value: clampPercentage(value),
+    value: value,
+    stringify: () => `${value}%`,
   };
 }
 
@@ -290,3 +293,4 @@ __test(createPercentage(100.1), { value: 100 }, "100%");
 __test(createPercentage(100.01), { value: 100 }, "100%");
 __test(createPercentage(100.001), { value: 100 }, "100%");
 __test(createPercentage(100.0001), { value: 100 }, "100%");
+__test(createPercentage(33.34).stringify(), "33.34%", "stringify 33.34%");
