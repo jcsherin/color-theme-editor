@@ -87,12 +87,42 @@ Digits in `#RRGGBB` are interpreted as a hexadecimal number.
 import type { Keywords } from "./keywords";
 import { keywords } from "./keywords";
 
+interface Percentage {
+  value: number;
+}
+
+const PERCENTAGE_MIN = 0;
+const PERCENTAGE_MAX = 100;
+
+/**
+ * Clamps percentage to a value between minimum & maximum
+ *
+ * @param value
+ * @returns Clamped value
+ */
+function clampPercentage(value: number): number {
+  if (Math.floor(value) < PERCENTAGE_MIN) return PERCENTAGE_MIN;
+  if (Math.ceil(value) > PERCENTAGE_MAX) return PERCENTAGE_MAX;
+  return value;
+}
+
+/**
+ * Create a {Percentage} value
+ *
+ * @param value
+ * @returns {Percentage}
+ */
+function createPercentage(value: number): Percentage {
+  return {
+    value: clampPercentage(value),
+  };
+}
+
 export type ColorFormat = "hex" | "named" | "rgb" | "rgba" | "hsl" | "hsla";
 export interface BaseColor {
   kind: ColorFormat;
   value: string;
 }
-
 function makeColor(kind: ColorFormat, value: string): BaseColor {
   return { kind, value };
 }
@@ -229,3 +259,34 @@ __debug("hsla(0%, 0%, 100%, 100%)");
 __debug("hsla(90, 0, 100%, 100%)");
 __debug("hsla(90, 0%, 100, 100%)");
 __debug("hsla(90, 0%, 100%, hex)");
+
+function __test(expected: any, actual: any, desc: string) {
+  if (JSON.stringify(expected) === JSON.stringify(actual)) {
+    console.log(`Pass: ${desc}`);
+    console.log(`actual: ${JSON.stringify(actual, null, 2)}`);
+    console.log(`------`);
+    return;
+  }
+
+  console.error(`FAIL: ${desc}`);
+  console.log(`expected: ${JSON.stringify(expected, null, 2)}`);
+  console.log(`actual: ${JSON.stringify(actual, null, 2)}`);
+  console.log(`------`);
+}
+
+__test(createPercentage(-0.1), { value: 0 }, "-0.1%");
+__test(createPercentage(-0.01), { value: 0 }, "-0.1%");
+__test(createPercentage(-0.001), { value: 0 }, "-0.1%");
+__test(createPercentage(-0.0001), { value: 0 }, "-0.1%");
+__test(createPercentage(0.1), { value: 0.1 }, "0.1%");
+__test(createPercentage(0.01), { value: 0.01 }, "0.01%");
+__test(createPercentage(0.001), { value: 0.001 }, "0.001%");
+__test(createPercentage(0.0001), { value: 0.0001 }, "0.0001%");
+__test(createPercentage(99.9), { value: 99.9 }, "99.9%");
+__test(createPercentage(99.99), { value: 99.99 }, "99.99%");
+__test(createPercentage(99.999), { value: 99.999 }, "99.999%");
+__test(createPercentage(99.9999), { value: 99.9999 }, "99.9999%");
+__test(createPercentage(100.1), { value: 100 }, "100%");
+__test(createPercentage(100.01), { value: 100 }, "100%");
+__test(createPercentage(100.001), { value: 100 }, "100%");
+__test(createPercentage(100.0001), { value: 100 }, "100%");
