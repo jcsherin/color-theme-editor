@@ -185,9 +185,22 @@ interface HSLA {
   alpha: Alpha;
 }
 
-interface Hex {
+interface HexColor {
   value: string;
 }
+
+interface NamedColor {
+  value: keyof Keywords;
+}
+
+interface ParsedColor {
+  value: HexColor | NamedColor | RGBA | HSLA;
+}
+
+const parsedColor: ParsedColor = {
+  value: { value: "aliceblue" as keyof Keywords },
+};
+console.log(parsedColor);
 
 export type ColorFormat = "hex" | "named" | "rgb" | "rgba" | "hsl" | "hsla";
 export interface BaseColor {
