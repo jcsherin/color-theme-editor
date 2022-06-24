@@ -87,6 +87,20 @@ Digits in `#RRGGBB` are interpreted as a hexadecimal number.
 import type { Keywords } from "./keywords";
 import { keywords } from "./keywords";
 
+/**
+ * Clamps value between a minimum & maximum value
+ *
+ * @param value
+ * @param min
+ * @param max
+ * @returns Clamped value between min & max
+ */
+function clamp(value: number, min: number, max: number): number {
+  if (Math.floor(value) < min) return min;
+  if (Math.ceil(value) > max) return max;
+  return value;
+}
+
 interface Percentage {
   value: number;
   stringify: () => string;
@@ -96,29 +110,50 @@ const PERCENTAGE_MIN = 0;
 const PERCENTAGE_MAX = 100;
 
 /**
- * Clamps percentage to a value between minimum & maximum
+ * Clamps percentage to a value between 0% and 100%.
  *
  * @param percentage
  * @returns Clamped percentage
  */
 function clampPercentage(percentage: number): number {
-  if (Math.floor(percentage) < PERCENTAGE_MIN) return PERCENTAGE_MIN;
-  if (Math.ceil(percentage) > PERCENTAGE_MAX) return PERCENTAGE_MAX;
-  return percentage;
+  return clamp(percentage, PERCENTAGE_MIN, PERCENTAGE_MAX);
 }
 
 /**
- * Create a {Percentage} value
+ * Create a {Percentage} value.
  *
  * @param percentage
  * @returns {Percentage}
  */
 function createPercentage(percentage: number): Percentage {
   const value = clampPercentage(percentage);
+
   return {
     value: value,
     stringify: () => `${value}%`,
   };
+}
+
+interface Alpha {
+  value: number | Percentage;
+}
+
+const ALPHA_MIN = 0;
+const ALPHA_MAX = 1;
+
+/**
+ * Create a {Alpha} value.
+ * A number is clamped between 0 & 1.
+ * A percentage is clamped between 0% & 100%.
+ *
+ * @param alpha
+ * @returns {Alpha}
+ */
+function createAlpha(alpha: number | Percentage): Alpha {
+  const value =
+    typeof alpha === "number" ? clamp(alpha, ALPHA_MIN, ALPHA_MAX) : alpha;
+
+  return { value };
 }
 
 export type ColorFormat = "hex" | "named" | "rgb" | "rgba" | "hsl" | "hsla";
@@ -278,9 +313,9 @@ function __test(expected: any, actual: any, desc: string) {
 }
 
 __test(createPercentage(-0.1), { value: 0 }, "-0.1%");
-__test(createPercentage(-0.01), { value: 0 }, "-0.1%");
-__test(createPercentage(-0.001), { value: 0 }, "-0.1%");
-__test(createPercentage(-0.0001), { value: 0 }, "-0.1%");
+__test(createPercentage(-0.01), { value: 0 }, "-0.01%");
+__test(createPercentage(-0.001), { value: 0 }, "-0.001%");
+__test(createPercentage(-0.0001), { value: 0 }, "-0.0001%");
 __test(createPercentage(0.1), { value: 0.1 }, "0.1%");
 __test(createPercentage(0.01), { value: 0.01 }, "0.01%");
 __test(createPercentage(0.001), { value: 0.001 }, "0.001%");
@@ -294,3 +329,20 @@ __test(createPercentage(100.01), { value: 100 }, "100%");
 __test(createPercentage(100.001), { value: 100 }, "100%");
 __test(createPercentage(100.0001), { value: 100 }, "100%");
 __test(createPercentage(33.34).stringify(), "33.34%", "stringify 33.34%");
+
+__test(createAlpha(-0.1), { value: 0 }, "-0.1");
+__test(createAlpha(-0.01), { value: 0 }, "-0.01");
+__test(createAlpha(-0.001), { value: 0 }, "-0.001");
+__test(createAlpha(-0.001), { value: 0 }, "-0.0001");
+__test(createAlpha(0.1), { value: 0.1 }, "0.1");
+__test(createAlpha(0.01), { value: 0.001 }, "0.01");
+__test(createAlpha(0.001), { value: 0.001 }, "0.001");
+__test(createAlpha(0.001), { value: 0.0001 }, "0.0001");
+__test(createAlpha(0.9), { value: 0.9 }, "0.9");
+__test(createAlpha(0.99), { value: 0.99 }, "0.99");
+__test(createAlpha(0.999), { value: 0.999 }, "0.999");
+__test(createAlpha(0.9999), { value: 0.9999 }, "0.9999");
+__test(createAlpha(1.1), { value: 1 }, "1.1");
+__test(createAlpha(1.01), { value: 1 }, "1.01");
+__test(createAlpha(1.001), { value: 1 }, "1.001");
+__test(createAlpha(1.0001), { value: 1 }, "1.0001");
