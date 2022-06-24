@@ -110,8 +110,10 @@ interface Percentage {
   stringify: () => string;
 }
 
-const PERCENTAGE_MIN = 0;
-const PERCENTAGE_MAX = 100;
+enum PercentageRange {
+  Min = 0,
+  Max = 100,
+}
 
 /**
  * Restrict the given percentage value between 0% and 100%.
@@ -120,7 +122,7 @@ const PERCENTAGE_MAX = 100;
  * @returns a clamped percentage value
  */
 function clampPercentage(percentage: number): number {
-  return clamp(percentage, PERCENTAGE_MIN, PERCENTAGE_MAX);
+  return clamp(percentage, PercentageRange.Min, PercentageRange.Max);
 }
 
 /**
@@ -142,8 +144,10 @@ interface Alpha {
   value: number | Percentage;
 }
 
-const ALPHA_MIN = 0;
-const ALPHA_MAX = 1;
+enum AlphaRange {
+  Min = 0,
+  Max = 1,
+}
 
 /**
  * The range of alpha is from 0 to 1 when a number is provided. The range of
@@ -154,7 +158,9 @@ const ALPHA_MAX = 1;
  */
 function createAlpha(alpha: number | Percentage): Alpha {
   const value =
-    typeof alpha === "number" ? clamp(alpha, ALPHA_MIN, ALPHA_MAX) : alpha;
+    typeof alpha === "number"
+      ? clamp(alpha, AlphaRange.Min, AlphaRange.Max)
+      : alpha;
 
   return { value };
 }
@@ -338,9 +344,9 @@ __test(createAlpha(-0.01), { value: 0 }, "-0.01");
 __test(createAlpha(-0.001), { value: 0 }, "-0.001");
 __test(createAlpha(-0.001), { value: 0 }, "-0.0001");
 __test(createAlpha(0.1), { value: 0.1 }, "0.1");
-__test(createAlpha(0.01), { value: 0.001 }, "0.01");
+__test(createAlpha(0.01), { value: 0.01 }, "0.01");
 __test(createAlpha(0.001), { value: 0.001 }, "0.001");
-__test(createAlpha(0.001), { value: 0.0001 }, "0.0001");
+__test(createAlpha(0.0001), { value: 0.0001 }, "0.0001");
 __test(createAlpha(0.9), { value: 0.9 }, "0.9");
 __test(createAlpha(0.99), { value: 0.99 }, "0.99");
 __test(createAlpha(0.999), { value: 0.999 }, "0.999");
