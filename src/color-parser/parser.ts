@@ -110,7 +110,7 @@ interface Percentage {
   stringify: () => string;
 }
 
-enum PercentageRange {
+const enum PercentageRange {
   Min = 0,
   Max = 100,
 }
@@ -144,7 +144,7 @@ interface Alpha {
   value: number | Percentage;
 }
 
-enum AlphaRange {
+const enum AlphaRange {
   Min = 0,
   Max = 1,
 }
