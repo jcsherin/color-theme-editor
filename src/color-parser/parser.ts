@@ -189,17 +189,21 @@ interface HexColor {
   value: string;
 }
 
+function createHexColor(value: string): HexColor {
+  return { value };
+}
+
 interface NamedColor {
   value: keyof Keywords;
 }
 
-interface ParsedColor {
-  value: HexColor | NamedColor | RGBA | HSLA;
+function createNamedColor(value: string): NamedColor {
+  return { value: value as keyof Keywords };
 }
 
-const parsedColor: ParsedColor = {
-  value: { value: "aliceblue" as keyof Keywords },
-};
+type ParsedColor = HexColor | NamedColor | RGBA | HSLA;
+
+const parsedColor: ParsedColor = createNamedColor("aliceblue");
 console.log(parsedColor);
 
 interface ParseError {
@@ -222,10 +226,13 @@ function makeColor(kind: ColorFormat, value: string): BaseColor {
   return { kind, value };
 }
 
-const PATTERN_hex8 = /^#[0-9A-Fa-f]{8}$/;
-const PATTERN_hex6 = /^#[0-9A-Fa-f]{6}$/;
-const PATTERN_hex4 = /^#[0-9A-Fa-f]{4}$/;
-const PATTERN_hex3 = /^#[0-9A-Fa-f]{3}$/;
+const HexPatterns = [
+  /^#[0-9A-Fa-f]{8}$/,
+  /^#[0-9A-Fa-f]{6}$/,
+  /^#[0-9A-Fa-f]{4}$/,
+  /^#[0-9A-Fa-f]{3}$/,
+];
+
 const PATTERN_rgba = /^rgba?\((.*)\)$/;
 const PATTERN_hsla = /^hsla?\((.*)\)$/;
 
@@ -244,19 +251,22 @@ function isAllPercentages(parts: string[]): boolean {
   return parts.map(parsePercentage).every((num) => !Number.isNaN(num));
 }
 
-export function parse(color: string): BaseColor | undefined {
+export function parse(
+  color: string
+): ParsedColor | ParseError | BaseColor | undefined {
   const value = color.trim();
 
+  // <named-color>
   if (keywords[value as keyof Keywords]) {
-    return makeColor("named", value);
-  } else if (
-    PATTERN_hex8.test(value) ||
-    PATTERN_hex6.test(value) ||
-    PATTERN_hex4.test(value) ||
-    PATTERN_hex3.test(value)
-  ) {
-    return makeColor("hex", value);
-  } else if (PATTERN_rgba.test(value)) {
+    return createNamedColor(value);
+  }
+
+  // <hex-color>
+  if (HexPatterns.some((regexp) => regexp.test(value))) {
+    return createHexColor(value);
+  }
+
+  if (PATTERN_rgba.test(value)) {
     const match = color.match(PATTERN_rgba);
     if (!match) return;
     if (!match[1]) return;
