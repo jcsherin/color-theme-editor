@@ -165,6 +165,30 @@ function createAlpha(alpha: number | Percentage): Alpha {
   return { value };
 }
 
+interface Triplet<T> {
+  value: [T, T, T];
+}
+
+interface RGBA {
+  channels: Triplet<number> | Triplet<Percentage>;
+  alpha: Alpha;
+}
+
+interface Hue {
+  value: number;
+}
+
+interface HSLA {
+  hue: Hue;
+  saturation: Percentage;
+  lightness: Percentage;
+  alpha: Alpha;
+}
+
+interface Hex {
+  value: string;
+}
+
 export type ColorFormat = "hex" | "named" | "rgb" | "rgba" | "hsl" | "hsla";
 export interface BaseColor {
   kind: ColorFormat;
