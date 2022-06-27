@@ -394,7 +394,7 @@ export function parse(
     }
 
     const hue = parseHue(parts[0]);
-    if (!hue) {
+    if (hue === undefined) {
       const message = "In hsla() the hue (first argument) should be a number";
       return createParseError(value, message);
     }
