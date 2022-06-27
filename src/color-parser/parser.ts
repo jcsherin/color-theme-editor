@@ -165,17 +165,29 @@ function createAlpha(alpha: number | Percentage): Alpha {
   return { value };
 }
 
-interface Triplet<T> {
-  value: [T, T, T];
-}
+type Triplet<T> = [T, T, T];
 
 interface RGBA {
   channels: Triplet<number> | Triplet<Percentage>;
   alpha: Alpha;
 }
 
+function createRGBA(
+  channels: number[] | Percentage[],
+  alpha: number | Percentage
+): RGBA {
+  return {
+    channels: channels.slice(0, 3) as Triplet<number> | Triplet<Percentage>,
+    alpha: createAlpha(alpha),
+  };
+}
+
 interface Hue {
   value: number;
+}
+
+function createHue(value: number): Hue {
+  return { value };
 }
 
 interface HSLA {
@@ -183,6 +195,20 @@ interface HSLA {
   saturation: Percentage;
   lightness: Percentage;
   alpha: Alpha;
+}
+
+function createHSLA(
+  hue: number,
+  saturation: Percentage,
+  lightness: Percentage,
+  alpha: number | Percentage
+) {
+  return {
+    hue: createHue(hue),
+    saturation,
+    lightness,
+    alpha: createAlpha(alpha),
+  };
 }
 
 interface HexColor {
@@ -211,6 +237,10 @@ interface ParseError {
   message: string;
 }
 
+function createParseError(value: string, message: string) {
+  return { value, message };
+}
+
 const notHexColor: ParseError = {
   value: "#ab",
   message: "is not a well formatted hexadecimal",
@@ -222,9 +252,6 @@ export interface BaseColor {
   kind: ColorFormat;
   value: string;
 }
-function makeColor(kind: ColorFormat, value: string): BaseColor {
-  return { kind, value };
-}
 
 const HexPatterns = [
   /^#[0-9A-Fa-f]{8}$/,
@@ -233,22 +260,59 @@ const HexPatterns = [
   /^#[0-9A-Fa-f]{3}$/,
 ];
 
-const PATTERN_rgba = /^rgba?\((.*)\)$/;
-const PATTERN_hsla = /^hsla?\((.*)\)$/;
+const RGBAPattern = /^rgba?\((.*)\)$/;
+const HSLAPattern = /^hsla?\((.*)\)$/;
 
-function parseNumber(str: string): number {
+function toNumber(str: string): number {
   return Number(str);
 }
-function isAllNumbers(parts: string[]): boolean {
-  return parts.map(parseNumber).every((num) => !Number.isNaN(num));
-}
 
-function parsePercentage(str: string): number {
+function toPercentage(str: string): number {
   return str.endsWith("%") ? parseFloat(str) : NaN;
 }
 
-function isAllPercentages(parts: string[]): boolean {
-  return parts.map(parsePercentage).every((num) => !Number.isNaN(num));
+function parseChannels(parts: string[]): number[] | Percentage[] | undefined {
+  const percentages = parts.map(toPercentage);
+
+  if (percentages.every((n) => !Number.isNaN(n))) {
+    return percentages.map(createPercentage);
+  }
+
+  const nums = parts.map(toNumber);
+  if (nums.every((n) => !Number.isNaN(n))) {
+    return nums;
+  }
+
+  return;
+}
+
+function parseAlpha(alpha: string): number | Percentage | undefined {
+  const percentAlpha = toPercentage(alpha);
+  if (!Number.isNaN(percentAlpha)) {
+    return createPercentage(percentAlpha);
+  }
+
+  const numAlpha = toNumber(alpha);
+  if (!Number.isNaN(numAlpha)) {
+    return numAlpha;
+  }
+
+  return;
+}
+
+function parseHue(hue: string): number | undefined {
+  const parsed = toNumber(hue);
+  return Number.isNaN(parsed) ? undefined : parsed;
+}
+
+function parseSaturation(saturation: string): Percentage | undefined {
+  const parsed = toPercentage(saturation);
+  return Number.isNaN(parsed) ? undefined : createPercentage(parsed);
+}
+
+function parseLightness(lightness: string): Percentage | undefined {
+  const parsed = toPercentage(lightness);
+  return Number.isNaN(parsed) ? undefined : createPercentage(parsed);
 }
 
 export function parse(
@@ -266,59 +330,111 @@ export function parse(
     return createHexColor(value);
   }
 
-  if (PATTERN_rgba.test(value)) {
-    const match = color.match(PATTERN_rgba);
-    if (!match) return;
-    if (!match[1]) return;
+  // <rgb()> | <rgba()>
+  if (RGBAPattern.test(value)) {
+    const match = value.match(RGBAPattern);
+    if (!match || !match[1]) {
+      return createParseError(
+        value,
+        `${value} seems to be a malformed rgba() value`
+      );
+    }
 
     const parts = match[1].split(",");
-    if (parts.length < 3 || parts.length > 4) return;
+    if (parts.length < 3 || parts.length > 4) {
+      const message =
+        value +
+        " seems to be an rgba() value. It should have exactly three arguments" +
+        " to specify the red, green & blue channels of the color respectively." +
+        " A final optional argument specifies the alpha of the color.";
+      return createParseError(value, message);
+    }
 
-    const rgb = parts.slice(0, 3);
-    if (!(isAllNumbers(rgb) || isAllPercentages(rgb))) return;
+    const channels = parseChannels(parts.slice(0, 3));
+    if (!channels) {
+      const message =
+        "The red, green & blue channels of the color should be either all " +
+        " numbers or all percentages.";
+      return createParseError(value, message);
+    }
 
     if (parts.length === 3) {
-      return makeColor("rgb", value);
+      return createRGBA(channels, 1);
     }
 
-    const alpha = parts[3];
-    if (
-      Number.isNaN(parseNumber(alpha)) &&
-      Number.isNaN(parsePercentage(alpha))
-    ) {
-      return;
+    const alpha = parseAlpha(parts[3]);
+    if (!alpha) {
+      const message =
+        "The alpha value(fourth argument) in rgba() should be either a " +
+        " number or a percentage";
+      return createParseError(value, message);
     }
 
-    return makeColor("rgba", value);
-  } else if (PATTERN_hsla.test(value)) {
-    const match = value.match(PATTERN_hsla);
-    if (!match) return;
-    if (!match[1]) return;
-
-    const parts = match[1].split(",");
-    if (parts.length < 3 || parts.length > 4) return;
-
-    const hue = parts[0];
-    if (Number.isNaN(parseNumber(hue))) return;
-
-    // saturation, lightness
-    if (!isAllPercentages(parts.slice(1, 3))) return;
-
-    if (parts.length === 3) {
-      return makeColor("hsl", value);
-    }
-
-    const alpha = parts[3];
-    if (
-      Number.isNaN(parseNumber(alpha)) &&
-      Number.isNaN(parsePercentage(alpha))
-    ) {
-      return;
-    }
-
-    return makeColor("hsla", value);
+    return createRGBA(channels, alpha);
   }
-  return;
+
+  // <hsl()> | <hsla()>
+  if (HSLAPattern.test(value)) {
+    const match = value.match(HSLAPattern);
+    if (!match || !match[1]) {
+      return createParseError(
+        value,
+        `${value} seems to be a malformed hsla() value`
+      );
+    }
+
+    const parts = match[1].split(",");
+    if (parts.length < 3 || parts.length > 4) {
+      const message =
+        value +
+        " seems to be an hsla() value. It should have exactly three arguments" +
+        " to specify the hue, saturation & lightness of the color respectively." +
+        " A final optional argument specifies the alpha of the color.";
+      return createParseError(value, message);
+    }
+
+    const hue = parseHue(parts[0]);
+    if (!hue) {
+      const message = "In hsla() the hue (first argument) should be a number";
+      return createParseError(value, message);
+    }
+
+    const saturation = parseSaturation(parts[1]);
+    if (!saturation) {
+      const message =
+        "In hsla() the saturation (second argument) should always be" +
+        " a percentage";
+      return createParseError(value, message);
+    }
+
+    const lightness = parseLightness(parts[2]);
+    if (!lightness) {
+      const message =
+        "In hsla() the ligthness (third argument) should always be" +
+        " a percentage";
+      return createParseError(value, message);
+    }
+
+    if (parts.length === 3) {
+      return createHSLA(hue, saturation, lightness, 1);
+    }
+
+    const alpha = parseAlpha(parts[3]);
+    if (!alpha) {
+      const message =
+        "The alpha value(fourth argument) in rgba() should be either a " +
+        " number or a percentage";
+      return createParseError(value, message);
+    }
+
+    return createHSLA(hue, saturation, lightness, alpha);
+  }
+
+  const message =
+    value +
+    " is not a supported color format. The supported formats are: hex, named " +
+    " color keyword, rgb(), rgba(), hsl() and hsla()";
+  return createParseError(value, message);
 }
 
 function __debug(color: string) {
@@ -344,6 +460,7 @@ __debug("rgba(0, 255, 0, 1)");
 __debug("rgba(0, 255, 0, 100%)");
 __debug("rgba(0%, 100%, 0%, 1)");
 __debug("rgba(0%, 100%, 0%, 100%)");
+__debug("rgba()");
 __debug("rgba(0, 255%, 0, 100%)");
 __debug("rgba(0%, 100, 0%, 100%)");
 __debug("rgba(0, 255%, 0, abc)");
