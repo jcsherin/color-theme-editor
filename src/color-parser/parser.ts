@@ -84,8 +84,8 @@ Digits in `#RRGGBB` are interpreted as a hexadecimal number.
 
 */
 
-import type { Keywords } from "./keywords";
-import { keywords } from "./keywords";
+import type { Triple, Keywords } from "./index";
+import { keywords } from "./index";
 
 /**
  * Use clamp to restrict a value to range that is defined by the minimum and
@@ -165,10 +165,8 @@ function createAlpha(alpha: number | Percentage): Alpha {
   return { value };
 }
 
-type Triplet<T> = [T, T, T];
-
 interface RGBA {
-  channels: Triplet<number> | Triplet<Percentage>;
+  channels: Triple<number> | Triple<Percentage>;
   alpha: Alpha;
 }
 
@@ -177,7 +175,7 @@ function createRGBA(
   alpha: number | Percentage
 ): RGBA {
   return {
-    channels: channels.slice(0, 3) as Triplet<number> | Triplet<Percentage>,
+    channels: channels.slice(0, 3) as Triple<number> | Triple<Percentage>,
     alpha: createAlpha(alpha),
   };
 }
@@ -212,11 +210,12 @@ function createHSLA(
 }
 
 interface HexColor {
+  tag: "hex-color";
   value: string;
 }
 
 function createHexColor(value: string): HexColor {
-  return { value };
+  return { tag: "hex-color", value };
 }
 
 interface NamedColor {
