@@ -301,3 +301,63 @@ exports[`Color Parser parses hex values corresponding to every named color keywo
 {\\"tag\\":\\"hex-color\\",\\"value\\":\\"#FFFF00\\"}
 {\\"tag\\":\\"hex-color\\",\\"value\\":\\"#9ACD32\\"}"
 `;
+
+exports[`Color Parser parses hex values of size 8, 6, 4 & 3 1`] = `
+Object {
+  "tag": "hex-color",
+  "value": "#4682B4FF",
+}
+`;
+
+exports[`Color Parser parses hex values of size 8, 6, 4 & 3 2`] = `
+Object {
+  "tag": "hex-color",
+  "value": "#4682B4",
+}
+`;
+
+exports[`Color Parser parses hex values of size 8, 6, 4 & 3 3`] = `
+Object {
+  "tag": "hex-color",
+  "value": "#4682",
+}
+`;
+
+exports[`Color Parser parses hex values of size 8, 6, 4 & 3 4`] = `
+Object {
+  "tag": "hex-color",
+  "value": "#468",
+}
+`;
+
+exports[`Color Parser returns a parse error for invalid hex values 1`] = `
+Object {
+  "message": "#46:  is not a supported color format.
+The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and hsla().",
+  "value": "#46",
+}
+`;
+
+exports[`Color Parser returns a parse error for invalid hex values 2`] = `
+Object {
+  "message": "#4682B4FF00:  is not a supported color format.
+The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and hsla().",
+  "value": "#4682B4FF00",
+}
+`;
+
+exports[`Color Parser returns a parse error for invalid hex values 3`] = `
+Object {
+  "message": "#xyz:  is not a supported color format.
+The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and hsla().",
+  "value": "#xyz",
+}
+`;
+
+exports[`Color Parser returns a parser error for non-existent color keywords 1`] = `
+Object {
+  "message": "notarealcolorkeyword:  is not a supported color format.
+The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and hsla().",
+  "value": "notarealcolorkeyword",
+}
+`;
