@@ -21,7 +21,7 @@ describe("Color Parser", () => {
     expect(expected).toMatchSnapshot();
   });
 
-  it("returns a parser error for non-existent color keywords", () => {
+  it("produces a parse error for non-existent color keywords", () => {
     const expected = parse("notarealcolorkeyword");
 
     expect(expected).toMatchSnapshot();
@@ -34,7 +34,7 @@ describe("Color Parser", () => {
     expect(parse("#468")).toMatchSnapshot();
   });
 
-  it("returns a parse error for invalid hex values", () => {
+  it("produces a parse error for invalid hex values", () => {
     expect(parse("#46")).toMatchSnapshot();
     expect(parse("#4682B4FF00")).toMatchSnapshot();
     expect(parse("#xyz")).toMatchSnapshot();
@@ -51,4 +51,59 @@ describe("Color Parser", () => {
     expect(parse("rgb(0%, 100%, 0%, 50%)")).toMatchSnapshot();
     expect(parse("rgba(0, 255, 0, 0.5)")).toMatchSnapshot();
   });
+
+  it("produces parse errors for missing rgba channel values", () => {
+    expect(parse("rgba()")).toMatchSnapshot();
+  });
+
+  it("produces parse errors for wrongly typed rgba channel values", () => {
+    expect(parse("rgba(0, 255%, 0)")).toMatchSnapshot();
+    expect(parse("rgba(0%, 100, 0%)")).toMatchSnapshot();
+    expect(parse("rgba(0, 255%, 0, 100%)")).toMatchSnapshot();
+    expect(parse("rgba(0%, 100, 0%, 100%)")).toMatchSnapshot();
+    expect(parse("rgba(0, 255%, 0, abc)")).toMatchSnapshot();
+    expect(parse("rgba(0%, 100, 0%, abc)")).toMatchSnapshot();
+  });
+
+  it("produces parse errors for wrongly typed rgba alpha value", () => {
+    expect(parse("rgba(0%, 100%, 0%, abc)")).toMatchSnapshot();
+    expect(parse("rgba(0%, 100%, 0%, abc)")).toMatchSnapshot();
+  });
+
+  it("produces parse errors for rgba with incorrect number of arguments", () => {
+    expect(parse("rgba(0%, 100, 0%, 100%, 1)")).toMatchSnapshot();
+    expect(parse("rgba(100%, 1)")).toMatchSnapshot();
+  });
+
+  it("parses rgba values with a clamped alpha", () => {
+    expect(parse("rgba(0, 0, 0, -.1)")).toMatchSnapshot();
+    expect(parse("rgba(0, 0, 0, 1.01)")).toMatchSnapshot();
+    expect(parse("rgba(0, 0, 0, -0.1%)")).toMatchSnapshot();
+    expect(parse("rgba(0, 0, 0, 100.01%)")).toMatchSnapshot();
+  });
+
+  it.skip("parses rgba values with clamped channel values", () => {});
 });
+
+/*
+__debug("rgb(0, 255, 0)");
+__debug("rgb(0%, 100%, 0%)");
+__debug("rgba(0, 255, 0)");
+__debug("rgba(0%, 100%, 0%)");
+__debug("rgba(0, 255, 0, 1)");
+__debug("rgba(0, 255, 0, 100%)");
+__debug("rgba(0%, 100%, 0%, 1)");
+__debug("rgba(0%, 100%, 0%, 100%)");
+
+
+__debug("rgba()");
+__debug("rgba(0, 255%, 0, 100%)");
+__debug("rgba(0%, 100, 0%, 100%)");
+__debug("rgba(0, 255%, 0, abc)");
+__debug("rgba(0%, 100, 0%, abc)");
+__debug("rgba(0%, 100%, 0%, abc)");
+__debug("rgba(0%, 100%, 0%, abc)");
+__debug("rgba(0%, 100, 0%, 100%, 1)");
+__debug("rgba(100%, 1)");
+
+*/

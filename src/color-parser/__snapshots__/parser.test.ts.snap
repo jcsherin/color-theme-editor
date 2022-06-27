@@ -330,7 +330,240 @@ Object {
 }
 `;
 
-exports[`Color Parser returns a parse error for invalid hex values 1`] = `
+exports[`Color Parser parses rgba values 1`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "channels": Array [
+    0,
+    255,
+    0,
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser parses rgba values 2`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "channels": Array [
+    0,
+    255,
+    0,
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser parses rgba values 3`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "channels": Array [
+    Object {
+      "stringify": [Function],
+      "value": 0,
+    },
+    Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+    Object {
+      "stringify": [Function],
+      "value": 0,
+    },
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser parses rgba values 4`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "channels": Array [
+    0,
+    255,
+    0,
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser parses rgba values 5`] = `
+Object {
+  "alpha": Object {
+    "value": Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+  },
+  "channels": Array [
+    0,
+    255,
+    0,
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser parses rgba values 6`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "channels": Array [
+    Object {
+      "stringify": [Function],
+      "value": 0,
+    },
+    Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+    Object {
+      "stringify": [Function],
+      "value": 0,
+    },
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser parses rgba values 7`] = `
+Object {
+  "alpha": Object {
+    "value": Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+  },
+  "channels": Array [
+    Object {
+      "stringify": [Function],
+      "value": 0,
+    },
+    Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+    Object {
+      "stringify": [Function],
+      "value": 0,
+    },
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser parses rgba values 8`] = `
+Object {
+  "alpha": Object {
+    "value": Object {
+      "stringify": [Function],
+      "value": 50,
+    },
+  },
+  "channels": Array [
+    Object {
+      "stringify": [Function],
+      "value": 0,
+    },
+    Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+    Object {
+      "stringify": [Function],
+      "value": 0,
+    },
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser parses rgba values 9`] = `
+Object {
+  "alpha": Object {
+    "value": 0.5,
+  },
+  "channels": Array [
+    0,
+    255,
+    0,
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser parses rgba values with a clamped alpha 1`] = `
+Object {
+  "alpha": Object {
+    "value": 0,
+  },
+  "channels": Array [
+    0,
+    0,
+    0,
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser parses rgba values with a clamped alpha 2`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "channels": Array [
+    0,
+    0,
+    0,
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser parses rgba values with a clamped alpha 3`] = `
+Object {
+  "alpha": Object {
+    "value": Object {
+      "stringify": [Function],
+      "value": 0,
+    },
+  },
+  "channels": Array [
+    0,
+    0,
+    0,
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser parses rgba values with a clamped alpha 4`] = `
+Object {
+  "alpha": Object {
+    "value": Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+  },
+  "channels": Array [
+    0,
+    0,
+    0,
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser produces a parse error for invalid hex values 1`] = `
 Object {
   "message": "#46:  is not a supported color format.
 The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and hsla().",
@@ -338,7 +571,7 @@ The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and 
 }
 `;
 
-exports[`Color Parser returns a parse error for invalid hex values 2`] = `
+exports[`Color Parser produces a parse error for invalid hex values 2`] = `
 Object {
   "message": "#4682B4FF00:  is not a supported color format.
 The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and hsla().",
@@ -346,7 +579,7 @@ The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and 
 }
 `;
 
-exports[`Color Parser returns a parse error for invalid hex values 3`] = `
+exports[`Color Parser produces a parse error for invalid hex values 3`] = `
 Object {
   "message": "#xyz:  is not a supported color format.
 The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and hsla().",
@@ -354,10 +587,87 @@ The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and 
 }
 `;
 
-exports[`Color Parser returns a parser error for non-existent color keywords 1`] = `
+exports[`Color Parser produces a parse error for non-existent color keywords 1`] = `
 Object {
   "message": "notarealcolorkeyword:  is not a supported color format.
 The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and hsla().",
   "value": "notarealcolorkeyword",
+}
+`;
+
+exports[`Color Parser produces parse errors for missing rgba channel values 1`] = `
+Object {
+  "message": "rgba() seems to be a malformed rgba() value",
+  "value": "rgba()",
+}
+`;
+
+exports[`Color Parser produces parse errors for rgba with incorrect number of arguments 1`] = `
+Object {
+  "message": "rgba(0%, 100, 0%, 100%, 1) seems to be an rgba() value. It should have exactly three arguments to specify the red, green & blue channels of the color respectively. A final optional argument specifies the alpha of the color.",
+  "value": "rgba(0%, 100, 0%, 100%, 1)",
+}
+`;
+
+exports[`Color Parser produces parse errors for rgba with incorrect number of arguments 2`] = `
+Object {
+  "message": "rgba(100%, 1) seems to be an rgba() value. It should have exactly three arguments to specify the red, green & blue channels of the color respectively. A final optional argument specifies the alpha of the color.",
+  "value": "rgba(100%, 1)",
+}
+`;
+
+exports[`Color Parser produces parse errors for wrongly typed rgba alpha value 1`] = `
+Object {
+  "message": "The alpha value(fourth argument) in rgba() should be either a  number or a percentage",
+  "value": "rgba(0%, 100%, 0%, abc)",
+}
+`;
+
+exports[`Color Parser produces parse errors for wrongly typed rgba alpha value 2`] = `
+Object {
+  "message": "The alpha value(fourth argument) in rgba() should be either a  number or a percentage",
+  "value": "rgba(0%, 100%, 0%, abc)",
+}
+`;
+
+exports[`Color Parser produces parse errors for wrongly typed rgba channel values 1`] = `
+Object {
+  "message": "The red, green & blue channels of the color should be either all  numbers or all percentages.",
+  "value": "rgba(0, 255%, 0)",
+}
+`;
+
+exports[`Color Parser produces parse errors for wrongly typed rgba channel values 2`] = `
+Object {
+  "message": "The red, green & blue channels of the color should be either all  numbers or all percentages.",
+  "value": "rgba(0%, 100, 0%)",
+}
+`;
+
+exports[`Color Parser produces parse errors for wrongly typed rgba channel values 3`] = `
+Object {
+  "message": "The red, green & blue channels of the color should be either all  numbers or all percentages.",
+  "value": "rgba(0, 255%, 0, 100%)",
+}
+`;
+
+exports[`Color Parser produces parse errors for wrongly typed rgba channel values 4`] = `
+Object {
+  "message": "The red, green & blue channels of the color should be either all  numbers or all percentages.",
+  "value": "rgba(0%, 100, 0%, 100%)",
+}
+`;
+
+exports[`Color Parser produces parse errors for wrongly typed rgba channel values 5`] = `
+Object {
+  "message": "The red, green & blue channels of the color should be either all  numbers or all percentages.",
+  "value": "rgba(0, 255%, 0, abc)",
+}
+`;
+
+exports[`Color Parser produces parse errors for wrongly typed rgba channel values 6`] = `
+Object {
+  "message": "The red, green & blue channels of the color should be either all  numbers or all percentages.",
+  "value": "rgba(0%, 100, 0%, abc)",
 }
 `;
