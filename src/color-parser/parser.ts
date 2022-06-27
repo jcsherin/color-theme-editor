@@ -229,9 +229,6 @@ function createNamedColor(value: string): NamedColor {
 
 type ParsedColor = HexColor | NamedColor | RGBA | HSLA;
 
-const parsedColor: ParsedColor = createNamedColor("aliceblue");
-console.log(parsedColor);
-
 interface ParseError {
   value: string;
   message: string;
@@ -239,18 +236,6 @@ interface ParseError {
 
 function createParseError(value: string, message: string) {
   return { value, message };
-}
-
-const notHexColor: ParseError = {
-  value: "#ab",
-  message: "is not a well formatted hexadecimal",
-};
-console.log(notHexColor);
-
-export type ColorFormat = "hex" | "named" | "rgb" | "rgba" | "hsl" | "hsla";
-export interface BaseColor {
-  kind: ColorFormat;
-  value: string;
 }
 
 const HexPatterns = [
@@ -315,9 +300,7 @@ function parseLightness(lightness: string): Percentage | undefined {
   return Number.isNaN(parsed) ? undefined : createPercentage(parsed);
 }
 
-export function parse(
-  color: string
-): ParsedColor | ParseError | BaseColor | undefined {
+export function parse(color: string): ParsedColor | ParseError {
   const value = color.trim();
 
   // <named-color>
