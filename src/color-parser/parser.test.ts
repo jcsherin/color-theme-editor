@@ -75,7 +75,7 @@ describe("Color Parser", () => {
     expect(parse("rgba(100%, 1)")).toMatchSnapshot();
   });
 
-  it("parses rgba values with a clamped alpha", () => {
+  it("parses rgba alpha values are clamped between 0 and 1", () => {
     expect(parse("rgba(0, 0, 0, -.1)")).toMatchSnapshot();
     expect(parse("rgba(0, 0, 0, 1.01)")).toMatchSnapshot();
     expect(parse("rgba(0, 0, 0, -0.1%)")).toMatchSnapshot();
