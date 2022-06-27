@@ -82,7 +82,14 @@ describe("Color Parser", () => {
     expect(parse("rgba(0, 0, 0, 100.01%)")).toMatchSnapshot();
   });
 
-  it.skip("parses rgba values with clamped channel values", () => {});
+  it.skip("parsed rgba channel values are clamped between 0 and 255", () => {});
+
+  it("treats rgb & rgba as synonyms", () => {
+    const rgb = parse("rgb(0, 255, 0)");
+    const rgba = parse("rgba(0, 255, 0)");
+
+    expect(JSON.stringify(rgb)).toBe(JSON.stringify(rgba));
+  });
 });
 
 /*
