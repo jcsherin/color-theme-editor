@@ -424,7 +424,7 @@ Object {
 }
 `;
 
-exports[`Color Parser RGBA parses rgba values 1`] = `
+exports[`Color Parser RGBA parses rgba values with an alpha value 1`] = `
 Object {
   "alpha": Object {
     "value": 1,
@@ -438,58 +438,7 @@ Object {
 }
 `;
 
-exports[`Color Parser RGBA parses rgba values 2`] = `
-Object {
-  "alpha": Object {
-    "value": 1,
-  },
-  "channels": Array [
-    0,
-    255,
-    0,
-  ],
-  "tag": "rgba",
-}
-`;
-
-exports[`Color Parser RGBA parses rgba values 3`] = `
-Object {
-  "alpha": Object {
-    "value": 1,
-  },
-  "channels": Array [
-    Object {
-      "stringify": [Function],
-      "value": 0,
-    },
-    Object {
-      "stringify": [Function],
-      "value": 100,
-    },
-    Object {
-      "stringify": [Function],
-      "value": 0,
-    },
-  ],
-  "tag": "rgba",
-}
-`;
-
-exports[`Color Parser RGBA parses rgba values 4`] = `
-Object {
-  "alpha": Object {
-    "value": 1,
-  },
-  "channels": Array [
-    0,
-    255,
-    0,
-  ],
-  "tag": "rgba",
-}
-`;
-
-exports[`Color Parser RGBA parses rgba values 5`] = `
+exports[`Color Parser RGBA parses rgba values with an alpha value 2`] = `
 Object {
   "alpha": Object {
     "value": Object {
@@ -506,7 +455,7 @@ Object {
 }
 `;
 
-exports[`Color Parser RGBA parses rgba values 6`] = `
+exports[`Color Parser RGBA parses rgba values with an alpha value 3`] = `
 Object {
   "alpha": Object {
     "value": 1,
@@ -529,7 +478,7 @@ Object {
 }
 `;
 
-exports[`Color Parser RGBA parses rgba values 7`] = `
+exports[`Color Parser RGBA parses rgba values with an alpha value 4`] = `
 Object {
   "alpha": Object {
     "value": Object {
@@ -555,7 +504,7 @@ Object {
 }
 `;
 
-exports[`Color Parser RGBA parses rgba values 8`] = `
+exports[`Color Parser RGBA parses rgba values with an alpha value 5`] = `
 Object {
   "alpha": Object {
     "value": Object {
@@ -581,7 +530,7 @@ Object {
 }
 `;
 
-exports[`Color Parser RGBA parses rgba values 9`] = `
+exports[`Color Parser RGBA parses rgba values with an alpha value 6`] = `
 Object {
   "alpha": Object {
     "value": 0.5,
@@ -590,6 +539,80 @@ Object {
     0,
     255,
     0,
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser RGBA parses rgba values without an alpha value 1`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "channels": Array [
+    0,
+    255,
+    0,
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser RGBA parses rgba values without an alpha value 2`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "channels": Array [
+    0,
+    255,
+    0,
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser RGBA parses rgba values without an alpha value 3`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "channels": Array [
+    Object {
+      "stringify": [Function],
+      "value": 0,
+    },
+    Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+    Object {
+      "stringify": [Function],
+      "value": 0,
+    },
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser RGBA parses rgba values without an alpha value 4`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "channels": Array [
+    Object {
+      "stringify": [Function],
+      "value": 0,
+    },
+    Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+    Object {
+      "stringify": [Function],
+      "value": 0,
+    },
   ],
   "tag": "rgba",
 }

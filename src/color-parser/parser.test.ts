@@ -45,10 +45,14 @@ describe("Color Parser", () => {
   });
 
   describe("RGBA", () => {
-    it("parses rgba values", () => {
+    it("parses rgba values without an alpha value", () => {
       expect(parse("rgb(0, 255, 0)")).toMatchSnapshot();
       expect(parse("rgba(0, 255, 0)")).toMatchSnapshot();
       expect(parse("rgb(0%, 100%, 0%)")).toMatchSnapshot();
+      expect(parse("rgba(0%, 100%, 0%)")).toMatchSnapshot();
+    });
+
+    it("parses rgba values with an alpha value", () => {
       expect(parse("rgba(0, 255, 0, 1)")).toMatchSnapshot();
       expect(parse("rgba(0, 255, 0, 100%)")).toMatchSnapshot();
       expect(parse("rgba(0%, 100%, 0%, 1)")).toMatchSnapshot();
