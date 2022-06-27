@@ -220,11 +220,12 @@ function createHexColor(value: string): HexColor {
 }
 
 interface NamedColor {
+  tag: "named-color";
   value: keyof Keywords;
 }
 
 function createNamedColor(value: string): NamedColor {
-  return { value: value as keyof Keywords };
+  return { tag: "named-color", value: value as keyof Keywords };
 }
 
 type ParsedColor = HexColor | NamedColor | RGBA | HSLA;
@@ -420,6 +421,7 @@ export function parse(color: string): ParsedColor | ParseError {
   return createParseError(value, message);
 }
 
+/*
 function __debug(color: string) {
   const parsed = parse(color);
   const serialized = JSON.stringify(parsed, null, 2);
@@ -513,3 +515,4 @@ __test(createAlpha(1.1), { value: 1 }, "1.1");
 __test(createAlpha(1.01), { value: 1 }, "1.01");
 __test(createAlpha(1.001), { value: 1 }, "1.001");
 __test(createAlpha(1.0001), { value: 1 }, "1.0001");
+*/
