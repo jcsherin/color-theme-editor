@@ -39,4 +39,16 @@ describe("Color Parser", () => {
     expect(parse("#4682B4FF00")).toMatchSnapshot();
     expect(parse("#xyz")).toMatchSnapshot();
   });
+
+  it("parses rgba values", () => {
+    expect(parse("rgb(0, 255, 0)")).toMatchSnapshot();
+    expect(parse("rgba(0, 255, 0)")).toMatchSnapshot();
+    expect(parse("rgb(0%, 100%, 0%)")).toMatchSnapshot();
+    expect(parse("rgba(0, 255, 0, 1)")).toMatchSnapshot();
+    expect(parse("rgba(0, 255, 0, 100%)")).toMatchSnapshot();
+    expect(parse("rgba(0%, 100%, 0%, 1)")).toMatchSnapshot();
+    expect(parse("rgba(0%, 100%, 0%, 100%)")).toMatchSnapshot();
+    expect(parse("rgb(0%, 100%, 0%, 50%)")).toMatchSnapshot();
+    expect(parse("rgba(0, 255, 0, 0.5)")).toMatchSnapshot();
+  });
 });

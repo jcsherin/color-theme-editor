@@ -166,6 +166,7 @@ function createAlpha(alpha: number | Percentage): Alpha {
 }
 
 interface RGBA {
+  tag: "rgba";
   channels: Triple<number> | Triple<Percentage>;
   alpha: Alpha;
 }
@@ -175,6 +176,7 @@ function createRGBA(
   alpha: number | Percentage
 ): RGBA {
   return {
+    tag: "rgba",
     channels: channels.slice(0, 3) as Triple<number> | Triple<Percentage>,
     alpha: createAlpha(alpha),
   };
