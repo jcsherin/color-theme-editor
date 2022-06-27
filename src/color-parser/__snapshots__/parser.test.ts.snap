@@ -151,7 +151,7 @@ exports[`Color Parser parses every named color keyword 1`] = `
 {\\"tag\\":\\"named-color\\",\\"value\\":\\"yellowgreen\\"}"
 `;
 
-exports[`Color Parser parses hexadecimal corresponding to every named color keyword 1`] = `
+exports[`Color Parser parses hex values corresponding to every named color keyword 1`] = `
 "{\\"tag\\":\\"hex-color\\",\\"value\\":\\"#F0F8FF\\"}
 {\\"tag\\":\\"hex-color\\",\\"value\\":\\"#FAEBD7\\"}
 {\\"tag\\":\\"hex-color\\",\\"value\\":\\"#00FFFF\\"}

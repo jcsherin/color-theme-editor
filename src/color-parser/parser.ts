@@ -414,9 +414,9 @@ export function parse(color: string): ParsedColor | ParseError {
   }
 
   const message =
-    value +
-    " is not a supported color format. The supported formats are: hex, named " +
-    " color keyword, rgb(), rgba(), hsl() and hsla()";
+    `${value}: ` +
+    " is not a supported color format.\nThe supported formats are: hex, named " +
+    " color keywords, rgb(), rgba(), hsl() and hsla().";
   return createParseError(value, message);
 }
 
