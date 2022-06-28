@@ -176,12 +176,12 @@ interface RGBA {
 
 function createRGBA(
   channels: Triple<number> | Triple<Percentage>,
-  alpha: number | Percentage
+  alpha: Alpha
 ): RGBA {
   return {
     tag: "rgba",
     channels: channels,
-    alpha: createAlpha(alpha),
+    alpha: alpha,
   };
 }
 
@@ -205,14 +205,14 @@ function createHSLA(
   hue: number,
   saturation: Percentage,
   lightness: Percentage,
-  alpha: number | Percentage
+  alpha: Alpha
 ): HSLA {
   return {
     tag: "hsla",
     hue: createHue(hue),
     saturation,
     lightness,
-    alpha: createAlpha(alpha),
+    alpha: alpha,
   };
 }
 
@@ -280,15 +280,15 @@ function parseChannels(
   return;
 }
 
-function parseAlpha(alpha: string): number | Percentage | undefined {
+function parseAlpha(alpha: string): Alpha | undefined {
   const percentAlpha = toPercentage(alpha);
   if (!Number.isNaN(percentAlpha)) {
-    return createPercentage(percentAlpha);
+    return createAlpha(createPercentage(percentAlpha));
   }
 
   const numAlpha = toNumber(alpha);
   if (!Number.isNaN(numAlpha)) {
-    return numAlpha;
+    return createAlpha(numAlpha);
   }
 
   return;
@@ -355,7 +355,7 @@ export function parse(color: string): ParsedColor | ParseError {
     }
 
     if (parts.length === 3) {
-      return createRGBA(channels, 1);
+      return createRGBA(channels, createAlpha(1));
     }
 
     const alpha = parseAlpha(parts[3]);
@@ -412,7 +412,7 @@ export function parse(color: string): ParsedColor | ParseError {
     }
 
     if (parts.length === 3) {
-      return createHSLA(hue, saturation, lightness, 1);
+      return createHSLA(hue, saturation, lightness, createAlpha(1));
     }
 
     const alpha = parseAlpha(parts[3]);
