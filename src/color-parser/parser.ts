@@ -185,17 +185,9 @@ function createRGBA(
   };
 }
 
-interface Hue {
-  value: number;
-}
-
-function createHue(value: number): Hue {
-  return { value };
-}
-
 interface HSLA {
   tag: "hsla";
-  hue: Hue;
+  hue: number;
   saturation: Percentage;
   lightness: Percentage;
   alpha: Alpha;
@@ -209,7 +201,7 @@ function createHSLA(
 ): HSLA {
   return {
     tag: "hsla",
-    hue: createHue(hue),
+    hue: hue,
     saturation,
     lightness,
     alpha: alpha,

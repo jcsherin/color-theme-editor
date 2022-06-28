@@ -8,9 +8,7 @@ Object {
       "value": 0,
     },
   },
-  "hue": Object {
-    "value": 90,
-  },
+  "hue": 90,
   "lightness": Object {
     "stringify": [Function],
     "value": 0,
@@ -31,9 +29,7 @@ Object {
       "value": 100,
     },
   },
-  "hue": Object {
-    "value": 90,
-  },
+  "hue": 90,
   "lightness": Object {
     "stringify": [Function],
     "value": 0,
@@ -51,9 +47,7 @@ Object {
   "alpha": Object {
     "value": 0,
   },
-  "hue": Object {
-    "value": 90,
-  },
+  "hue": 90,
   "lightness": Object {
     "stringify": [Function],
     "value": 0,
@@ -71,9 +65,7 @@ Object {
   "alpha": Object {
     "value": 1,
   },
-  "hue": Object {
-    "value": 90,
-  },
+  "hue": 90,
   "lightness": Object {
     "stringify": [Function],
     "value": 0,
@@ -94,9 +86,7 @@ Object {
       "value": 100,
     },
   },
-  "hue": Object {
-    "value": 90,
-  },
+  "hue": 90,
   "lightness": Object {
     "stringify": [Function],
     "value": 0,
@@ -117,9 +107,7 @@ Object {
       "value": 100,
     },
   },
-  "hue": Object {
-    "value": 90,
-  },
+  "hue": 90,
   "lightness": Object {
     "stringify": [Function],
     "value": 100,
@@ -140,9 +128,7 @@ Object {
       "value": 100,
     },
   },
-  "hue": Object {
-    "value": 90,
-  },
+  "hue": 90,
   "lightness": Object {
     "stringify": [Function],
     "value": 100,
@@ -163,9 +149,7 @@ Object {
       "value": 100,
     },
   },
-  "hue": Object {
-    "value": 90,
-  },
+  "hue": 90,
   "lightness": Object {
     "stringify": [Function],
     "value": 100,
@@ -183,9 +167,7 @@ Object {
   "alpha": Object {
     "value": 1,
   },
-  "hue": Object {
-    "value": 0,
-  },
+  "hue": 0,
   "lightness": Object {
     "stringify": [Function],
     "value": 100,
@@ -203,9 +185,7 @@ Object {
   "alpha": Object {
     "value": 1,
   },
-  "hue": Object {
-    "value": 90,
-  },
+  "hue": 90,
   "lightness": Object {
     "stringify": [Function],
     "value": 100,
@@ -223,9 +203,7 @@ Object {
   "alpha": Object {
     "value": 1,
   },
-  "hue": Object {
-    "value": 0,
-  },
+  "hue": 0,
   "lightness": Object {
     "stringify": [Function],
     "value": 100,
@@ -243,9 +221,7 @@ Object {
   "alpha": Object {
     "value": 1,
   },
-  "hue": Object {
-    "value": 90,
-  },
+  "hue": 90,
   "lightness": Object {
     "stringify": [Function],
     "value": 100,
@@ -263,9 +239,7 @@ Object {
   "alpha": Object {
     "value": 1,
   },
-  "hue": Object {
-    "value": 0,
-  },
+  "hue": 0,
   "lightness": Object {
     "stringify": [Function],
     "value": 100,
@@ -283,9 +257,7 @@ Object {
   "alpha": Object {
     "value": 1,
   },
-  "hue": Object {
-    "value": 90,
-  },
+  "hue": 90,
   "lightness": Object {
     "stringify": [Function],
     "value": 100,
@@ -306,9 +278,7 @@ Object {
       "value": 100,
     },
   },
-  "hue": Object {
-    "value": 0,
-  },
+  "hue": 0,
   "lightness": Object {
     "stringify": [Function],
     "value": 100,
@@ -329,9 +299,7 @@ Object {
       "value": 100,
     },
   },
-  "hue": Object {
-    "value": 90,
-  },
+  "hue": 90,
   "lightness": Object {
     "stringify": [Function],
     "value": 100,
@@ -349,9 +317,7 @@ Object {
   "alpha": Object {
     "value": 0.5,
   },
-  "hue": Object {
-    "value": 90,
-  },
+  "hue": 90,
   "lightness": Object {
     "stringify": [Function],
     "value": 100,
@@ -372,9 +338,7 @@ Object {
       "value": 50,
     },
   },
-  "hue": Object {
-    "value": 90,
-  },
+  "hue": 90,
   "lightness": Object {
     "stringify": [Function],
     "value": 100,
