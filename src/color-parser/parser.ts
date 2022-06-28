@@ -121,8 +121,13 @@ const enum PercentageRange {
  * @param percentage
  * @returns a clamped percentage value
  */
-function clampPercentage(percentage: number): number {
-  return clamp(percentage, PercentageRange.Min, PercentageRange.Max);
+function clampPercentage(percentage: Percentage): Percentage {
+  const result = clamp(
+    percentage.value,
+    PercentageRange.Min,
+    PercentageRange.Max
+  );
+  return createPercentage(result);
 }
 
 /**
@@ -132,11 +137,9 @@ function clampPercentage(percentage: number): number {
  * @returns {Percentage}
  */
 function createPercentage(percentage: number): Percentage {
-  const value = clampPercentage(percentage);
-
   return {
-    value: value,
-    stringify: () => `${value}%`,
+    value: percentage,
+    stringify: () => `${percentage}%`,
   };
 }
 
@@ -160,7 +163,7 @@ function createAlpha(alpha: number | Percentage): Alpha {
   const value =
     typeof alpha === "number"
       ? clamp(alpha, AlphaRange.Min, AlphaRange.Max)
-      : alpha;
+      : clampPercentage(alpha);
 
   return { value };
 }
@@ -298,12 +301,16 @@ function parseHue(hue: string): number | undefined {
 
 function parseSaturation(saturation: string): Percentage | undefined {
   const parsed = toPercentage(saturation);
-  return Number.isNaN(parsed) ? undefined : createPercentage(parsed);
+  return Number.isNaN(parsed)
+    ? undefined
+    : clampPercentage(createPercentage(parsed));
 }
 
 function parseLightness(lightness: string): Percentage | undefined {
   const parsed = toPercentage(lightness);
-  return Number.isNaN(parsed) ? undefined : createPercentage(parsed);
+  return Number.isNaN(parsed)
+    ? undefined
+    : clampPercentage(createPercentage(parsed));
 }
 
 export function parse(color: string): ParsedColor | ParseError {
