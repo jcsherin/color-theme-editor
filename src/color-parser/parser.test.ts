@@ -100,27 +100,73 @@ describe("Color Parser", () => {
       expect(JSON.stringify(rgb)).toBe(JSON.stringify(rgba));
     });
   });
+
+  describe("HSLA", () => {
+    it("parses hsla values without an alpha value", () => {
+      expect(parse("hsl(0, 0%, 100%)")).toMatchSnapshot();
+      expect(parse("hsl(90, 0%, 100%)")).toMatchSnapshot();
+      expect(parse("hsla(0, 0%, 100%)")).toMatchSnapshot();
+      expect(parse("hsla(90, 0%, 100%)")).toMatchSnapshot();
+    });
+
+    it("parses hsla values without an alpha value", () => {
+      expect(parse("hsla(0, 0%, 100%, 1)")).toMatchSnapshot();
+      expect(parse("hsla(90, 0%, 100%, 1)")).toMatchSnapshot();
+      expect(parse("hsla(0, 0%, 100%, 100%)")).toMatchSnapshot();
+      expect(parse("hsla(90, 0%, 100%, 100%)")).toMatchSnapshot();
+      expect(parse("hsla(90, 0%, 100%, 0.5)")).toMatchSnapshot();
+      expect(parse("hsla(90, 0%, 100%, 50%)")).toMatchSnapshot();
+    });
+
+    it("produces parse errors for missing hue, saturation & ligthness values", () => {
+      expect(parse("hsla()")).toMatchSnapshot();
+    });
+
+    it("produces parse errors when hue value is not a number", () => {
+      expect(parse("hsla(0%, 0%, 100%, 100%)")).toMatchSnapshot();
+    });
+
+    it("produces parse errors when saturation is not a percentage", () => {
+      expect(parse("hsla(90, 0, 100%, 100%)")).toMatchSnapshot();
+    });
+
+    it("produces parse errors when lightness is not a percentage", () => {
+      expect(parse("hsla(90, 0%, 100, 100%)")).toMatchSnapshot();
+    });
+
+    it("produces parse errors when alpha is neither a number nor percentage", () => {
+      expect(parse("hsla(90, 0%, 100%, hex)")).toMatchSnapshot();
+    });
+
+    it("clamps saturation between 0% and 100%", () => {
+      expect(parse("hsla(90, -.1%, 100%, 100%)")).toMatchSnapshot();
+      expect(parse("hsla(90, 100.1%, 100%, 100%)")).toMatchSnapshot();
+    });
+
+    it("clamps lightness between 0% and 100%", () => {
+      expect(parse("hsla(90, 100%, -.1%, 100%)")).toMatchSnapshot();
+      expect(parse("hsla(90, 100%, 100.1%, 100%)")).toMatchSnapshot();
+    });
+
+    it("clamps alpha values between either 0 and 1 or 0% and 100%", () => {
+      expect(parse("hsla(90, 100%, 0%, -.1%)")).toMatchSnapshot();
+      expect(parse("hsla(90, 100%, 0%, 100.1%)")).toMatchSnapshot();
+      expect(parse("hsla(90, 100%, 0%, -.1)")).toMatchSnapshot();
+      expect(parse("hsla(90, 100%, 0%, 1.01)")).toMatchSnapshot();
+    });
+
+    it("treats hsl and hsla as synonyms", () => {
+      const fst = "hsl(0, 0%, 100%)";
+      const snd = "hsla(0, 0%, 100%)";
+
+      expect(JSON.stringify(parse(fst))).toBe(JSON.stringify(parse(snd)));
+
+      const fstWithAlpha = "hsl(0, 0%, 100%, 1)";
+      const sndWithAlpha = "hsla(0, 0%, 100%, 1)";
+
+      expect(JSON.stringify(parse(fstWithAlpha))).toBe(
+        JSON.stringify(parse(sndWithAlpha))
+      );
+    });
+  });
 });
-
-/*
-__debug("rgb(0, 255, 0)");
-__debug("rgb(0%, 100%, 0%)");
-__debug("rgba(0, 255, 0)");
-__debug("rgba(0%, 100%, 0%)");
-__debug("rgba(0, 255, 0, 1)");
-__debug("rgba(0, 255, 0, 100%)");
-__debug("rgba(0%, 100%, 0%, 1)");
-__debug("rgba(0%, 100%, 0%, 100%)");
-
-
-__debug("rgba()");
-__debug("rgba(0, 255%, 0, 100%)");
-__debug("rgba(0%, 100, 0%, 100%)");
-__debug("rgba(0, 255%, 0, abc)");
-__debug("rgba(0%, 100, 0%, abc)");
-__debug("rgba(0%, 100%, 0%, abc)");
-__debug("rgba(0%, 100%, 0%, abc)");
-__debug("rgba(0%, 100, 0%, 100%, 1)");
-__debug("rgba(100%, 1)");
-
-*/

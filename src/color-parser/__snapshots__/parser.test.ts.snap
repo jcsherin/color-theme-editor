@@ -1,5 +1,427 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Color Parser HSLA clamps alpha values between either 0 and 1 or 0% and 100% 1`] = `
+Object {
+  "alpha": Object {
+    "value": Object {
+      "stringify": [Function],
+      "value": 0,
+    },
+  },
+  "hue": Object {
+    "value": 90,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA clamps alpha values between either 0 and 1 or 0% and 100% 2`] = `
+Object {
+  "alpha": Object {
+    "value": Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+  },
+  "hue": Object {
+    "value": 90,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA clamps alpha values between either 0 and 1 or 0% and 100% 3`] = `
+Object {
+  "alpha": Object {
+    "value": 0,
+  },
+  "hue": Object {
+    "value": 90,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA clamps alpha values between either 0 and 1 or 0% and 100% 4`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "hue": Object {
+    "value": 90,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA clamps lightness between 0% and 100% 1`] = `
+Object {
+  "alpha": Object {
+    "value": Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+  },
+  "hue": Object {
+    "value": 90,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA clamps lightness between 0% and 100% 2`] = `
+Object {
+  "alpha": Object {
+    "value": Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+  },
+  "hue": Object {
+    "value": 90,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA clamps saturation between 0% and 100% 1`] = `
+Object {
+  "alpha": Object {
+    "value": Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+  },
+  "hue": Object {
+    "value": 90,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA clamps saturation between 0% and 100% 2`] = `
+Object {
+  "alpha": Object {
+    "value": Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+  },
+  "hue": Object {
+    "value": 90,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA parses hsla values without an alpha value 1`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "hue": Object {
+    "value": 0,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA parses hsla values without an alpha value 2`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "hue": Object {
+    "value": 90,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA parses hsla values without an alpha value 3`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "hue": Object {
+    "value": 0,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA parses hsla values without an alpha value 4`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "hue": Object {
+    "value": 90,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA parses hsla values without an alpha value 5`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "hue": Object {
+    "value": 0,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA parses hsla values without an alpha value 6`] = `
+Object {
+  "alpha": Object {
+    "value": 1,
+  },
+  "hue": Object {
+    "value": 90,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA parses hsla values without an alpha value 7`] = `
+Object {
+  "alpha": Object {
+    "value": Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+  },
+  "hue": Object {
+    "value": 0,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA parses hsla values without an alpha value 8`] = `
+Object {
+  "alpha": Object {
+    "value": Object {
+      "stringify": [Function],
+      "value": 100,
+    },
+  },
+  "hue": Object {
+    "value": 90,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA parses hsla values without an alpha value 9`] = `
+Object {
+  "alpha": Object {
+    "value": 0.5,
+  },
+  "hue": Object {
+    "value": 90,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA parses hsla values without an alpha value 10`] = `
+Object {
+  "alpha": Object {
+    "value": Object {
+      "stringify": [Function],
+      "value": 50,
+    },
+  },
+  "hue": Object {
+    "value": 90,
+  },
+  "lightness": Object {
+    "stringify": [Function],
+    "value": 100,
+  },
+  "saturation": Object {
+    "stringify": [Function],
+    "value": 0,
+  },
+  "tag": "hsla",
+}
+`;
+
+exports[`Color Parser HSLA produces parse errors for missing hue, saturation & ligthness values 1`] = `
+Object {
+  "message": "hsla() seems to be a malformed hsla() value",
+  "value": "hsla()",
+}
+`;
+
+exports[`Color Parser HSLA produces parse errors when alpha is neither a number nor percentage 1`] = `
+Object {
+  "message": "The alpha value(fourth argument) in hsla() should be either a  number or a percentage",
+  "value": "hsla(90, 0%, 100%, hex)",
+}
+`;
+
+exports[`Color Parser HSLA produces parse errors when hue value is not a number 1`] = `
+Object {
+  "message": "In hsla() the hue (first argument) should be a number",
+  "value": "hsla(0%, 0%, 100%, 100%)",
+}
+`;
+
+exports[`Color Parser HSLA produces parse errors when lightness is not a percentage 1`] = `
+Object {
+  "message": "In hsla() the ligthness (third argument) should always be a percentage",
+  "value": "hsla(90, 0%, 100, 100%)",
+}
+`;
+
+exports[`Color Parser HSLA produces parse errors when saturation is not a percentage 1`] = `
+Object {
+  "message": "In hsla() the saturation (second argument) should always be a percentage",
+  "value": "hsla(90, 0, 100%, 100%)",
+}
+`;
+
 exports[`Color Parser Hex colors parses hex values corresponding to every named color keyword 1`] = `
 "{\\"tag\\":\\"hex-color\\",\\"value\\":\\"#F0F8FF\\"}
 {\\"tag\\":\\"hex-color\\",\\"value\\":\\"#FAEBD7\\"}

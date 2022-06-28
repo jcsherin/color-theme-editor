@@ -191,6 +191,7 @@ function createHue(value: number): Hue {
 }
 
 interface HSLA {
+  tag: "hsla";
   hue: Hue;
   saturation: Percentage;
   lightness: Percentage;
@@ -202,8 +203,9 @@ function createHSLA(
   saturation: Percentage,
   lightness: Percentage,
   alpha: number | Percentage
-) {
+): HSLA {
   return {
+    tag: "hsla",
     hue: createHue(hue),
     saturation,
     lightness,
@@ -407,7 +409,7 @@ export function parse(color: string): ParsedColor | ParseError {
     const alpha = parseAlpha(parts[3]);
     if (!alpha) {
       const message =
-        "The alpha value(fourth argument) in rgba() should be either a " +
+        "The alpha value(fourth argument) in hsla() should be either a " +
         " number or a percentage";
       return createParseError(value, message);
     }
@@ -421,99 +423,3 @@ export function parse(color: string): ParsedColor | ParseError {
     " color keywords, rgb(), rgba(), hsl() and hsla().";
   return createParseError(value, message);
 }
-
-/*
-function __debug(color: string) {
-  const parsed = parse(color);
-  const serialized = JSON.stringify(parsed, null, 2);
-  console.log(`Parsing "${color}":`);
-  console.log(serialized);
-}
-
-__debug("steelblue");
-__debug("notacolor");
-__debug("#4682B4FF");
-__debug("#4682B4");
-__debug("#4682");
-__debug("#468");
-__debug("#46");
-__debug("#4682B4FF00");
-__debug("rgb(0, 255, 0)");
-__debug("rgb(0%, 100%, 0%)");
-__debug("rgba(0, 255, 0)");
-__debug("rgba(0%, 100%, 0%)");
-__debug("rgba(0, 255, 0, 1)");
-__debug("rgba(0, 255, 0, 100%)");
-__debug("rgba(0%, 100%, 0%, 1)");
-__debug("rgba(0%, 100%, 0%, 100%)");
-__debug("rgba()");
-__debug("rgba(0, 255%, 0, 100%)");
-__debug("rgba(0%, 100, 0%, 100%)");
-__debug("rgba(0, 255%, 0, abc)");
-__debug("rgba(0%, 100, 0%, abc)");
-__debug("rgba(0%, 100%, 0%, abc)");
-__debug("rgba(0%, 100%, 0%, abc)");
-__debug("rgba(0%, 100, 0%, 100%, 1)");
-__debug("rgba(100%, 1)");
-__debug("hsl(0, 0%, 100%)");
-__debug("hsl(90, 0%, 100%)");
-__debug("hsla(0, 0%, 100%)");
-__debug("hsla(90, 0%, 100%)");
-__debug("hsla(0, 0%, 100%, 1)");
-__debug("hsla(90, 0%, 100%, 1)");
-__debug("hsla(0, 0%, 100%, 100%)");
-__debug("hsla(90, 0%, 100%, 100%)");
-__debug("hsla(0%, 0%, 100%, 100%)");
-__debug("hsla(90, 0, 100%, 100%)");
-__debug("hsla(90, 0%, 100, 100%)");
-__debug("hsla(90, 0%, 100%, hex)");
-
-function __test(expected: any, actual: any, desc: string) {
-  if (JSON.stringify(expected) === JSON.stringify(actual)) {
-    console.log(`Pass: ${desc}`);
-    console.log(`actual: ${JSON.stringify(actual, null, 2)}`);
-    console.log(`------`);
-    return;
-  }
-
-  console.error(`FAIL: ${desc}`);
-  console.log(`expected: ${JSON.stringify(expected, null, 2)}`);
-  console.log(`actual: ${JSON.stringify(actual, null, 2)}`);
-  console.log(`------`);
-}
-
-__test(createPercentage(-0.1), { value: 0 }, "-0.1%");
-__test(createPercentage(-0.01), { value: 0 }, "-0.01%");
-__test(createPercentage(-0.001), { value: 0 }, "-0.001%");
-__test(createPercentage(-0.0001), { value: 0 }, "-0.0001%");
-__test(createPercentage(0.1), { value: 0.1 }, "0.1%");
-__test(createPercentage(0.01), { value: 0.01 }, "0.01%");
-__test(createPercentage(0.001), { value: 0.001 }, "0.001%");
-__test(createPercentage(0.0001), { value: 0.0001 }, "0.0001%");
-__test(createPercentage(99.9), { value: 99.9 }, "99.9%");
-__test(createPercentage(99.99), { value: 99.99 }, "99.99%");
-__test(createPercentage(99.999), { value: 99.999 }, "99.999%");
-__test(createPercentage(99.9999), { value: 99.9999 }, "99.9999%");
-__test(createPercentage(100.1), { value: 100 }, "100%");
-__test(createPercentage(100.01), { value: 100 }, "100%");
-__test(createPercentage(100.001), { value: 100 }, "100%");
-__test(createPercentage(100.0001), { value: 100 }, "100%");
-__test(createPercentage(33.34).stringify(), "33.34%", "stringify 33.34%");
-
-__test(createAlpha(-0.1), { value: 0 }, "-0.1");
-__test(createAlpha(-0.01), { value: 0 }, "-0.01");
-__test(createAlpha(-0.001), { value: 0 }, "-0.001");
-__test(createAlpha(-0.001), { value: 0 }, "-0.0001");
-__test(createAlpha(0.1), { value: 0.1 }, "0.1");
-__test(createAlpha(0.01), { value: 0.01 }, "0.01");
-__test(createAlpha(0.001), { value: 0.001 }, "0.001");
-__test(createAlpha(0.0001), { value: 0.0001 }, "0.0001");
-__test(createAlpha(0.9), { value: 0.9 }, "0.9");
-__test(createAlpha(0.99), { value: 0.99 }, "0.99");
-__test(createAlpha(0.999), { value: 0.999 }, "0.999");
-__test(createAlpha(0.9999), { value: 0.9999 }, "0.9999");
-__test(createAlpha(1.1), { value: 1 }, "1.1");
-__test(createAlpha(1.01), { value: 1 }, "1.01");
-__test(createAlpha(1.001), { value: 1 }, "1.001");
-__test(createAlpha(1.0001), { value: 1 }, "1.0001");
-*/
