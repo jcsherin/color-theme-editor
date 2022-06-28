@@ -172,12 +172,12 @@ interface RGBA {
 }
 
 function createRGBA(
-  channels: number[] | Percentage[],
+  channels: Triple<number> | Triple<Percentage>,
   alpha: number | Percentage
 ): RGBA {
   return {
     tag: "rgba",
-    channels: channels.slice(0, 3) as Triple<number> | Triple<Percentage>,
+    channels: channels,
     alpha: createAlpha(alpha),
   };
 }
@@ -260,16 +260,18 @@ function toPercentage(str: string): number {
   return str.endsWith("%") ? parseFloat(str) : NaN;
 }
 
-function parseChannels(parts: string[]): number[] | Percentage[] | undefined {
-  const percentages = parts.map(toPercentage);
+function parseChannels(
+  parts: Triple<string>
+): Triple<number> | Triple<Percentage> | undefined {
+  const percentages: Triple<number> = parts.map(toPercentage) as Triple<number>;
 
   if (percentages.every((n) => !Number.isNaN(n))) {
-    return percentages.map(createPercentage);
+    return percentages.map(createPercentage) as Triple<Percentage>;
   }
 
   const nums = parts.map(toNumber);
   if (nums.every((n) => !Number.isNaN(n))) {
-    return nums;
+    return nums as Triple<number>;
   }
 
   return;
@@ -337,7 +339,7 @@ export function parse(color: string): ParsedColor | ParseError {
       return createParseError(value, message);
     }
 
-    const channels = parseChannels(parts.slice(0, 3));
+    const channels = parseChannels(parts.slice(0, 3) as Triple<string>);
     if (!channels) {
       const message =
         "The red, green & blue channels of the color should be either all " +
