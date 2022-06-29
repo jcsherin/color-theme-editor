@@ -133,12 +133,14 @@ function clampPercentage(percentage: Percentage): Percentage {
 /**
  * Create a {Percentage} value.
  *
- * @param percentage
+ * @param value
  * @returns {Percentage}
  */
-function createPercentage(percentage: number): Percentage {
+function createPercentage(value: string | number): Percentage {
+  const percentage =
+    typeof value === "number" ? value : Number.parseFloat(value);
   return {
-    percentage: percentage,
+    percentage,
     stringify: () => `${percentage}%`,
   };
 }
@@ -247,62 +249,52 @@ const HexPatterns = [
 const RGBAPattern = /^rgba?\((.*)\)$/;
 const HSLAPattern = /^hsla?\((.*)\)$/;
 
-function toNumber(str: string): number {
-  return Number(str);
+function isNumber(str: string): boolean {
+  return !Number.isNaN(Number(str));
 }
 
-function toPercentage(str: string): number {
-  return str.endsWith("%") ? parseFloat(str) : NaN;
+function isPercentage(str: string): boolean {
+  return str.endsWith("%") && !Number.isNaN(Number.parseFloat(str));
 }
 
 function parseChannels(
   parts: Triple<string>
 ): Triple<number> | Triple<Percentage> | undefined {
-  const percentages: Triple<number> = parts.map(toPercentage) as Triple<number>;
-
-  if (percentages.every((n) => !Number.isNaN(n))) {
-    return percentages.map(createPercentage) as Triple<Percentage>;
+  if (parts.every(isPercentage)) {
+    return parts.map(createPercentage) as Triple<Percentage>;
   }
 
-  const nums = parts.map(toNumber);
-  if (nums.every((n) => !Number.isNaN(n))) {
-    return nums as Triple<number>;
+  if (parts.every(isNumber)) {
+    return parts.map((str) => Number.parseFloat(str)) as Triple<number>;
   }
 
   return;
 }
 
 function parseAlpha(alpha: string): Alpha | undefined {
-  const percentAlpha = toPercentage(alpha);
-  if (!Number.isNaN(percentAlpha)) {
-    return createAlpha(createPercentage(percentAlpha));
+  if (isPercentage(alpha)) {
+    return createAlpha(createPercentage(alpha));
   }
 
-  const numAlpha = toNumber(alpha);
-  if (!Number.isNaN(numAlpha)) {
-    return createAlpha(numAlpha);
+  if (isNumber(alpha)) {
+    return createAlpha(Number.parseFloat(alpha));
   }
 
   return;
 }
 
 function parseHue(hue: string): number | undefined {
-  const parsed = toNumber(hue);
-  return Number.isNaN(parsed) ? undefined : parsed;
+  if (isNumber(hue)) return Number.parseFloat(hue);
 }
 
 function parseSaturation(saturation: string): Percentage | undefined {
-  const parsed = toPercentage(saturation);
-  return Number.isNaN(parsed)
-    ? undefined
-    : clampPercentage(createPercentage(parsed));
+  if (isPercentage(saturation))
+    return clampPercentage(createPercentage(saturation));
 }
 
 function parseLightness(lightness: string): Percentage | undefined {
-  const parsed = toPercentage(lightness);
-  return Number.isNaN(parsed)
-    ? undefined
-    : clampPercentage(createPercentage(parsed));
+  if (isPercentage(lightness))
+    return clampPercentage(createPercentage(lightness));
 }
 
 export function parse(color: string): ParsedColor | ParseError {
