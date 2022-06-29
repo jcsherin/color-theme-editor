@@ -257,15 +257,34 @@ function isPercentage(str: string): boolean {
   return str.endsWith("%") && !Number.isNaN(Number.parseFloat(str));
 }
 
+const enum ChannelNumberRange {
+  Min = 0,
+  Max = 255,
+}
+
+/**
+ * Restrict the given channel value between 0 and 255.
+ *
+ * @param num
+ * @returns a clamped channel value
+ */
+function clampChannelNumber(num: number): number {
+  return clamp(num, ChannelNumberRange.Min, ChannelNumberRange.Max);
+}
+
 function parseChannels(
   parts: Triple<string>
 ): Triple<number> | Triple<Percentage> | undefined {
   if (parts.every(isPercentage)) {
-    return parts.map(createPercentage) as Triple<Percentage>;
+    return parts
+      .map(createPercentage)
+      .map(clampPercentage) as Triple<Percentage>;
   }
 
   if (parts.every(isNumber)) {
-    return parts.map((str) => Number.parseFloat(str)) as Triple<number>;
+    return parts
+      .map((str) => Number.parseFloat(str))
+      .map(clampChannelNumber) as Triple<number>;
   }
 
   return;

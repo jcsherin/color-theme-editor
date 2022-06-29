@@ -748,6 +748,80 @@ The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and 
 }
 `;
 
+exports[`Color Parser RGBA parsed rgba channel values are clamped between 0 and 255 1`] = `
+Object {
+  "alpha": Object {
+    "alpha": 1,
+  },
+  "channels": Array [
+    0,
+    0,
+    0,
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser RGBA parsed rgba channel values are clamped between 0 and 255 2`] = `
+Object {
+  "alpha": Object {
+    "alpha": 1,
+  },
+  "channels": Array [
+    255,
+    255,
+    255,
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser RGBA parsed rgba channel values are clamped between 0 and 255 3`] = `
+Object {
+  "alpha": Object {
+    "alpha": 1,
+  },
+  "channels": Array [
+    Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+  ],
+  "tag": "rgba",
+}
+`;
+
+exports[`Color Parser RGBA parsed rgba channel values are clamped between 0 and 255 4`] = `
+Object {
+  "alpha": Object {
+    "alpha": 1,
+  },
+  "channels": Array [
+    Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+    Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+    Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+  ],
+  "tag": "rgba",
+}
+`;
+
 exports[`Color Parser RGBA parses rgba alpha values are clamped between 0 and 1 1`] = `
 Object {
   "alpha": Object {
