@@ -3,19 +3,19 @@
 exports[`Color Parser HSLA clamps alpha values between either 0 and 1 or 0% and 100% 1`] = `
 Object {
   "alpha": Object {
-    "value": Object {
+    "alpha": Object {
+      "percentage": 0,
       "stringify": [Function],
-      "value": 0,
     },
   },
   "hue": 90,
   "lightness": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "saturation": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "tag": "hsla",
 }
@@ -24,19 +24,19 @@ Object {
 exports[`Color Parser HSLA clamps alpha values between either 0 and 1 or 0% and 100% 2`] = `
 Object {
   "alpha": Object {
-    "value": Object {
+    "alpha": Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
   },
   "hue": 90,
   "lightness": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "saturation": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "tag": "hsla",
 }
@@ -45,16 +45,16 @@ Object {
 exports[`Color Parser HSLA clamps alpha values between either 0 and 1 or 0% and 100% 3`] = `
 Object {
   "alpha": Object {
-    "value": 0,
+    "alpha": 0,
   },
   "hue": 90,
   "lightness": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "saturation": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "tag": "hsla",
 }
@@ -63,16 +63,16 @@ Object {
 exports[`Color Parser HSLA clamps alpha values between either 0 and 1 or 0% and 100% 4`] = `
 Object {
   "alpha": Object {
-    "value": 1,
+    "alpha": 1,
   },
   "hue": 90,
   "lightness": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "saturation": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "tag": "hsla",
 }
@@ -81,19 +81,19 @@ Object {
 exports[`Color Parser HSLA clamps lightness between 0% and 100% 1`] = `
 Object {
   "alpha": Object {
-    "value": Object {
+    "alpha": Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
   },
   "hue": 90,
   "lightness": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "saturation": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "tag": "hsla",
 }
@@ -102,19 +102,19 @@ Object {
 exports[`Color Parser HSLA clamps lightness between 0% and 100% 2`] = `
 Object {
   "alpha": Object {
-    "value": Object {
+    "alpha": Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
   },
   "hue": 90,
   "lightness": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "saturation": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "tag": "hsla",
 }
@@ -123,19 +123,19 @@ Object {
 exports[`Color Parser HSLA clamps saturation between 0% and 100% 1`] = `
 Object {
   "alpha": Object {
-    "value": Object {
+    "alpha": Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
   },
   "hue": 90,
   "lightness": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "saturation": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "tag": "hsla",
 }
@@ -144,19 +144,19 @@ Object {
 exports[`Color Parser HSLA clamps saturation between 0% and 100% 2`] = `
 Object {
   "alpha": Object {
-    "value": Object {
+    "alpha": Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
   },
   "hue": 90,
   "lightness": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "saturation": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "tag": "hsla",
 }
@@ -165,16 +165,16 @@ Object {
 exports[`Color Parser HSLA parses hsla values without an alpha value 1`] = `
 Object {
   "alpha": Object {
-    "value": 1,
+    "alpha": 1,
   },
   "hue": 0,
   "lightness": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "saturation": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "tag": "hsla",
 }
@@ -183,16 +183,16 @@ Object {
 exports[`Color Parser HSLA parses hsla values without an alpha value 2`] = `
 Object {
   "alpha": Object {
-    "value": 1,
+    "alpha": 1,
   },
   "hue": 90,
   "lightness": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "saturation": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "tag": "hsla",
 }
@@ -201,16 +201,16 @@ Object {
 exports[`Color Parser HSLA parses hsla values without an alpha value 3`] = `
 Object {
   "alpha": Object {
-    "value": 1,
+    "alpha": 1,
   },
   "hue": 0,
   "lightness": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "saturation": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "tag": "hsla",
 }
@@ -219,16 +219,16 @@ Object {
 exports[`Color Parser HSLA parses hsla values without an alpha value 4`] = `
 Object {
   "alpha": Object {
-    "value": 1,
+    "alpha": 1,
   },
   "hue": 90,
   "lightness": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "saturation": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "tag": "hsla",
 }
@@ -237,16 +237,16 @@ Object {
 exports[`Color Parser HSLA parses hsla values without an alpha value 5`] = `
 Object {
   "alpha": Object {
-    "value": 1,
+    "alpha": 1,
   },
   "hue": 0,
   "lightness": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "saturation": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "tag": "hsla",
 }
@@ -255,16 +255,16 @@ Object {
 exports[`Color Parser HSLA parses hsla values without an alpha value 6`] = `
 Object {
   "alpha": Object {
-    "value": 1,
+    "alpha": 1,
   },
   "hue": 90,
   "lightness": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "saturation": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "tag": "hsla",
 }
@@ -273,19 +273,19 @@ Object {
 exports[`Color Parser HSLA parses hsla values without an alpha value 7`] = `
 Object {
   "alpha": Object {
-    "value": Object {
+    "alpha": Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
   },
   "hue": 0,
   "lightness": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "saturation": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "tag": "hsla",
 }
@@ -294,19 +294,19 @@ Object {
 exports[`Color Parser HSLA parses hsla values without an alpha value 8`] = `
 Object {
   "alpha": Object {
-    "value": Object {
+    "alpha": Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
   },
   "hue": 90,
   "lightness": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "saturation": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "tag": "hsla",
 }
@@ -315,16 +315,16 @@ Object {
 exports[`Color Parser HSLA parses hsla values without an alpha value 9`] = `
 Object {
   "alpha": Object {
-    "value": 0.5,
+    "alpha": 0.5,
   },
   "hue": 90,
   "lightness": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "saturation": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "tag": "hsla",
 }
@@ -333,19 +333,19 @@ Object {
 exports[`Color Parser HSLA parses hsla values without an alpha value 10`] = `
 Object {
   "alpha": Object {
-    "value": Object {
+    "alpha": Object {
+      "percentage": 50,
       "stringify": [Function],
-      "value": 50,
     },
   },
   "hue": 90,
   "lightness": Object {
+    "percentage": 100,
     "stringify": [Function],
-    "value": 100,
   },
   "saturation": Object {
+    "percentage": 0,
     "stringify": [Function],
-    "value": 0,
   },
   "tag": "hsla",
 }
@@ -751,7 +751,7 @@ The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and 
 exports[`Color Parser RGBA parses rgba alpha values are clamped between 0 and 1 1`] = `
 Object {
   "alpha": Object {
-    "value": 0,
+    "alpha": 0,
   },
   "channels": Array [
     0,
@@ -765,7 +765,7 @@ Object {
 exports[`Color Parser RGBA parses rgba alpha values are clamped between 0 and 1 2`] = `
 Object {
   "alpha": Object {
-    "value": 1,
+    "alpha": 1,
   },
   "channels": Array [
     0,
@@ -779,9 +779,9 @@ Object {
 exports[`Color Parser RGBA parses rgba alpha values are clamped between 0 and 1 3`] = `
 Object {
   "alpha": Object {
-    "value": Object {
+    "alpha": Object {
+      "percentage": 0,
       "stringify": [Function],
-      "value": 0,
     },
   },
   "channels": Array [
@@ -796,9 +796,9 @@ Object {
 exports[`Color Parser RGBA parses rgba alpha values are clamped between 0 and 1 4`] = `
 Object {
   "alpha": Object {
-    "value": Object {
+    "alpha": Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
   },
   "channels": Array [
@@ -813,7 +813,7 @@ Object {
 exports[`Color Parser RGBA parses rgba values with an alpha value 1`] = `
 Object {
   "alpha": Object {
-    "value": 1,
+    "alpha": 1,
   },
   "channels": Array [
     0,
@@ -827,9 +827,9 @@ Object {
 exports[`Color Parser RGBA parses rgba values with an alpha value 2`] = `
 Object {
   "alpha": Object {
-    "value": Object {
+    "alpha": Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
   },
   "channels": Array [
@@ -844,20 +844,20 @@ Object {
 exports[`Color Parser RGBA parses rgba values with an alpha value 3`] = `
 Object {
   "alpha": Object {
-    "value": 1,
+    "alpha": 1,
   },
   "channels": Array [
     Object {
+      "percentage": 0,
       "stringify": [Function],
-      "value": 0,
     },
     Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
     Object {
+      "percentage": 0,
       "stringify": [Function],
-      "value": 0,
     },
   ],
   "tag": "rgba",
@@ -867,23 +867,23 @@ Object {
 exports[`Color Parser RGBA parses rgba values with an alpha value 4`] = `
 Object {
   "alpha": Object {
-    "value": Object {
+    "alpha": Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
   },
   "channels": Array [
     Object {
+      "percentage": 0,
       "stringify": [Function],
-      "value": 0,
     },
     Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
     Object {
+      "percentage": 0,
       "stringify": [Function],
-      "value": 0,
     },
   ],
   "tag": "rgba",
@@ -893,23 +893,23 @@ Object {
 exports[`Color Parser RGBA parses rgba values with an alpha value 5`] = `
 Object {
   "alpha": Object {
-    "value": Object {
+    "alpha": Object {
+      "percentage": 50,
       "stringify": [Function],
-      "value": 50,
     },
   },
   "channels": Array [
     Object {
+      "percentage": 0,
       "stringify": [Function],
-      "value": 0,
     },
     Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
     Object {
+      "percentage": 0,
       "stringify": [Function],
-      "value": 0,
     },
   ],
   "tag": "rgba",
@@ -919,7 +919,7 @@ Object {
 exports[`Color Parser RGBA parses rgba values with an alpha value 6`] = `
 Object {
   "alpha": Object {
-    "value": 0.5,
+    "alpha": 0.5,
   },
   "channels": Array [
     0,
@@ -933,7 +933,7 @@ Object {
 exports[`Color Parser RGBA parses rgba values without an alpha value 1`] = `
 Object {
   "alpha": Object {
-    "value": 1,
+    "alpha": 1,
   },
   "channels": Array [
     0,
@@ -947,7 +947,7 @@ Object {
 exports[`Color Parser RGBA parses rgba values without an alpha value 2`] = `
 Object {
   "alpha": Object {
-    "value": 1,
+    "alpha": 1,
   },
   "channels": Array [
     0,
@@ -961,20 +961,20 @@ Object {
 exports[`Color Parser RGBA parses rgba values without an alpha value 3`] = `
 Object {
   "alpha": Object {
-    "value": 1,
+    "alpha": 1,
   },
   "channels": Array [
     Object {
+      "percentage": 0,
       "stringify": [Function],
-      "value": 0,
     },
     Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
     Object {
+      "percentage": 0,
       "stringify": [Function],
-      "value": 0,
     },
   ],
   "tag": "rgba",
@@ -984,20 +984,20 @@ Object {
 exports[`Color Parser RGBA parses rgba values without an alpha value 4`] = `
 Object {
   "alpha": Object {
-    "value": 1,
+    "alpha": 1,
   },
   "channels": Array [
     Object {
+      "percentage": 0,
       "stringify": [Function],
-      "value": 0,
     },
     Object {
+      "percentage": 100,
       "stringify": [Function],
-      "value": 100,
     },
     Object {
+      "percentage": 0,
       "stringify": [Function],
-      "value": 0,
     },
   ],
   "tag": "rgba",

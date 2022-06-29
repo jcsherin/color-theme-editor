@@ -106,7 +106,7 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 interface Percentage {
-  value: number;
+  percentage: number;
   stringify: () => string;
 }
 
@@ -123,7 +123,7 @@ const enum PercentageRange {
  */
 function clampPercentage(percentage: Percentage): Percentage {
   const result = clamp(
-    percentage.value,
+    percentage.percentage,
     PercentageRange.Min,
     PercentageRange.Max
   );
@@ -138,13 +138,13 @@ function clampPercentage(percentage: Percentage): Percentage {
  */
 function createPercentage(percentage: number): Percentage {
   return {
-    value: percentage,
+    percentage: percentage,
     stringify: () => `${percentage}%`,
   };
 }
 
 interface Alpha {
-  value: number | Percentage;
+  alpha: number | Percentage;
 }
 
 const enum AlphaRange {
@@ -165,7 +165,7 @@ function createAlpha(alpha: number | Percentage): Alpha {
       ? clamp(alpha, AlphaRange.Min, AlphaRange.Max)
       : clampPercentage(alpha);
 
-  return { value };
+  return { alpha: value };
 }
 
 interface RGBA {
