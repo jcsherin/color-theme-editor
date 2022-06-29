@@ -229,12 +229,12 @@ function createNamedColor(value: string): NamedColor {
 type ParsedColor = HexColor | NamedColor | RGBA | HSLA;
 
 interface ParseError {
-  value: string;
+  token: string;
   message: string;
 }
 
-function createParseError(value: string, message: string) {
-  return { value, message };
+function createParseError(token: string, message: string) {
+  return { token, message };
 }
 
 const HexPatterns = [
@@ -306,36 +306,36 @@ function parseLightness(lightness: string): Percentage | undefined {
 }
 
 export function parse(color: string): ParsedColor | ParseError {
-  const value = color.trim();
+  const token = color.trim();
 
   // <named-color>
-  if (keywords[value as keyof Keywords]) {
-    return createNamedColor(value);
+  if (keywords[token as keyof Keywords]) {
+    return createNamedColor(token);
   }
 
   // <hex-color>
-  if (HexPatterns.some((regexp) => regexp.test(value))) {
-    return createHexColor(value);
+  if (HexPatterns.some((regexp) => regexp.test(token))) {
+    return createHexColor(token);
   }
 
   // <rgb()> | <rgba()>
-  if (RGBAPattern.test(value)) {
-    const match = value.match(RGBAPattern);
+  if (RGBAPattern.test(token)) {
+    const match = token.match(RGBAPattern);
     if (!match || !match[1]) {
       return createParseError(
-        value,
-        `${value} seems to be a malformed rgba() value`
+        token,
+        `${token} seems to be a malformed rgba() value`
       );
     }
 
     const parts = match[1].split(",");
     if (parts.length < 3 || parts.length > 4) {
       const message =
-        value +
+        token +
         " seems to be an rgba() value. It should have exactly three arguments" +
         " to specify the red, green & blue channels of the color respectively." +
         " A final optional argument specifies the alpha of the color.";
-      return createParseError(value, message);
+      return createParseError(token, message);
     }
 
     const channels = parseChannels(parts.slice(0, 3) as Triple<string>);
@@ -343,7 +343,7 @@ export function parse(color: string): ParsedColor | ParseError {
       const message =
         "The red, green & blue channels of the color should be either all " +
         " numbers or all percentages.";
-      return createParseError(value, message);
+      return createParseError(token, message);
     }
 
     if (parts.length === 3) {
@@ -355,36 +355,36 @@ export function parse(color: string): ParsedColor | ParseError {
       const message =
         "The alpha value(fourth argument) in rgba() should be either a " +
         " number or a percentage";
-      return createParseError(value, message);
+      return createParseError(token, message);
     }
 
     return createRGBA(channels, alpha);
   }
 
   // <hsl()> | <hsla()>
-  if (HSLAPattern.test(value)) {
-    const match = value.match(HSLAPattern);
+  if (HSLAPattern.test(token)) {
+    const match = token.match(HSLAPattern);
     if (!match || !match[1]) {
       return createParseError(
-        value,
-        `${value} seems to be a malformed hsla() value`
+        token,
+        `${token} seems to be a malformed hsla() value`
       );
     }
 
     const parts = match[1].split(",");
     if (parts.length < 3 || parts.length > 4) {
       const message =
-        value +
+        token +
         " seems to be an hsla() value. It should have exactly three arguments" +
         " to specify the hue, saturation & lightness of the color respectively." +
         " A final optional argument specifies the alpha of the color.";
-      return createParseError(value, message);
+      return createParseError(token, message);
     }
 
     const hue = parseHue(parts[0]);
     if (hue === undefined) {
       const message = "In hsla() the hue (first argument) should be a number";
-      return createParseError(value, message);
+      return createParseError(token, message);
     }
 
     const saturation = parseSaturation(parts[1]);
@@ -392,7 +392,7 @@ export function parse(color: string): ParsedColor | ParseError {
       const message =
         "In hsla() the saturation (second argument) should always be" +
         " a percentage";
-      return createParseError(value, message);
+      return createParseError(token, message);
     }
 
     const lightness = parseLightness(parts[2]);
@@ -400,7 +400,7 @@ export function parse(color: string): ParsedColor | ParseError {
       const message =
         "In hsla() the ligthness (third argument) should always be" +
         " a percentage";
-      return createParseError(value, message);
+      return createParseError(token, message);
     }
 
     if (parts.length === 3) {
@@ -412,15 +412,15 @@ export function parse(color: string): ParsedColor | ParseError {
       const message =
         "The alpha value(fourth argument) in hsla() should be either a " +
         " number or a percentage";
-      return createParseError(value, message);
+      return createParseError(token, message);
     }
 
     return createHSLA(hue, saturation, lightness, alpha);
   }
 
   const message =
-    `${value}: ` +
+    `${token}: ` +
     " is not a supported color format.\nThe supported formats are: hex, named " +
     " color keywords, rgb(), rgba(), hsl() and hsla().";
-  return createParseError(value, message);
+  return createParseError(token, message);
 }

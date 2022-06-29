@@ -354,35 +354,35 @@ Object {
 exports[`Color Parser HSLA produces parse errors for missing hue, saturation & ligthness values 1`] = `
 Object {
   "message": "hsla() seems to be a malformed hsla() value",
-  "value": "hsla()",
+  "token": "hsla()",
 }
 `;
 
 exports[`Color Parser HSLA produces parse errors when alpha is neither a number nor percentage 1`] = `
 Object {
   "message": "The alpha value(fourth argument) in hsla() should be either a  number or a percentage",
-  "value": "hsla(90, 0%, 100%, hex)",
+  "token": "hsla(90, 0%, 100%, hex)",
 }
 `;
 
 exports[`Color Parser HSLA produces parse errors when hue value is not a number 1`] = `
 Object {
   "message": "In hsla() the hue (first argument) should be a number",
-  "value": "hsla(0%, 0%, 100%, 100%)",
+  "token": "hsla(0%, 0%, 100%, 100%)",
 }
 `;
 
 exports[`Color Parser HSLA produces parse errors when lightness is not a percentage 1`] = `
 Object {
   "message": "In hsla() the ligthness (third argument) should always be a percentage",
-  "value": "hsla(90, 0%, 100, 100%)",
+  "token": "hsla(90, 0%, 100, 100%)",
 }
 `;
 
 exports[`Color Parser HSLA produces parse errors when saturation is not a percentage 1`] = `
 Object {
   "message": "In hsla() the saturation (second argument) should always be a percentage",
-  "value": "hsla(90, 0, 100%, 100%)",
+  "token": "hsla(90, 0, 100%, 100%)",
 }
 `;
 
@@ -569,7 +569,7 @@ exports[`Color Parser Hex colors produces a parse error for invalid hex values 1
 Object {
   "message": "#46:  is not a supported color format.
 The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and hsla().",
-  "value": "#46",
+  "token": "#46",
 }
 `;
 
@@ -577,7 +577,7 @@ exports[`Color Parser Hex colors produces a parse error for invalid hex values 2
 Object {
   "message": "#4682B4FF00:  is not a supported color format.
 The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and hsla().",
-  "value": "#4682B4FF00",
+  "token": "#4682B4FF00",
 }
 `;
 
@@ -585,7 +585,7 @@ exports[`Color Parser Hex colors produces a parse error for invalid hex values 3
 Object {
   "message": "#xyz:  is not a supported color format.
 The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and hsla().",
-  "value": "#xyz",
+  "token": "#xyz",
 }
 `;
 
@@ -744,7 +744,7 @@ exports[`Color Parser Named color keywords produces a parse error for non-existe
 Object {
   "message": "notarealcolorkeyword:  is not a supported color format.
 The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and hsla().",
-  "value": "notarealcolorkeyword",
+  "token": "notarealcolorkeyword",
 }
 `;
 
@@ -1007,76 +1007,76 @@ Object {
 exports[`Color Parser RGBA produces parse errors for missing rgba channel values 1`] = `
 Object {
   "message": "rgba() seems to be a malformed rgba() value",
-  "value": "rgba()",
+  "token": "rgba()",
 }
 `;
 
 exports[`Color Parser RGBA produces parse errors for rgba with incorrect number of arguments 1`] = `
 Object {
   "message": "rgba(0%, 100, 0%, 100%, 1) seems to be an rgba() value. It should have exactly three arguments to specify the red, green & blue channels of the color respectively. A final optional argument specifies the alpha of the color.",
-  "value": "rgba(0%, 100, 0%, 100%, 1)",
+  "token": "rgba(0%, 100, 0%, 100%, 1)",
 }
 `;
 
 exports[`Color Parser RGBA produces parse errors for rgba with incorrect number of arguments 2`] = `
 Object {
   "message": "rgba(100%, 1) seems to be an rgba() value. It should have exactly three arguments to specify the red, green & blue channels of the color respectively. A final optional argument specifies the alpha of the color.",
-  "value": "rgba(100%, 1)",
+  "token": "rgba(100%, 1)",
 }
 `;
 
 exports[`Color Parser RGBA produces parse errors for wrongly typed rgba alpha value 1`] = `
 Object {
   "message": "The alpha value(fourth argument) in rgba() should be either a  number or a percentage",
-  "value": "rgba(0%, 100%, 0%, abc)",
+  "token": "rgba(0%, 100%, 0%, abc)",
 }
 `;
 
 exports[`Color Parser RGBA produces parse errors for wrongly typed rgba alpha value 2`] = `
 Object {
   "message": "The alpha value(fourth argument) in rgba() should be either a  number or a percentage",
-  "value": "rgba(0%, 100%, 0%, abc)",
+  "token": "rgba(0%, 100%, 0%, abc)",
 }
 `;
 
 exports[`Color Parser RGBA produces parse errors for wrongly typed rgba channel values 1`] = `
 Object {
   "message": "The red, green & blue channels of the color should be either all  numbers or all percentages.",
-  "value": "rgba(0, 255%, 0)",
+  "token": "rgba(0, 255%, 0)",
 }
 `;
 
 exports[`Color Parser RGBA produces parse errors for wrongly typed rgba channel values 2`] = `
 Object {
   "message": "The red, green & blue channels of the color should be either all  numbers or all percentages.",
-  "value": "rgba(0%, 100, 0%)",
+  "token": "rgba(0%, 100, 0%)",
 }
 `;
 
 exports[`Color Parser RGBA produces parse errors for wrongly typed rgba channel values 3`] = `
 Object {
   "message": "The red, green & blue channels of the color should be either all  numbers or all percentages.",
-  "value": "rgba(0, 255%, 0, 100%)",
+  "token": "rgba(0, 255%, 0, 100%)",
 }
 `;
 
 exports[`Color Parser RGBA produces parse errors for wrongly typed rgba channel values 4`] = `
 Object {
   "message": "The red, green & blue channels of the color should be either all  numbers or all percentages.",
-  "value": "rgba(0%, 100, 0%, 100%)",
+  "token": "rgba(0%, 100, 0%, 100%)",
 }
 `;
 
 exports[`Color Parser RGBA produces parse errors for wrongly typed rgba channel values 5`] = `
 Object {
   "message": "The red, green & blue channels of the color should be either all  numbers or all percentages.",
-  "value": "rgba(0, 255%, 0, abc)",
+  "token": "rgba(0, 255%, 0, abc)",
 }
 `;
 
 exports[`Color Parser RGBA produces parse errors for wrongly typed rgba channel values 6`] = `
 Object {
   "message": "The red, green & blue channels of the color should be either all  numbers or all percentages.",
-  "value": "rgba(0%, 100, 0%, abc)",
+  "token": "rgba(0%, 100, 0%, abc)",
 }
 `;
