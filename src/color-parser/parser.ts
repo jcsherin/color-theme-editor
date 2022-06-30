@@ -228,7 +228,17 @@ function createNamedColor(value: string): KeywordColor {
   return { tag: "named-color", keyword: value as keyof Keywords };
 }
 
-type ParsedColor = HexColor | KeywordColor | RGBAColor | HSLAColor;
+export interface ParsedColor {
+  token: string;
+  parsed: HexColor | KeywordColor | RGBAColor | HSLAColor;
+}
+
+function createParsedColor(
+  token: string,
+  parsed: HexColor | KeywordColor | RGBAColor | HSLAColor
+): ParsedColor {
+  return { token, parsed };
+}
 
 interface ParseError {
   token: string;
@@ -321,12 +331,12 @@ export function parse(color: string): ParsedColor | ParseError {
 
   // <named-color>
   if (keywords[token as keyof Keywords]) {
-    return createNamedColor(token);
+    return createParsedColor(token, createNamedColor(token));
   }
 
   // <hex-color>
   if (HexPatterns.some((regexp) => regexp.test(token))) {
-    return createHexColor(token);
+    return createParsedColor(token, createHexColor(token));
   }
 
   // <rgb()> | <rgba()>
@@ -358,7 +368,7 @@ export function parse(color: string): ParsedColor | ParseError {
     }
 
     if (parts.length === 3) {
-      return createRGBA(channels, createAlpha(1));
+      return createParsedColor(token, createRGBA(channels, createAlpha(1)));
     }
 
     const alpha = parseAlpha(parts[3]);
@@ -369,7 +379,7 @@ export function parse(color: string): ParsedColor | ParseError {
       return createParseError(token, message);
     }
 
-    return createRGBA(channels, alpha);
+    return createParsedColor(token, createRGBA(channels, alpha));
   }
 
   // <hsl()> | <hsla()>
@@ -415,7 +425,10 @@ export function parse(color: string): ParsedColor | ParseError {
     }
 
     if (parts.length === 3) {
-      return createHSLA(hue, saturation, lightness, createAlpha(1));
+      return createParsedColor(
+        token,
+        createHSLA(hue, saturation, lightness, createAlpha(1))
+      );
     }
 
     const alpha = parseAlpha(parts[3]);
@@ -426,7 +439,10 @@ export function parse(color: string): ParsedColor | ParseError {
       return createParseError(token, message);
     }
 
-    return createHSLA(hue, saturation, lightness, alpha);
+    return createParsedColor(
+      token,
+      createHSLA(hue, saturation, lightness, alpha)
+    );
   }
 
   const message =

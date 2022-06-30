@@ -2,352 +2,406 @@
 
 exports[`Color Parser HSLA clamps alpha values between either 0 and 1 or 0% and 100% 1`] = `
 Object {
-  "alpha": Object {
+  "parsed": Object {
     "alpha": Object {
+      "alpha": Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
+    },
+    "hue": 90,
+    "lightness": Object {
       "percentage": 0,
       "stringify": [Function],
     },
+    "saturation": Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 90,
-  "lightness": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(90, 100%, 0%, -.1%)",
 }
 `;
 
 exports[`Color Parser HSLA clamps alpha values between either 0 and 1 or 0% and 100% 2`] = `
 Object {
-  "alpha": Object {
+  "parsed": Object {
     "alpha": Object {
+      "alpha": Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+    },
+    "hue": 90,
+    "lightness": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "saturation": Object {
       "percentage": 100,
       "stringify": [Function],
     },
+    "tag": "hsla",
   },
-  "hue": 90,
-  "lightness": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(90, 100%, 0%, 100.1%)",
 }
 `;
 
 exports[`Color Parser HSLA clamps alpha values between either 0 and 1 or 0% and 100% 3`] = `
 Object {
-  "alpha": Object {
-    "alpha": 0,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 0,
+    },
+    "hue": 90,
+    "lightness": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "saturation": Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 90,
-  "lightness": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(90, 100%, 0%, -.1)",
 }
 `;
 
 exports[`Color Parser HSLA clamps alpha values between either 0 and 1 or 0% and 100% 4`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "hue": 90,
+    "lightness": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "saturation": Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 90,
-  "lightness": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(90, 100%, 0%, 1.01)",
 }
 `;
 
 exports[`Color Parser HSLA clamps lightness between 0% and 100% 1`] = `
 Object {
-  "alpha": Object {
+  "parsed": Object {
     "alpha": Object {
+      "alpha": Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+    },
+    "hue": 90,
+    "lightness": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "saturation": Object {
       "percentage": 100,
       "stringify": [Function],
     },
+    "tag": "hsla",
   },
-  "hue": 90,
-  "lightness": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(90, 100%, -.1%, 100%)",
 }
 `;
 
 exports[`Color Parser HSLA clamps lightness between 0% and 100% 2`] = `
 Object {
-  "alpha": Object {
+  "parsed": Object {
     "alpha": Object {
+      "alpha": Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+    },
+    "hue": 90,
+    "lightness": Object {
       "percentage": 100,
       "stringify": [Function],
     },
+    "saturation": Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 90,
-  "lightness": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(90, 100%, 100.1%, 100%)",
 }
 `;
 
 exports[`Color Parser HSLA clamps saturation between 0% and 100% 1`] = `
 Object {
-  "alpha": Object {
+  "parsed": Object {
     "alpha": Object {
+      "alpha": Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+    },
+    "hue": 90,
+    "lightness": Object {
       "percentage": 100,
       "stringify": [Function],
     },
+    "saturation": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 90,
-  "lightness": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(90, -.1%, 100%, 100%)",
 }
 `;
 
 exports[`Color Parser HSLA clamps saturation between 0% and 100% 2`] = `
 Object {
-  "alpha": Object {
+  "parsed": Object {
     "alpha": Object {
+      "alpha": Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+    },
+    "hue": 90,
+    "lightness": Object {
       "percentage": 100,
       "stringify": [Function],
     },
+    "saturation": Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 90,
-  "lightness": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(90, 100.1%, 100%, 100%)",
 }
 `;
 
 exports[`Color Parser HSLA parses hsla values without an alpha value 1`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "hue": 0,
+    "lightness": Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+    "saturation": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 0,
-  "lightness": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsl(0, 0%, 100%)",
 }
 `;
 
 exports[`Color Parser HSLA parses hsla values without an alpha value 2`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "hue": 90,
+    "lightness": Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+    "saturation": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 90,
-  "lightness": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsl(90, 0%, 100%)",
 }
 `;
 
 exports[`Color Parser HSLA parses hsla values without an alpha value 3`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "hue": 0,
+    "lightness": Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+    "saturation": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 0,
-  "lightness": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(0, 0%, 100%)",
 }
 `;
 
 exports[`Color Parser HSLA parses hsla values without an alpha value 4`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "hue": 90,
+    "lightness": Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+    "saturation": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 90,
-  "lightness": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(90, 0%, 100%)",
 }
 `;
 
 exports[`Color Parser HSLA parses hsla values without an alpha value 5`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "hue": 0,
+    "lightness": Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+    "saturation": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 0,
-  "lightness": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(0, 0%, 100%, 1)",
 }
 `;
 
 exports[`Color Parser HSLA parses hsla values without an alpha value 6`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "hue": 90,
+    "lightness": Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+    "saturation": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 90,
-  "lightness": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(90, 0%, 100%, 1)",
 }
 `;
 
 exports[`Color Parser HSLA parses hsla values without an alpha value 7`] = `
 Object {
-  "alpha": Object {
+  "parsed": Object {
     "alpha": Object {
+      "alpha": Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+    },
+    "hue": 0,
+    "lightness": Object {
       "percentage": 100,
       "stringify": [Function],
     },
+    "saturation": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 0,
-  "lightness": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(0, 0%, 100%, 100%)",
 }
 `;
 
 exports[`Color Parser HSLA parses hsla values without an alpha value 8`] = `
 Object {
-  "alpha": Object {
+  "parsed": Object {
     "alpha": Object {
+      "alpha": Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+    },
+    "hue": 90,
+    "lightness": Object {
       "percentage": 100,
       "stringify": [Function],
     },
+    "saturation": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 90,
-  "lightness": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(90, 0%, 100%, 100%)",
 }
 `;
 
 exports[`Color Parser HSLA parses hsla values without an alpha value 9`] = `
 Object {
-  "alpha": Object {
-    "alpha": 0.5,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 0.5,
+    },
+    "hue": 90,
+    "lightness": Object {
+      "percentage": 100,
+      "stringify": [Function],
+    },
+    "saturation": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 90,
-  "lightness": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(90, 0%, 100%, 0.5)",
 }
 `;
 
 exports[`Color Parser HSLA parses hsla values without an alpha value 10`] = `
 Object {
-  "alpha": Object {
+  "parsed": Object {
     "alpha": Object {
-      "percentage": 50,
+      "alpha": Object {
+        "percentage": 50,
+        "stringify": [Function],
+      },
+    },
+    "hue": 90,
+    "lightness": Object {
+      "percentage": 100,
       "stringify": [Function],
     },
+    "saturation": Object {
+      "percentage": 0,
+      "stringify": [Function],
+    },
+    "tag": "hsla",
   },
-  "hue": 90,
-  "lightness": Object {
-    "percentage": 100,
-    "stringify": [Function],
-  },
-  "saturation": Object {
-    "percentage": 0,
-    "stringify": [Function],
-  },
-  "tag": "hsla",
+  "token": "hsla(90, 0%, 100%, 50%)",
 }
 `;
 
@@ -387,181 +441,193 @@ Object {
 `;
 
 exports[`Color Parser Hex colors parses hex values corresponding to every named color keyword 1`] = `
-"{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F0F8FF\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FAEBD7\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00FFFF\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#7FFFD4\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F0FFFF\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F5F5DC\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFE4C4\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#000000\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFEBCD\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#0000FF\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#8A2BE2\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#A52A2A\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#DEB887\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#5F9EA0\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#7FFF00\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#D2691E\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF7F50\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#6495ED\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFF8DC\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#DC143C\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00FFFF\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00008B\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#008B8B\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#B8860B\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#A9A9A9\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#006400\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#A9A9A9\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#BDB76B\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#8B008B\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#556B2F\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF8C00\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#9932CC\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#8B0000\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#E9967A\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#8FBC8F\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#483D8B\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#2F4F4F\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#2F4F4F\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00CED1\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#9400D3\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF1493\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00BFFF\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#696969\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#696969\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#1E90FF\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#B22222\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFFAF0\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#228B22\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF00FF\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#DCDCDC\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F8F8FF\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFD700\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#DAA520\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#808080\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#008000\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#ADFF2F\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#808080\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F0FFF0\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF69B4\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#CD5C5C\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#4B0082\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFFFF0\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F0E68C\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#E6E6FA\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFF0F5\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#7CFC00\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFFACD\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#ADD8E6\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F08080\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#E0FFFF\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FAFAD2\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#D3D3D3\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#90EE90\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#D3D3D3\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFB6C1\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFA07A\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#20B2AA\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#87CEFA\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#778899\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#778899\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#B0C4DE\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFFFE0\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00FF00\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#32CD32\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FAF0E6\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF00FF\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#800000\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#66CDAA\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#0000CD\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#BA55D3\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#9370DB\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#3CB371\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#7B68EE\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00FA9A\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#48D1CC\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#C71585\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#191970\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F5FFFA\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFE4E1\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFE4B5\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFDEAD\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#000080\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FDF5E6\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#808000\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#6B8E23\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFA500\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF4500\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#DA70D6\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#EEE8AA\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#98FB98\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#AFEEEE\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#DB7093\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFEFD5\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFDAB9\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#CD853F\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFC0CB\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#DDA0DD\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#B0E0E6\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#800080\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#663399\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF0000\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#BC8F8F\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#4169E1\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#8B4513\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FA8072\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F4A460\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#2E8B57\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFF5EE\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#A0522D\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#C0C0C0\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#87CEEB\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#6A5ACD\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#708090\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#708090\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFFAFA\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00FF7F\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#4682B4\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#D2B48C\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#008080\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#D8BFD8\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF6347\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#40E0D0\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#EE82EE\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F5DEB3\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFFFFF\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F5F5F5\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFFF00\\"}
-{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#9ACD32\\"}"
+"{\\"token\\":\\"#F0F8FF\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F0F8FF\\"}}
+{\\"token\\":\\"#FAEBD7\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FAEBD7\\"}}
+{\\"token\\":\\"#00FFFF\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00FFFF\\"}}
+{\\"token\\":\\"#7FFFD4\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#7FFFD4\\"}}
+{\\"token\\":\\"#F0FFFF\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F0FFFF\\"}}
+{\\"token\\":\\"#F5F5DC\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F5F5DC\\"}}
+{\\"token\\":\\"#FFE4C4\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFE4C4\\"}}
+{\\"token\\":\\"#000000\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#000000\\"}}
+{\\"token\\":\\"#FFEBCD\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFEBCD\\"}}
+{\\"token\\":\\"#0000FF\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#0000FF\\"}}
+{\\"token\\":\\"#8A2BE2\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#8A2BE2\\"}}
+{\\"token\\":\\"#A52A2A\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#A52A2A\\"}}
+{\\"token\\":\\"#DEB887\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#DEB887\\"}}
+{\\"token\\":\\"#5F9EA0\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#5F9EA0\\"}}
+{\\"token\\":\\"#7FFF00\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#7FFF00\\"}}
+{\\"token\\":\\"#D2691E\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#D2691E\\"}}
+{\\"token\\":\\"#FF7F50\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF7F50\\"}}
+{\\"token\\":\\"#6495ED\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#6495ED\\"}}
+{\\"token\\":\\"#FFF8DC\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFF8DC\\"}}
+{\\"token\\":\\"#DC143C\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#DC143C\\"}}
+{\\"token\\":\\"#00FFFF\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00FFFF\\"}}
+{\\"token\\":\\"#00008B\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00008B\\"}}
+{\\"token\\":\\"#008B8B\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#008B8B\\"}}
+{\\"token\\":\\"#B8860B\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#B8860B\\"}}
+{\\"token\\":\\"#A9A9A9\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#A9A9A9\\"}}
+{\\"token\\":\\"#006400\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#006400\\"}}
+{\\"token\\":\\"#A9A9A9\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#A9A9A9\\"}}
+{\\"token\\":\\"#BDB76B\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#BDB76B\\"}}
+{\\"token\\":\\"#8B008B\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#8B008B\\"}}
+{\\"token\\":\\"#556B2F\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#556B2F\\"}}
+{\\"token\\":\\"#FF8C00\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF8C00\\"}}
+{\\"token\\":\\"#9932CC\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#9932CC\\"}}
+{\\"token\\":\\"#8B0000\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#8B0000\\"}}
+{\\"token\\":\\"#E9967A\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#E9967A\\"}}
+{\\"token\\":\\"#8FBC8F\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#8FBC8F\\"}}
+{\\"token\\":\\"#483D8B\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#483D8B\\"}}
+{\\"token\\":\\"#2F4F4F\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#2F4F4F\\"}}
+{\\"token\\":\\"#2F4F4F\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#2F4F4F\\"}}
+{\\"token\\":\\"#00CED1\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00CED1\\"}}
+{\\"token\\":\\"#9400D3\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#9400D3\\"}}
+{\\"token\\":\\"#FF1493\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF1493\\"}}
+{\\"token\\":\\"#00BFFF\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00BFFF\\"}}
+{\\"token\\":\\"#696969\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#696969\\"}}
+{\\"token\\":\\"#696969\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#696969\\"}}
+{\\"token\\":\\"#1E90FF\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#1E90FF\\"}}
+{\\"token\\":\\"#B22222\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#B22222\\"}}
+{\\"token\\":\\"#FFFAF0\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFFAF0\\"}}
+{\\"token\\":\\"#228B22\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#228B22\\"}}
+{\\"token\\":\\"#FF00FF\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF00FF\\"}}
+{\\"token\\":\\"#DCDCDC\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#DCDCDC\\"}}
+{\\"token\\":\\"#F8F8FF\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F8F8FF\\"}}
+{\\"token\\":\\"#FFD700\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFD700\\"}}
+{\\"token\\":\\"#DAA520\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#DAA520\\"}}
+{\\"token\\":\\"#808080\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#808080\\"}}
+{\\"token\\":\\"#008000\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#008000\\"}}
+{\\"token\\":\\"#ADFF2F\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#ADFF2F\\"}}
+{\\"token\\":\\"#808080\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#808080\\"}}
+{\\"token\\":\\"#F0FFF0\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F0FFF0\\"}}
+{\\"token\\":\\"#FF69B4\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF69B4\\"}}
+{\\"token\\":\\"#CD5C5C\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#CD5C5C\\"}}
+{\\"token\\":\\"#4B0082\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#4B0082\\"}}
+{\\"token\\":\\"#FFFFF0\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFFFF0\\"}}
+{\\"token\\":\\"#F0E68C\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F0E68C\\"}}
+{\\"token\\":\\"#E6E6FA\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#E6E6FA\\"}}
+{\\"token\\":\\"#FFF0F5\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFF0F5\\"}}
+{\\"token\\":\\"#7CFC00\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#7CFC00\\"}}
+{\\"token\\":\\"#FFFACD\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFFACD\\"}}
+{\\"token\\":\\"#ADD8E6\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#ADD8E6\\"}}
+{\\"token\\":\\"#F08080\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F08080\\"}}
+{\\"token\\":\\"#E0FFFF\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#E0FFFF\\"}}
+{\\"token\\":\\"#FAFAD2\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FAFAD2\\"}}
+{\\"token\\":\\"#D3D3D3\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#D3D3D3\\"}}
+{\\"token\\":\\"#90EE90\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#90EE90\\"}}
+{\\"token\\":\\"#D3D3D3\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#D3D3D3\\"}}
+{\\"token\\":\\"#FFB6C1\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFB6C1\\"}}
+{\\"token\\":\\"#FFA07A\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFA07A\\"}}
+{\\"token\\":\\"#20B2AA\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#20B2AA\\"}}
+{\\"token\\":\\"#87CEFA\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#87CEFA\\"}}
+{\\"token\\":\\"#778899\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#778899\\"}}
+{\\"token\\":\\"#778899\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#778899\\"}}
+{\\"token\\":\\"#B0C4DE\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#B0C4DE\\"}}
+{\\"token\\":\\"#FFFFE0\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFFFE0\\"}}
+{\\"token\\":\\"#00FF00\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00FF00\\"}}
+{\\"token\\":\\"#32CD32\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#32CD32\\"}}
+{\\"token\\":\\"#FAF0E6\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FAF0E6\\"}}
+{\\"token\\":\\"#FF00FF\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF00FF\\"}}
+{\\"token\\":\\"#800000\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#800000\\"}}
+{\\"token\\":\\"#66CDAA\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#66CDAA\\"}}
+{\\"token\\":\\"#0000CD\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#0000CD\\"}}
+{\\"token\\":\\"#BA55D3\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#BA55D3\\"}}
+{\\"token\\":\\"#9370DB\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#9370DB\\"}}
+{\\"token\\":\\"#3CB371\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#3CB371\\"}}
+{\\"token\\":\\"#7B68EE\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#7B68EE\\"}}
+{\\"token\\":\\"#00FA9A\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00FA9A\\"}}
+{\\"token\\":\\"#48D1CC\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#48D1CC\\"}}
+{\\"token\\":\\"#C71585\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#C71585\\"}}
+{\\"token\\":\\"#191970\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#191970\\"}}
+{\\"token\\":\\"#F5FFFA\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F5FFFA\\"}}
+{\\"token\\":\\"#FFE4E1\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFE4E1\\"}}
+{\\"token\\":\\"#FFE4B5\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFE4B5\\"}}
+{\\"token\\":\\"#FFDEAD\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFDEAD\\"}}
+{\\"token\\":\\"#000080\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#000080\\"}}
+{\\"token\\":\\"#FDF5E6\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FDF5E6\\"}}
+{\\"token\\":\\"#808000\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#808000\\"}}
+{\\"token\\":\\"#6B8E23\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#6B8E23\\"}}
+{\\"token\\":\\"#FFA500\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFA500\\"}}
+{\\"token\\":\\"#FF4500\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF4500\\"}}
+{\\"token\\":\\"#DA70D6\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#DA70D6\\"}}
+{\\"token\\":\\"#EEE8AA\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#EEE8AA\\"}}
+{\\"token\\":\\"#98FB98\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#98FB98\\"}}
+{\\"token\\":\\"#AFEEEE\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#AFEEEE\\"}}
+{\\"token\\":\\"#DB7093\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#DB7093\\"}}
+{\\"token\\":\\"#FFEFD5\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFEFD5\\"}}
+{\\"token\\":\\"#FFDAB9\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFDAB9\\"}}
+{\\"token\\":\\"#CD853F\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#CD853F\\"}}
+{\\"token\\":\\"#FFC0CB\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFC0CB\\"}}
+{\\"token\\":\\"#DDA0DD\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#DDA0DD\\"}}
+{\\"token\\":\\"#B0E0E6\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#B0E0E6\\"}}
+{\\"token\\":\\"#800080\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#800080\\"}}
+{\\"token\\":\\"#663399\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#663399\\"}}
+{\\"token\\":\\"#FF0000\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF0000\\"}}
+{\\"token\\":\\"#BC8F8F\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#BC8F8F\\"}}
+{\\"token\\":\\"#4169E1\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#4169E1\\"}}
+{\\"token\\":\\"#8B4513\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#8B4513\\"}}
+{\\"token\\":\\"#FA8072\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FA8072\\"}}
+{\\"token\\":\\"#F4A460\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F4A460\\"}}
+{\\"token\\":\\"#2E8B57\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#2E8B57\\"}}
+{\\"token\\":\\"#FFF5EE\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFF5EE\\"}}
+{\\"token\\":\\"#A0522D\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#A0522D\\"}}
+{\\"token\\":\\"#C0C0C0\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#C0C0C0\\"}}
+{\\"token\\":\\"#87CEEB\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#87CEEB\\"}}
+{\\"token\\":\\"#6A5ACD\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#6A5ACD\\"}}
+{\\"token\\":\\"#708090\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#708090\\"}}
+{\\"token\\":\\"#708090\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#708090\\"}}
+{\\"token\\":\\"#FFFAFA\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFFAFA\\"}}
+{\\"token\\":\\"#00FF7F\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#00FF7F\\"}}
+{\\"token\\":\\"#4682B4\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#4682B4\\"}}
+{\\"token\\":\\"#D2B48C\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#D2B48C\\"}}
+{\\"token\\":\\"#008080\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#008080\\"}}
+{\\"token\\":\\"#D8BFD8\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#D8BFD8\\"}}
+{\\"token\\":\\"#FF6347\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FF6347\\"}}
+{\\"token\\":\\"#40E0D0\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#40E0D0\\"}}
+{\\"token\\":\\"#EE82EE\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#EE82EE\\"}}
+{\\"token\\":\\"#F5DEB3\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F5DEB3\\"}}
+{\\"token\\":\\"#FFFFFF\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFFFFF\\"}}
+{\\"token\\":\\"#F5F5F5\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#F5F5F5\\"}}
+{\\"token\\":\\"#FFFF00\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#FFFF00\\"}}
+{\\"token\\":\\"#9ACD32\\",\\"parsed\\":{\\"tag\\":\\"hex-color\\",\\"hex\\":\\"#9ACD32\\"}}"
 `;
 
 exports[`Color Parser Hex colors parses hex values of size 8, 6, 4 & 3 1`] = `
 Object {
-  "hex": "#4682B4FF",
-  "tag": "hex-color",
+  "parsed": Object {
+    "hex": "#4682B4FF",
+    "tag": "hex-color",
+  },
+  "token": "#4682B4FF",
 }
 `;
 
 exports[`Color Parser Hex colors parses hex values of size 8, 6, 4 & 3 2`] = `
 Object {
-  "hex": "#4682B4",
-  "tag": "hex-color",
+  "parsed": Object {
+    "hex": "#4682B4",
+    "tag": "hex-color",
+  },
+  "token": "#4682B4",
 }
 `;
 
 exports[`Color Parser Hex colors parses hex values of size 8, 6, 4 & 3 3`] = `
 Object {
-  "hex": "#4682",
-  "tag": "hex-color",
+  "parsed": Object {
+    "hex": "#4682",
+    "tag": "hex-color",
+  },
+  "token": "#4682",
 }
 `;
 
 exports[`Color Parser Hex colors parses hex values of size 8, 6, 4 & 3 4`] = `
 Object {
-  "hex": "#468",
-  "tag": "hex-color",
+  "parsed": Object {
+    "hex": "#468",
+    "tag": "hex-color",
+  },
+  "token": "#468",
 }
 `;
 
@@ -590,154 +656,154 @@ The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and 
 `;
 
 exports[`Color Parser Named color keywords parses every named color keyword 1`] = `
-"{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"aliceblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"antiquewhite\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"aqua\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"aquamarine\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"azure\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"beige\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"bisque\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"black\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"blanchedalmond\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"blue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"blueviolet\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"brown\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"burlywood\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"cadetblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"chartreuse\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"chocolate\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"coral\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"cornflowerblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"cornsilk\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"crimson\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"cyan\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkcyan\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkgoldenrod\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkgray\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkgreen\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkgrey\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkkhaki\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkmagenta\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkolivegreen\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkorange\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkorchid\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkred\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darksalmon\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkseagreen\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkslateblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkslategray\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkslategrey\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkturquoise\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkviolet\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"deeppink\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"deepskyblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"dimgray\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"dimgrey\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"dodgerblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"firebrick\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"floralwhite\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"forestgreen\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"fuchsia\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"gainsboro\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"ghostwhite\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"gold\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"goldenrod\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"gray\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"green\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"greenyellow\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"grey\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"honeydew\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"hotpink\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"indianred\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"indigo\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"ivory\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"khaki\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lavender\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lavenderblush\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lawngreen\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lemonchiffon\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightcoral\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightcyan\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightgoldenrodyellow\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightgray\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightgreen\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightgrey\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightpink\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightsalmon\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightseagreen\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightskyblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightslategray\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightslategrey\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightsteelblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightyellow\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lime\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"limegreen\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"linen\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"magenta\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"maroon\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumaquamarine\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumorchid\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumpurple\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumseagreen\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumslateblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumspringgreen\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumturquoise\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumvioletred\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"midnightblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mintcream\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mistyrose\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"moccasin\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"navajowhite\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"navy\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"oldlace\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"olive\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"olivedrab\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"orange\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"orangered\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"orchid\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"palegoldenrod\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"palegreen\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"paleturquoise\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"palevioletred\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"papayawhip\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"peachpuff\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"peru\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"pink\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"plum\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"powderblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"purple\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"rebeccapurple\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"red\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"rosybrown\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"royalblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"saddlebrown\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"salmon\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"sandybrown\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"seagreen\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"seashell\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"sienna\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"silver\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"skyblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"slateblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"slategray\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"slategrey\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"snow\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"springgreen\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"steelblue\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"tan\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"teal\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"thistle\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"tomato\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"turquoise\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"violet\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"wheat\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"white\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"whitesmoke\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"yellow\\"}
-{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"yellowgreen\\"}"
+"{\\"token\\":\\"aliceblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"aliceblue\\"}}
+{\\"token\\":\\"antiquewhite\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"antiquewhite\\"}}
+{\\"token\\":\\"aqua\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"aqua\\"}}
+{\\"token\\":\\"aquamarine\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"aquamarine\\"}}
+{\\"token\\":\\"azure\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"azure\\"}}
+{\\"token\\":\\"beige\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"beige\\"}}
+{\\"token\\":\\"bisque\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"bisque\\"}}
+{\\"token\\":\\"black\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"black\\"}}
+{\\"token\\":\\"blanchedalmond\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"blanchedalmond\\"}}
+{\\"token\\":\\"blue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"blue\\"}}
+{\\"token\\":\\"blueviolet\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"blueviolet\\"}}
+{\\"token\\":\\"brown\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"brown\\"}}
+{\\"token\\":\\"burlywood\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"burlywood\\"}}
+{\\"token\\":\\"cadetblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"cadetblue\\"}}
+{\\"token\\":\\"chartreuse\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"chartreuse\\"}}
+{\\"token\\":\\"chocolate\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"chocolate\\"}}
+{\\"token\\":\\"coral\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"coral\\"}}
+{\\"token\\":\\"cornflowerblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"cornflowerblue\\"}}
+{\\"token\\":\\"cornsilk\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"cornsilk\\"}}
+{\\"token\\":\\"crimson\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"crimson\\"}}
+{\\"token\\":\\"cyan\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"cyan\\"}}
+{\\"token\\":\\"darkblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkblue\\"}}
+{\\"token\\":\\"darkcyan\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkcyan\\"}}
+{\\"token\\":\\"darkgoldenrod\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkgoldenrod\\"}}
+{\\"token\\":\\"darkgray\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkgray\\"}}
+{\\"token\\":\\"darkgreen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkgreen\\"}}
+{\\"token\\":\\"darkgrey\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkgrey\\"}}
+{\\"token\\":\\"darkkhaki\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkkhaki\\"}}
+{\\"token\\":\\"darkmagenta\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkmagenta\\"}}
+{\\"token\\":\\"darkolivegreen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkolivegreen\\"}}
+{\\"token\\":\\"darkorange\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkorange\\"}}
+{\\"token\\":\\"darkorchid\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkorchid\\"}}
+{\\"token\\":\\"darkred\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkred\\"}}
+{\\"token\\":\\"darksalmon\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darksalmon\\"}}
+{\\"token\\":\\"darkseagreen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkseagreen\\"}}
+{\\"token\\":\\"darkslateblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkslateblue\\"}}
+{\\"token\\":\\"darkslategray\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkslategray\\"}}
+{\\"token\\":\\"darkslategrey\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkslategrey\\"}}
+{\\"token\\":\\"darkturquoise\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkturquoise\\"}}
+{\\"token\\":\\"darkviolet\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"darkviolet\\"}}
+{\\"token\\":\\"deeppink\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"deeppink\\"}}
+{\\"token\\":\\"deepskyblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"deepskyblue\\"}}
+{\\"token\\":\\"dimgray\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"dimgray\\"}}
+{\\"token\\":\\"dimgrey\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"dimgrey\\"}}
+{\\"token\\":\\"dodgerblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"dodgerblue\\"}}
+{\\"token\\":\\"firebrick\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"firebrick\\"}}
+{\\"token\\":\\"floralwhite\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"floralwhite\\"}}
+{\\"token\\":\\"forestgreen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"forestgreen\\"}}
+{\\"token\\":\\"fuchsia\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"fuchsia\\"}}
+{\\"token\\":\\"gainsboro\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"gainsboro\\"}}
+{\\"token\\":\\"ghostwhite\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"ghostwhite\\"}}
+{\\"token\\":\\"gold\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"gold\\"}}
+{\\"token\\":\\"goldenrod\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"goldenrod\\"}}
+{\\"token\\":\\"gray\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"gray\\"}}
+{\\"token\\":\\"green\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"green\\"}}
+{\\"token\\":\\"greenyellow\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"greenyellow\\"}}
+{\\"token\\":\\"grey\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"grey\\"}}
+{\\"token\\":\\"honeydew\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"honeydew\\"}}
+{\\"token\\":\\"hotpink\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"hotpink\\"}}
+{\\"token\\":\\"indianred\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"indianred\\"}}
+{\\"token\\":\\"indigo\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"indigo\\"}}
+{\\"token\\":\\"ivory\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"ivory\\"}}
+{\\"token\\":\\"khaki\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"khaki\\"}}
+{\\"token\\":\\"lavender\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lavender\\"}}
+{\\"token\\":\\"lavenderblush\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lavenderblush\\"}}
+{\\"token\\":\\"lawngreen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lawngreen\\"}}
+{\\"token\\":\\"lemonchiffon\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lemonchiffon\\"}}
+{\\"token\\":\\"lightblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightblue\\"}}
+{\\"token\\":\\"lightcoral\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightcoral\\"}}
+{\\"token\\":\\"lightcyan\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightcyan\\"}}
+{\\"token\\":\\"lightgoldenrodyellow\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightgoldenrodyellow\\"}}
+{\\"token\\":\\"lightgray\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightgray\\"}}
+{\\"token\\":\\"lightgreen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightgreen\\"}}
+{\\"token\\":\\"lightgrey\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightgrey\\"}}
+{\\"token\\":\\"lightpink\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightpink\\"}}
+{\\"token\\":\\"lightsalmon\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightsalmon\\"}}
+{\\"token\\":\\"lightseagreen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightseagreen\\"}}
+{\\"token\\":\\"lightskyblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightskyblue\\"}}
+{\\"token\\":\\"lightslategray\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightslategray\\"}}
+{\\"token\\":\\"lightslategrey\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightslategrey\\"}}
+{\\"token\\":\\"lightsteelblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightsteelblue\\"}}
+{\\"token\\":\\"lightyellow\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lightyellow\\"}}
+{\\"token\\":\\"lime\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"lime\\"}}
+{\\"token\\":\\"limegreen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"limegreen\\"}}
+{\\"token\\":\\"linen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"linen\\"}}
+{\\"token\\":\\"magenta\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"magenta\\"}}
+{\\"token\\":\\"maroon\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"maroon\\"}}
+{\\"token\\":\\"mediumaquamarine\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumaquamarine\\"}}
+{\\"token\\":\\"mediumblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumblue\\"}}
+{\\"token\\":\\"mediumorchid\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumorchid\\"}}
+{\\"token\\":\\"mediumpurple\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumpurple\\"}}
+{\\"token\\":\\"mediumseagreen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumseagreen\\"}}
+{\\"token\\":\\"mediumslateblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumslateblue\\"}}
+{\\"token\\":\\"mediumspringgreen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumspringgreen\\"}}
+{\\"token\\":\\"mediumturquoise\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumturquoise\\"}}
+{\\"token\\":\\"mediumvioletred\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mediumvioletred\\"}}
+{\\"token\\":\\"midnightblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"midnightblue\\"}}
+{\\"token\\":\\"mintcream\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mintcream\\"}}
+{\\"token\\":\\"mistyrose\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"mistyrose\\"}}
+{\\"token\\":\\"moccasin\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"moccasin\\"}}
+{\\"token\\":\\"navajowhite\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"navajowhite\\"}}
+{\\"token\\":\\"navy\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"navy\\"}}
+{\\"token\\":\\"oldlace\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"oldlace\\"}}
+{\\"token\\":\\"olive\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"olive\\"}}
+{\\"token\\":\\"olivedrab\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"olivedrab\\"}}
+{\\"token\\":\\"orange\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"orange\\"}}
+{\\"token\\":\\"orangered\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"orangered\\"}}
+{\\"token\\":\\"orchid\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"orchid\\"}}
+{\\"token\\":\\"palegoldenrod\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"palegoldenrod\\"}}
+{\\"token\\":\\"palegreen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"palegreen\\"}}
+{\\"token\\":\\"paleturquoise\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"paleturquoise\\"}}
+{\\"token\\":\\"palevioletred\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"palevioletred\\"}}
+{\\"token\\":\\"papayawhip\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"papayawhip\\"}}
+{\\"token\\":\\"peachpuff\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"peachpuff\\"}}
+{\\"token\\":\\"peru\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"peru\\"}}
+{\\"token\\":\\"pink\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"pink\\"}}
+{\\"token\\":\\"plum\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"plum\\"}}
+{\\"token\\":\\"powderblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"powderblue\\"}}
+{\\"token\\":\\"purple\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"purple\\"}}
+{\\"token\\":\\"rebeccapurple\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"rebeccapurple\\"}}
+{\\"token\\":\\"red\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"red\\"}}
+{\\"token\\":\\"rosybrown\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"rosybrown\\"}}
+{\\"token\\":\\"royalblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"royalblue\\"}}
+{\\"token\\":\\"saddlebrown\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"saddlebrown\\"}}
+{\\"token\\":\\"salmon\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"salmon\\"}}
+{\\"token\\":\\"sandybrown\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"sandybrown\\"}}
+{\\"token\\":\\"seagreen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"seagreen\\"}}
+{\\"token\\":\\"seashell\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"seashell\\"}}
+{\\"token\\":\\"sienna\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"sienna\\"}}
+{\\"token\\":\\"silver\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"silver\\"}}
+{\\"token\\":\\"skyblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"skyblue\\"}}
+{\\"token\\":\\"slateblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"slateblue\\"}}
+{\\"token\\":\\"slategray\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"slategray\\"}}
+{\\"token\\":\\"slategrey\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"slategrey\\"}}
+{\\"token\\":\\"snow\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"snow\\"}}
+{\\"token\\":\\"springgreen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"springgreen\\"}}
+{\\"token\\":\\"steelblue\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"steelblue\\"}}
+{\\"token\\":\\"tan\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"tan\\"}}
+{\\"token\\":\\"teal\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"teal\\"}}
+{\\"token\\":\\"thistle\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"thistle\\"}}
+{\\"token\\":\\"tomato\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"tomato\\"}}
+{\\"token\\":\\"turquoise\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"turquoise\\"}}
+{\\"token\\":\\"violet\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"violet\\"}}
+{\\"token\\":\\"wheat\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"wheat\\"}}
+{\\"token\\":\\"white\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"white\\"}}
+{\\"token\\":\\"whitesmoke\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"whitesmoke\\"}}
+{\\"token\\":\\"yellow\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"yellow\\"}}
+{\\"token\\":\\"yellowgreen\\",\\"parsed\\":{\\"tag\\":\\"named-color\\",\\"keyword\\":\\"yellowgreen\\"}}"
 `;
 
 exports[`Color Parser Named color keywords produces a parse error for non-existent color keywords 1`] = `
@@ -750,331 +816,385 @@ The supported formats are: hex, named  color keywords, rgb(), rgba(), hsl() and 
 
 exports[`Color Parser RGBA parsed rgba channel values are clamped between 0 and 255 1`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "channels": Array [
+      0,
+      0,
+      0,
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    0,
-    0,
-    0,
-  ],
-  "tag": "rgba",
+  "token": "rgb(-.1, -.1, -.1)",
 }
 `;
 
 exports[`Color Parser RGBA parsed rgba channel values are clamped between 0 and 255 2`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "channels": Array [
+      255,
+      255,
+      255,
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    255,
-    255,
-    255,
-  ],
-  "tag": "rgba",
+  "token": "rgb(255.01, 255.01, 255.01)",
 }
 `;
 
 exports[`Color Parser RGBA parsed rgba channel values are clamped between 0 and 255 3`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "channels": Array [
+      Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
+      Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
+      Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    Object {
-      "percentage": 0,
-      "stringify": [Function],
-    },
-    Object {
-      "percentage": 0,
-      "stringify": [Function],
-    },
-    Object {
-      "percentage": 0,
-      "stringify": [Function],
-    },
-  ],
-  "tag": "rgba",
+  "token": "rgb(-.1%, -.1%, -.1%)",
 }
 `;
 
 exports[`Color Parser RGBA parsed rgba channel values are clamped between 0 and 255 4`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "channels": Array [
+      Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+      Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+      Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    Object {
-      "percentage": 100,
-      "stringify": [Function],
-    },
-    Object {
-      "percentage": 100,
-      "stringify": [Function],
-    },
-    Object {
-      "percentage": 100,
-      "stringify": [Function],
-    },
-  ],
-  "tag": "rgba",
+  "token": "rgb(100.1%, 100.1%, 100.1%)",
 }
 `;
 
 exports[`Color Parser RGBA parses rgba alpha values are clamped between 0 and 1 1`] = `
 Object {
-  "alpha": Object {
-    "alpha": 0,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 0,
+    },
+    "channels": Array [
+      0,
+      0,
+      0,
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    0,
-    0,
-    0,
-  ],
-  "tag": "rgba",
+  "token": "rgba(0, 0, 0, -.1)",
 }
 `;
 
 exports[`Color Parser RGBA parses rgba alpha values are clamped between 0 and 1 2`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "channels": Array [
+      0,
+      0,
+      0,
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    0,
-    0,
-    0,
-  ],
-  "tag": "rgba",
+  "token": "rgba(0, 0, 0, 1.01)",
 }
 `;
 
 exports[`Color Parser RGBA parses rgba alpha values are clamped between 0 and 1 3`] = `
 Object {
-  "alpha": Object {
+  "parsed": Object {
     "alpha": Object {
-      "percentage": 0,
-      "stringify": [Function],
+      "alpha": Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
     },
+    "channels": Array [
+      0,
+      0,
+      0,
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    0,
-    0,
-    0,
-  ],
-  "tag": "rgba",
+  "token": "rgba(0, 0, 0, -0.1%)",
 }
 `;
 
 exports[`Color Parser RGBA parses rgba alpha values are clamped between 0 and 1 4`] = `
 Object {
-  "alpha": Object {
+  "parsed": Object {
     "alpha": Object {
-      "percentage": 100,
-      "stringify": [Function],
+      "alpha": Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
     },
+    "channels": Array [
+      0,
+      0,
+      0,
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    0,
-    0,
-    0,
-  ],
-  "tag": "rgba",
+  "token": "rgba(0, 0, 0, 100.01%)",
 }
 `;
 
 exports[`Color Parser RGBA parses rgba values with an alpha value 1`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "channels": Array [
+      0,
+      255,
+      0,
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    0,
-    255,
-    0,
-  ],
-  "tag": "rgba",
+  "token": "rgba(0, 255, 0, 1)",
 }
 `;
 
 exports[`Color Parser RGBA parses rgba values with an alpha value 2`] = `
 Object {
-  "alpha": Object {
+  "parsed": Object {
     "alpha": Object {
-      "percentage": 100,
-      "stringify": [Function],
+      "alpha": Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
     },
+    "channels": Array [
+      0,
+      255,
+      0,
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    0,
-    255,
-    0,
-  ],
-  "tag": "rgba",
+  "token": "rgba(0, 255, 0, 100%)",
 }
 `;
 
 exports[`Color Parser RGBA parses rgba values with an alpha value 3`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "channels": Array [
+      Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
+      Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+      Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    Object {
-      "percentage": 0,
-      "stringify": [Function],
-    },
-    Object {
-      "percentage": 100,
-      "stringify": [Function],
-    },
-    Object {
-      "percentage": 0,
-      "stringify": [Function],
-    },
-  ],
-  "tag": "rgba",
+  "token": "rgba(0%, 100%, 0%, 1)",
 }
 `;
 
 exports[`Color Parser RGBA parses rgba values with an alpha value 4`] = `
 Object {
-  "alpha": Object {
+  "parsed": Object {
     "alpha": Object {
-      "percentage": 100,
-      "stringify": [Function],
+      "alpha": Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
     },
+    "channels": Array [
+      Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
+      Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+      Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    Object {
-      "percentage": 0,
-      "stringify": [Function],
-    },
-    Object {
-      "percentage": 100,
-      "stringify": [Function],
-    },
-    Object {
-      "percentage": 0,
-      "stringify": [Function],
-    },
-  ],
-  "tag": "rgba",
+  "token": "rgba(0%, 100%, 0%, 100%)",
 }
 `;
 
 exports[`Color Parser RGBA parses rgba values with an alpha value 5`] = `
 Object {
-  "alpha": Object {
+  "parsed": Object {
     "alpha": Object {
-      "percentage": 50,
-      "stringify": [Function],
+      "alpha": Object {
+        "percentage": 50,
+        "stringify": [Function],
+      },
     },
+    "channels": Array [
+      Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
+      Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+      Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    Object {
-      "percentage": 0,
-      "stringify": [Function],
-    },
-    Object {
-      "percentage": 100,
-      "stringify": [Function],
-    },
-    Object {
-      "percentage": 0,
-      "stringify": [Function],
-    },
-  ],
-  "tag": "rgba",
+  "token": "rgb(0%, 100%, 0%, 50%)",
 }
 `;
 
 exports[`Color Parser RGBA parses rgba values with an alpha value 6`] = `
 Object {
-  "alpha": Object {
-    "alpha": 0.5,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 0.5,
+    },
+    "channels": Array [
+      0,
+      255,
+      0,
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    0,
-    255,
-    0,
-  ],
-  "tag": "rgba",
+  "token": "rgba(0, 255, 0, 0.5)",
 }
 `;
 
 exports[`Color Parser RGBA parses rgba values without an alpha value 1`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "channels": Array [
+      0,
+      255,
+      0,
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    0,
-    255,
-    0,
-  ],
-  "tag": "rgba",
+  "token": "rgb(0, 255, 0)",
 }
 `;
 
 exports[`Color Parser RGBA parses rgba values without an alpha value 2`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "channels": Array [
+      0,
+      255,
+      0,
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    0,
-    255,
-    0,
-  ],
-  "tag": "rgba",
+  "token": "rgba(0, 255, 0)",
 }
 `;
 
 exports[`Color Parser RGBA parses rgba values without an alpha value 3`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "channels": Array [
+      Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
+      Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+      Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    Object {
-      "percentage": 0,
-      "stringify": [Function],
-    },
-    Object {
-      "percentage": 100,
-      "stringify": [Function],
-    },
-    Object {
-      "percentage": 0,
-      "stringify": [Function],
-    },
-  ],
-  "tag": "rgba",
+  "token": "rgb(0%, 100%, 0%)",
 }
 `;
 
 exports[`Color Parser RGBA parses rgba values without an alpha value 4`] = `
 Object {
-  "alpha": Object {
-    "alpha": 1,
+  "parsed": Object {
+    "alpha": Object {
+      "alpha": 1,
+    },
+    "channels": Array [
+      Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
+      Object {
+        "percentage": 100,
+        "stringify": [Function],
+      },
+      Object {
+        "percentage": 0,
+        "stringify": [Function],
+      },
+    ],
+    "tag": "rgba",
   },
-  "channels": Array [
-    Object {
-      "percentage": 0,
-      "stringify": [Function],
-    },
-    Object {
-      "percentage": 100,
-      "stringify": [Function],
-    },
-    Object {
-      "percentage": 0,
-      "stringify": [Function],
-    },
-  ],
-  "tag": "rgba",
+  "token": "rgba(0%, 100%, 0%)",
 }
 `;
 

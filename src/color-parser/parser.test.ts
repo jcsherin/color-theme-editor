@@ -1,4 +1,4 @@
-import type { KeywordSpec } from "./index";
+import type { KeywordSpec, ParsedColor } from "./index";
 import { keywords, parse } from "./index";
 
 describe("Color Parser", () => {
@@ -99,10 +99,10 @@ describe("Color Parser", () => {
     });
 
     it("treats rgb & rgba as synonyms", () => {
-      const rgb = parse("rgb(0, 255, 0)");
-      const rgba = parse("rgba(0, 255, 0)");
+      const rgb = parse("rgb(0, 255, 0)") as ParsedColor;
+      const rgba = parse("rgba(0, 255, 0)") as ParsedColor;
 
-      expect(JSON.stringify(rgb)).toBe(JSON.stringify(rgba));
+      expect(JSON.stringify(rgb.parsed)).toBe(JSON.stringify(rgba.parsed));
     });
   });
 
@@ -161,16 +161,16 @@ describe("Color Parser", () => {
     });
 
     it("treats hsl and hsla as synonyms", () => {
-      const fst = "hsl(0, 0%, 100%)";
-      const snd = "hsla(0, 0%, 100%)";
+      const fst = parse("hsl(0, 0%, 100%)") as ParsedColor;
+      const snd = parse("hsla(0, 0%, 100%)") as ParsedColor;
 
-      expect(JSON.stringify(parse(fst))).toBe(JSON.stringify(parse(snd)));
+      expect(JSON.stringify(fst.parsed)).toBe(JSON.stringify(snd.parsed));
 
-      const fstWithAlpha = "hsl(0, 0%, 100%, 1)";
-      const sndWithAlpha = "hsla(0, 0%, 100%, 1)";
+      const fstWithAlpha = parse("hsl(0, 0%, 100%, 1)") as ParsedColor;
+      const sndWithAlpha = parse("hsla(0, 0%, 100%, 1)") as ParsedColor;
 
-      expect(JSON.stringify(parse(fstWithAlpha))).toBe(
-        JSON.stringify(parse(sndWithAlpha))
+      expect(JSON.stringify(fstWithAlpha.parsed)).toBe(
+        JSON.stringify(sndWithAlpha.parsed)
       );
     });
   });
