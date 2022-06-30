@@ -170,7 +170,7 @@ function createAlpha(alpha: number | Percentage): Alpha {
   return { alpha: value };
 }
 
-interface RGBA {
+interface RGBAColor {
   tag: "rgba";
   channels: Triple<number> | Triple<Percentage>;
   alpha: Alpha;
@@ -179,7 +179,7 @@ interface RGBA {
 function createRGBA(
   channels: Triple<number> | Triple<Percentage>,
   alpha: Alpha
-): RGBA {
+): RGBAColor {
   return {
     tag: "rgba",
     channels: channels,
@@ -187,7 +187,7 @@ function createRGBA(
   };
 }
 
-interface HSLA {
+interface HSLAColor {
   tag: "hsla";
   hue: number;
   saturation: Percentage;
@@ -200,7 +200,7 @@ function createHSLA(
   saturation: Percentage,
   lightness: Percentage,
   alpha: Alpha
-): HSLA {
+): HSLAColor {
   return {
     tag: "hsla",
     hue: hue,
@@ -212,23 +212,23 @@ function createHSLA(
 
 interface HexColor {
   tag: "hex-color";
-  value: string;
+  hex: string;
 }
 
-function createHexColor(value: string): HexColor {
-  return { tag: "hex-color", value };
+function createHexColor(hex: string): HexColor {
+  return { tag: "hex-color", hex: hex };
 }
 
-interface NamedColor {
+interface KeywordColor {
   tag: "named-color";
-  value: keyof Keywords;
+  keyword: keyof Keywords;
 }
 
-function createNamedColor(value: string): NamedColor {
-  return { tag: "named-color", value: value as keyof Keywords };
+function createNamedColor(value: string): KeywordColor {
+  return { tag: "named-color", keyword: value as keyof Keywords };
 }
 
-type ParsedColor = HexColor | NamedColor | RGBA | HSLA;
+type ParsedColor = HexColor | KeywordColor | RGBAColor | HSLAColor;
 
 interface ParseError {
   token: string;
