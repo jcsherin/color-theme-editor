@@ -84,17 +84,21 @@ exports[`Component for adding selected colors to a group renders a list of selec
       </span>
     </button>
   </div>
-  <button
-    class="mr-4 mb-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
-    disabled=""
+  <div
+    class="grid grid-cols-3 gap-2"
   >
-    primary
-  </button>
-  <button
-    class="mr-4 mb-4 px-6 py-1 bg-blue-200 hover:bg-blue-400 text-sky-900 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-300"
-    disabled=""
-  >
-    secondary
-  </button>
+    <button
+      class="py-1 px-4 rounded-sm border border-pink-700 hover:border-pink-400 text-pink-700 disabled:cursor-not-allowed disabled:border-slate-500 disabled:text-slate-700 disabled:bg-slate-300"
+      disabled=""
+    >
+      primary
+    </button>
+    <button
+      class="py-1 px-4 rounded-sm border border-pink-700 hover:border-pink-400 text-pink-700 disabled:cursor-not-allowed disabled:border-slate-500 disabled:text-slate-700 disabled:bg-slate-300"
+      disabled=""
+    >
+      secondary
+    </button>
+  </div>
 </div>
 `;

@@ -70,7 +70,7 @@ describe("ClipboardButton component", () => {
 
     expect(button).not.toBeInTheDocument();
     expect(
-      await screen.findByText(/^Copied!$/, { exact: true })
+      await screen.findByText(/^Copied to clipboard!$/, { exact: true })
     ).toBeInTheDocument();
   });
 
@@ -89,7 +89,7 @@ describe("ClipboardButton component", () => {
     user.click(button);
     await waitForElementToBeRemoved(button);
 
-    const flash = await screen.findByText(/^Copied!$/, { exact: true });
+    const flash = await screen.findByText(/^Copied to clipboard!$/, { exact: true });
     await waitForElementToBeRemoved(flash, { timeout: props.expiryInMs });
     const newButton = await screen.findByRole("button", {
       name: props.label,
