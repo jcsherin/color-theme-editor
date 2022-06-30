@@ -1,9 +1,9 @@
 import React from "react";
-import { getColorValue, HexColor } from "../color";
+import { getColorValue, Deprecated__HexColor } from "../color";
 import { SelectableItem } from "./index";
 
 interface SelectableProps {
-  color: HexColor;
+  color: Deprecated__HexColor;
   selectableItem: SelectableItem;
   handleSelection: (selectableItem: SelectableItem) => void;
 }

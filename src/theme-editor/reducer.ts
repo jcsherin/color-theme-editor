@@ -15,7 +15,7 @@ import {
   colorComparator,
   getColorName,
   getColorValue,
-  HexColor,
+  Deprecated__HexColor,
   parseColors,
   updateColorName,
   makeColorMap,
@@ -38,7 +38,7 @@ export interface ThemeEditorState {
   selectables: SelectableItem[];
 }
 
-type SerializedColorMap = [string, HexColor][];
+type SerializedColorMap = [string, Deprecated__HexColor][];
 type SerializedGroupMap = [string, Group][];
 export interface SerializedThemeEditorState {
   formData: FormData;
@@ -318,7 +318,7 @@ export const reducer = (
       );
 
       // Add Colors
-      const addedColors: HexColor[] = currColors
+      const addedColors: Deprecated__HexColor[] = currColors
         .filter((color) => !prevColors.includes(color))
         .map((serialized) => JSON.parse(serialized));
       merged = {
@@ -331,7 +331,7 @@ export const reducer = (
       };
 
       // Delete Colors
-      const deletedColors: HexColor[] = prevColors
+      const deletedColors: Deprecated__HexColor[] = prevColors
         .filter((color) => !currColors.includes(color))
         .map((serialized) => JSON.parse(serialized));
       const deletedColorIds = deletedColors.map(getColorId);

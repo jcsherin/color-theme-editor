@@ -1,4 +1,4 @@
-import { getColorId, HexColor } from "../color";
+import { getColorId, Deprecated__HexColor } from "../color";
 
 export interface Group {
   name: string;
@@ -9,7 +9,7 @@ export type GroupMap = Map<string, Group>;
 
 export function removeColorsFromGroupMap(
   groupMap: GroupMap,
-  removedColors: HexColor[]
+  removedColors: Deprecated__HexColor[]
 ): GroupMap {
   const removedColorIds = removedColors.map(getColorId);
   const filtered = Array.from(groupMap, ([key, group]): [string, Group] => {

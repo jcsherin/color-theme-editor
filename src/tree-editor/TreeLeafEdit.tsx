@@ -1,6 +1,11 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
-import { getColorId, getColorName, getColorValue, HexColor } from "../color";
+import {
+  getColorId,
+  getColorName,
+  getColorValue,
+  Deprecated__HexColor,
+} from "../color";
 
 export function TreeLeafEdit({
   color,
@@ -11,7 +16,7 @@ export function TreeLeafEdit({
   next,
   children,
 }: {
-  color: HexColor;
+  color: Deprecated__HexColor;
   focus: boolean;
   handleRenameColor: (colorId: string, name: string) => void;
   handleKeyboardNavigate: (key: string, target: string) => void;

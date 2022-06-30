@@ -4,7 +4,7 @@ import {
   colorComparator,
   getColorName,
   getColorValue,
-  HexColor,
+  Deprecated__HexColor,
 } from "../color";
 import { ThemeEditorState } from "../theme-editor";
 import {
@@ -16,7 +16,7 @@ import {
 } from "./index";
 
 const treeLeafView = (
-  color: HexColor,
+  color: Deprecated__HexColor,
   colorId: string,
   handleFocus: (colorId: string) => void
 ) => (
@@ -98,7 +98,7 @@ export function TreeEditor({
       colorId: string;
       prevColorId: string;
       nextColorId: string;
-      color: HexColor;
+      color: Deprecated__HexColor;
     },
     focusRenameInput: boolean,
     handleFocus: (colorId: string) => void,

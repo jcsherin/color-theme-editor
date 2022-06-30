@@ -1,10 +1,13 @@
-export interface HexColor {
+export interface Deprecated__HexColor {
   kind: "hex";
   name: string;
   hexcode: string;
 }
 
-export function makeHexColor(name: string, value: string): HexColor {
+export function makeHexColor(
+  name: string,
+  value: string
+): Deprecated__HexColor {
   return {
     kind: "hex",
     name: name,
@@ -12,36 +15,39 @@ export function makeHexColor(name: string, value: string): HexColor {
   };
 }
 
-export function getColorId(color: HexColor) {
+export function getColorId(color: Deprecated__HexColor) {
   switch (color.kind) {
     case "hex":
       return color.hexcode;
   }
 }
 
-export function getColorValue(color: HexColor) {
+export function getColorValue(color: Deprecated__HexColor) {
   switch (color.kind) {
     case "hex":
       return color.hexcode;
   }
 }
 
-export function getColorName(color: HexColor) {
+export function getColorName(color: Deprecated__HexColor) {
   switch (color.kind) {
     case "hex":
       return color.name;
   }
 }
 
-export function updateColorName(color: HexColor, name: string): HexColor {
+export function updateColorName(
+  color: Deprecated__HexColor,
+  name: string
+): Deprecated__HexColor {
   return { ...color, name: name };
 }
 
-export type ColorMap = Map<string, HexColor>;
+export type ColorMap = Map<string, Deprecated__HexColor>;
 
 export function removeColorsFromColorMap(
   colors: ColorMap,
-  deleted: HexColor[]
+  deleted: Deprecated__HexColor[]
 ): ColorMap {
   deleted.map(getColorId).forEach((colorId) => colors.delete(colorId));
   return new Map(Array.from(colors));
@@ -49,7 +55,7 @@ export function removeColorsFromColorMap(
 
 export function addColorsToColorMap(
   colorMap: ColorMap,
-  colors: HexColor[]
+  colors: Deprecated__HexColor[]
 ): ColorMap {
   colors.forEach((color) => {
     const key = getColorId(color);
@@ -58,7 +64,7 @@ export function addColorsToColorMap(
   return new Map(Array.from(colorMap));
 }
 
-export function makeColorMap(colors: HexColor[]): ColorMap {
+export function makeColorMap(colors: Deprecated__HexColor[]): ColorMap {
   const map = new Map();
   colors.forEach((color) => {
     const key = getColorId(color);
@@ -77,7 +83,7 @@ export function colorComparator(map: ColorMap) {
   };
 }
 
-function parseColor(v: string): HexColor | undefined {
+function parseColor(v: string): Deprecated__HexColor | undefined {
   const hexColor = /^#(?:[0-9a-fA-F]{3}){1,2}$/;
   const value = v.trim();
   if (hexColor.test(value)) {
@@ -85,7 +91,7 @@ function parseColor(v: string): HexColor | undefined {
   }
 }
 
-export function parseColors(colors: string): HexColor[] {
+export function parseColors(colors: string): Deprecated__HexColor[] {
   const deduped = Array.from(new Set(colors.split("\n")));
   return deduped.map(parseColor).flatMap((color) => (color ? [color] : []));
 }
