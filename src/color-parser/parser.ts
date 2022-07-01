@@ -220,12 +220,12 @@ function createHexColor(hex: string): HexColor {
 }
 
 interface KeywordColor {
-  tag: "named-color";
+  tag: "keyword-color";
   keyword: keyof Keywords;
 }
 
-function createNamedColor(value: string): KeywordColor {
-  return { tag: "named-color", keyword: value as keyof Keywords };
+function createKeywordColor(value: string): KeywordColor {
+  return { tag: "keyword-color", keyword: value as keyof Keywords };
 }
 
 export interface ParsedColor {
@@ -331,7 +331,7 @@ export function parse(color: string): ParsedColor | ParseError {
 
   // <named-color>
   if (keywords[token as keyof Keywords]) {
-    return createParsedColor(token, createNamedColor(token));
+    return createParsedColor(token, createKeywordColor(token));
   }
 
   // <hex-color>
