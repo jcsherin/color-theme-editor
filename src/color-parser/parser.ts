@@ -107,7 +107,6 @@ function clamp(value: number, min: number, max: number): number {
 
 interface Percentage {
   percentage: number;
-  stringify: () => string;
 }
 
 const enum PercentageRange {
@@ -141,8 +140,11 @@ function createPercentage(value: string | number): Percentage {
     typeof value === "number" ? value : Number.parseFloat(value);
   return {
     percentage,
-    stringify: () => `${percentage}%`,
   };
+}
+
+function stringifyPercentage(value: Percentage): string {
+  return `${value.percentage}%`;
 }
 
 interface Alpha {

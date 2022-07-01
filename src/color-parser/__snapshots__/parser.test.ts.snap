@@ -6,17 +6,14 @@ Object {
     "alpha": Object {
       "alpha": Object {
         "percentage": 0,
-        "stringify": [Function],
       },
     },
     "hue": 90,
     "lightness": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -30,17 +27,14 @@ Object {
     "alpha": Object {
       "alpha": Object {
         "percentage": 100,
-        "stringify": [Function],
       },
     },
     "hue": 90,
     "lightness": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -57,11 +51,9 @@ Object {
     "hue": 90,
     "lightness": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -78,11 +70,9 @@ Object {
     "hue": 90,
     "lightness": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -96,17 +86,14 @@ Object {
     "alpha": Object {
       "alpha": Object {
         "percentage": 100,
-        "stringify": [Function],
       },
     },
     "hue": 90,
     "lightness": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -120,17 +107,14 @@ Object {
     "alpha": Object {
       "alpha": Object {
         "percentage": 100,
-        "stringify": [Function],
       },
     },
     "hue": 90,
     "lightness": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -144,17 +128,14 @@ Object {
     "alpha": Object {
       "alpha": Object {
         "percentage": 100,
-        "stringify": [Function],
       },
     },
     "hue": 90,
     "lightness": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -168,17 +149,14 @@ Object {
     "alpha": Object {
       "alpha": Object {
         "percentage": 100,
-        "stringify": [Function],
       },
     },
     "hue": 90,
     "lightness": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -195,11 +173,9 @@ Object {
     "hue": 0,
     "lightness": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -216,11 +192,9 @@ Object {
     "hue": 90,
     "lightness": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -237,11 +211,9 @@ Object {
     "hue": 0,
     "lightness": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -258,11 +230,9 @@ Object {
     "hue": 90,
     "lightness": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -279,11 +249,9 @@ Object {
     "hue": 0,
     "lightness": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -300,11 +268,9 @@ Object {
     "hue": 90,
     "lightness": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -318,17 +284,14 @@ Object {
     "alpha": Object {
       "alpha": Object {
         "percentage": 100,
-        "stringify": [Function],
       },
     },
     "hue": 0,
     "lightness": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -342,17 +305,14 @@ Object {
     "alpha": Object {
       "alpha": Object {
         "percentage": 100,
-        "stringify": [Function],
       },
     },
     "hue": 90,
     "lightness": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -369,11 +329,9 @@ Object {
     "hue": 90,
     "lightness": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -387,17 +345,14 @@ Object {
     "alpha": Object {
       "alpha": Object {
         "percentage": 50,
-        "stringify": [Function],
       },
     },
     "hue": 90,
     "lightness": Object {
       "percentage": 100,
-      "stringify": [Function],
     },
     "saturation": Object {
       "percentage": 0,
-      "stringify": [Function],
     },
     "tag": "hsla",
   },
@@ -857,15 +812,12 @@ Object {
     "channels": Array [
       Object {
         "percentage": 0,
-        "stringify": [Function],
       },
       Object {
         "percentage": 0,
-        "stringify": [Function],
       },
       Object {
         "percentage": 0,
-        "stringify": [Function],
       },
     ],
     "tag": "rgba",
@@ -883,15 +835,12 @@ Object {
     "channels": Array [
       Object {
         "percentage": 100,
-        "stringify": [Function],
       },
       Object {
         "percentage": 100,
-        "stringify": [Function],
       },
       Object {
         "percentage": 100,
-        "stringify": [Function],
       },
     ],
     "tag": "rgba",
@@ -940,7 +889,6 @@ Object {
     "alpha": Object {
       "alpha": Object {
         "percentage": 0,
-        "stringify": [Function],
       },
     },
     "channels": Array [
@@ -960,7 +908,6 @@ Object {
     "alpha": Object {
       "alpha": Object {
         "percentage": 100,
-        "stringify": [Function],
       },
     },
     "channels": Array [
@@ -997,7 +944,6 @@ Object {
     "alpha": Object {
       "alpha": Object {
         "percentage": 100,
-        "stringify": [Function],
       },
     },
     "channels": Array [
@@ -1020,15 +966,12 @@ Object {
     "channels": Array [
       Object {
         "percentage": 0,
-        "stringify": [Function],
       },
       Object {
         "percentage": 100,
-        "stringify": [Function],
       },
       Object {
         "percentage": 0,
-        "stringify": [Function],
       },
     ],
     "tag": "rgba",
@@ -1043,21 +986,17 @@ Object {
     "alpha": Object {
       "alpha": Object {
         "percentage": 100,
-        "stringify": [Function],
       },
     },
     "channels": Array [
       Object {
         "percentage": 0,
-        "stringify": [Function],
       },
       Object {
         "percentage": 100,
-        "stringify": [Function],
       },
       Object {
         "percentage": 0,
-        "stringify": [Function],
       },
     ],
     "tag": "rgba",
@@ -1072,21 +1011,17 @@ Object {
     "alpha": Object {
       "alpha": Object {
         "percentage": 50,
-        "stringify": [Function],
       },
     },
     "channels": Array [
       Object {
         "percentage": 0,
-        "stringify": [Function],
       },
       Object {
         "percentage": 100,
-        "stringify": [Function],
       },
       Object {
         "percentage": 0,
-        "stringify": [Function],
       },
     ],
     "tag": "rgba",
@@ -1155,15 +1090,12 @@ Object {
     "channels": Array [
       Object {
         "percentage": 0,
-        "stringify": [Function],
       },
       Object {
         "percentage": 100,
-        "stringify": [Function],
       },
       Object {
         "percentage": 0,
-        "stringify": [Function],
       },
     ],
     "tag": "rgba",
@@ -1181,15 +1113,12 @@ Object {
     "channels": Array [
       Object {
         "percentage": 0,
-        "stringify": [Function],
       },
       Object {
         "percentage": 100,
-        "stringify": [Function],
       },
       Object {
         "percentage": 0,
-        "stringify": [Function],
       },
     ],
     "tag": "rgba",
