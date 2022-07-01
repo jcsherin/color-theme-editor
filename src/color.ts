@@ -4,10 +4,55 @@ import { stringifyColor } from "./color-parser";
 interface NamedCSSColor extends ParsedColor {
   id: string;
   name?: string;
+  displayValue: string;
 }
 
-function makeNamedCSSColor(color: ParsedColor): NamedCSSColor {
-  return { id: stringifyColor(color.parsed), ...color };
+function createNamedCSSColor(color: ParsedColor): NamedCSSColor {
+  const str = stringifyColor(color.parsed);
+  return { id: str, displayValue: str, ...color };
+}
+
+function updateName(color: NamedCSSColor, name: string): NamedCSSColor {
+  if (name.trim().length === 0) return color;
+  if (name === color.name) return color;
+  return { ...color, name };
+}
+
+interface NamedCSSColorDictionary {
+  [index: string]: NamedCSSColor;
+}
+
+function createDictionary(colors: NamedCSSColor[]): NamedCSSColorDictionary {
+  return colors.reduce((dictionary, namedCssColor) => {
+    dictionary[namedCssColor.id] = namedCssColor;
+    return dictionary;
+  }, {} as NamedCSSColorDictionary);
+}
+
+function removeMultiFromDictionary(
+  dictionary: NamedCSSColorDictionary,
+  colors: NamedCSSColor[]
+): NamedCSSColorDictionary {
+  colors.forEach((namedCssColor) => delete dictionary[namedCssColor.id]);
+  return { ...dictionary };
+}
+
+function addMultiToDictionary(
+  dictionary: NamedCSSColorDictionary,
+  colors: NamedCSSColor[]
+): NamedCSSColorDictionary {
+  colors.forEach(
+    (namedCssColor) => (dictionary[namedCssColor.id] = namedCssColor)
+  );
+  return { ...dictionary };
+}
+
+function sortComparator(dictionary: NamedCSSColorDictionary) {
+  return (id1: string, id2: string) => {
+    if (id1 < id2) return -1;
+    if (id1 > id2) return 1;
+    return 0;
+  };
 }
 
 export interface Deprecated__HexColor {
