@@ -269,7 +269,7 @@ function createParsedColor(
   return { token, parsed };
 }
 
-function stringifyColor(
+export function stringifyColor(
   color: HexColor | KeywordColor | RGBAColor | HSLAColor
 ): string {
   switch (color.tag) {

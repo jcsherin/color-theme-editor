@@ -1,3 +1,15 @@
+import type { ParsedColor } from "./color-parser";
+import { stringifyColor } from "./color-parser";
+
+interface NamedCSSColor extends ParsedColor {
+  id: string;
+  name?: string;
+}
+
+function makeNamedCSSColor(color: ParsedColor): NamedCSSColor {
+  return { id: stringifyColor(color.parsed), ...color };
+}
+
 export interface Deprecated__HexColor {
   kind: "hex";
   name: string;
