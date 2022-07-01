@@ -172,6 +172,12 @@ function createAlpha(alpha: number | Percentage): Alpha {
   return { alpha: value };
 }
 
+function stringifyAlpha(value: Alpha): string {
+  return typeof value.alpha === "number"
+    ? `${value.alpha}`
+    : stringifyPercentage(value.alpha);
+}
+
 interface RGBAColor {
   tag: "rgba";
   channels: Triple<number> | Triple<Percentage>;
@@ -187,6 +193,21 @@ function createRGBA(
     channels: channels,
     alpha: alpha,
   };
+}
+
+function stringifyRGBA(color: RGBAColor): string {
+  const channels =
+    typeof color.channels[0] === "number" &&
+    typeof color.channels[1] === "number" &&
+    typeof color.channels[2] === "number"
+      ? [`${color.channels[0]}`, `${color.channels[1]}`, `${color.channels[2]}`]
+      : [
+          stringifyPercentage(color.channels[0] as Percentage),
+          stringifyPercentage(color.channels[1] as Percentage),
+          stringifyPercentage(color.channels[2] as Percentage),
+        ];
+
+  return `rgba(${channels.join(",")}, ${stringifyAlpha(color.alpha)})`;
 }
 
 interface HSLAColor {
@@ -210,6 +231,12 @@ function createHSLA(
     lightness,
     alpha: alpha,
   };
+}
+
+function stringifyHSLA(color: HSLAColor): string {
+  return `hsla(${color.hue}, ${stringifyPercentage(
+    color.saturation
+  )}, ${stringifyPercentage(color.lightness)}), ${stringifyAlpha(color.alpha)}`;
 }
 
 interface HexColor {
@@ -240,6 +267,21 @@ function createParsedColor(
   parsed: HexColor | KeywordColor | RGBAColor | HSLAColor
 ): ParsedColor {
   return { token, parsed };
+}
+
+function stringifyColor(
+  color: HexColor | KeywordColor | RGBAColor | HSLAColor
+): string {
+  switch (color.tag) {
+    case "hex-color":
+      return color.hex;
+    case "keyword-color":
+      return color.keyword;
+    case "rgba":
+      return stringifyRGBA(color);
+    case "hsla":
+      return stringifyHSLA(color);
+  }
 }
 
 interface ParseError {
