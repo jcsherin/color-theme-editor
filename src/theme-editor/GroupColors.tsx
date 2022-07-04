@@ -8,7 +8,8 @@ import {
   someSelected,
   Group,
 } from "./index";
-import { ColorMap } from "../color";
+
+import type { NamedCSSColorDictionary } from "../color";
 
 interface NotificationBoxProps {
   message: string;
@@ -50,7 +51,7 @@ function GroupButtons({
 
 interface SelectableButtonsProps {
   selectables: SelectableItem[];
-  colorMap: ColorMap;
+  colorMap: NamedCSSColorDictionary;
   handleSelection: (selectableItem: SelectableItem) => void;
 }
 
@@ -61,7 +62,7 @@ function SelectableButtons({
 }: SelectableButtonsProps) {
   const buttons = selectables
     .flatMap((selectableItem) => {
-      const color = colorMap.get(selectableItem.colorId);
+      const color = colorMap[selectableItem.colorId];
       return color ? [{ selectableItem: selectableItem, color: color }] : [];
     })
     .map(({ selectableItem, color }) => (
@@ -90,11 +91,13 @@ export function GroupColors({
 }: GroupColorsProps) {
   const groupsCount = Array.from(state.groupMap.values()).length;
   const groupingWorkCompleted =
-    state.colorMap.size !== 0 && allGrouped(state.selectables);
+    state.colorMap &&
+    Object.keys(state.colorMap).length > 0 &&
+    allGrouped(state.selectables);
 
   return (
     <div>
-      {state.colorMap.size === 0 && (
+      {state.colorMap && Object.keys(state.colorMap).length === 0 && (
         <div className="mb-8">
           <NotificationBox message={`Click "Edit" to add color values.`} />
         </div>

@@ -1,9 +1,10 @@
+import type { NamedCSSColor } from "../color";
+
 import React from "react";
-import { getColorValue, Deprecated__HexColor } from "../color";
 import { SelectableItem } from "./index";
 
 interface SelectableProps {
-  color: Deprecated__HexColor;
+  color: NamedCSSColor;
   selectableItem: SelectableItem;
   handleSelection: (selectableItem: SelectableItem) => void;
 }
@@ -36,10 +37,10 @@ export function Selectable({
     >
       <span
         className="w-16 h-12 block border-b"
-        style={{ backgroundColor: getColorValue(color) }}
+        style={{ backgroundColor: color.cssValue }}
       ></span>
       <span className="block text-xs text-center truncate bg-black text-white">
-        {getColorValue(color)}
+        {color.cssValue}
       </span>
     </button>
   );

@@ -1,11 +1,7 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
-import {
-  getColorId,
-  getColorName,
-  getColorValue,
-  Deprecated__HexColor,
-} from "../color";
+
+import type { NamedCSSColor } from "../color";
 
 export function TreeLeafEdit({
   color,
@@ -16,7 +12,7 @@ export function TreeLeafEdit({
   next,
   children,
 }: {
-  color: Deprecated__HexColor;
+  color: NamedCSSColor;
   focus: boolean;
   handleRenameColor: (colorId: string, name: string) => void;
   handleKeyboardNavigate: (key: string, target: string) => void;
@@ -24,7 +20,7 @@ export function TreeLeafEdit({
   next: string;
   children?: React.ReactNode;
 }) {
-  const [value, setValue] = useState(getColorName(color));
+  const [value, setValue] = useState(color.name);
   const renameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -41,7 +37,7 @@ export function TreeLeafEdit({
       <input
         ref={renameRef}
         type="text"
-        placeholder={`Rename ${getColorName(color)}`}
+        placeholder={`Rename ${color.name}`}
         value={value}
         onChange={(event) => {
           const newValue = event.currentTarget.value;
@@ -52,8 +48,7 @@ export function TreeLeafEdit({
           if (key === "Enter") {
             const name = event.currentTarget.value.trim();
             if (name.length > 0) {
-              const colorId = getColorId(color);
-              handleRenameColor(colorId, name);
+              handleRenameColor(color.id, name);
             }
             handleKeyboardNavigate(key, next);
           } else if (key === "ArrowDown") {
@@ -70,9 +65,9 @@ export function TreeLeafEdit({
       <span className="mr-4">:</span>
       <span
         className="w-4 h-4 inline-block mr-2 rounded-sm"
-        style={{ backgroundColor: getColorValue(color) }}
+        style={{ backgroundColor: color.cssValue }}
       ></span>
-      <span className="mr-4">{getColorValue(color)},</span>
+      <span className="mr-4">{color.cssValue},</span>
       {children}
     </div>
   );

@@ -3,13 +3,17 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import renderer from "react-test-renderer";
 
-import { getColorId, makeHexColor } from "../color";
 import {
   Selectable,
   groupSelected,
   makeSelectable,
   toggleStatus,
 } from "./index";
+
+import type { ParsedColor } from "../color-parser";
+
+import { parse } from "../color-parser";
+import { createNamedCSSColor } from "../color";
 
 function setup(jsx: JSX.Element) {
   return {
@@ -20,8 +24,8 @@ function setup(jsx: JSX.Element) {
 
 describe("Selectable component", () => {
   it("renders the `default` state", () => {
-    const red = makeHexColor("red", "#f44336");
-    const defaultItem = makeSelectable(getColorId(red));
+    const red = createNamedCSSColor(parse("#f44336") as ParsedColor, "red");
+    const defaultItem = makeSelectable(red.id);
 
     const tree = renderer.create(
       <Selectable
@@ -55,8 +59,8 @@ describe("Selectable component", () => {
   });
 
   it("renders the `selected` state", () => {
-    const red = makeHexColor("red", "#f44336");
-    const defaultItem = makeSelectable(getColorId(red));
+    const red = createNamedCSSColor(parse("#f44336") as ParsedColor, "red");
+    const defaultItem = makeSelectable(red.id);
     const toggleFn = toggleStatus(defaultItem.colorId);
     const selectedItem = toggleFn(defaultItem);
 
@@ -92,8 +96,8 @@ describe("Selectable component", () => {
   });
 
   it("renders the `grouped` state", () => {
-    const red = makeHexColor("red", "#f44336");
-    const defaultItem = makeSelectable(getColorId(red));
+    const red = createNamedCSSColor(parse("#f44336") as ParsedColor, "red");
+    const defaultItem = makeSelectable(red.id);
     const toggleFn = toggleStatus(defaultItem.colorId);
     const selectedItem = toggleFn(defaultItem);
     const groupedItem = groupSelected([selectedItem])[0];
@@ -130,8 +134,8 @@ describe("Selectable component", () => {
   });
 
   it("when clicked `handleSelection` prop is invoked", async () => {
-    const red = makeHexColor("red", "#f44336");
-    const defaultItem = makeSelectable(getColorId(red));
+    const red = createNamedCSSColor(parse("#f44336") as ParsedColor, "red");
+    const defaultItem = makeSelectable(red.id);
 
     const mockHandleSelection = jest.fn();
     const { user } = setup(

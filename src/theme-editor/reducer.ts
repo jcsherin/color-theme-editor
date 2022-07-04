@@ -10,19 +10,6 @@ import {
   isSelected,
   GroupMap,
 } from "./index";
-import {
-  ColorMap,
-  colorComparator,
-  getColorName,
-  getColorValue,
-  Deprecated__HexColor,
-  parseColors,
-  updateColorName,
-  makeColorMap,
-  addColorsToColorMap,
-  removeColorsFromColorMap,
-  getColorId,
-} from "../color";
 import { FormData, initFormData } from "../form";
 import {
   addGroupsToGroupMap,
@@ -30,19 +17,29 @@ import {
   removeColorsFromGroupMap,
   removeGroupsFromGroupMap,
 } from "./group";
+import {
+  addMultiToDictionary,
+  createNamedCSSColor,
+  createNamedCSSColorDictionary,
+  NamedCSSColor,
+  NamedCSSColorDictionary,
+  removeMultiFromDictionary,
+  sortComparator,
+  updateNamedCSSColorName,
+} from "../color";
+import { parse as parseColor, ParsedColor } from "../color-parser";
 
 export interface ThemeEditorState {
   formData: FormData;
-  colorMap: ColorMap;
+  colorMap: NamedCSSColorDictionary;
   groupMap: GroupMap;
   selectables: SelectableItem[];
 }
 
-type SerializedColorMap = [string, Deprecated__HexColor][];
 type SerializedGroupMap = [string, Group][];
 export interface SerializedThemeEditorState {
   formData: FormData;
-  colorMap: SerializedColorMap;
+  colorMap: NamedCSSColorDictionary;
   groupMap: SerializedGroupMap;
   selectables: SelectableItem[];
 }
@@ -50,7 +47,7 @@ export interface SerializedThemeEditorState {
 export function initThemeEditorState(): ThemeEditorState {
   return {
     formData: initFormData(),
-    colorMap: new Map(),
+    colorMap: createNamedCSSColorDictionary([]),
     groupMap: new Map(),
     selectables: [],
   };
@@ -61,7 +58,7 @@ export function serializeThemeEditorState(
 ): SerializedThemeEditorState {
   return {
     formData: themeEditor.formData,
-    colorMap: Array.from(themeEditor.colorMap),
+    colorMap: themeEditor.colorMap,
     groupMap: Array.from(themeEditor.groupMap),
     selectables: themeEditor.selectables,
   };
@@ -72,7 +69,7 @@ export function deserializeThemeEditorState(
 ): ThemeEditorState {
   return {
     formData: state.formData,
-    colorMap: new Map(state.colorMap),
+    colorMap: state.colorMap,
     groupMap: new Map(state.groupMap),
     selectables: state.selectables,
   };
@@ -88,13 +85,12 @@ export function serializeForTailwind({
   Array.from(groupMap.values()).forEach((colorGroup) => {
     const inner: { [name: string]: string } = {};
     Array.from(colorGroup.colorIds)
-      .sort(colorComparator(colorMap))
+      .sort(sortComparator)
       .forEach((colorId) => {
-        const color = colorMap.get(colorId);
+        const color = colorMap[colorId];
         if (color) {
-          const key = getColorName(color);
-          const value = getColorValue(color);
-          inner[key] = value;
+          const name = color.name ? color.name : color.cssValue;
+          inner[name] = color.cssValue;
         }
       });
     serialized[colorGroup.name] = inner;
@@ -102,13 +98,12 @@ export function serializeForTailwind({
   selectables
     .filter(notGrouped)
     .map((item) => item.colorId)
-    .sort(colorComparator(colorMap))
+    .sort(sortComparator)
     .forEach((colorId) => {
-      const color = colorMap.get(colorId);
+      const color = colorMap[colorId];
       if (color) {
-        const key = getColorName(color);
-        const value = getColorValue(color);
-        serialized[key] = value;
+        const name = color.name ? color.name : color.cssValue;
+        serialized[name] = color.cssValue;
       }
     });
   const wrapper = { theme: { colors: serialized } };
@@ -116,10 +111,22 @@ export function serializeForTailwind({
   return template;
 }
 
+// FIXME: Handle `ParseError` values
+function getParsedColors(formData: FormData): NamedCSSColor[] {
+  const parseResult = formData.colors
+    .split("\n")
+    .map(parseColor) as ParsedColor[];
+  const parsedColors = parseResult.map((parsed) => createNamedCSSColor(parsed));
+  return parsedColors;
+}
+
 export function parse(formData: FormData): ThemeEditorState {
-  const colorMap = makeColorMap(parseColors(formData.colors));
+  const parsedColors = getParsedColors(formData).map((parsed) =>
+    createNamedCSSColor(parsed)
+  );
+  const colorMap = createNamedCSSColorDictionary(parsedColors);
   const groupMap = makeGroupMap(parseColorGroups(formData.groupNames));
-  const selectables = Array.from(colorMap.keys()).map(makeSelectable);
+  const selectables = Array.from(Object.keys(colorMap)).map(makeSelectable);
   return {
     formData,
     colorMap,
@@ -194,7 +201,7 @@ export const getInitialThemeEditorState = (
 
   const state = JSON.parse(cached);
   const formData: FormData = state.formData;
-  const colorMap: ColorMap = new Map(state.colorMap);
+  const colorMap: NamedCSSColorDictionary = state.colorMap;
   const groupMap: GroupMap = new Map(state.groupMap);
   const selectables: SelectableItem[] = state.slectables;
   return {
@@ -251,17 +258,15 @@ export const reducer = (
     }
 
     case "renameColor": {
-      const color = state.colorMap.get(action.colorId);
+      const color = state.colorMap[action.colorId];
       if (!color) return state;
 
-      state.colorMap.set(
-        action.colorId,
-        updateColorName(color, action.newName)
-      );
-
+      const renamed = {
+        [action.colorId]: updateNamedCSSColorName(color, action.newName),
+      };
       return {
         ...state,
-        colorMap: new Map(Array.from(state.colorMap)),
+        colorMap: { ...state.colorMap, ...renamed },
       };
     }
 
@@ -310,34 +315,30 @@ export const reducer = (
       }
 
       let merged = state;
-      const prevColors = parseColors(state.formData.colors).map((color) =>
-        JSON.stringify(color)
-      );
-      const currColors = parseColors(action.formData.colors).map((color) =>
-        JSON.stringify(color)
-      );
+      const prevColors = getParsedColors(state.formData);
+      const currColors = getParsedColors(action.formData);
 
       // Add Colors
-      const addedColors: Deprecated__HexColor[] = currColors
-        .filter((color) => !prevColors.includes(color))
-        .map((serialized) => JSON.parse(serialized));
+      const addedColors = currColors.filter(
+        (color) => !prevColors.includes(color)
+      );
       merged = {
         ...merged,
-        colorMap: addColorsToColorMap(merged.colorMap, addedColors),
+        colorMap: addMultiToDictionary(merged.colorMap, addedColors),
         selectables: [
           ...merged.selectables,
-          ...addedColors.map(getColorId).map(makeSelectable),
+          ...addedColors.map((color) => makeSelectable(color.id)),
         ],
       };
 
       // Delete Colors
-      const deletedColors: Deprecated__HexColor[] = prevColors
-        .filter((color) => !currColors.includes(color))
-        .map((serialized) => JSON.parse(serialized));
-      const deletedColorIds = deletedColors.map(getColorId);
+      const deletedColors = prevColors.filter(
+        (color) => !currColors.includes(color)
+      );
+      const deletedColorIds = deletedColors.map((color) => color.id);
       merged = {
         ...merged,
-        colorMap: removeColorsFromColorMap(merged.colorMap, deletedColors),
+        colorMap: removeMultiFromDictionary(merged.colorMap, deletedColors),
         groupMap: removeColorsFromGroupMap(merged.groupMap, deletedColors),
         selectables: merged.selectables.filter(
           (selectable) => !deletedColorIds.includes(selectable.colorId)

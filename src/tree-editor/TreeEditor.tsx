@@ -1,11 +1,8 @@
+import type { NamedCSSColor } from "../color";
+
 import React, { useEffect, useReducer, useRef, useState } from "react";
+import { sortComparator } from "../color";
 import { notGrouped } from "../theme-editor";
-import {
-  colorComparator,
-  getColorName,
-  getColorValue,
-  Deprecated__HexColor,
-} from "../color";
 import { ThemeEditorState } from "../theme-editor";
 import {
   TreeNode,
@@ -16,22 +13,22 @@ import {
 } from "./index";
 
 const treeLeafView = (
-  color: Deprecated__HexColor,
+  color: NamedCSSColor,
   colorId: string,
   handleFocus: (colorId: string) => void
 ) => (
   <TreeLeafView
     colorId={colorId}
-    key={getColorValue(color)}
+    key={color.cssValue}
     handleFocus={(_event) => handleFocus(colorId)}
   >
-    <span className="mr-4">"{getColorName(color)}"</span>
+    <span className="mr-4">"{color.name}"</span>
     <span className="mr-4">:</span>
     <span
       className="w-4 h-4 inline-block mr-2 rounded-sm"
-      style={{ backgroundColor: getColorValue(color) }}
+      style={{ backgroundColor: color.cssValue }}
     ></span>
-    <span>{getColorValue(color)},</span>
+    <span>{color.cssValue},</span>
   </TreeLeafView>
 );
 
@@ -98,7 +95,7 @@ export function TreeEditor({
       colorId: string;
       prevColorId: string;
       nextColorId: string;
-      color: Deprecated__HexColor;
+      color: NamedCSSColor;
     },
     focusRenameInput: boolean,
     handleFocus: (colorId: string) => void,
@@ -112,7 +109,7 @@ export function TreeEditor({
       case "edit":
         return inputMode.colorId === colorId ? (
           <TreeLeafEdit
-            key={getColorValue(color)}
+            key={color.cssValue}
             color={color}
             focus={focusRenameInput}
             handleRenameColor={handleRenameColor}
@@ -130,13 +127,13 @@ export function TreeEditor({
 
   const configOrderedColorIds = Array.from(state.groupMap.values())
     .flatMap((colorGroup) =>
-      Array.from(colorGroup.colorIds).sort(colorComparator(state.colorMap))
+      Array.from(colorGroup.colorIds).sort(sortComparator)
     )
     .concat(
       state.selectables
         .filter(notGrouped)
         .map((item) => item.colorId)
-        .sort(colorComparator(state.colorMap))
+        .sort(sortComparator)
     );
 
   const getNodeIdx = (colorId: string) =>
@@ -158,9 +155,9 @@ export function TreeEditor({
   const colorGroupNodes = Array.from(state.groupMap.values()).map(
     (colorGroup) => {
       const children = Array.from(colorGroup.colorIds)
-        .sort(colorComparator(state.colorMap))
+        .sort(sortComparator)
         .flatMap((colorId) => {
-          const color = state.colorMap.get(colorId);
+          const color = state.colorMap[colorId];
           return color
             ? [
                 {
@@ -218,9 +215,9 @@ export function TreeEditor({
   const singleColorNodes = state.selectables
     .filter(notGrouped)
     .map((item) => item.colorId)
-    .sort(colorComparator(state.colorMap))
+    .sort(sortComparator)
     .flatMap((colorId) => {
-      const color = state.colorMap.get(colorId);
+      const color = state.colorMap[colorId];
       return color
         ? [
             {
