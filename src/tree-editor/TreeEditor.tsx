@@ -125,7 +125,7 @@ export function TreeEditor({
     }
   };
 
-  const configOrderedColorIds = Object.values(state.groupMap)
+  const configOrderedColorIds = Object.values(state.groupDictionary)
     .flat()
     .concat(
       state.selectables
@@ -150,12 +150,12 @@ export function TreeEditor({
     return configOrderedColorIds[nextIdx];
   };
 
-  const colorGroupNodes = Object.entries(state.groupMap).map(
+  const colorGroupNodes = Object.entries(state.groupDictionary).map(
     ([groupName, colorIds]) => {
       const children = colorIds
         .sort(sortComparator)
         .flatMap((colorId) => {
-          const color = state.colorMap[colorId];
+          const color = state.colorDictionary[colorId];
           return color
             ? [
                 {
@@ -213,7 +213,7 @@ export function TreeEditor({
     .map((item) => item.colorId)
     .sort(sortComparator)
     .flatMap((colorId) => {
-      const color = state.colorMap[colorId];
+      const color = state.colorDictionary[colorId];
       return color
         ? [
             {

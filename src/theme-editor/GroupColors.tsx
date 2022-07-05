@@ -88,22 +88,23 @@ export function GroupColors({
   handleSelection,
   handleAddToGroup,
 }: GroupColorsProps) {
-  const groupsCount = Object.keys(state.groupMap).length;
+  const groupsCount = Object.keys(state.groupDictionary).length;
   const groupingWorkCompleted =
-    state.colorMap &&
-    Object.keys(state.colorMap).length > 0 &&
+    state.colorDictionary &&
+    Object.keys(state.colorDictionary).length > 0 &&
     allGrouped(state.selectables);
 
   return (
     <div>
-      {state.colorMap && Object.keys(state.colorMap).length === 0 && (
-        <div className="mb-8">
-          <NotificationBox message={`Click "Edit" to add color values.`} />
-        </div>
-      )}
+      {state.colorDictionary &&
+        Object.keys(state.colorDictionary).length === 0 && (
+          <div className="mb-8">
+            <NotificationBox message={`Click "Edit" to add color values.`} />
+          </div>
+        )}
       <SelectableButtons
         selectables={state.selectables}
-        colorMap={state.colorMap}
+        colorMap={state.colorDictionary}
         handleSelection={handleSelection}
       />
       {groupsCount === 0 && (
@@ -116,7 +117,7 @@ export function GroupColors({
       )}
       {groupsCount > 0 && !groupingWorkCompleted && (
         <GroupButtons
-          groupNames={Object.keys(state.groupMap)}
+          groupNames={Object.keys(state.groupDictionary)}
           disabled={!someSelected(state.selectables)}
           handleAddToGroup={handleAddToGroup}
         />
