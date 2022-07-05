@@ -24,8 +24,8 @@ A UI component for creating a color theme. You can use it to group colors by nam
 - [x] Unquote keys in config (already implemented in copied config)
 - [ ] Share URL
 - [ ] Download theme
-- [ ] Improve `mergeState` -> `migrateState` (simplifiy existing algo)
-- [ ] Wire new color parser into app (formats: RGBA, HSLA, Keywords)
+- [x] Improve `mergeState` -> `migrateState` (simplifiy existing algo)
+- [x] Wire new color parser into app (formats: RGBA, HSLA, Keywords)
   - [ ] Update load example with newly supported formats
 - [ ] Write a detailed README with screenshots
 - [ ] Add integration tests for `App`
