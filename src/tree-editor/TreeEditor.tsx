@@ -125,10 +125,8 @@ export function TreeEditor({
     }
   };
 
-  const configOrderedColorIds = Array.from(state.groupMap.values())
-    .flatMap((colorGroup) =>
-      Array.from(colorGroup.colorIds).sort(sortComparator)
-    )
+  const configOrderedColorIds = Object.values(state.groupMap)
+    .flat()
     .concat(
       state.selectables
         .filter(notGrouped)
@@ -152,9 +150,9 @@ export function TreeEditor({
     return configOrderedColorIds[nextIdx];
   };
 
-  const colorGroupNodes = Array.from(state.groupMap.values()).map(
-    (colorGroup) => {
-      const children = Array.from(colorGroup.colorIds)
+  const colorGroupNodes = Object.entries(state.groupMap).map(
+    ([groupName, colorIds]) => {
+      const children = colorIds
         .sort(sortComparator)
         .flatMap((colorId) => {
           const color = state.colorMap[colorId];
@@ -173,9 +171,7 @@ export function TreeEditor({
           let removeButton = (
             <button
               className="py-1 px-4 text-red-100 hover:text-red-300 bg-red-600 hover:bg-red-800 font-sans rounded-sm"
-              onClick={(_e) =>
-                handleRemoveFromGroup(args.colorId, colorGroup.name)
-              }
+              onClick={(_e) => handleRemoveFromGroup(args.colorId, groupName)}
             >
               Remove
             </button>
@@ -191,17 +187,17 @@ export function TreeEditor({
           );
         });
 
-      const contents = `"${colorGroup.name}" :`;
+      const contents = `"${groupName}" :`;
       return children.length === 0 ? (
         <TreeNode
-          key={colorGroup.name}
+          key={groupName}
           contents={contents}
           openMarker="{"
           closeMarker="},"
         />
       ) : (
         <TreeNode
-          key={colorGroup.name}
+          key={groupName}
           contents={contents}
           openMarker="{"
           closeMarker="},"

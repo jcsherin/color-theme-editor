@@ -6,7 +6,6 @@ import {
   SelectableItem,
   allGrouped,
   someSelected,
-  Group,
 } from "./index";
 
 import type { NamedCSSColorDictionary } from "../color";
@@ -24,23 +23,23 @@ function NotificationBox({ message }: NotificationBoxProps) {
 }
 
 interface GroupButtonsProps {
-  groups: Array<Group>;
+  groupNames: string[];
   disabled: boolean;
   handleAddToGroup: (groupName: string) => void;
 }
 
 function GroupButtons({
-  groups,
+  groupNames,
   disabled,
   handleAddToGroup,
 }: GroupButtonsProps) {
   return (
     <div className="grid grid-cols-3 gap-2">
-      {groups.map((group) => (
+      {groupNames.map((name) => (
         <GroupButton
-          key={group.name}
+          key={name}
           className={`py-1 px-4 rounded-sm border border-pink-700 hover:border-pink-400 text-pink-700 disabled:cursor-not-allowed disabled:border-slate-500 disabled:text-slate-700 disabled:bg-slate-300`}
-          groupName={group.name}
+          groupName={name}
           disabled={disabled}
           handleClick={handleAddToGroup}
         />
@@ -89,7 +88,7 @@ export function GroupColors({
   handleSelection,
   handleAddToGroup,
 }: GroupColorsProps) {
-  const groupsCount = Array.from(state.groupMap.values()).length;
+  const groupsCount = Object.keys(state.groupMap).length;
   const groupingWorkCompleted =
     state.colorMap &&
     Object.keys(state.colorMap).length > 0 &&
@@ -117,7 +116,7 @@ export function GroupColors({
       )}
       {groupsCount > 0 && !groupingWorkCompleted && (
         <GroupButtons
-          groups={Array.from(state.groupMap.values())}
+          groupNames={Object.keys(state.groupMap)}
           disabled={!someSelected(state.selectables)}
           handleAddToGroup={handleAddToGroup}
         />

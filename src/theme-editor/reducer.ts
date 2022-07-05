@@ -1,46 +1,29 @@
+import type { GroupDictionary, SelectableItem } from "./index";
+import type { FormData } from "../form";
+import type { NamedCSSColor, NamedCSSColorDictionary } from "../color";
+import type { ParsedColor } from "../color-parser";
+
 import {
-  Group,
-  SelectableItem,
   notGrouped,
-  parseColorGroups,
   makeSelectable,
   toggleStatus,
   ungroup,
   groupSelected,
   isSelected,
-  GroupMap,
 } from "./index";
-import { FormData, initFormData } from "../form";
+import { initFormData } from "../form";
 import {
-  addGroupsToGroupMap,
-  makeGroupMap,
-  removeColorsFromGroupMap,
-  removeGroupsFromGroupMap,
-} from "./group";
-import {
-  addMultiToDictionary,
   createNamedCSSColor,
   createNamedCSSColorDictionary,
-  NamedCSSColor,
-  NamedCSSColorDictionary,
-  removeMultiFromDictionary,
-  sortComparator,
   updateNamedCSSColorName,
 } from "../color";
-import { parse as parseColor, ParsedColor } from "../color-parser";
+import { parse as parseColor } from "../color-parser";
+import { emptyGroupDictionary } from "./group";
 
 export interface ThemeEditorState {
   formData: FormData;
   colorMap: NamedCSSColorDictionary;
-  groupMap: GroupMap;
-  selectables: SelectableItem[];
-}
-
-type SerializedGroupMap = [string, Group][];
-export interface SerializedThemeEditorState {
-  formData: FormData;
-  colorMap: NamedCSSColorDictionary;
-  groupMap: SerializedGroupMap;
+  groupMap: GroupDictionary;
   selectables: SelectableItem[];
 }
 
@@ -48,30 +31,8 @@ export function initThemeEditorState(): ThemeEditorState {
   return {
     formData: initFormData(),
     colorMap: createNamedCSSColorDictionary([]),
-    groupMap: new Map(),
+    groupMap: emptyGroupDictionary(),
     selectables: [],
-  };
-}
-
-export function serializeThemeEditorState(
-  themeEditor: ThemeEditorState
-): SerializedThemeEditorState {
-  return {
-    formData: themeEditor.formData,
-    colorMap: themeEditor.colorMap,
-    groupMap: Array.from(themeEditor.groupMap),
-    selectables: themeEditor.selectables,
-  };
-}
-
-export function deserializeThemeEditorState(
-  state: SerializedThemeEditorState
-): ThemeEditorState {
-  return {
-    formData: state.formData,
-    colorMap: state.colorMap,
-    groupMap: new Map(state.groupMap),
-    selectables: state.selectables,
   };
 }
 
@@ -80,32 +41,32 @@ export function serializeForTailwind({
   groupMap,
   selectables,
 }: ThemeEditorState) {
-  const serialized: { [name: string]: string | { [name: string]: string } } =
-    {};
-  Array.from(groupMap.values()).forEach((colorGroup) => {
-    const inner: { [name: string]: string } = {};
-    Array.from(colorGroup.colorIds)
-      .sort(sortComparator)
-      .forEach((colorId) => {
-        const color = colorMap[colorId];
-        if (color) {
-          const name = color.name ? color.name : color.cssValue;
-          inner[name] = color.cssValue;
-        }
-      });
-    serialized[colorGroup.name] = inner;
-  });
-  selectables
+  //  { [groupName: string]: { [colorName: string]: string } }
+  const groupedColors: {
+    [groupName: string]: { [colorName: string]: string };
+  } = Object.entries(groupMap)
+    .map(([groupName, colorIds]): [string, NamedCSSColor[]] => [
+      groupName,
+      colorIds.map((id) => colorMap[id]),
+    ])
+    .reduce((outer, [groupName, colors]) => {
+      return {
+        ...outer,
+        [groupName]: colors.reduce((acc, color) => {
+          return { ...acc, [color.name || color.cssValue]: color.cssValue };
+        }, {}),
+      };
+    }, {});
+
+  const ungroupedColors: { [colorName: string]: string } = selectables
     .filter(notGrouped)
-    .map((item) => item.colorId)
-    .sort(sortComparator)
-    .forEach((colorId) => {
-      const color = colorMap[colorId];
-      if (color) {
-        const name = color.name ? color.name : color.cssValue;
-        serialized[name] = color.cssValue;
-      }
-    });
+    .map((selectable) => selectable.colorId)
+    .map((id) => colorMap[id])
+    .reduce((acc, color) => {
+      return { ...acc, [color.name || color.cssValue]: color.cssValue };
+    }, {});
+
+  const serialized = { ...groupedColors, ...ungroupedColors };
   const wrapper = { theme: { colors: serialized } };
   const template = `module.exports = ${JSON.stringify(wrapper, null, 2)}`;
   return template;
@@ -120,12 +81,22 @@ function getParsedColors(formData: FormData): NamedCSSColor[] {
   return parsedColors;
 }
 
+function getParsedGroupNames(formData: FormData): string[] {
+  return formData.groupNames
+    .split("\n")
+    .map((value) => value.trim())
+    .filter((value) => value.length > 0)
+    .map((value) => value.replace(/\s+/g, "-"));
+}
+
 export function parse(formData: FormData): ThemeEditorState {
   const parsedColors = getParsedColors(formData).map((parsed) =>
     createNamedCSSColor(parsed)
   );
   const colorMap = createNamedCSSColorDictionary(parsedColors);
-  const groupMap = makeGroupMap(parseColorGroups(formData.groupNames));
+  const groupMap = getParsedGroupNames(formData).reduce((acc, groupName) => {
+    return { ...acc, [groupName]: [] };
+  }, emptyGroupDictionary());
   const selectables = Array.from(Object.keys(colorMap)).map(makeSelectable);
   return {
     formData,
@@ -202,7 +173,7 @@ export const getInitialThemeEditorState = (
   const state = JSON.parse(cached);
   const formData: FormData = state.formData;
   const colorMap: NamedCSSColorDictionary = state.colorMap;
-  const groupMap: GroupMap = new Map(state.groupMap);
+  const groupMap: GroupDictionary = state.groupMap;
   const selectables: SelectableItem[] = state.slectables;
   return {
     formData,
@@ -222,37 +193,30 @@ export const reducer = (
     }
 
     case "addToGroup": {
-      const group = state.groupMap.get(action.groupName);
-      if (!group) return state;
-
-      const selected = state.selectables
+      const groupedColorIds = state.groupMap[action.groupName];
+      const selectedColorIds = state.selectables
         .filter(isSelected)
         .map((item) => item.colorId);
-
-      const deduped = new Set([...group.colorIds, ...selected]);
-      const newGroup = { ...group, colorIds: Array.from(deduped) };
-      state.groupMap.set(group.name, newGroup);
+      const dedupedColorIds: string[] = Array.from(
+        new Set(groupedColorIds.concat(selectedColorIds))
+      );
 
       return {
         ...state,
-        groupMap: new Map(Array.from(state.groupMap)),
+        groupMap: { ...state.groupMap, [action.groupName]: dedupedColorIds },
         selectables: groupSelected(state.selectables),
       };
     }
 
     case "removeFromGroup": {
-      const group = state.groupMap.get(action.groupName);
-      if (!group) return state;
-
-      const colorIds = group.colorIds.filter(
-        (colorId) => colorId !== action.colorId
-      );
-      const newGroup = { ...group, colorIds: colorIds };
-      state.groupMap.set(group.name, newGroup);
-
       return {
         ...state,
-        groupMap: new Map(Array.from(state.groupMap)),
+        groupMap: {
+          ...state.groupMap,
+          [action.groupName]: state.groupMap[action.groupName].filter(
+            (id) => id !== action.colorId
+          ),
+        },
         selectables: state.selectables.map(ungroup(action.colorId)),
       };
     }
@@ -307,87 +271,89 @@ export const reducer = (
       9. Rewrite `formData` field with `action.formData`
       */
     case "mergeState": {
-      if (
-        action.formData.groupNames === state.formData.groupNames &&
-        action.formData.colors === state.formData.colors
-      ) {
-        return state;
-      }
+      // FIXME: Rewrite merge using a simpler reconciliation algorithm
+      return state;
+      // if (
+      //   action.formData.groupNames === state.formData.groupNames &&
+      //   action.formData.colors === state.formData.colors
+      // ) {
+      //   return state;
+      // }
 
-      let merged = state;
-      const prevColors = getParsedColors(state.formData);
-      const currColors = getParsedColors(action.formData);
+      // let merged = state;
+      // const prevColors = getParsedColors(state.formData);
+      // const currColors = getParsedColors(action.formData);
 
-      // Add Colors
-      const addedColors = currColors.filter(
-        (color) => !prevColors.includes(color)
-      );
-      merged = {
-        ...merged,
-        colorMap: addMultiToDictionary(merged.colorMap, addedColors),
-        selectables: [
-          ...merged.selectables,
-          ...addedColors.map((color) => makeSelectable(color.id)),
-        ],
-      };
+      // // Add Colors
+      // const addedColors = currColors.filter(
+      //   (color) => !prevColors.includes(color)
+      // );
+      // merged = {
+      //   ...merged,
+      //   colorMap: addMultiToDictionary(merged.colorMap, addedColors),
+      //   selectables: [
+      //     ...merged.selectables,
+      //     ...addedColors.map((color) => makeSelectable(color.id)),
+      //   ],
+      // };
 
-      // Delete Colors
-      const deletedColors = prevColors.filter(
-        (color) => !currColors.includes(color)
-      );
-      const deletedColorIds = deletedColors.map((color) => color.id);
-      merged = {
-        ...merged,
-        colorMap: removeMultiFromDictionary(merged.colorMap, deletedColors),
-        groupMap: removeColorsFromGroupMap(merged.groupMap, deletedColors),
-        selectables: merged.selectables.filter(
-          (selectable) => !deletedColorIds.includes(selectable.colorId)
-        ),
-      };
+      // // Delete Colors
+      // const deletedColors = prevColors.filter(
+      //   (color) => !currColors.includes(color)
+      // );
+      // const deletedColorIds = deletedColors.map((color) => color.id);
+      // merged = {
+      //   ...merged,
+      //   colorMap: removeMultiFromDictionary(merged.colorMap, deletedColors),
+      //   groupMap: removeColorsFromGroupMap(merged.groupMap, deletedColors),
+      //   selectables: merged.selectables.filter(
+      //     (selectable) => !deletedColorIds.includes(selectable.colorId)
+      //   ),
+      // };
 
-      const prevGroups = parseColorGroups(state.formData.groupNames).map(
-        (group) => JSON.stringify(group)
-      );
-      const currGroups = parseColorGroups(action.formData.groupNames).map(
-        (group) => JSON.stringify(group)
-      );
+      // const prevGroups = parseColorGroups(state.formData.groupNames).map(
+      //   (group) => JSON.stringify(group)
+      // );
+      // const currGroups = parseColorGroups(action.formData.groupNames).map(
+      //   (group) => JSON.stringify(group)
+      // );
 
-      // Add Groups
-      const addedGroups: Group[] = currGroups
-        .filter((group) => !prevGroups.includes(group))
-        .map((serialized) => JSON.parse(serialized));
-      merged = {
-        ...merged,
-        groupMap: addGroupsToGroupMap(merged.groupMap, addedGroups),
-      };
+      // // Add Groups
+      // const addedGroups: Group[] = currGroups
+      //   .filter((group) => !prevGroups.includes(group))
+      //   .map((serialized) => JSON.parse(serialized));
+      // merged = {
+      //   ...merged,
+      //   groupMap: addGroupsToGroupMap(merged.groupMap, addedGroups),
+      // };
 
-      // Delete Groups
-      const deletedGroups: Group[] = prevGroups
-        .filter((group) => !currGroups.includes(group))
-        .map((serialized) => JSON.parse(serialized));
-      const deletedGroupNames = deletedGroups.map((group) => group.name);
-      const colorIdsForUngrouping = Array.from(
-        merged.groupMap,
-        ([_key, group]) =>
-          deletedGroupNames.includes(group.name) ? group.colorIds : []
-      ).flat();
-      merged = {
-        ...merged,
-        groupMap: removeGroupsFromGroupMap(merged.groupMap, deletedGroups),
-        selectables: merged.selectables.map((selectable) =>
-          colorIdsForUngrouping.includes(selectable.colorId)
-            ? ungroup(selectable.colorId)(selectable)
-            : selectable
-        ),
-      };
+      // // Delete Groups
+      // const deletedGroups: Group[] = prevGroups
+      //   .filter((group) => !currGroups.includes(group))
+      //   .map((serialized) => JSON.parse(serialized));
+      // const deletedGroupNames = deletedGroups.map((group) => group.name);
+      // const colorIdsForUngrouping = Array.from(
+      //   merged.groupMap,
+      //   ([_key, group]) =>
+      //     deletedGroupNames.includes(group.name) ? group.colorIds : []
+      // ).flat();
+      // merged = {
+      //   ...merged,
+      //   groupMap: removeGroupsFromGroupMap(merged.groupMap, deletedGroups),
+      //   selectables: merged.selectables.map((selectable) =>
+      //     colorIdsForUngrouping.includes(selectable.colorId)
+      //       ? ungroup(selectable.colorId)(selectable)
+      //       : selectable
+      //   ),
+      // };
 
-      // Rewrite Form Data
-      merged = {
-        ...merged,
-        formData: action.formData,
-      };
+      // // Rewrite Form Data
+      // merged = {
+      //   ...merged,
+      //   formData: action.formData,
+      // };
 
-      return merged;
+      // return merged;
     }
   }
 };

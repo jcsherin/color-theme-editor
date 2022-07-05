@@ -2,13 +2,9 @@ import React, { useState } from "react";
 import { CopyButton } from "../clipboard";
 import { TreeEditor } from "../tree-editor";
 import { SelectableItem, GroupColors } from "./index";
-import {
-  deserializeThemeEditorState,
-  serializeForTailwind,
-  serializeThemeEditorState,
-} from "./reducer";
+import { serializeForTailwind } from "./reducer";
 
-import type { ThemeEditorState, SerializedThemeEditorState } from "./reducer";
+import type { ThemeEditorState } from "./reducer";
 import { Form2, FormData } from "../form";
 
 export interface EditUI {
@@ -16,32 +12,10 @@ export interface EditUI {
   state: ThemeEditorState;
 }
 
-export interface EditUISerialized {
-  kind: "main";
-  state: SerializedThemeEditorState;
-}
-
 export function createEditUI(state: ThemeEditorState): EditUI {
   return {
     kind: "main",
     state: state,
-  };
-}
-
-export function serializeEditUI(ui: EditUI): {
-  state: SerializedThemeEditorState;
-  kind: "main";
-} {
-  return { ...ui, state: serializeThemeEditorState(ui.state) };
-}
-
-export function deserializeEditUI(ui: {
-  kind: "main";
-  state: SerializedThemeEditorState;
-}): EditUI {
-  return {
-    ...ui,
-    state: deserializeThemeEditorState(ui.state),
   };
 }
 

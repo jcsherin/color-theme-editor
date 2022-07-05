@@ -6,10 +6,6 @@ import {
   initThemeEditorState,
   reducer,
 } from "./theme-editor";
-import {
-  deserializeThemeEditorState,
-  serializeThemeEditorState,
-} from "./theme-editor/reducer";
 
 function init({
   cacheKey,
@@ -19,11 +15,7 @@ function init({
   initialState: ThemeEditorState;
 }) {
   const cached = localStorage.getItem(cacheKey);
-  if (cached) {
-    return deserializeThemeEditorState(JSON.parse(cached));
-  }
-
-  return initialState;
+  return cached ? JSON.parse(cached) : initialState;
 }
 
 const cacheKey = "themeEditorState";
@@ -39,10 +31,7 @@ export default function App() {
   );
 
   useEffect(() => {
-    localStorage.setItem(
-      cacheKey,
-      JSON.stringify(serializeThemeEditorState(state))
-    );
+    localStorage.setItem(cacheKey, JSON.stringify(state));
   }, [state]);
 
   return (
