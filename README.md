@@ -26,10 +26,14 @@ A UI component for creating a color theme. You can use it to group colors by nam
 - [ ] Download theme
 - [x] Improve `mergeState` -> `migrateState` (simplifiy existing algo)
 - [x] Wire new color parser into app (formats: RGBA, HSLA, Keywords)
-  - [ ] Update load example with newly supported formats
+- [ ] Update load example with newly supported formats
 - [ ] Write a detailed README with screenshots
 - [ ] Add integration tests for `App`
 - [ ] Improve first time user experience
   - [ ] Show color value parse errors
   - [ ] Turn on edit mode for first grouped color
   - [ ] Use space in grouping UI column for usage instructions
+- [ ] Add Error Boundaries
+- [ ] Fix bugs:
+  - [ ] Empty color values crashing the UI
+  - [ ] Do not allow duplicate color values to be loaded
