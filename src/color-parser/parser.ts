@@ -293,6 +293,10 @@ function createParseError(token: string, message: string) {
   return { token, message };
 }
 
+export function isParseError(parsed: ParsedColor | ParseError): boolean {
+  return "token" in parsed && "message" in parsed;
+}
+
 const HexPatterns = [
   /^#[0-9A-Fa-f]{8}$/,
   /^#[0-9A-Fa-f]{6}$/,

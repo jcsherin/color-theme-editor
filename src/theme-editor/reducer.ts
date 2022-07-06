@@ -1,7 +1,6 @@
 import type { GroupDictionary, SelectableItem } from "./index";
 import type { FormData } from "../form";
 import type { NamedCSSColor, NamedCSSColorDictionary } from "../color";
-import type { ParsedColor } from "../color-parser";
 
 import {
   notGrouped,
@@ -19,6 +18,7 @@ import {
 } from "../color";
 import { parse as parseColor } from "../color-parser";
 import { emptyGroupDictionary } from "./group";
+import { isParseError, ParsedColor } from "../color-parser/parser";
 
 export interface ThemeEditorState {
   formData: FormData;
@@ -74,11 +74,12 @@ export function serializeForTailwind({
 
 // FIXME: Handle `ParseError` values
 function getParsedColors(formData: FormData): NamedCSSColor[] {
-  const parseResult = formData.colors
+  const result = formData.colors
     .split("\n")
-    .map(parseColor) as ParsedColor[];
-  const parsedColors = parseResult.map((parsed) => createNamedCSSColor(parsed));
-  return parsedColors;
+    .map(parseColor)
+    .filter((parsed) => !isParseError(parsed)) as ParsedColor[];
+
+  return result.map((parsed) => createNamedCSSColor(parsed));
 }
 
 function getParsedGroupNames(formData: FormData): string[] {
@@ -251,9 +252,12 @@ export const reducer = (
     }
 
     case "mergeState": {
+      console.log(JSON.stringify(action));
+
       const colorDictionary = createNamedCSSColorDictionary(
         getParsedColors(action.formData)
       );
+      console.log(JSON.stringify(colorDictionary));
 
       const tmpGroupDictionary = getParsedGroupNames(action.formData).reduce(
         (acc, groupName) => {
@@ -275,6 +279,7 @@ export const reducer = (
         },
         tmpGroupDictionary
       );
+      console.log(JSON.stringify(groupDictionary));
 
       const grouped = Object.values(groupDictionary).flat();
       const selectables = Object.keys(colorDictionary)
@@ -284,6 +289,8 @@ export const reducer = (
             ? groupSelected([selectableItem])[0]
             : selectableItem
         );
+
+      console.log(JSON.stringify(selectables));
 
       return {
         colorDictionary,
