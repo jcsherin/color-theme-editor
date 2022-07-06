@@ -37,7 +37,7 @@ export function TreeLeafEdit({
       <input
         ref={renameRef}
         type="text"
-        placeholder={`Rename ${color.name}`}
+        placeholder={`Rename ${color.name ? color.name : color.cssValue}`}
         value={value}
         onChange={(event) => {
           const newValue = event.currentTarget.value;

@@ -22,7 +22,7 @@ const treeLeafView = (
     key={color.cssValue}
     handleFocus={(_event) => handleFocus(colorId)}
   >
-    <span className="mr-4">"{color.name}"</span>
+    <span className="mr-4">"{color.name ? color.name : color.cssValue}"</span>
     <span className="mr-4">:</span>
     <span
       className="w-4 h-4 inline-block mr-2 rounded-sm"
