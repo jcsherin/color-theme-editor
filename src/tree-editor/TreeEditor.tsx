@@ -1,4 +1,4 @@
-import type { NamedCSSColor } from "../color";
+import { nameComparator, NamedCSSColor } from "../color";
 
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { sortComparator } from "../color";
@@ -153,7 +153,7 @@ export function TreeEditor({
   const colorGroupNodes = Object.entries(state.groupDictionary).map(
     ([groupName, colorIds]) => {
       const children = colorIds
-        .sort(sortComparator)
+        .sort(nameComparator(state.colorDictionary))
         .flatMap((colorId) => {
           const color = state.colorDictionary[colorId];
           return color

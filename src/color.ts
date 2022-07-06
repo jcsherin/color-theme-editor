@@ -61,3 +61,18 @@ export function sortComparator(id1: string, id2: string): 0 | 1 | -1 {
   if (id1 > id2) return 1;
   return 0;
 }
+
+export function nameComparator(colorDictionary: NamedCSSColorDictionary) {
+  const colorNameForComparator = (color: NamedCSSColor): string => {
+    return color.name ? color.name : "";
+  };
+
+  return function (colorId1: string, colorId2: string): 0 | 1 | -1 {
+    const name1 = colorNameForComparator(colorDictionary[colorId1]);
+    const name2 = colorNameForComparator(colorDictionary[colorId2]);
+
+    if (name1 < name2) return -1;
+    if (name1 > name2) return 1;
+    return 0;
+  };
+}
