@@ -34,6 +34,7 @@ A UI component for creating a color theme. You can use it to group colors by nam
   - [ ] Turn on edit mode for first grouped color
   - [ ] Use space in grouping UI column for usage instructions
 - [ ] Add Error Boundaries
-- [ ] Fix bugs:
+- [x] Fix bugs:
   - [x] Empty color values crashing the UI
-  - [ ] Do not allow duplicate color values to be loaded
+  - [x] Do not allow duplicate color values to be loaded
+  - [x] Preserve state of existing colors when merging state

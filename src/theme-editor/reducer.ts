@@ -268,15 +268,14 @@ export const reducer = (
       );
       const groupDictionary = Object.keys(state.groupDictionary).reduce(
         (acc, groupName) => {
-          if (acc[groupName] !== undefined) {
-            const diff = new Set([
-              ...Object.keys(colorDictionary).filter((id) =>
-                state.groupDictionary[groupName].includes(id)
-              ),
-            ]);
-            return { ...acc, [groupName]: Array.from(diff) };
-          }
-          return acc;
+          if (!acc[groupName]) return acc;
+
+          const diff = new Set([
+            ...Object.keys(colorDictionary).filter((id) =>
+              state.groupDictionary[groupName].includes(id)
+            ),
+          ]);
+          return { ...acc, [groupName]: Array.from(diff) };
         },
         tmpGroupDictionary
       );
@@ -286,7 +285,7 @@ export const reducer = (
         .map(makeSelectable)
         .map((selectableItem) =>
           grouped.includes(selectableItem.colorId)
-            ? groupSelected([selectableItem])[0]
+            ? ({ ...selectableItem, status: "grouped" } as SelectableItem)
             : selectableItem
         );
 
