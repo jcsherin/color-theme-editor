@@ -38,3 +38,4 @@ A UI component for creating a color theme. You can use it to group colors by nam
   - [x] Empty color values crashing the UI
   - [x] Do not allow duplicate color values to be loaded
   - [x] Preserve state of existing colors when merging state
+  - [ ] After renaming within group sorted order for names is not being applied
