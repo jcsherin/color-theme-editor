@@ -2,22 +2,21 @@ import React from "react";
 import { useEffect, useRef, useState } from "react";
 
 import type { NamedCSSColor } from "../color";
+import type { ColorIterator } from "./colorIterator";
 
 export function TreeLeafEdit({
   color,
   focus,
   handleRenameColor,
   handleKeyboardNavigate,
-  prev,
-  next,
+  colorIterator,
   children,
 }: {
   color: NamedCSSColor;
   focus: boolean;
   handleRenameColor: (colorId: string, name: string) => void;
   handleKeyboardNavigate: (key: string, target: string) => void;
-  prev: string;
-  next: string;
+  colorIterator: ColorIterator;
   children?: React.ReactNode;
 }) {
   const [value, setValue] = useState(color.name);
@@ -50,14 +49,14 @@ export function TreeLeafEdit({
             if (name.length > 0) {
               handleRenameColor(color.id, name);
             }
-            handleKeyboardNavigate(key, next);
+            handleKeyboardNavigate(key, colorIterator.next(color).id);
           } else if (key === "ArrowDown") {
-            handleKeyboardNavigate(key, next);
+            handleKeyboardNavigate(key, colorIterator.next(color).id);
           } else if (key === "ArrowUp") {
-            handleKeyboardNavigate(key, prev);
+            handleKeyboardNavigate(key, colorIterator.prev(color).id);
           } else if (key === "Escape") {
             // refactor: the 2nd arg `next` is unused
-            handleKeyboardNavigate(key, next);
+            handleKeyboardNavigate(key, colorIterator.next(color).id);
           }
         }}
         className="py-2 pl-4 mr-4 w-1/2 text-black"

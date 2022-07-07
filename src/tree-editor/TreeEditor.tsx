@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useRef, useState } from "react";
 
 import type { NamedCSSColor } from "../color";
 import type { ThemeEditorState } from "../theme-editor";
+import type { ColorIterator } from "./colorIterator";
 
 import { nameComparator } from "../color";
 import { isGrouped } from "../theme-editor";
@@ -10,6 +11,7 @@ import { TreeNode } from "./TreeNode";
 import { TreeLeafEdit } from "./TreeLeafEdit";
 import { UngroupButton } from "./UngroupButton";
 import { editorViewMode, reducer } from "./reducer";
+import { createColorIterator } from "./colorIterator";
 
 export function TreeEditor({
   state,
@@ -62,15 +64,8 @@ export function TreeEditor({
   };
 
   const colorNode = (
-    {
-      prevColorId,
-      nextColorId,
-      color,
-    }: {
-      prevColorId: string;
-      nextColorId: string;
-      color: NamedCSSColor;
-    },
+    color: NamedCSSColor,
+    colorIterator: ColorIterator,
     focusRenameInput: boolean,
     handleFocus: (color: NamedCSSColor) => void,
     handleRenameColor: (colorId: string, name: string) => void,
@@ -85,11 +80,10 @@ export function TreeEditor({
           <TreeLeafEdit
             key={color.cssValue}
             color={color}
+            colorIterator={colorIterator}
             focus={focusRenameInput}
             handleRenameColor={handleRenameColor}
             handleKeyboardNavigate={handleKeyboardNavigate}
-            prev={prevColorId}
-            next={nextColorId}
           >
             {children}
           </TreeLeafEdit>
@@ -99,56 +93,26 @@ export function TreeEditor({
     }
   };
 
-  const configOrderedColorIds = Object.values(state.groupDictionary)
-    .flat()
-    .concat(
-      state.selectables
-        .filter((item) => !isGrouped(item))
-        .map((item) => item.colorId)
-    );
-
-  const getNodeIdx = (colorId: string) =>
-    configOrderedColorIds.findIndex((id) => id === colorId);
-
-  const prevColorId = (colorId: string) => {
-    const idx = getNodeIdx(colorId);
-    const prevIdx =
-      (idx - 1 + configOrderedColorIds.length) % configOrderedColorIds.length;
-    return configOrderedColorIds[prevIdx];
-  };
-
-  const nextColorId = (colorId: string) => {
-    const idx = getNodeIdx(colorId);
-    const nextIdx = (idx + 1) % configOrderedColorIds.length;
-    return configOrderedColorIds[nextIdx];
-  };
+  const colorIterator = createColorIterator(state);
 
   const groupedColors = Object.entries(state.groupDictionary).map(
     ([groupName, colorIds]) => {
       const children = colorIds
         .sort(nameComparator(state.colorDictionary))
-        .flatMap((colorId) => {
-          const color = state.colorDictionary[colorId];
-          return color
-            ? [
-                {
-                  prevColorId: prevColorId(colorId),
-                  nextColorId: nextColorId(colorId),
-                  color,
-                },
-              ]
-            : [];
-        })
-        .map((args) =>
+        .flatMap((colorId) =>
+          state.colorDictionary[colorId] ? [state.colorDictionary[colorId]] : []
+        )
+        .map((color) =>
           colorNode(
-            args,
+            color,
+            colorIterator,
             focusRenameInput,
             handleInputFocus,
             handleRenameColor,
             handleKeyboardNavigate,
             <UngroupButton
               groupName={groupName}
-              color={args.color}
+              color={color}
               handleRemoveFromGroup={handleRemoveFromGroup}
             />
           )
@@ -178,21 +142,13 @@ export function TreeEditor({
   const ungroupedColors = state.selectables
     .filter((item) => !isGrouped(item))
     .map((item) => item.colorId)
-    .flatMap((colorId) => {
-      const color = state.colorDictionary[colorId];
-      return color
-        ? [
-            {
-              prevColorId: prevColorId(colorId),
-              nextColorId: nextColorId(colorId),
-              color,
-            },
-          ]
-        : [];
-    })
-    .map((args) =>
+    .flatMap((colorId) =>
+      state.colorDictionary[colorId] ? [state.colorDictionary[colorId]] : []
+    )
+    .map((color) =>
       colorNode(
-        args,
+        color,
+        colorIterator,
         focusRenameInput,
         handleInputFocus,
         handleRenameColor,
