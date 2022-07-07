@@ -1,8 +1,10 @@
-import { nameComparator, NamedCSSColor } from "../color";
-
 import React, { useEffect, useReducer, useRef, useState } from "react";
-import { notGrouped } from "../theme-editor";
+
+import type { NamedCSSColor } from "../color";
 import { ThemeEditorState } from "../theme-editor";
+
+import { nameComparator } from "../color";
+import { notGrouped } from "../theme-editor";
 import {
   TreeNode,
   TreeLeafView,
@@ -140,7 +142,7 @@ export function TreeEditor({
     return configOrderedColorIds[nextIdx];
   };
 
-  const colorGroupNodes = Object.entries(state.groupDictionary).map(
+  const groupedColors = Object.entries(state.groupDictionary).map(
     ([groupName, colorIds]) => {
       const children = colorIds
         .sort(nameComparator(state.colorDictionary))
@@ -198,7 +200,7 @@ export function TreeEditor({
     }
   );
 
-  const singleColorNodes = state.selectables
+  const ungroupedColors = state.selectables
     .filter(notGrouped)
     .map((item) => item.colorId)
     .flatMap((colorId) => {
@@ -224,14 +226,13 @@ export function TreeEditor({
       )
     );
 
-  const childNodes = [colorGroupNodes, ...singleColorNodes];
-
   return (
     <div ref={mouseRef} className={className} style={style}>
       <TreeNode contents="module.exports =" openMarker="{" closeMarker="}">
         <TreeNode contents="theme:" openMarker="{" closeMarker="}">
           <TreeNode contents="colors:" openMarker="{" closeMarker="}">
-            {childNodes}
+            {groupedColors}
+            {ungroupedColors}
           </TreeNode>
         </TreeNode>
       </TreeNode>
