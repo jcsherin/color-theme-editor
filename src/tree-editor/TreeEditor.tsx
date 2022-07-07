@@ -84,12 +84,10 @@ export function TreeEditor({
 
   const colorNode = (
     {
-      colorId,
       prevColorId,
       nextColorId,
       color,
     }: {
-      colorId: string;
       prevColorId: string;
       nextColorId: string;
       color: NamedCSSColor;
@@ -104,7 +102,7 @@ export function TreeEditor({
       case "view":
         return treeLeafView(color, handleFocus);
       case "edit":
-        return editorMode.colorId === colorId ? (
+        return editorMode.colorId === color.id ? (
           <TreeLeafEdit
             key={color.cssValue}
             color={color}
@@ -155,7 +153,6 @@ export function TreeEditor({
           return color
             ? [
                 {
-                  colorId,
                   prevColorId: prevColorId(colorId),
                   nextColorId: nextColorId(colorId),
                   color,
@@ -167,7 +164,7 @@ export function TreeEditor({
           let removeButton = (
             <button
               className="py-1 px-4 text-red-100 hover:text-red-300 bg-red-600 hover:bg-red-800 font-sans rounded-sm"
-              onClick={(_e) => handleRemoveFromGroup(args.colorId, groupName)}
+              onClick={(_e) => handleRemoveFromGroup(args.color.id, groupName)}
             >
               Remove
             </button>
@@ -212,7 +209,6 @@ export function TreeEditor({
       return color
         ? [
             {
-              colorId,
               prevColorId: prevColorId(colorId),
               nextColorId: nextColorId(colorId),
               color,
