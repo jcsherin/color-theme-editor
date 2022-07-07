@@ -13,13 +13,12 @@ import {
 
 const treeLeafView = (
   color: NamedCSSColor,
-  colorId: string,
   handleFocus: (colorId: string) => void
 ) => (
   <TreeLeafView
-    colorId={colorId}
+    colorId={color.id}
     key={color.cssValue}
-    handleFocus={(_event) => handleFocus(colorId)}
+    handleFocus={(_event) => handleFocus(color.id)}
   >
     <span className="mr-4">"{color.name ? color.name : color.cssValue}"</span>
     <span className="mr-4">:</span>
@@ -101,7 +100,7 @@ export function TreeEditor({
   ) => {
     switch (editorMode.kind) {
       case "view":
-        return treeLeafView(color, colorId, handleFocus);
+        return treeLeafView(color, handleFocus);
       case "edit":
         return editorMode.colorId === colorId ? (
           <TreeLeafEdit
@@ -116,7 +115,7 @@ export function TreeEditor({
             {children}
           </TreeLeafEdit>
         ) : (
-          treeLeafView(color, colorId, handleFocus)
+          treeLeafView(color, handleFocus)
         );
     }
   };
