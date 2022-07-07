@@ -252,12 +252,13 @@ export const reducer = (
     }
 
     case "mergeState": {
-      console.log(JSON.stringify(action));
-
       const colorDictionary = createNamedCSSColorDictionary(
-        getParsedColors(action.formData)
+        getParsedColors(action.formData).map((parsedColor) =>
+          state.colorDictionary[parsedColor.id]
+            ? state.colorDictionary[parsedColor.id]
+            : parsedColor
+        )
       );
-      console.log(JSON.stringify(colorDictionary));
 
       const tmpGroupDictionary = getParsedGroupNames(action.formData).reduce(
         (acc, groupName) => {
@@ -279,7 +280,6 @@ export const reducer = (
         },
         tmpGroupDictionary
       );
-      console.log(JSON.stringify(groupDictionary));
 
       const grouped = Object.values(groupDictionary).flat();
       const selectables = Object.keys(colorDictionary)
@@ -289,8 +289,6 @@ export const reducer = (
             ? groupSelected([selectableItem])[0]
             : selectableItem
         );
-
-      console.log(JSON.stringify(selectables));
 
       return {
         colorDictionary,
