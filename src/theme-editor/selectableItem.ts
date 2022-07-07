@@ -26,8 +26,8 @@ export function isSelected(item: SelectableItem): boolean {
   return item.status === "selected";
 }
 
-export function notGrouped(item: SelectableItem): boolean {
-  return item.status !== "grouped";
+export function isGrouped(item: SelectableItem): boolean {
+  return item.status === "grouped";
 }
 
 export function groupSelected(items: SelectableItem[]): SelectableItem[] {

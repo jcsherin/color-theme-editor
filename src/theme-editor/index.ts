@@ -9,7 +9,7 @@ export {
   groupSelected,
   isSelected,
   makeSelectable,
-  notGrouped,
+  isGrouped,
   someSelected,
   toggleStatus,
   ungroup,

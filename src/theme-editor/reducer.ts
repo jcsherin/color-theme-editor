@@ -1,9 +1,8 @@
-import type { GroupDictionary, SelectableItem } from "./index";
+import { GroupDictionary, isGrouped, SelectableItem } from "./index";
 import type { FormData } from "../form";
 import type { NamedCSSColor, NamedCSSColorDictionary } from "../color";
 
 import {
-  notGrouped,
   makeSelectable,
   toggleStatus,
   ungroup,
@@ -59,7 +58,7 @@ export function serializeForTailwind({
     }, {});
 
   const ungroupedColors: { [colorName: string]: string } = selectables
-    .filter(notGrouped)
+    .filter((item) => !isGrouped(item))
     .map((selectable) => selectable.colorId)
     .map((id) => colorDictionary[id])
     .reduce((acc, color) => {

@@ -4,7 +4,7 @@ import type { NamedCSSColor } from "../color";
 import { ThemeEditorState } from "../theme-editor";
 
 import { nameComparator } from "../color";
-import { notGrouped } from "../theme-editor";
+import { isGrouped } from "../theme-editor";
 import {
   TreeNode,
   TreeLeafView,
@@ -124,7 +124,11 @@ export function TreeEditor({
 
   const configOrderedColorIds = Object.values(state.groupDictionary)
     .flat()
-    .concat(state.selectables.filter(notGrouped).map((item) => item.colorId));
+    .concat(
+      state.selectables
+        .filter((item) => !isGrouped(item))
+        .map((item) => item.colorId)
+    );
 
   const getNodeIdx = (colorId: string) =>
     configOrderedColorIds.findIndex((id) => id === colorId);
@@ -201,7 +205,7 @@ export function TreeEditor({
   );
 
   const ungroupedColors = state.selectables
-    .filter(notGrouped)
+    .filter((item) => !isGrouped(item))
     .map((item) => item.colorId)
     .flatMap((colorId) => {
       const color = state.colorDictionary[colorId];
