@@ -4,3 +4,4 @@ export { TreeLeafEdit } from "./TreeLeafEdit";
 export { TreeLeafView } from "./TreeLeafView";
 export { TreeNode } from "./TreeNode";
 export { ColorSelector } from "./ColorSelector";
+export { UngroupButton } from "./UngroupButton";

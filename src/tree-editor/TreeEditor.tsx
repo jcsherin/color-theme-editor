@@ -11,6 +11,7 @@ import {
   TreeLeafEdit,
   editorViewMode,
   reducer,
+  UngroupButton,
 } from "./index";
 
 export function TreeEditor({
@@ -141,25 +142,20 @@ export function TreeEditor({
               ]
             : [];
         })
-        .map((args) => {
-          let removeButton = (
-            <button
-              className="py-1 px-4 text-red-100 hover:text-red-300 bg-red-600 hover:bg-red-800 font-sans rounded-sm"
-              onClick={(_e) => handleRemoveFromGroup(args.color.id, groupName)}
-            >
-              Remove
-            </button>
-          );
-
-          return colorNode(
+        .map((args) =>
+          colorNode(
             args,
             focusRenameInput,
             handleInputFocus,
             handleRenameColor,
             handleKeyboardNavigate,
-            removeButton
-          );
-        });
+            <UngroupButton
+              groupName={groupName}
+              color={args.color}
+              handleRemoveFromGroup={handleRemoveFromGroup}
+            />
+          )
+        );
 
       const contents = `"${groupName}" :`;
       return children.length === 0 ? (
