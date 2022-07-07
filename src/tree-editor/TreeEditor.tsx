@@ -1,18 +1,15 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 
 import type { NamedCSSColor } from "../color";
-import { ThemeEditorState } from "../theme-editor";
+import type { ThemeEditorState } from "../theme-editor";
 
 import { nameComparator } from "../color";
 import { isGrouped } from "../theme-editor";
-import {
-  ColorSelector,
-  TreeNode,
-  TreeLeafEdit,
-  editorViewMode,
-  reducer,
-  UngroupButton,
-} from "./index";
+import { ColorSelector } from "./ColorSelector";
+import { TreeNode } from "./TreeNode";
+import { TreeLeafEdit } from "./TreeLeafEdit";
+import { UngroupButton } from "./UngroupButton";
+import { editorViewMode, reducer } from "./reducer";
 
 export function TreeEditor({
   state,

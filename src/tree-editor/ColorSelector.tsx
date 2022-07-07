@@ -1,7 +1,7 @@
 import type { NamedCSSColor } from "../color";
 
 import React from "react";
-import { TreeLeafView } from "./index";
+import { TreeLeafView } from "./TreeLeafView";
 
 interface ColorSelectorProps {
   color: NamedCSSColor;
