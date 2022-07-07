@@ -7,8 +7,8 @@ import {
   TreeNode,
   TreeLeafView,
   TreeLeafEdit,
-  initialInputMode,
-  reducerInputAction,
+  editorViewMode,
+  reducer,
 } from "./index";
 
 const treeLeafView = (
@@ -64,23 +64,20 @@ export function TreeEditor({
       document.removeEventListener("mousedown", handleRenameInputFocus);
   }, []);
 
-  const [inputMode, inputActionDispatch] = useReducer(
-    reducerInputAction,
-    initialInputMode
-  );
+  const [editorMode, dispatchEditor] = useReducer(reducer, editorViewMode);
 
   const handleInputFocus = (colorId: string) =>
-    inputActionDispatch({ kind: "focus", colorId: colorId });
+    dispatchEditor({ kind: "focus", colorId: colorId });
 
   const handleKeyboardNavigate = (key: string, target: string) => {
     switch (key) {
       case "Enter":
       case "ArrowDown":
-        return inputActionDispatch({ kind: "movedown", target: target });
+        return dispatchEditor({ kind: "movedown", target: target });
       case "ArrowUp":
-        return inputActionDispatch({ kind: "moveup", target: target });
+        return dispatchEditor({ kind: "moveup", target: target });
       case "Escape":
-        return inputActionDispatch({ kind: "escape" });
+        return dispatchEditor({ kind: "escape" });
     }
   };
 
@@ -102,11 +99,11 @@ export function TreeEditor({
     handleKeyboardNavigate: (key: string, target: string) => void,
     children?: React.ReactNode
   ) => {
-    switch (inputMode.kind) {
+    switch (editorMode.kind) {
       case "view":
         return treeLeafView(color, colorId, handleFocus);
       case "edit":
-        return inputMode.colorId === colorId ? (
+        return editorMode.colorId === colorId ? (
           <TreeLeafEdit
             key={color.cssValue}
             color={color}

@@ -6,7 +6,7 @@ interface EditMode {
   colorId: string;
 }
 
-type InputMode = ViewMode | EditMode;
+type EditorMode = ViewMode | EditMode;
 
 interface Focus {
   kind: "focus";
@@ -27,14 +27,11 @@ interface Escape {
   kind: "escape";
 }
 
-type InputAction = Focus | MoveUp | MoveDown | Escape;
+type EditorAction = Focus | MoveUp | MoveDown | Escape;
 
-export const initialInputMode: InputMode = { kind: "view" };
+export const editorViewMode: EditorMode = { kind: "view" };
 
-export function reducerInputAction(
-  state: InputMode,
-  action: InputAction
-): InputMode {
+export function reducer(state: EditorMode, action: EditorAction): EditorMode {
   switch (state.kind) {
     case "view":
       switch (action.kind) {
@@ -54,7 +51,7 @@ export function reducerInputAction(
         case "moveup":
           return { ...state, colorId: action.target };
         case "escape":
-          return { ...state, kind: "view" };
+          return { kind: "view" };
       }
   }
 }
