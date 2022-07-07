@@ -55,13 +55,6 @@ export function addMultiToDictionary(
   return { ...dictionary };
 }
 
-// FIXME: Implement sorting by name in `sortComparator` using `colorMap`.
-export function sortComparator(id1: string, id2: string): 0 | 1 | -1 {
-  if (id1 < id2) return -1;
-  if (id1 > id2) return 1;
-  return 0;
-}
-
 export function nameComparator(colorDictionary: NamedCSSColorDictionary) {
   const colorNameForComparator = (color: NamedCSSColor): string => {
     return color.name ? color.name : "";

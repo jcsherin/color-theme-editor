@@ -1,7 +1,6 @@
 import { nameComparator, NamedCSSColor } from "../color";
 
 import React, { useEffect, useReducer, useRef, useState } from "react";
-import { sortComparator } from "../color";
 import { notGrouped } from "../theme-editor";
 import { ThemeEditorState } from "../theme-editor";
 import {
@@ -127,12 +126,7 @@ export function TreeEditor({
 
   const configOrderedColorIds = Object.values(state.groupDictionary)
     .flat()
-    .concat(
-      state.selectables
-        .filter(notGrouped)
-        .map((item) => item.colorId)
-        .sort(sortComparator)
-    );
+    .concat(state.selectables.filter(notGrouped).map((item) => item.colorId));
 
   const getNodeIdx = (colorId: string) =>
     configOrderedColorIds.findIndex((id) => id === colorId);
@@ -211,7 +205,6 @@ export function TreeEditor({
   const singleColorNodes = state.selectables
     .filter(notGrouped)
     .map((item) => item.colorId)
-    .sort(sortComparator)
     .flatMap((colorId) => {
       const color = state.colorDictionary[colorId];
       return color
