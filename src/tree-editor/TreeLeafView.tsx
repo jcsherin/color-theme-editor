@@ -1,16 +1,17 @@
 import React from "react";
+import { NamedCSSColor } from "../color";
 
 export function TreeLeafView({
-  colorId,
+  color,
   handleFocus,
   children,
 }: {
-  colorId: string;
-  handleFocus: (colorId: string) => void;
+  color: NamedCSSColor;
+  handleFocus: (color: NamedCSSColor) => void;
   children: React.ReactNode;
 }) {
   return (
-    <button className="flex items-center" onClick={(_e) => handleFocus(colorId)}>
+    <button className="flex items-center" onClick={(_e) => handleFocus(color)}>
       {children}
     </button>
   );

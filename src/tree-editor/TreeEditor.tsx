@@ -6,31 +6,12 @@ import { ThemeEditorState } from "../theme-editor";
 import { nameComparator } from "../color";
 import { isGrouped } from "../theme-editor";
 import {
+  ColorSelector,
   TreeNode,
-  TreeLeafView,
   TreeLeafEdit,
   editorViewMode,
   reducer,
 } from "./index";
-
-const treeLeafView = (
-  color: NamedCSSColor,
-  handleFocus: (colorId: string) => void
-) => (
-  <TreeLeafView
-    colorId={color.id}
-    key={color.cssValue}
-    handleFocus={(_event) => handleFocus(color.id)}
-  >
-    <span className="mr-4">"{color.name ? color.name : color.cssValue}"</span>
-    <span className="mr-4">:</span>
-    <span
-      className="w-4 h-4 inline-block mr-2 rounded-sm"
-      style={{ backgroundColor: color.cssValue }}
-    ></span>
-    <span>{color.cssValue},</span>
-  </TreeLeafView>
-);
 
 export function TreeEditor({
   state,
@@ -67,8 +48,8 @@ export function TreeEditor({
 
   const [editorMode, dispatchEditor] = useReducer(reducer, editorViewMode);
 
-  const handleInputFocus = (colorId: string) =>
-    dispatchEditor({ kind: "focus", colorId: colorId });
+  const handleInputFocus = (color: NamedCSSColor) =>
+    dispatchEditor({ kind: "focus", colorId: color.id });
 
   const handleKeyboardNavigate = (key: string, target: string) => {
     switch (key) {
@@ -93,14 +74,14 @@ export function TreeEditor({
       color: NamedCSSColor;
     },
     focusRenameInput: boolean,
-    handleFocus: (colorId: string) => void,
+    handleFocus: (color: NamedCSSColor) => void,
     handleRenameColor: (colorId: string, name: string) => void,
     handleKeyboardNavigate: (key: string, target: string) => void,
     children?: React.ReactNode
   ) => {
     switch (editorMode.kind) {
       case "view":
-        return treeLeafView(color, handleFocus);
+        return <ColorSelector color={color} handleFocus={handleFocus} />;
       case "edit":
         return editorMode.colorId === color.id ? (
           <TreeLeafEdit
@@ -115,7 +96,7 @@ export function TreeEditor({
             {children}
           </TreeLeafEdit>
         ) : (
-          treeLeafView(color, handleFocus)
+          <ColorSelector color={color} handleFocus={handleFocus} />
         );
     }
   };
