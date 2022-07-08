@@ -58,22 +58,43 @@ function getColorFromId(colorDictionary: NamedCSSColorDictionary) {
   ];
 }
 
-export function sortGroupedColors(
-  state: ThemeEditorState
+export function sortGroupColorsByName(
+  colorDictionary: NamedCSSColorDictionary,
+  groupDictionary: GroupDictionary
 ): [groupName: string, colors: NamedCSSColor[]][] {
-  return Object.entries(state.groupDictionary)
-    .map(sortColorIdsByName(state.colorDictionary))
-    .map(getColorFromId(state.colorDictionary));
+  return Object.entries(groupDictionary)
+    .map(sortColorIdsByName(colorDictionary))
+    .map(getColorFromId(colorDictionary));
 }
 
-export function sortUngroupedColors(state: ThemeEditorState): NamedCSSColor[] {
-  return state.selectables
+export function sortUngroupedColorsByName(
+  colorDictionary: NamedCSSColorDictionary,
+  selectables: SelectableItem[]
+): NamedCSSColor[] {
+  return selectables
     .filter((item) => !isGrouped(item))
-    .flatMap((item) =>
-      state.colorDictionary[item.colorId]
-        ? [state.colorDictionary[item.colorId]]
-        : []
+    .map((item) => item.colorId)
+    .sort(nameComparator(colorDictionary))
+    .flatMap((colorId) =>
+      colorDictionary[colorId] ? [colorDictionary[colorId]] : []
     );
+}
+
+type SerializedGroupDictionary = {
+  [groupName: string]: {
+    [colorName: string]: [colorCssValue: string];
+  };
+};
+
+function serializeGroup(
+  groupName: string,
+  colors: NamedCSSColor[]
+): SerializedGroupDictionary {
+  return {
+    [groupName]: colors.reduce((acc, color) => {
+      return { ...acc, [color.name || color.cssValue]: color.cssValue };
+    }, {}),
+  };
 }
 
 export function serializeForTailwind({
@@ -81,22 +102,14 @@ export function serializeForTailwind({
   groupDictionary,
   selectables,
 }: ThemeEditorState) {
-  //  { [groupName: string]: { [colorName: string]: string } }
-  const groupedColors: {
-    [groupName: string]: { [colorName: string]: string };
-  } = Object.entries(groupDictionary)
-    .map(([groupName, colorIds]): [string, NamedCSSColor[]] => [
-      groupName,
-      colorIds.map((id) => colorDictionary[id]),
-    ])
-    .reduce((outer, [groupName, colors]) => {
-      return {
-        ...outer,
-        [groupName]: colors.reduce((acc, color) => {
-          return { ...acc, [color.name || color.cssValue]: color.cssValue };
-        }, {}),
-      };
-    }, {});
+  const sortedGroups = sortGroupColorsByName(colorDictionary, groupDictionary);
+  const serializeGroups: SerializedGroupDictionary = sortedGroups.reduce(
+    (acc, [groupName, colors]) => {
+      const serialized = serializeGroup(groupName, colors);
+      return { ...acc, ...serialized };
+    },
+    {}
+  );
 
   const ungroupedColors: { [colorName: string]: string } = selectables
     .filter((item) => !isGrouped(item))
@@ -106,7 +119,7 @@ export function serializeForTailwind({
       return { ...acc, [color.name || color.cssValue]: color.cssValue };
     }, {});
 
-  const serialized = { ...groupedColors, ...ungroupedColors };
+  const serialized = { ...serializeGroups, ...ungroupedColors };
   const wrapper = { theme: { colors: serialized } };
   const template = `module.exports = ${JSON.stringify(wrapper, null, 2)}`;
   return template;
