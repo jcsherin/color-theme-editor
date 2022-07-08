@@ -80,30 +80,35 @@ export function sortUngroupedColorsByName(
     );
 }
 
-type SerializedGroupDictionary = {
-  [groupName: string]: {
-    [colorName: string]: [colorCssValue: string];
-  };
+type SerializedColors = {
+  [colorName: string]: [colorCssValue: string];
 };
+type SerializedGroupDictionary = {
+  [groupName: string]: SerializedColors;
+};
+
+function serializeColors(colors: NamedCSSColor[]): SerializedColors {
+  return colors.reduce((acc, color) => {
+    return { ...acc, [color.name || color.cssValue]: color.cssValue };
+  }, {});
+}
 
 function serializeGroup(
   groupName: string,
   colors: NamedCSSColor[]
 ): SerializedGroupDictionary {
   return {
-    [groupName]: colors.reduce((acc, color) => {
-      return { ...acc, [color.name || color.cssValue]: color.cssValue };
-    }, {}),
+    [groupName]: serializeColors(colors),
   };
 }
 
-export function serializeForTailwind({
+export function serializedTailwindExport({
   colorDictionary,
   groupDictionary,
   selectables,
 }: ThemeEditorState) {
-  const sortedGroups = sortGroupColorsByName(colorDictionary, groupDictionary);
-  const serializeGroups: SerializedGroupDictionary = sortedGroups.reduce(
+  const sortedGrouped = sortGroupColorsByName(colorDictionary, groupDictionary);
+  const serializeGroups: SerializedGroupDictionary = sortedGrouped.reduce(
     (acc, [groupName, colors]) => {
       const serialized = serializeGroup(groupName, colors);
       return { ...acc, ...serialized };
@@ -111,17 +116,17 @@ export function serializeForTailwind({
     {}
   );
 
-  const ungroupedColors: { [colorName: string]: string } = selectables
-    .filter((item) => !isGrouped(item))
-    .map((selectable) => selectable.colorId)
-    .map((id) => colorDictionary[id])
-    .reduce((acc, color) => {
-      return { ...acc, [color.name || color.cssValue]: color.cssValue };
-    }, {});
+  const sortedUngrouped = sortUngroupedColorsByName(
+    colorDictionary,
+    selectables
+  );
+  const serializedUngrouped: SerializedColors =
+    serializeColors(sortedUngrouped);
 
-  const serialized = { ...serializeGroups, ...ungroupedColors };
-  const wrapper = { theme: { colors: serialized } };
-  const template = `module.exports = ${JSON.stringify(wrapper, null, 2)}`;
+  const serialized = {
+    theme: { colors: { ...serializeGroups, ...serializedUngrouped } },
+  };
+  const template = `module.exports = ${JSON.stringify(serialized, null, 2)}`;
   return template;
 }
 
