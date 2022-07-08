@@ -4,14 +4,16 @@ import type { NamedCSSColor } from "../color";
 import type { ThemeEditorState } from "../theme-editor";
 import type { ColorIterator } from "./colorIterator";
 
-import { nameComparator } from "../color";
-import { isGrouped } from "../theme-editor";
 import { ColorSelector } from "./ColorSelector";
 import { TreeNode } from "./TreeNode";
 import { TreeLeafEdit } from "./TreeLeafEdit";
 import { UngroupButton } from "./UngroupButton";
 import { editorViewMode, reducer } from "./reducer";
 import { createColorIterator } from "./colorIterator";
+import {
+  sortGroupColorsByName,
+  sortUngroupedColorsByName,
+} from "../theme-editor/reducer";
 
 export function TreeEditor({
   state,
@@ -105,14 +107,27 @@ export function TreeEditor({
 
   const colorIterator = createColorIterator(state);
 
-  const groupedColors = Object.entries(state.groupDictionary).map(
-    ([groupName, colorIds]) => {
-      const children = colorIds
-        .sort(nameComparator(state.colorDictionary))
-        .flatMap((colorId) =>
-          state.colorDictionary[colorId] ? [state.colorDictionary[colorId]] : []
-        )
-        .map((color) =>
+  const groupNameToKey = (groupName: string): string => `"${groupName}" :`;
+
+  const sortedGroupedColors = sortGroupColorsByName(
+    state.colorDictionary,
+    state.groupDictionary
+  ).map(([groupName, colors]) =>
+    colors.length === 0 ? (
+      <TreeNode
+        key={groupName}
+        contents={groupNameToKey(groupName)}
+        openMarker="{"
+        closeMarker="},"
+      />
+    ) : (
+      <TreeNode
+        key={groupName}
+        contents={groupNameToKey(groupName)}
+        openMarker="{"
+        closeMarker="},"
+      >
+        {colors.map((color) =>
           colorNode(
             color,
             colorIterator,
@@ -126,53 +141,32 @@ export function TreeEditor({
               handleRemoveFromGroup={handleRemoveFromGroup}
             />
           )
-        );
-
-      const contents = `"${groupName}" :`;
-      return children.length === 0 ? (
-        <TreeNode
-          key={groupName}
-          contents={contents}
-          openMarker="{"
-          closeMarker="},"
-        />
-      ) : (
-        <TreeNode
-          key={groupName}
-          contents={contents}
-          openMarker="{"
-          closeMarker="},"
-        >
-          {children}
-        </TreeNode>
-      );
-    }
+        )}
+      </TreeNode>
+    )
   );
 
-  const ungroupedColors = state.selectables
-    .filter((item) => !isGrouped(item))
-    .map((item) => item.colorId)
-    .flatMap((colorId) =>
-      state.colorDictionary[colorId] ? [state.colorDictionary[colorId]] : []
+  const sortedUngroupedColors = sortUngroupedColorsByName(
+    state.colorDictionary,
+    state.selectables
+  ).map((color) =>
+    colorNode(
+      color,
+      colorIterator,
+      focusRenameInput,
+      handleInputFocus,
+      handleRenameColor,
+      handleKeyboardNavigate
     )
-    .map((color) =>
-      colorNode(
-        color,
-        colorIterator,
-        focusRenameInput,
-        handleInputFocus,
-        handleRenameColor,
-        handleKeyboardNavigate
-      )
-    );
+  );
 
   return (
     <div ref={mouseRef} className={className} style={style}>
       <TreeNode contents="module.exports =" openMarker="{" closeMarker="}">
         <TreeNode contents="theme:" openMarker="{" closeMarker="}">
           <TreeNode contents="colors:" openMarker="{" closeMarker="}">
-            {groupedColors}
-            {ungroupedColors}
+            {sortedGroupedColors}
+            {sortedUngroupedColors}
           </TreeNode>
         </TreeNode>
       </TreeNode>
