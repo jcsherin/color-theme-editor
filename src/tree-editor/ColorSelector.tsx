@@ -10,7 +10,7 @@ interface ColorSelectorProps {
 
 export function ColorSelector({ color, handleFocus }: ColorSelectorProps) {
   return (
-    <TreeLeafView color={color} key={color.id} handleFocus={handleFocus}>
+    <TreeLeafView color={color} handleFocus={handleFocus}>
       <span className="mr-4">"{color.name ? color.name : color.cssValue}"</span>
       <span className="mr-4">:</span>
       <span

@@ -74,11 +74,17 @@ export function TreeEditor({
   ) => {
     switch (editorMode.kind) {
       case "view":
-        return <ColorSelector color={color} handleFocus={handleFocus} />;
+        return (
+          <ColorSelector
+            key={color.id}
+            color={color}
+            handleFocus={handleFocus}
+          />
+        );
       case "edit":
         return editorMode.colorId === color.id ? (
           <TreeLeafEdit
-            key={color.cssValue}
+            key={color.id}
             color={color}
             colorIterator={colorIterator}
             focus={focusRenameInput}
@@ -88,7 +94,11 @@ export function TreeEditor({
             {children}
           </TreeLeafEdit>
         ) : (
-          <ColorSelector color={color} handleFocus={handleFocus} />
+          <ColorSelector
+            key={color.id}
+            color={color}
+            handleFocus={handleFocus}
+          />
         );
     }
   };
