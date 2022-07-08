@@ -16,6 +16,38 @@ import {
 } from "../theme-editor/reducer";
 import { useFocusTextInput } from "./useFocusTextInput";
 
+const colorNode = (
+  color: NamedCSSColor,
+  colorIterator: ColorIterator,
+  editorMode: EditorMode,
+  isFocusTextInput: boolean,
+  handleFocus: (color: NamedCSSColor) => void,
+  handleRenameColor: (colorId: string, name: string) => void,
+  handleKeyboardNavigate: (key: string, target: string) => void,
+  children?: React.ReactNode
+) => {
+  switch (editorMode.kind) {
+    case "view":
+      return (
+        <ColorSelector key={color.id} color={color} handleFocus={handleFocus} />
+      );
+    case "edit":
+      return editorMode.colorId === color.id ? (
+        <TreeLeafEdit
+          key={color.id}
+          color={color}
+          colorIterator={colorIterator}
+          focus={isFocusTextInput}
+          handleRenameColor={handleRenameColor}
+          handleKeyboardNavigate={handleKeyboardNavigate}
+        >
+          {children}
+        </TreeLeafEdit>
+      ) : (
+        <ColorSelector key={color.id} color={color} handleFocus={handleFocus} />
+      );
+  }
+};
 
 export function TreeEditor({
   state,
@@ -46,46 +78,6 @@ export function TreeEditor({
         return dispatchEditor({ kind: "moveup", target: target });
       case "Escape":
         return dispatchEditor({ kind: "escape" });
-    }
-  };
-
-  const colorNode = (
-    color: NamedCSSColor,
-    colorIterator: ColorIterator,
-    focusRenameInput: boolean,
-    handleFocus: (color: NamedCSSColor) => void,
-    handleRenameColor: (colorId: string, name: string) => void,
-    handleKeyboardNavigate: (key: string, target: string) => void,
-    children?: React.ReactNode
-  ) => {
-    switch (editorMode.kind) {
-      case "view":
-        return (
-          <ColorSelector
-            key={color.id}
-            color={color}
-            handleFocus={handleFocus}
-          />
-        );
-      case "edit":
-        return editorMode.colorId === color.id ? (
-          <TreeLeafEdit
-            key={color.id}
-            color={color}
-            colorIterator={colorIterator}
-            focus={focusRenameInput}
-            handleRenameColor={handleRenameColor}
-            handleKeyboardNavigate={handleKeyboardNavigate}
-          >
-            {children}
-          </TreeLeafEdit>
-        ) : (
-          <ColorSelector
-            key={color.id}
-            color={color}
-            handleFocus={handleFocus}
-          />
-        );
     }
   };
 
