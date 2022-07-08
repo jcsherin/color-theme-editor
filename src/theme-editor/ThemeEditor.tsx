@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CopyButton } from "../clipboard";
 import { TreeEditor } from "../tree-editor";
 import { SelectableItem, GroupColors } from "./index";
-import { serializedTailwindExport } from "./reducer";
+import { exportAsTailwind } from "./reducer";
 
 import type { ThemeEditorState } from "./reducer";
 import { Form2, FormData } from "../form";
@@ -78,7 +78,7 @@ export function ThemeEditor({
           <div className="h-12 flex items-center">
             <CopyButton
               label="Copy Tailwind Config"
-              content={serializedTailwindExport(state)}
+              content={exportAsTailwind(state)}
               expiryInMs={2000}
               className="py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"
               flashClassName="py-1 px-4 rounded-sm text-green-50 bg-green-700"

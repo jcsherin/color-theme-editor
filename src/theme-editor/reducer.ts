@@ -102,7 +102,7 @@ function serializeGroup(
   };
 }
 
-export function serializedTailwindExport({
+export function exportAsTailwind({
   colorDictionary,
   groupDictionary,
   selectables,
