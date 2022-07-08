@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, { useReducer, useRef } from "react";
 
 import type { NamedCSSColor } from "../color";
 import type { ThemeEditorState } from "../theme-editor";
@@ -8,12 +8,14 @@ import { ColorSelector } from "./ColorSelector";
 import { TreeNode } from "./TreeNode";
 import { TreeLeafEdit } from "./TreeLeafEdit";
 import { UngroupButton } from "./UngroupButton";
-import { editorViewMode, reducer } from "./reducer";
+import { EditorMode, editorViewMode, reducer } from "./reducer";
 import { createColorIterator } from "./colorIterator";
 import {
   sortGroupColorsByName,
   sortUngroupedColorsByName,
 } from "../theme-editor/reducer";
+import { useFocusTextInput } from "./useFocusTextInput";
+
 
 export function TreeEditor({
   state,
@@ -28,26 +30,8 @@ export function TreeEditor({
   className: string;
   style: React.CSSProperties;
 }) {
-  const [focusRenameInput, setFocusRenameInput] = useState(false);
   const mouseRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    function handleRenameInputFocus(event: MouseEvent) {
-      if (
-        mouseRef &&
-        mouseRef.current &&
-        mouseRef.current.contains(event.target as Node)
-      ) {
-        setFocusRenameInput(true);
-      } else {
-        setFocusRenameInput(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleRenameInputFocus);
-    return () =>
-      document.removeEventListener("mousedown", handleRenameInputFocus);
-  }, []);
-
+  const isFocusTextInput = useFocusTextInput(mouseRef);
   const [editorMode, dispatchEditor] = useReducer(reducer, editorViewMode);
 
   const handleInputFocus = (color: NamedCSSColor) =>
@@ -131,7 +115,8 @@ export function TreeEditor({
           colorNode(
             color,
             colorIterator,
-            focusRenameInput,
+            editorMode,
+            isFocusTextInput,
             handleInputFocus,
             handleRenameColor,
             handleKeyboardNavigate,
@@ -153,7 +138,8 @@ export function TreeEditor({
     colorNode(
       color,
       colorIterator,
-      focusRenameInput,
+      editorMode,
+      isFocusTextInput,
       handleInputFocus,
       handleRenameColor,
       handleKeyboardNavigate

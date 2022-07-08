@@ -6,7 +6,7 @@ interface EditMode {
   colorId: string;
 }
 
-type EditorMode = ViewMode | EditMode;
+export type EditorMode = ViewMode | EditMode;
 
 interface Focus {
   kind: "focus";
