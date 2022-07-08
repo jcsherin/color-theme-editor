@@ -1,7 +1,10 @@
 import type { NamedCSSColor } from "../color";
-import { isGrouped, ThemeEditorState } from "../theme-editor";
+import { ThemeEditorState } from "../theme-editor";
 
-import { nameComparator } from "../color";
+import {
+  sortGroupColorsByName,
+  sortUngroupedColorsByName,
+} from "../theme-editor/reducer";
 
 export interface ColorIterator {
   next: (color: NamedCSSColor) => NamedCSSColor;
@@ -9,23 +12,18 @@ export interface ColorIterator {
 }
 
 export function createColorIterator(state: ThemeEditorState): ColorIterator {
-  const orderedGroupColors = Object.values(state.groupDictionary)
-    .map((ids) => ids.slice().sort(nameComparator(state.colorDictionary)))
-    .flat()
-    .map((id) => state.colorDictionary[id]);
-  const orderedUngroupedColors = state.selectables
-    .filter((item) => !isGrouped(item))
-    .map((item) => item.colorId)
-    .sort(nameComparator(state.colorDictionary))
-    .map((id) => state.colorDictionary[id]);
-  const orderedColors = [...orderedGroupColors, ...orderedUngroupedColors];
+  const sortedGrouped = sortGroupColorsByName(
+    state.colorDictionary,
+    state.groupDictionary
+  ).flatMap(([_, colors]) => colors);
+  const sortedUngrouped = sortUngroupedColorsByName(
+    state.colorDictionary,
+    state.selectables
+  );
+  const orderedColors = [...sortedGrouped, ...sortedUngrouped];
 
   const findIndex = (color: NamedCSSColor) =>
     orderedColors.findIndex((c) => c.id === color.id);
-
-  orderedColors.forEach((color, idx) =>
-    console.log(idx, JSON.stringify(color))
-  );
 
   return {
     next: (color) => {
