@@ -58,7 +58,9 @@ function getColorFromId(colorDictionary: NamedCSSColorDictionary) {
   ];
 }
 
-export function sortedGroupedColors(state: ThemeEditorState) {
+export function sortGroupedColors(
+  state: ThemeEditorState
+): [groupName: string, colors: NamedCSSColor[]][] {
   return Object.entries(state.groupDictionary)
     .map(sortColorIdsByName(state.colorDictionary))
     .map(getColorFromId(state.colorDictionary));
