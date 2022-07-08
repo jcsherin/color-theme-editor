@@ -1,6 +1,10 @@
 import { GroupDictionary, isGrouped, SelectableItem } from "./index";
 import type { FormData } from "../form";
-import type { NamedCSSColor, NamedCSSColorDictionary } from "../color";
+import {
+  nameComparator,
+  NamedCSSColor,
+  NamedCSSColorDictionary,
+} from "../color";
 
 import {
   makeSelectable,
@@ -33,6 +37,31 @@ export function initThemeEditorState(): ThemeEditorState {
     groupDictionary: emptyGroupDictionary(),
     selectables: [],
   };
+}
+
+function sortColorIdsByName(colorDictionary: NamedCSSColorDictionary) {
+  return ([groupName, colorIds]: [string, string[]]): [string, string[]] => [
+    groupName,
+    colorIds.sort(nameComparator(colorDictionary)),
+  ];
+}
+
+function getColorFromId(colorDictionary: NamedCSSColorDictionary) {
+  return ([groupName, colorIds]: [string, string[]]): [
+    string,
+    NamedCSSColor[]
+  ] => [
+    groupName,
+    colorIds.flatMap((id) =>
+      colorDictionary[id] ? [colorDictionary[id]] : []
+    ),
+  ];
+}
+
+export function sortedGroupedColors(state: ThemeEditorState) {
+  return Object.entries(state.groupDictionary)
+    .map(sortColorIdsByName(state.colorDictionary))
+    .map(getColorFromId(state.colorDictionary));
 }
 
 export function serializeForTailwind({
