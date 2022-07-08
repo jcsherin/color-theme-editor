@@ -64,6 +64,16 @@ export function sortedGroupedColors(state: ThemeEditorState) {
     .map(getColorFromId(state.colorDictionary));
 }
 
+export function sortUngroupedColors(state: ThemeEditorState): NamedCSSColor[] {
+  return state.selectables
+    .filter((item) => !isGrouped(item))
+    .flatMap((item) =>
+      state.colorDictionary[item.colorId]
+        ? [state.colorDictionary[item.colorId]]
+        : []
+    );
+}
+
 export function serializeForTailwind({
   colorDictionary,
   groupDictionary,
