@@ -2,7 +2,7 @@ import type { FormData } from "./index";
 
 interface FormLoadExample {
   kind: "loadExample";
-  classnames: string;
+  groupNames: string;
   colors: string;
 }
 
@@ -21,7 +21,7 @@ export function formReducer(_form: FormData, action: FormAction): FormData {
   switch (action.kind) {
     case "loadExample":
       return {
-        groupNames: action.classnames,
+        groupNames: action.groupNames,
         colors: action.colors,
       };
     case "resetForm":
