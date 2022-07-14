@@ -10,7 +10,7 @@ function toFillState(form: FormData): FillState {
   return "filled";
 }
 
-export function FormHelper({
+export function SecondaryAction({
   formData,
   className,
   handleLoadExample,
