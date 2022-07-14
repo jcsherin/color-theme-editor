@@ -1,16 +1,15 @@
 import type { NamedCSSColor } from "../color";
 
 import React from "react";
-import { TreeLeafView } from "./TreeLeafView";
 
 interface ColorSelectorProps {
   color: NamedCSSColor;
   handleFocus: (color: NamedCSSColor) => void;
 }
 
-export function ColorSelector({ color, handleFocus }: ColorSelectorProps) {
+export function ColorLeaf({ color, handleFocus }: ColorSelectorProps) {
   return (
-    <TreeLeafView color={color} handleFocus={handleFocus}>
+    <button className="flex items-center" onClick={(_e) => handleFocus(color)}>
       <span className="mr-4">"{color.name ? color.name : color.cssValue}"</span>
       <span className="mr-4">:</span>
       <span
@@ -18,6 +17,6 @@ export function ColorSelector({ color, handleFocus }: ColorSelectorProps) {
         style={{ backgroundColor: color.cssValue }}
       ></span>
       <span>{color.cssValue},</span>
-    </TreeLeafView>
+    </button>
   );
 }
