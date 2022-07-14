@@ -1,4 +1,5 @@
-import { Triple } from "./index";
+import type { Triple } from "./triple";
+
 export interface KeywordSpec {
   hex: string;
   rgb: Triple<number>;

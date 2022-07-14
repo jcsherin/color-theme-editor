@@ -84,8 +84,10 @@ Digits in `#RRGGBB` are interpreted as a hexadecimal number.
 
 */
 
-import type { Triple, Keywords } from "./index";
-import { keywords } from "./index";
+import type { Triple } from "./triple";
+import type { Keywords } from "./keywords";
+
+import { keywords } from "./keywords";
 
 /**
  * Use clamp to restrict a value to range that is defined by the minimum and

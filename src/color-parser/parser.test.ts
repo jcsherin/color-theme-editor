@@ -1,5 +1,8 @@
-import type { KeywordSpec, ParsedColor } from "./index";
-import { keywords, parse } from "./index";
+import type { KeywordSpec } from "./keywords";
+import type { ParsedColor } from "./index";
+
+import { keywords } from "./keywords";
+import { parse } from "./index";
 
 describe("Color Parser", () => {
   describe("Named color keywords", () => {
