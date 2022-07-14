@@ -1,1 +1,1 @@
-export { default as CopyButton } from "./CopyButton";
+export { CopyButton } from "./CopyButton";
