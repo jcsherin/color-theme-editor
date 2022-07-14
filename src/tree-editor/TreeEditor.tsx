@@ -10,7 +10,7 @@ import type { ColorIterator } from "./colorIterator";
 
 import { ColorLeaf } from "./ColorLeaf";
 import { TreeNode } from "./TreeNode";
-import { TreeLeafEdit } from "./TreeLeafEdit";
+import { ColorInput } from "./ColorInput";
 import { UngroupButton } from "./UngroupButton";
 import { EditorMode, editorViewMode, reducer } from "./reducer";
 import { createColorIterator } from "./colorIterator";
@@ -61,7 +61,7 @@ function toLeafNode(
       );
     case "edit":
       return editorMode.colorId === color.id ? (
-        <TreeLeafEdit
+        <ColorInput
           key={color.id}
           color={color}
           colorIterator={colorIterator}
@@ -70,7 +70,7 @@ function toLeafNode(
           handleKeyboardNavigate={handleKeyboardNavigate}
         >
           {children}
-        </TreeLeafEdit>
+        </ColorInput>
       ) : (
         <ColorLeaf
           key={color.id}

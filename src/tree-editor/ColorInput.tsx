@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { NamedCSSColor } from "../color";
 import type { ColorIterator } from "./colorIterator";
 
-export function TreeLeafEdit({
+export function ColorInput({
   color,
   focus,
   handleRenameColor,
