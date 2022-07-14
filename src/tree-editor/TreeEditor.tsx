@@ -11,7 +11,6 @@ import type { ColorIterator } from "./colorIterator";
 import { ColorLeaf } from "./ColorLeaf";
 import { TreeNode } from "./TreeNode";
 import { ColorInput } from "./ColorInput";
-import { UngroupButton } from "./UngroupButton";
 import { EditorMode, editorViewMode, reducer } from "./reducer";
 import { createColorIterator } from "./colorIterator";
 import {
@@ -48,7 +47,8 @@ function toLeafNode(
   handleInputFocus: (color: NamedCSSColor) => void,
   handleRenameColor: (colorId: string, newName: string) => void,
   handleKeyboardNavigate: (key: string, target: string) => void,
-  children?: React.ReactNode
+  groupName?: string,
+  handleRemoveFromGroup?: (colorId: string, gorupName: string) => void
 ) {
   switch (editorMode.kind) {
     case "view":
@@ -69,7 +69,14 @@ function toLeafNode(
           handleRenameColor={handleRenameColor}
           handleKeyboardNavigate={handleKeyboardNavigate}
         >
-          {children}
+          {groupName && handleRemoveFromGroup && (
+            <button
+              className="py-1 px-4 text-red-100 hover:text-red-300 bg-red-600 hover:bg-red-800 font-sans rounded-sm"
+              onClick={(_e) => handleRemoveFromGroup(color.id, groupName)}
+            >
+              Remove
+            </button>
+          )}
         </ColorInput>
       ) : (
         <ColorLeaf
@@ -121,11 +128,8 @@ function GroupedColorTree({
                   handleInputFocus,
                   handleRenameColor,
                   handleKeyboardNavigate,
-                  <UngroupButton
-                    groupName={groupName}
-                    color={color}
-                    handleRemoveFromGroup={handleRemoveFromGroup}
-                  />
+                  groupName,
+                  handleRemoveFromGroup
                 )
               )}
             </TreeNode>
