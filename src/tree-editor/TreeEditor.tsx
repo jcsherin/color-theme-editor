@@ -20,8 +20,7 @@ import {
 } from "../theme-editor/reducer";
 import { useFocusTextInput } from "./useFocusTextInput";
 
-interface SortedColorsProps {
-  colorDictionary: NamedCSSColorDictionary;
+interface NodeProps {
   colorIterator: ColorIterator;
   editorMode: EditorMode;
   isFocusTextInput: boolean;
@@ -30,29 +29,40 @@ interface SortedColorsProps {
   handleKeyboardNavigate: (key: string, target: string) => void;
 }
 
-interface SortedGroupedColorsProps extends SortedColorsProps {
+interface GroupedColorTreeProps extends NodeProps {
+  colorDictionary: NamedCSSColorDictionary;
   groupDictionary: GroupDictionary;
   handleRemoveFromGroup: (colorId: string, gorupName: string) => void;
 }
 
-interface SortedUngroupedColorsProps extends SortedColorsProps {
+interface UngroupedColorNodesProps extends NodeProps {
+  colorDictionary: NamedCSSColorDictionary;
   selectables: SelectableItem[];
 }
 
-const colorNode = (
-  color: NamedCSSColor,
-  colorIterator: ColorIterator,
-  editorMode: EditorMode,
-  isFocusTextInput: boolean,
-  handleFocus: (color: NamedCSSColor) => void,
-  handleRenameColor: (colorId: string, name: string) => void,
-  handleKeyboardNavigate: (key: string, target: string) => void,
-  children?: React.ReactNode
-) => {
+interface ColorNodeProps extends NodeProps {
+  color: NamedCSSColor;
+  children?: React.ReactNode;
+}
+
+function ColorNode({
+  color,
+  colorIterator,
+  editorMode,
+  isFocusTextInput,
+  handleInputFocus,
+  handleRenameColor,
+  handleKeyboardNavigate,
+  children,
+}: ColorNodeProps) {
   switch (editorMode.kind) {
     case "view":
       return (
-        <ColorSelector key={color.id} color={color} handleFocus={handleFocus} />
+        <ColorSelector
+          key={color.id}
+          color={color}
+          handleFocus={handleInputFocus}
+        />
       );
     case "edit":
       return editorMode.colorId === color.id ? (
@@ -67,14 +77,18 @@ const colorNode = (
           {children}
         </TreeLeafEdit>
       ) : (
-        <ColorSelector key={color.id} color={color} handleFocus={handleFocus} />
+        <ColorSelector
+          key={color.id}
+          color={color}
+          handleFocus={handleInputFocus}
+        />
       );
   }
-};
+}
 
 const groupNameToKey = (groupName: string): string => `"${groupName}" :`;
 
-function SortedGroupedColors({
+function GroupedColorTree({
   colorDictionary,
   groupDictionary,
   colorIterator,
@@ -84,7 +98,7 @@ function SortedGroupedColors({
   handleRenameColor,
   handleRemoveFromGroup,
   handleKeyboardNavigate,
-}: SortedGroupedColorsProps) {
+}: GroupedColorTreeProps) {
   return (
     <>
       {sortGroupColorsByName(colorDictionary, groupDictionary).map(
@@ -103,22 +117,23 @@ function SortedGroupedColors({
               openMarker="{"
               closeMarker="},"
             >
-              {colors.map((color) =>
-                colorNode(
-                  color,
-                  colorIterator,
-                  editorMode,
-                  isFocusTextInput,
-                  handleInputFocus,
-                  handleRenameColor,
-                  handleKeyboardNavigate,
+              {colors.map((color) => (
+                <ColorNode
+                  color={color}
+                  colorIterator={colorIterator}
+                  editorMode={editorMode}
+                  isFocusTextInput={isFocusTextInput}
+                  handleInputFocus={handleInputFocus}
+                  handleRenameColor={handleRenameColor}
+                  handleKeyboardNavigate={handleKeyboardNavigate}
+                >
                   <UngroupButton
                     groupName={groupName}
                     color={color}
                     handleRemoveFromGroup={handleRemoveFromGroup}
                   />
-                )
-              )}
+                </ColorNode>
+              ))}
             </TreeNode>
           )
       )}
@@ -126,7 +141,7 @@ function SortedGroupedColors({
   );
 }
 
-function SortedUngroupedColors({
+function UngroupedColorNodes({
   colorDictionary,
   selectables,
   colorIterator,
@@ -135,20 +150,20 @@ function SortedUngroupedColors({
   handleInputFocus,
   handleRenameColor,
   handleKeyboardNavigate,
-}: SortedUngroupedColorsProps) {
+}: UngroupedColorNodesProps) {
   return (
     <>
-      {sortUngroupedColorsByName(colorDictionary, selectables).map((color) =>
-        colorNode(
-          color,
-          colorIterator,
-          editorMode,
-          isFocusTextInput,
-          handleInputFocus,
-          handleRenameColor,
-          handleKeyboardNavigate
-        )
-      )}
+      {sortUngroupedColorsByName(colorDictionary, selectables).map((color) => (
+        <ColorNode
+          color={color}
+          colorIterator={colorIterator}
+          editorMode={editorMode}
+          isFocusTextInput={isFocusTextInput}
+          handleInputFocus={handleInputFocus}
+          handleRenameColor={handleRenameColor}
+          handleKeyboardNavigate={handleKeyboardNavigate}
+        />
+      ))}
     </>
   );
 }
@@ -192,7 +207,7 @@ export function TreeEditor({
       <TreeNode contents="module.exports =" openMarker="{" closeMarker="}">
         <TreeNode contents="theme:" openMarker="{" closeMarker="}">
           <TreeNode contents="colors:" openMarker="{" closeMarker="}">
-            <SortedGroupedColors
+            <GroupedColorTree
               colorDictionary={state.colorDictionary}
               groupDictionary={state.groupDictionary}
               colorIterator={colorIterator}
@@ -203,7 +218,7 @@ export function TreeEditor({
               handleRemoveFromGroup={handleRemoveFromGroup}
               handleKeyboardNavigate={handleKeyboardNavigate}
             />
-            <SortedUngroupedColors
+            <UngroupedColorNodes
               colorDictionary={state.colorDictionary}
               selectables={state.selectables}
               colorIterator={colorIterator}
