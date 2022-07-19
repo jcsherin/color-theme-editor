@@ -1,5 +1,6 @@
+import type { FormData } from "./index";
+
 import React from "react";
-import { FormData } from "./index";
 
 type FillState = "empty" | "partiallyFilled" | "filled";
 
