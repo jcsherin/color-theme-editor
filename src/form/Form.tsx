@@ -6,15 +6,15 @@ import { ContextAction } from "./ContextAction";
 
 interface FormProps {
   formData: FormData;
-  handleUpdateForm: (form: FormData) => void;
+  handleFormUpdate: (form: FormData) => void;
 }
 
-export function Form({ formData, handleUpdateForm }: FormProps) {
+export function Form({ formData, handleFormUpdate }: FormProps) {
   const [state, setState] = useState<FormData>(formData);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleUpdateForm(state);
+    handleFormUpdate(state);
   };
 
   const handleLoadExample = () =>

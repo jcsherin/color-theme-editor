@@ -62,7 +62,7 @@ export function ThemeEditor({
         return (
           <Form
             formData={state.formData}
-            handleUpdateForm={(formData) => {
+            handleFormUpdate={(formData) => {
               setViewMode("showGrouping");
               handleMergeState(formData);
             }}
