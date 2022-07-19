@@ -13,7 +13,7 @@ import {
   groupSelected,
   isSelected,
 } from "./index";
-import { initFormData } from "../form";
+import { emptyFormData } from "../form";
 import {
   createNamedCSSColor,
   createNamedCSSColorDictionary,
@@ -31,7 +31,7 @@ export interface ThemeEditorState {
 
 export function initThemeEditorState(): ThemeEditorState {
   return {
-    formData: initFormData(),
+    formData: emptyFormData(),
     colorDictionary: createNamedCSSColorDictionary([]),
     groupDictionary: emptyGroupDictionary(),
     selectables: [],

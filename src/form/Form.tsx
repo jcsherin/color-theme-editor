@@ -1,26 +1,26 @@
 import {
   createFormData,
   FormData,
-  initFormData,
+  emptyFormData,
+  isEmpty,
   updateColors,
   updateGroupNames,
 } from "./FormData";
 
 import React, { FormEvent, useState } from "react";
 import { stagedColorTheme } from "../utils/example";
-import { ContextAction } from "./ContextAction";
 
 interface FormProps {
-  formData: FormData;
-  handleFormUpdate: (form: FormData) => void;
+  init: FormData;
+  handleUpdate: (form: FormData) => void;
 }
 
-export function Form({ formData, handleFormUpdate }: FormProps) {
-  const [state, setState] = useState<FormData>(formData);
+export function Form({ init, handleUpdate: handleUpdate }: FormProps) {
+  const [state, setState] = useState<FormData>(init);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleFormUpdate(state);
+    handleUpdate(state);
   };
 
   const handleLoadExample = () =>
@@ -31,7 +31,7 @@ export function Form({ formData, handleFormUpdate }: FormProps) {
       );
     });
 
-  const handleResetForm = () => setState(initFormData);
+  const handleResetForm = () => setState(emptyFormData);
 
   const handleUpdateGroupNames = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -40,15 +40,33 @@ export function Form({ formData, handleFormUpdate }: FormProps) {
   const handleUpdateColors = (event: React.ChangeEvent<HTMLTextAreaElement>) =>
     setState(() => updateColors(state, event.target.value));
 
+  const secondaryActionClassName =
+    "justify-self-end ml-auto py-1 px-4 rounded-sm border border-pink-700 hover:border-pink-400 text-pink-700";
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="h-12 flex items-center">
-        <ContextAction
-          className="justify-self-end ml-auto py-1 px-4 rounded-sm border border-pink-700 hover:border-pink-400 text-pink-700"
-          formData={state}
-          handleLoadExample={handleLoadExample}
-          handleResetForm={handleResetForm}
-        />
+        {isEmpty(state) ? (
+          <button
+            onClick={(event) => {
+              event.preventDefault();
+              handleLoadExample();
+            }}
+            className={`mr-4 ${secondaryActionClassName}`}
+          >
+            Load Example
+          </button>
+        ) : (
+          <button
+            onClick={(event) => {
+              event.preventDefault();
+              handleResetForm();
+            }}
+            className={`text-red-500 hover:text-red-700 mr-4 ${secondaryActionClassName}`}
+          >
+            Reset Form
+          </button>
+        )}
         <button
           type="submit"
           className="py-1 px-4 rounded-sm bg-sky-900 hover:bg-sky-700 text-sky-50"

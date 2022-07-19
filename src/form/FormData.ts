@@ -3,7 +3,7 @@ export interface FormData {
   colors: string;
 }
 
-export function initFormData(): FormData {
+export function emptyFormData(): FormData {
   return { groupNames: "", colors: "" };
 }
 
@@ -20,4 +20,8 @@ export function updateGroupNames(
 
 export function updateColors(formData: FormData, colors: string): FormData {
   return { ...formData, colors };
+}
+
+export function isEmpty(form: FormData): boolean {
+  return form.groupNames.length === 0 && form.colors.length === 0;
 }
