@@ -23,12 +23,9 @@ export function Form({ init, handleUpdate: handleUpdate }: FormProps) {
     handleUpdate(state);
   };
 
-  const handleLoadExample = () =>
+  const handleLoadExample = (groupNames: string, colors: string) =>
     setState(() => {
-      return createFormData(
-        stagedColorTheme.groupNames,
-        stagedColorTheme.colors
-      );
+      return createFormData(groupNames, colors);
     });
 
   const handleResetForm = () => setState(emptyFormData);
@@ -50,7 +47,10 @@ export function Form({ init, handleUpdate: handleUpdate }: FormProps) {
           <button
             onClick={(event) => {
               event.preventDefault();
-              handleLoadExample();
+              handleLoadExample(
+                stagedColorTheme.groupNames,
+                stagedColorTheme.colors
+              );
             }}
             className={`mr-4 ${secondaryActionClassName}`}
           >
