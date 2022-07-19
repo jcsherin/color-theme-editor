@@ -1,13 +1,13 @@
+import type { Source } from "./source";
+
+import React, { FormEvent, useState } from "react";
 import {
   createSource,
-  Source,
   emptySource,
   isEmptySource,
   updateColors,
   updateGroupNames,
 } from "./source";
-
-import React, { FormEvent, useState } from "react";
 import { stagedColorTheme } from "../utils/example";
 
 interface ThemeInputProps {
