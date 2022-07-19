@@ -2,7 +2,7 @@ import type { FormData } from "./FormData";
 
 import React, { FormEvent, useState } from "react";
 import { stagedColorTheme } from "../utils/example";
-import { SecondaryAction } from "./SecondaryAction";
+import { ContextAction } from "./ContextAction";
 
 interface FormProps {
   formData: FormData;
@@ -45,7 +45,7 @@ export function Form({ formData, handleUpdateForm }: FormProps) {
   return (
     <form onSubmit={handleSubmit}>
       <div className="h-12 flex items-center">
-        <SecondaryAction
+        <ContextAction
           className="justify-self-end ml-auto py-1 px-4 rounded-sm border border-pink-700 hover:border-pink-400 text-pink-700"
           formData={state}
           handleLoadExample={handleLoadExample}

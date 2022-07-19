@@ -11,7 +11,7 @@ function toFillState(form: FormData): FillState {
   return "filled";
 }
 
-export function SecondaryAction({
+export function ContextAction({
   formData,
   className,
   handleLoadExample,
