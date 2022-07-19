@@ -31,6 +31,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./index.html",
       title: "Development",
+      favicon: "./favicon.ico",
     }),
   ],
   stats: {
