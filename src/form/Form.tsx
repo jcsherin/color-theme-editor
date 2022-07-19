@@ -4,13 +4,12 @@ import React, { FormEvent, useState } from "react";
 import { stagedColorTheme } from "../utils/example";
 import { SecondaryAction } from "./SecondaryAction";
 
-export function Form({
-  formData,
-  handleUpdateForm,
-}: {
+interface FormProps {
   formData: FormData;
   handleUpdateForm: (form: FormData) => void;
-}) {
+}
+
+export function Form({ formData, handleUpdateForm }: FormProps) {
   const [state, setState] = useState<FormData>(formData);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -18,25 +17,39 @@ export function Form({
     handleUpdateForm(state);
   };
 
+  const handleLoadExample = () =>
+    setState(() => {
+      return {
+        groupNames: stagedColorTheme.groupNames,
+        colors: stagedColorTheme.colors,
+      };
+    });
+
+  const handleResetForm = () =>
+    setState(() => {
+      return { groupNames: "", colors: "" };
+    });
+
+  const handleUpdateGroupNames = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) =>
+    setState(() => {
+      return { ...state, groupNames: event.target.value };
+    });
+
+  const handleUpdateColors = (event: React.ChangeEvent<HTMLTextAreaElement>) =>
+    setState(() => {
+      return { ...state, colors: event.target.value };
+    });
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="h-12 flex items-center">
         <SecondaryAction
           className="justify-self-end ml-auto py-1 px-4 rounded-sm border border-pink-700 hover:border-pink-400 text-pink-700"
           formData={state}
-          handleLoadExample={() =>
-            setState(() => {
-              return {
-                groupNames: stagedColorTheme.groupNames,
-                colors: stagedColorTheme.colors,
-              };
-            })
-          }
-          handleResetForm={() =>
-            setState(() => {
-              return { groupNames: "", colors: "" };
-            })
-          }
+          handleLoadExample={handleLoadExample}
+          handleResetForm={handleResetForm}
         />
         <button
           type="submit"
@@ -51,21 +64,13 @@ export function Form({
             className="grow w-full bg-slate-900 text-slate-200 font-mono h-80 py-2 px-4 mb-2"
             placeholder="Enter one group name per line"
             value={state.groupNames}
-            onChange={(event) => {
-              setState(() => {
-                return { ...state, groupNames: event.target.value };
-              });
-            }}
+            onChange={handleUpdateGroupNames}
           />
           <textarea
             className="grow w-full bg-slate-900 text-slate-200 font-mono h-80 py-2 px-4"
             placeholder="Enter one color value per line"
             value={state.colors}
-            onChange={(event) => {
-              setState(() => {
-                return { ...state, colors: event.target.value };
-              });
-            }}
+            onChange={handleUpdateColors}
           />
         </div>
       </div>
