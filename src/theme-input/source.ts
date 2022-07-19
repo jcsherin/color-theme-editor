@@ -11,14 +11,14 @@ export function createSource(groupNames: string, colors: string): Source {
   return { groupNames, colors };
 }
 
-export function updateGroupNames(formData: Source, groupNames: string): Source {
-  return { ...formData, groupNames };
+export function updateGroupNames(src: Source, groupNames: string): Source {
+  return { ...src, groupNames };
 }
 
-export function updateColors(formData: Source, colors: string): Source {
-  return { ...formData, colors };
+export function updateColors(src: Source, colors: string): Source {
+  return { ...src, colors };
 }
 
-export function isEmptySource(form: Source): boolean {
-  return form.groupNames.length === 0 && form.colors.length === 0;
+export function isEmptySource(src: Source): boolean {
+  return src.groupNames.length === 0 && src.colors.length === 0;
 }

@@ -613,7 +613,7 @@ export const stagedColorTheme: Source = createSource(
     .join("\n")
 );
 
-export const sampleFormData: Source = createSource(
+export const presetSrc: Source = createSource(
   ["primary", "secondary", "notification", "background"].join("\n"),
   shuffle(tailwindColors).slice(0, 5).join("\n")
 );
