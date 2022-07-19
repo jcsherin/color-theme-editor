@@ -4,8 +4,6 @@ A UI component for creating a color theme. You can use it to group colors by nam
 
 [Demo](https://melted-powder.surge.sh/)
 
-![How to edit a color theme?](assets/howto-edit-color-theme.gif)
-
 ## Todos
 
 - [x] Deploy and link to online demo in README
