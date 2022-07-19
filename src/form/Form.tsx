@@ -1,4 +1,10 @@
-import { createFormData, FormData, initFormData } from "./FormData";
+import {
+  createFormData,
+  FormData,
+  initFormData,
+  updateColors,
+  updateGroupNames,
+} from "./FormData";
 
 import React, { FormEvent, useState } from "react";
 import { stagedColorTheme } from "../utils/example";
@@ -29,15 +35,10 @@ export function Form({ formData, handleFormUpdate }: FormProps) {
 
   const handleUpdateGroupNames = (
     event: React.ChangeEvent<HTMLTextAreaElement>
-  ) =>
-    setState(() => {
-      return { ...state, groupNames: event.target.value };
-    });
+  ) => setState(() => updateGroupNames(state, event.target.value));
 
   const handleUpdateColors = (event: React.ChangeEvent<HTMLTextAreaElement>) =>
-    setState(() => {
-      return { ...state, colors: event.target.value };
-    });
+    setState(() => updateColors(state, event.target.value));
 
   return (
     <form onSubmit={handleSubmit}>
