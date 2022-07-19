@@ -1,5 +1,5 @@
 import { GroupDictionary, isGrouped, SelectableItem } from "./index";
-import type { RawData } from "../theme-input";
+import type { Source } from "../theme-input";
 import {
   nameComparator,
   NamedCSSColor,
@@ -13,7 +13,7 @@ import {
   groupSelected,
   isSelected,
 } from "./index";
-import { emptyRawData } from "../theme-input";
+import { emptySource } from "../theme-input";
 import {
   createNamedCSSColor,
   createNamedCSSColorDictionary,
@@ -23,7 +23,7 @@ import { parseColor, isParseError, ParsedColor } from "../parse-color";
 import { emptyGroupDictionary } from "./group";
 
 export interface ThemeEditorState {
-  formData: RawData;
+  formData: Source;
   colorDictionary: NamedCSSColorDictionary;
   groupDictionary: GroupDictionary;
   selectables: SelectableItem[];
@@ -31,7 +31,7 @@ export interface ThemeEditorState {
 
 export function initThemeEditorState(): ThemeEditorState {
   return {
-    formData: emptyRawData(),
+    formData: emptySource(),
     colorDictionary: createNamedCSSColorDictionary([]),
     groupDictionary: emptyGroupDictionary(),
     selectables: [],
@@ -130,7 +130,7 @@ export function exportAsTailwind({
 }
 
 // FIXME: Handle `ParseError` values
-function getParsedColors(formData: RawData): NamedCSSColor[] {
+function getParsedColors(formData: Source): NamedCSSColor[] {
   const result = formData.colors
     .split("\n")
     .map(parseColor)
@@ -139,7 +139,7 @@ function getParsedColors(formData: RawData): NamedCSSColor[] {
   return result.map((parsed) => createNamedCSSColor(parsed));
 }
 
-function getParsedGroupNames(formData: RawData): string[] {
+function getParsedGroupNames(formData: Source): string[] {
   return formData.groupNames
     .split("\n")
     .map((value) => value.trim())
@@ -147,7 +147,7 @@ function getParsedGroupNames(formData: RawData): string[] {
     .map((value) => value.replace(/\s+/g, "-"));
 }
 
-export function parse(formData: RawData): ThemeEditorState {
+export function parse(formData: Source): ThemeEditorState {
   const parsedColors = getParsedColors(formData).map((parsed) =>
     createNamedCSSColor(parsed)
   );
@@ -166,7 +166,7 @@ export function parse(formData: RawData): ThemeEditorState {
 
 interface ThemeEditorActionParse {
   kind: "parse";
-  form: RawData;
+  form: Source;
 }
 
 interface ThemeEditorActionAddToGroup {
@@ -197,7 +197,7 @@ interface ThemeEditorActionReset {
 
 interface ThemeEditorActionMergeState {
   kind: "mergeState";
-  formData: RawData;
+  formData: Source;
 }
 
 export type ThemeEditorAction =
@@ -229,7 +229,7 @@ export const getInitialThemeEditorState = (
   }
 
   const state = JSON.parse(cached);
-  const formData: RawData = state.formData;
+  const formData: Source = state.formData;
   const colorDictionary: NamedCSSColorDictionary = state.colorDictionary;
   const groupDictionary: GroupDictionary = state.groupDictionary;
   const selectables: SelectableItem[] = state.slectables;

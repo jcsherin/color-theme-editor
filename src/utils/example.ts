@@ -1,6 +1,6 @@
 import { shuffle } from "./random";
-import type { RawData } from "../theme-input";
-import { createRawData } from "../theme-input/RawData";
+import type { Source } from "../theme-input";
+import { createSource } from "../theme-input/source";
 
 // https://gist.github.com/davidpiesse/74f5eaa23eb405e61b58cfe535d9907c
 let tailwind = {
@@ -606,14 +606,14 @@ let tailwindColors = Array.from(
   new Set(Object.values(tailwind).filter((x) => x.startsWith("#")))
 );
 
-export const stagedColorTheme: RawData = createRawData(
+export const stagedColorTheme: Source = createSource(
   Object.keys(colors).join("\n"),
   Object.values(colors)
     .flatMap((arr) => arr.slice(4))
     .join("\n")
 );
 
-export const sampleFormData: RawData = createRawData(
+export const sampleFormData: Source = createSource(
   ["primary", "secondary", "notification", "background"].join("\n"),
   shuffle(tailwindColors).slice(0, 5).join("\n")
 );

@@ -1,25 +1,25 @@
 import {
-  createRawData,
-  RawData,
-  emptyRawData,
-  isEmpty,
+  createSource,
+  Source,
+  emptySource,
+  isEmptySource,
   updateColors,
   updateGroupNames,
-} from "./RawData";
+} from "./source";
 
 import React, { FormEvent, useState } from "react";
 import { stagedColorTheme } from "../utils/example";
 
 interface ThemeInputProps {
-  init: RawData;
-  handleUpdate: (form: RawData) => void;
+  init: Source;
+  handleUpdate: (form: Source) => void;
 }
 
 export function ThemeInput({
   init,
   handleUpdate: handleUpdate,
 }: ThemeInputProps) {
-  const [state, setState] = useState<RawData>(init);
+  const [state, setState] = useState<Source>(init);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -28,10 +28,10 @@ export function ThemeInput({
 
   const handleLoadExample = (groupNames: string, colors: string) =>
     setState(() => {
-      return createRawData(groupNames, colors);
+      return createSource(groupNames, colors);
     });
 
-  const handleResetForm = () => setState(emptyRawData);
+  const handleResetForm = () => setState(emptySource);
 
   const handleUpdateGroupNames = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -46,7 +46,7 @@ export function ThemeInput({
   return (
     <form onSubmit={handleSubmit}>
       <div className="h-12 flex items-center">
-        {isEmpty(state) ? (
+        {isEmptySource(state) ? (
           <button
             onClick={(event) => {
               event.preventDefault();
