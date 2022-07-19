@@ -1,5 +1,4 @@
 import React from "react";
-import renderer from "react-test-renderer";
 import {
   render,
   screen,
@@ -33,22 +32,20 @@ function setup(jsx: JSX.Element) {
 
 describe("ClipboardButton component", () => {
   it("renders a button for copying content to clipboard", () => {
-    let tree = renderer
-      .create(
-        <CopyButton
-          label={props.label}
-          content={props.content}
-          expiryInMs={props.expiryInMs}
-        />
-      )
-      .toJSON();
+    const { container } = setup(
+      <CopyButton
+        label={props.label}
+        content={props.content}
+        expiryInMs={props.expiryInMs}
+      />
+    );
 
-    expect(tree).toMatchInlineSnapshot(`
-<span
-  className="py-1 px-4 text-xl text-red-600"
->
-  Copying to clipboard is not supported in this browser!
-</span>
+    expect(container).toMatchInlineSnapshot(`
+<div>
+  <button>
+    Copy to clipboard
+  </button>
+</div>
 `);
   });
 
@@ -89,7 +86,9 @@ describe("ClipboardButton component", () => {
     user.click(button);
     await waitForElementToBeRemoved(button);
 
-    const flash = await screen.findByText(/^Copied to clipboard!$/, { exact: true });
+    const flash = await screen.findByText(/^Copied to clipboard!$/, {
+      exact: true,
+    });
     await waitForElementToBeRemoved(flash, { timeout: props.expiryInMs });
     const newButton = await screen.findByRole("button", {
       name: props.label,
