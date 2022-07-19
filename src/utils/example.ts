@@ -1,6 +1,6 @@
 import { shuffle } from "./random";
-import type { RawData } from "../form";
-import { createRawData } from "../form/RawData";
+import type { RawData } from "../theme-input";
+import { createRawData } from "../theme-input/RawData";
 
 // https://gist.github.com/davidpiesse/74f5eaa23eb405e61b58cfe535d9907c
 let tailwind = {

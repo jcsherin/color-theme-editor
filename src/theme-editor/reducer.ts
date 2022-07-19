@@ -1,5 +1,5 @@
 import { GroupDictionary, isGrouped, SelectableItem } from "./index";
-import type { RawData } from "../form";
+import type { RawData } from "../theme-input";
 import {
   nameComparator,
   NamedCSSColor,
@@ -13,7 +13,7 @@ import {
   groupSelected,
   isSelected,
 } from "./index";
-import { emptyRawData } from "../form";
+import { emptyRawData } from "../theme-input";
 import {
   createNamedCSSColor,
   createNamedCSSColorDictionary,
