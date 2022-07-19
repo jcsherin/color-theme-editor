@@ -19,9 +19,8 @@ import {
   createNamedCSSColorDictionary,
   updateNamedCSSColorName,
 } from "../color";
-import { parse as parseColor } from "../color-parser";
+import { parseColor, isParseError, ParsedColor } from "../parse-color";
 import { emptyGroupDictionary } from "./group";
-import { isParseError, ParsedColor } from "../color-parser/parser";
 
 export interface ThemeEditorState {
   formData: FormData;

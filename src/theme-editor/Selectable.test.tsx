@@ -10,9 +10,9 @@ import {
   toggleStatus,
 } from "./index";
 
-import type { ParsedColor } from "../color-parser";
+import type { ParsedColor } from "../parse-color";
 
-import { parse } from "../color-parser";
+import { parseColor } from "../parse-color";
 import { createNamedCSSColor } from "../color";
 
 function setup(jsx: JSX.Element) {
@@ -24,7 +24,10 @@ function setup(jsx: JSX.Element) {
 
 describe("Selectable component", () => {
   it("renders the `default` state", () => {
-    const red = createNamedCSSColor(parse("#f44336") as ParsedColor, "red");
+    const red = createNamedCSSColor(
+      parseColor("#f44336") as ParsedColor,
+      "red"
+    );
     const defaultItem = makeSelectable(red.id);
 
     const tree = renderer.create(
@@ -59,7 +62,10 @@ describe("Selectable component", () => {
   });
 
   it("renders the `selected` state", () => {
-    const red = createNamedCSSColor(parse("#f44336") as ParsedColor, "red");
+    const red = createNamedCSSColor(
+      parseColor("#f44336") as ParsedColor,
+      "red"
+    );
     const defaultItem = makeSelectable(red.id);
     const toggleFn = toggleStatus(defaultItem.colorId);
     const selectedItem = toggleFn(defaultItem);
@@ -96,7 +102,10 @@ describe("Selectable component", () => {
   });
 
   it("renders the `grouped` state", () => {
-    const red = createNamedCSSColor(parse("#f44336") as ParsedColor, "red");
+    const red = createNamedCSSColor(
+      parseColor("#f44336") as ParsedColor,
+      "red"
+    );
     const defaultItem = makeSelectable(red.id);
     const toggleFn = toggleStatus(defaultItem.colorId);
     const selectedItem = toggleFn(defaultItem);
@@ -134,7 +143,10 @@ describe("Selectable component", () => {
   });
 
   it("when clicked `handleSelection` prop is invoked", async () => {
-    const red = createNamedCSSColor(parse("#f44336") as ParsedColor, "red");
+    const red = createNamedCSSColor(
+      parseColor("#f44336") as ParsedColor,
+      "red"
+    );
     const defaultItem = makeSelectable(red.id);
 
     const mockHandleSelection = jest.fn();

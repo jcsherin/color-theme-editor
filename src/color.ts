@@ -1,5 +1,5 @@
-import type { ParsedColor } from "./color-parser";
-import { stringifyColor } from "./color-parser";
+import type { ParsedColor } from "./parse-color";
+import { stringifyColor } from "./parse-color";
 
 export interface NamedCSSColor extends ParsedColor {
   id: string;

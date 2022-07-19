@@ -376,7 +376,7 @@ function parseLightness(lightness: string): Percentage | undefined {
     return clampPercentage(createPercentage(lightness));
 }
 
-export function parse(color: string): ParsedColor | ParseError {
+export function parseColor(color: string): ParsedColor | ParseError {
   const token = color.trim();
 
   // <named-color>
