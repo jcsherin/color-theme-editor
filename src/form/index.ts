@@ -1,4 +1,4 @@
 export type { RawData } from "./RawData";
 
-export { Form } from "./Form";
+export { ThemeInput } from "./ThemeInput";
 export { emptyRawData } from "./RawData";

@@ -5,7 +5,7 @@ import { SelectableItem, GroupColors } from "./index";
 import { exportAsTailwind } from "./reducer";
 
 import type { ThemeEditorState } from "./reducer";
-import { Form, RawData } from "../form";
+import { ThemeInput, RawData } from "../form";
 
 export interface EditUI {
   kind: "main";
@@ -60,7 +60,7 @@ export function ThemeEditor({
         );
       case "showForm":
         return (
-          <Form
+          <ThemeInput
             init={state.formData}
             handleUpdate={(formData) => {
               setViewMode("showGrouping");

@@ -10,12 +10,15 @@ import {
 import React, { FormEvent, useState } from "react";
 import { stagedColorTheme } from "../utils/example";
 
-interface FormProps {
+interface ThemeInputProps {
   init: RawData;
   handleUpdate: (form: RawData) => void;
 }
 
-export function Form({ init, handleUpdate: handleUpdate }: FormProps) {
+export function ThemeInput({
+  init,
+  handleUpdate: handleUpdate,
+}: ThemeInputProps) {
   const [state, setState] = useState<RawData>(init);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
