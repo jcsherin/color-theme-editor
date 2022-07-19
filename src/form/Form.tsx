@@ -1,4 +1,4 @@
-import type { FormData } from "./FormData";
+import { createFormData, FormData, initFormData } from "./FormData";
 
 import React, { FormEvent, useState } from "react";
 import { stagedColorTheme } from "../utils/example";
@@ -19,16 +19,13 @@ export function Form({ formData, handleUpdateForm }: FormProps) {
 
   const handleLoadExample = () =>
     setState(() => {
-      return {
-        groupNames: stagedColorTheme.groupNames,
-        colors: stagedColorTheme.colors,
-      };
+      return createFormData(
+        stagedColorTheme.groupNames,
+        stagedColorTheme.colors
+      );
     });
 
-  const handleResetForm = () =>
-    setState(() => {
-      return { groupNames: "", colors: "" };
-    });
+  const handleResetForm = () => setState(initFormData);
 
   const handleUpdateGroupNames = (
     event: React.ChangeEvent<HTMLTextAreaElement>

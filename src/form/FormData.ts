@@ -6,3 +6,7 @@ export interface FormData {
 export function initFormData(): FormData {
   return { groupNames: "", colors: "" };
 }
+
+export function createFormData(groupNames: string, colors: string): FormData {
+  return { groupNames, colors };
+}
