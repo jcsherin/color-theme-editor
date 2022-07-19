@@ -5,7 +5,7 @@ import { SelectableItem, GroupColors } from "./index";
 import { exportAsTailwind } from "./reducer";
 
 import type { ThemeEditorState } from "./reducer";
-import { Form, FormData } from "../form";
+import { Form, RawData } from "../form";
 
 export interface EditUI {
   kind: "main";
@@ -34,7 +34,7 @@ export function ThemeEditor({
   handleRemoveFromGroup: (colorId: string, groupName: string) => void;
   handleAddToGroup: (groupName: string) => void;
   handleToggleStatus: (selectableItem: SelectableItem) => void;
-  handleMergeState: (formData: FormData) => void;
+  handleMergeState: (formData: RawData) => void;
 }) {
   const [viewMode, setViewMode] = useState<Mode>("showGrouping");
 

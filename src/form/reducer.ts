@@ -1,4 +1,4 @@
-import type { FormData } from "./index";
+import type { RawData } from "./index";
 
 interface FormLoadExample {
   kind: "loadExample";
@@ -12,12 +12,12 @@ interface FormReset {
 
 interface FormUpdate {
   kind: "updateForm";
-  formData: FormData;
+  formData: RawData;
 }
 
 export type FormAction = FormLoadExample | FormReset | FormUpdate;
 
-export function formReducer(_form: FormData, action: FormAction): FormData {
+export function formReducer(_form: RawData, action: FormAction): RawData {
   switch (action.kind) {
     case "loadExample":
       return {

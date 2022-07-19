@@ -1,4 +1,4 @@
-export type { FormData } from "./FormData";
+export type { RawData } from "./RawData";
 
 export { Form } from "./Form";
-export { emptyFormData } from "./FormData";
+export { emptyRawData } from "./RawData";

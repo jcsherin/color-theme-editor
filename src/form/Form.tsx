@@ -1,22 +1,22 @@
 import {
-  createFormData,
-  FormData,
-  emptyFormData,
+  createRawData,
+  RawData,
+  emptyRawData,
   isEmpty,
   updateColors,
   updateGroupNames,
-} from "./FormData";
+} from "./RawData";
 
 import React, { FormEvent, useState } from "react";
 import { stagedColorTheme } from "../utils/example";
 
 interface FormProps {
-  init: FormData;
-  handleUpdate: (form: FormData) => void;
+  init: RawData;
+  handleUpdate: (form: RawData) => void;
 }
 
 export function Form({ init, handleUpdate: handleUpdate }: FormProps) {
-  const [state, setState] = useState<FormData>(init);
+  const [state, setState] = useState<RawData>(init);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -25,10 +25,10 @@ export function Form({ init, handleUpdate: handleUpdate }: FormProps) {
 
   const handleLoadExample = (groupNames: string, colors: string) =>
     setState(() => {
-      return createFormData(groupNames, colors);
+      return createRawData(groupNames, colors);
     });
 
-  const handleResetForm = () => setState(emptyFormData);
+  const handleResetForm = () => setState(emptyRawData);
 
   const handleUpdateGroupNames = (
     event: React.ChangeEvent<HTMLTextAreaElement>

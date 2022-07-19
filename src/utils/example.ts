@@ -1,5 +1,6 @@
 import { shuffle } from "./random";
-import type { FormData } from "../form";
+import type { RawData } from "../form";
+import { createRawData } from "../form/RawData";
 
 // https://gist.github.com/davidpiesse/74f5eaa23eb405e61b58cfe535d9907c
 let tailwind = {
@@ -605,17 +606,17 @@ let tailwindColors = Array.from(
   new Set(Object.values(tailwind).filter((x) => x.startsWith("#")))
 );
 
-export const stagedColorTheme: FormData = {
-  groupNames: Object.keys(colors).join("\n"),
-  colors: Object.values(colors)
+export const stagedColorTheme: RawData = createRawData(
+  Object.keys(colors).join("\n"),
+  Object.values(colors)
     .flatMap((arr) => arr.slice(4))
-    .join("\n"),
-};
+    .join("\n")
+);
 
-export const sampleFormData: FormData = {
-  groupNames: ["primary", "secondary", "notification", "background"].join("\n"),
-  colors: shuffle(tailwindColors).slice(0, 5).join("\n"),
-};
+export const sampleFormData: RawData = createRawData(
+  ["primary", "secondary", "notification", "background"].join("\n"),
+  shuffle(tailwindColors).slice(0, 5).join("\n")
+);
 
 export const testColors = (limit: number): string[] =>
   tailwindColors.slice(0, limit);
