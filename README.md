@@ -8,4 +8,4 @@ A web frontend for editing the custom color palette exported from your Figma/XD/
 
 [![renaming green colors](/images/screenshot-renaming.png)](https://melted-powder.surge.sh/)
 
-[Click here to use it live.](https://melted-powder.surge.sh/)
+[Click here to use it live](https://melted-powder.surge.sh/)
