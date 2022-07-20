@@ -4,7 +4,7 @@ A web frontend for editing the color palette exported from your Figma/XD/Sketch 
 
 - Group related color values together
 - Provide human-readable names to each color
-- Export the result in Tailwind configuration format
+- Copy the edited Tailwind configuration to clipboard
 
 [![renaming green colors](/images/screenshot-renaming.png)](https://melted-powder.surge.sh/)
 
