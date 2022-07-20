@@ -1,3 +1,7 @@
+# Color Theme Editor
+
+![color renaming](/images/screenshot-renaming.png)
+
 ## Description
 
 A UI component for creating a color theme. You can use it to group colors by name, and use the keyboard-friendly editor to quickly rename them.
