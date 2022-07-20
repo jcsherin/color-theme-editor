@@ -1,25 +1,25 @@
-import type { Source } from "./source";
+import type { RawTheme } from "./rawTheme";
 
 import React, { FormEvent, useState } from "react";
 import {
-  createSource,
-  emptySource,
+  createRawTheme,
+  emptyRawTheme,
   isEmptySource,
   updateColors,
   updateGroupNames,
-} from "./source";
+} from "./rawTheme";
 import { stagedColorTheme } from "../utils/example";
 
 interface ThemeInputProps {
-  init: Source;
-  handleUpdate: (form: Source) => void;
+  init: RawTheme;
+  handleUpdate: (form: RawTheme) => void;
 }
 
 export function ThemeInput({
   init,
   handleUpdate: handleUpdate,
 }: ThemeInputProps) {
-  const [state, setState] = useState<Source>(init);
+  const [state, setState] = useState<RawTheme>(init);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -28,10 +28,10 @@ export function ThemeInput({
 
   const handleLoadExample = (groupNames: string, colors: string) =>
     setState(() => {
-      return createSource(groupNames, colors);
+      return createRawTheme(groupNames, colors);
     });
 
-  const handleResetForm = () => setState(emptySource);
+  const handleResetForm = () => setState(emptyRawTheme);
 
   const handleUpdateGroupNames = (
     event: React.ChangeEvent<HTMLTextAreaElement>

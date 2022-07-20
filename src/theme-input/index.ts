@@ -1,4 +1,4 @@
-export type { Source } from "./source";
+export type { RawTheme } from "./rawTheme";
 
 export { ThemeInput } from "./ThemeInput";
-export { emptySource } from "./source";
+export { emptyRawTheme } from "./rawTheme";
