@@ -1,6 +1,6 @@
 # Color Theme Editor
 
-A web frontend for editing the color palette exported from your Figma/XD/Sketch design files.
+A web frontend for editing the custom color palette exported from your Figma/XD/Sketch design files.
 
 - Group related color values together
 - Provide human-readable names to each color
