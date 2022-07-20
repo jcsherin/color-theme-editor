@@ -1,11 +1,14 @@
+import type { ThemeEditorState } from "./reducer";
+import type { SelectableItem } from "./selectableItem";
+import type { RawTheme } from "../theme-input";
+
 import React, { useState } from "react";
+
 import { CopyButton } from "../clipboard";
 import { TreeEditor } from "../tree-editor";
-import { SelectableItem, GroupColors } from "./index";
+import { GroupColors } from "./GroupColors";
 import { exportAsTailwind } from "./reducer";
-
-import type { ThemeEditorState } from "./reducer";
-import { ThemeInput, RawTheme } from "../theme-input";
+import { ThemeInput } from "../theme-input";
 
 export interface EditUI {
   kind: "main";
